@@ -882,3 +882,425 @@ class CompleteEcommerceService:
         
         # Add new images
         await self._process_product_images(product_id, images)
+
+    async def create_product_with_stripe(self, product_data: Dict[str, Any], vendor_id: str) -> Dict[str, Any]:
+        """
+        Create a new product with real Stripe product and price creation
+        """
+        try:
+            db = self.db
+            
+            # Create Stripe product first
+            stripe_product = stripe.Product.create(
+                name=product_data['name'],
+                description=product_data.get('description', ''),
+                images=product_data.get('images', [])[:8],  # Stripe limit
+                metadata={
+                    'vendor_id': vendor_id,
+                    'product_type': product_data.get('product_type', 'physical')
+                }
+            )
+            
+            # Create base price in Stripe
+            stripe_price = stripe.Price.create(
+                unit_amount=int(float(product_data['price']) * 100),  # Convert to cents
+                currency=product_data.get('currency', 'usd'),
+                product=stripe_product.id,
+                metadata={
+                    'variant': 'default'
+                }
+            )
+            
+            # Generate product ID
+            product_id = str(uuid.uuid4())
+            
+            # Create product document
+            product = {
+                'product_id': product_id,
+                'vendor_id': vendor_id,
+                'stripe_product_id': stripe_product.id,
+                'stripe_price_id': stripe_price.id,
+                'name': product_data['name'],
+                'description': product_data.get('description', ''),
+                'category': product_data.get('category', 'general'),
+                'subcategory': product_data.get('subcategory'),
+                'product_type': product_data.get('product_type', 'physical'),
+                'price': float(product_data['price']),
+                'currency': product_data.get('currency', 'usd'),
+                'cost_price': float(product_data.get('cost_price', 0)),
+                'compare_at_price': float(product_data.get('compare_at_price', 0)),
+                'sku': product_data.get('sku', f"PRD-{product_id[:8]}"),
+                'barcode': product_data.get('barcode'),
+                'weight': product_data.get('weight', 0),
+                'dimensions': product_data.get('dimensions', {}),
+                'images': product_data.get('images', []),
+                'image_alt_texts': product_data.get('image_alt_texts', []),
+                'variants': [],
+                'inventory': {
+                    'track_inventory': product_data.get('track_inventory', True),
+                    'quantity': product_data.get('quantity', 0),
+                    'low_stock_threshold': product_data.get('low_stock_threshold', 10),
+                    'continue_selling': product_data.get('continue_selling', False)
+                },
+                'shipping': {
+                    'requires_shipping': product_data.get('requires_shipping', True),
+                    'weight_unit': product_data.get('weight_unit', 'kg'),
+                    'shipping_class': product_data.get('shipping_class'),
+                    'free_shipping': product_data.get('free_shipping', False)
+                },
+                'seo': {
+                    'title': product_data.get('seo_title', product_data['name']),
+                    'description': product_data.get('seo_description', ''),
+                    'url_handle': product_data.get('url_handle', product_data['name'].lower().replace(' ', '-'))
+                },
+                'status': product_data.get('status', 'draft'),
+                'visibility': product_data.get('visibility', 'visible'),
+                'tags': product_data.get('tags', []),
+                'collections': product_data.get('collections', []),
+                'vendor_info': {
+                    'vendor_id': vendor_id,
+                    'commission_rate': product_data.get('commission_rate', 0.15)
+                },
+                'analytics': {
+                    'views': 0,
+                    'sales_count': 0,
+                    'revenue': 0.0,
+                    'last_sold': None
+                },
+                'created_at': datetime.utcnow(),
+                'updated_at': datetime.utcnow()
+            }
+            
+            # Add variants if provided
+            if product_data.get('variants'):
+                variants = []
+                for variant_data in product_data['variants']:
+                    variant = await self._create_product_variant_with_stripe(
+                        product_id, variant_data, stripe_product.id
+                    )
+                    variants.append(variant)
+                product['variants'] = variants
+            
+            # Insert product into database
+            await self.products.insert_one(product)
+            
+            # Create inventory record
+            inventory_record = {
+                'product_id': product_id,
+                'vendor_id': vendor_id,
+                'total_quantity': product['inventory']['quantity'],
+                'available_quantity': product['inventory']['quantity'],
+                'reserved_quantity': 0,
+                'sold_quantity': 0,
+                'inventory_movements': [],
+                'last_updated': datetime.utcnow()
+            }
+            await self.inventory.insert_one(inventory_record)
+            
+            return {
+                'success': True,
+                'product': product,
+                'stripe_product_id': stripe_product.id,
+                'stripe_price_id': stripe_price.id
+            }
+            
+        except Exception as e:
+            logging.error(f"Product creation error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+
+    async def _create_product_variant_with_stripe(self, product_id: str, variant_data: Dict, stripe_product_id: str) -> Dict:
+        """Create a product variant with Stripe price"""
+        try:
+            # Create Stripe price for variant
+            stripe_price = stripe.Price.create(
+                unit_amount=int(float(variant_data['price']) * 100),
+                currency=variant_data.get('currency', 'usd'),
+                product=stripe_product_id,
+                metadata={
+                    'variant': variant_data.get('title', 'variant'),
+                    'option1': variant_data.get('option1'),
+                    'option2': variant_data.get('option2'),
+                    'option3': variant_data.get('option3')
+                }
+            )
+            
+            variant_id = str(uuid.uuid4())
+            
+            variant = {
+                'variant_id': variant_id,
+                'product_id': product_id,
+                'stripe_price_id': stripe_price.id,
+                'title': variant_data.get('title', 'Default'),
+                'option1': variant_data.get('option1'),
+                'option2': variant_data.get('option2'),
+                'option3': variant_data.get('option3'),
+                'price': float(variant_data['price']),
+                'compare_at_price': float(variant_data.get('compare_at_price', 0)),
+                'cost_price': float(variant_data.get('cost_price', 0)),
+                'sku': variant_data.get('sku', f"VAR-{variant_id[:8]}"),
+                'barcode': variant_data.get('barcode'),
+                'weight': variant_data.get('weight', 0),
+                'inventory_quantity': variant_data.get('inventory_quantity', 0),
+                'image': variant_data.get('image'),
+                'position': variant_data.get('position', 1),
+                'created_at': datetime.utcnow()
+            }
+            
+            return variant
+            
+        except Exception as e:
+            logging.error(f"Variant creation error: {str(e)}")
+            raise e
+
+    async def create_order_with_stripe(self, order_data: Dict[str, Any], customer_id: str) -> Dict[str, Any]:
+        """
+        Create order with real Stripe payment processing
+        """
+        try:
+            order_id = str(uuid.uuid4())
+            
+            # Calculate order totals
+            subtotal = 0.0
+            order_items = []
+            
+            for item_data in order_data['items']:
+                product = await self.products.find_one({'product_id': item_data['product_id']})
+                if not product:
+                    return {'success': False, 'error': f"Product {item_data['product_id']} not found"}
+                
+                # Check inventory
+                if product['inventory']['track_inventory']:
+                    inventory = await self.inventory.find_one({'product_id': item_data['product_id']})
+                    if inventory['available_quantity'] < item_data['quantity']:
+                        return {'success': False, 'error': f"Insufficient inventory for {product['name']}"}
+                
+                item_price = product['price']
+                if item_data.get('variant_id'):
+                    # Find variant price
+                    for variant in product.get('variants', []):
+                        if variant['variant_id'] == item_data['variant_id']:
+                            item_price = variant['price']
+                            break
+                
+                item_total = item_price * item_data['quantity']
+                subtotal += item_total
+                
+                order_item = {
+                    'order_item_id': str(uuid.uuid4()),
+                    'order_id': order_id,
+                    'product_id': item_data['product_id'],
+                    'variant_id': item_data.get('variant_id'),
+                    'quantity': item_data['quantity'],
+                    'unit_price': item_price,
+                    'total_price': item_total,
+                    'product_snapshot': {
+                        'name': product['name'],
+                        'sku': product['sku'],
+                        'image': product['images'][0] if product['images'] else None
+                    }
+                }
+                order_items.append(order_item)
+            
+            # Calculate taxes and shipping
+            tax_amount = subtotal * float(order_data.get('tax_rate', 0))
+            shipping_amount = float(order_data.get('shipping_cost', 0))
+            discount_amount = float(order_data.get('discount_amount', 0))
+            
+            total_amount = subtotal + tax_amount + shipping_amount - discount_amount
+            
+            # Create Stripe PaymentIntent
+            stripe_payment_intent = stripe.PaymentIntent.create(
+                amount=int(total_amount * 100),  # Convert to cents
+                currency=order_data.get('currency', 'usd'),
+                customer=customer_id,
+                metadata={
+                    'order_id': order_id,
+                    'customer_id': customer_id
+                },
+                automatic_payment_methods={'enabled': True}
+            )
+            
+            # Create order document
+            order = {
+                'order_id': order_id,
+                'order_number': f"ORD-{datetime.utcnow().strftime('%Y%m%d')}-{order_id[:6].upper()}",
+                'customer_id': customer_id,
+                'stripe_payment_intent_id': stripe_payment_intent.id,
+                'status': 'pending',
+                'payment_status': 'pending',
+                'financial_status': 'pending',
+                'fulfillment_status': 'unfulfilled',
+                'items': order_items,
+                'customer_info': order_data.get('customer_info', {}),
+                'shipping_address': order_data.get('shipping_address', {}),
+                'billing_address': order_data.get('billing_address', {}),
+                'pricing': {
+                    'subtotal': subtotal,
+                    'tax_amount': tax_amount,
+                    'shipping_amount': shipping_amount,
+                    'discount_amount': discount_amount,
+                    'total_amount': total_amount,
+                    'currency': order_data.get('currency', 'usd')
+                },
+                'shipping': {
+                    'method': order_data.get('shipping_method'),
+                    'tracking_number': None,
+                    'carrier': None,
+                    'estimated_delivery': None
+                },
+                'notes': order_data.get('notes', ''),
+                'created_at': datetime.utcnow(),
+                'updated_at': datetime.utcnow()
+            }
+            
+            # Insert order into database
+            await self.orders.insert_one(order)
+            
+            # Insert order items
+            for item in order_items:
+                await self.order_items.insert_one(item)
+            
+            # Reserve inventory
+            for item_data in order_data['items']:
+                await self.inventory.update_one(
+                    {'product_id': item_data['product_id']},
+                    {
+                        '$inc': {
+                            'available_quantity': -item_data['quantity'],
+                            'reserved_quantity': item_data['quantity']
+                        },
+                        '$push': {
+                            'inventory_movements': {
+                                'type': 'reserved',
+                                'quantity': item_data['quantity'],
+                                'order_id': order_id,
+                                'timestamp': datetime.utcnow()
+                            }
+                        }
+                    }
+                )
+            
+            return {
+                'success': True,
+                'order': order,
+                'stripe_client_secret': stripe_payment_intent.client_secret
+            }
+            
+        except Exception as e:
+            logging.error(f"Order creation error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+
+    async def get_ecommerce_analytics(self, vendor_id: Optional[str] = None, date_range: Dict = None) -> Dict[str, Any]:
+        """
+        Get comprehensive e-commerce analytics
+        """
+        try:
+            # Build date filter
+            date_filter = {}
+            if date_range:
+                if date_range.get('start_date'):
+                    date_filter['created_at'] = {'$gte': datetime.fromisoformat(date_range['start_date'])}
+                if date_range.get('end_date'):
+                    date_filter.setdefault('created_at', {})['$lte'] = datetime.fromisoformat(date_range['end_date'])
+            
+            # Total sales pipeline
+            sales_pipeline = [
+                {'$match': {**date_filter, 'payment_status': 'paid'}},
+                {'$group': {
+                    '_id': None,
+                    'total_revenue': {'$sum': '$pricing.total_amount'},
+                    'total_orders': {'$sum': 1},
+                    'avg_order_value': {'$avg': '$pricing.total_amount'}
+                }}
+            ]
+            
+            sales_data = await self.orders.aggregate(sales_pipeline).to_list(length=1)
+            sales_stats = sales_data[0] if sales_data else {
+                'total_revenue': 0,
+                'total_orders': 0,
+                'avg_order_value': 0
+            }
+            
+            # Top products
+            top_products_pipeline = [
+                {'$match': date_filter},
+                {'$lookup': {
+                    'from': 'order_items',
+                    'localField': 'order_id',
+                    'foreignField': 'order_id',
+                    'as': 'items'
+                }},
+                {'$unwind': '$items'},
+                {'$group': {
+                    '_id': '$items.product_id',
+                    'total_sold': {'$sum': '$items.quantity'},
+                    'total_revenue': {'$sum': '$items.total_price'},
+                    'product_name': {'$first': '$items.product_snapshot.name'}
+                }},
+                {'$sort': {'total_sold': -1}},
+                {'$limit': 10}
+            ]
+            
+            top_products = await self.orders.aggregate(top_products_pipeline).to_list(length=10)
+            
+            # Sales by status
+            status_pipeline = [
+                {'$match': date_filter},
+                {'$group': {
+                    '_id': '$status',
+                    'count': {'$sum': 1},
+                    'revenue': {'$sum': '$pricing.total_amount'}
+                }}
+            ]
+            
+            sales_by_status = await self.orders.aggregate(status_pipeline).to_list(length=None)
+            
+            # Recent orders
+            recent_orders = await self.orders.find(
+                date_filter
+            ).sort('created_at', -1).limit(10).to_list(length=10)
+            
+            # Inventory alerts (low stock products)
+            low_stock_products = await self.products.find({
+                'inventory.track_inventory': True,
+                '$expr': {
+                    '$lte': ['$inventory.quantity', '$inventory.low_stock_threshold']
+                },
+                'status': 'active'
+            }).limit(10).to_list(length=10)
+            
+            return {
+                'success': True,
+                'analytics': {
+                    'sales_summary': {
+                        'total_revenue': float(sales_stats['total_revenue']),
+                        'total_orders': sales_stats['total_orders'],
+                        'average_order_value': float(sales_stats['avg_order_value']),
+                        'period': date_range or 'all_time'
+                    },
+                    'top_products': top_products,
+                    'sales_by_status': sales_by_status,
+                    'recent_orders': recent_orders,
+                    'inventory_alerts': {
+                        'low_stock_products': low_stock_products,
+                        'total_low_stock': len(low_stock_products)
+                    },
+                    'generated_at': datetime.utcnow().isoformat()
+                }
+            }
+            
+        except Exception as e:
+            logging.error(f"E-commerce analytics error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+
+# Global service instance
+ecommerce_service = CompleteEcommerceService
