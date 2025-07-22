@@ -263,8 +263,7 @@ ROUTER_MAPPINGS = {
     "compliance_system": ("/api/compliance", ["Compliance System"]),
     "rate_limiting_system": ("/api/rate-limiting", ["Rate Limiting System"]),
     "i18n_system": ("/api/i18n", ["Internationalization"]),
-    "google_oauth": ("/api/google-oauth", ["Google OAuth"])
-
+    "google_oauth": ("/api/google-oauth", ["Google OAuth"]),
     "advanced_lms_router": ("Advanced LMS", advanced_lms_router),
     "multi_vendor_marketplace_router": ("Multi-Vendor Marketplace", multi_vendor_marketplace_router),
     "advanced_business_intelligence_router": ("Business Intelligence", advanced_business_intelligence_router),
