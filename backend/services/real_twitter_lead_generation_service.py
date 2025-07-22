@@ -194,6 +194,26 @@ class RealTwitterLeadGenerationService:
         engagement_ratio = (tweets / max(followers, 1)) * 100
         return min(engagement_ratio, 100.0)  # Cap at 100%
     
+    async def extract_contact_information_mock(self, lead_data: Dict) -> Dict:
+        """Extract contact information from lead data (mock version)"""
+        contact_info = {
+            "email": None,
+            "phone": None,
+            "website": lead_data.get("website_url"),
+            "other_social": []
+        }
+        
+        # Mock email extraction based on username pattern
+        username = lead_data.get("username", "")
+        if username:
+            # Generate realistic email patterns
+            if "business" in username.lower():
+                contact_info["email"] = f"{username}@{username}.com"
+            elif "consultant" in username.lower():
+                contact_info["email"] = f"contact@{username}.com"
+        
+        return contact_info
+    
     async def extract_contact_information(self, user) -> Dict:
         """Extract contact information from Twitter profile"""
         contact_info = {
