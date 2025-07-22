@@ -449,7 +449,7 @@ except Exception as e:
 
 try:
     from api.complete_admin_dashboard import router as admin_router
-    app.include_router(admin_router, prefix="/api/admin", tags=["Admin Dashboard"])
+    app.include_router(admin_router, prefix="/api/admin-dashboard", tags=["Admin Dashboard"])
     included_count += 1
     print("  ✅ Included Complete Advanced Admin Dashboard router")
 except Exception as e:
