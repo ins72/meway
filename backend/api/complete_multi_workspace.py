@@ -52,7 +52,7 @@ async def create_workspace(
     """Create a new workspace with real data persistence"""
     try:
         result = await complete_multi_workspace_service.create_workspace(
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             name=workspace_data.name,
             description=workspace_data.description,
             workspace_type=workspace_data.workspace_type,
