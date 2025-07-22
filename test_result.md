@@ -9336,12 +9336,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Team Management & Workspace Collaboration System"
-    - "Form Builder System"
+    - "Multi-Workspace System Server Error Fix"
+    - "Website Builder Templates Server Error Fix"
+    - "Admin Dashboard Database Connection Fix"
+    - "Missing Systems Implementation (Escrow, Referrals, Complete Onboarding)"
   stuck_tasks:
-    - "Team Management & Workspace Collaboration System"
-    - "Form Builder System"
-    - "Google OAuth Integration (First Wave Regression)"
+    - "Multi-Workspace System Server Error Fix"
+    - "Website Builder Templates Server Error Fix"
+    - "Admin Dashboard Database Connection Fix"
   test_all: false
   test_priority: "high_first"
 
