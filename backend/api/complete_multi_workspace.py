@@ -271,7 +271,7 @@ async def change_member_role(
         
         success = await complete_multi_workspace_service.change_member_role(
             workspace_id=workspace_id,
-            admin_id=user['id'],
+            admin_id=user.get('_id') or user.get('id') or user.get('user_id'),
             member_id=member_id,
             new_role=role_data.new_role
         )
