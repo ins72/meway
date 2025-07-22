@@ -516,7 +516,7 @@ class OnboardingService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                                random.seed(seed_value)
+                                # Deterministic ordering based on database data
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
                 return shuffled

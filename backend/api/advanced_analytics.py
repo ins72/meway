@@ -7,7 +7,6 @@ from typing import Optional, List
 from datetime import datetime, timedelta
 from pydantic import BaseModel
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.advanced_analytics_service import AdvancedAnalyticsService

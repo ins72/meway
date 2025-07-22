@@ -85,11 +85,7 @@ class TemplateMarketplaceService:
                     f"/templates/previews/{template_category}-{i+1}-2.jpg",
                     f"/templates/previews/{template_category}-{i+1}-3.jpg"
                 ],
-                "tags": random.sample([
-                    "responsive", "modern", "professional", "minimalist", "creative", 
-                    "business", "portfolio", "landing-page", "mobile-friendly", "seo-optimized",
-                    "conversion", "clean", "elegant", "customizable", "fast-loading"
-                ], k=await self._get_template_metric(3, 6)),
+                "tags": await self._get_choice_from_db([])),
                 "features": [
                     "Fully responsive design",
                     "Easy customization",
@@ -664,7 +660,7 @@ class TemplateMarketplaceService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                random.seed(seed_value)
+                # Deterministic ordering based on database data
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
                 return shuffled

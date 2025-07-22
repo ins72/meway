@@ -5,7 +5,6 @@ Business logic for AI-powered content creation, conversations, and optimization
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 

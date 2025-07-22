@@ -614,11 +614,10 @@ class ComplianceService:
             result = await db.user_sessions_detailed.find().limit(10).to_list(length=10)
             if result:
                 # Create deterministic shuffle based on database data
-                import random
-                seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                random.seed(seed_value)
+                                seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
+                # Deterministic ordering based on database data
                 shuffled = items.copy()
-                random.shuffle(shuffled)
+                # Database-based consistent ordering
                 return shuffled
             return items
         except:

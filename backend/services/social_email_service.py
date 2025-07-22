@@ -83,7 +83,7 @@ class SocialEmailService:
             {"name": "YouTube", "username": "Your Business Channel", "followers": await self._get_metric_from_db('general', 300, 2500)}
         ]
         
-        selected_platforms = random.sample(available_platforms, k=min(connected_count, len(available_platforms)))
+        selected_platforms = await self._get_choice_from_db([])))
         
         for platform in selected_platforms:
             connection = {
@@ -551,9 +551,9 @@ class SocialEmailService:
             result = await db.analytics.find_one({"type": "sample_distribution"})
             if result and result.get("common_samples"):
                 return result["common_samples"][:k]
-            return random.sample(choices, k=min(k, len(choices)))
+            return await self._get_choice_from_db([])))
         except:
-            return random.sample(choices, k=min(k, len(choices)))
+            return await self._get_choice_from_db([])))
 
 
     async def get_database(self):

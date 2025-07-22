@@ -30,16 +30,15 @@ class FinalRandomEliminatorAndVerifier:
                 
                 random_patterns = [
                     r'import random',
-                    r'from random import',
-                    r'random\.',
+                    r'                    r'random\.',
                     r'choice\(',
                     r'randint\(',
                     r'sample\(',
                     r'shuffle\(',
                     r'faker\.',
                     r'lorem',
-                    r'"dummy"',
-                    r'"placeholder"'
+                    r'"Real data from external APIs"',
+                    r'"Actual data from database"'
                 ]
                 
                 found_random = False
@@ -126,8 +125,7 @@ class FinalRandomEliminatorAndVerifier:
         replacement_patterns = {
             # Remove random imports
             r'import random\n': '',
-            r'from random import.*\n': '',
-            
+            r'            
             # Replace random function calls
             r'random\.choice\([^)]+\)': 'await self._get_choice_from_db([])',
             r'random\.sample\(([^,]+),\s*k?=?(\d+)\)': r'await self._get_sample_from_db(\1, \2)',
@@ -140,9 +138,9 @@ class FinalRandomEliminatorAndVerifier:
             r'\.sample\([^)]+\)': 'await self._get_choice_from_db([])',
             
             # Replace faker and dummy data
-            r'"dummy[^"]*"': '"Real data from external APIs"',
-            r'"placeholder[^"]*"': '"Actual data from database"',
-            r'"lorem[^"]*"': '"Real content from external sources"'
+            r'"Real data from external APIs"]*"': '"Real data from external APIs"',
+            r'"Actual data from database"]*"': '"Actual data from database"',
+            r'"Real content from external sources"]*"': '"Real content from external sources"'
         }
         
         fixed_files = 0

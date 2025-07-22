@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
 import json
-import random
 
 from core.auth import get_current_user
 from services.automation_service import AutomationService
