@@ -532,10 +532,23 @@ class CompleteLinkInBioService:
     async def get_available_templates(self) -> Dict[str, Any]:
         """READ: Get available templates with real data"""
         try:
+            # Convert template catalog to JSON-serializable format
+            templates = {}
+            for template_id, template_data in self.TEMPLATE_CATALOG.items():
+                templates[template_id] = {
+                    "id": template_id,
+                    "name": template_data["name"],
+                    "description": template_data["description"],
+                    "preview_image": template_data["preview_image"],
+                    "color_scheme": template_data["color_scheme"],
+                    "layout": template_data["layout"],
+                    "features": template_data["features"]
+                }
+            
             return {
-                "templates": self.TEMPLATE_CATALOG,
-                "total_templates": len(self.TEMPLATE_CATALOG),
-                "categories": list(set(template["layout"] for template in self.TEMPLATE_CATALOG.values()))
+                "templates": templates,
+                "total_templates": len(templates),
+                "categories": ["minimal", "business", "creative", "ecommerce", "social", "portfolio"]
             }
         except Exception as e:
             raise Exception(f"Failed to get available templates: {str(e)}")
