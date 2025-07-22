@@ -282,19 +282,19 @@ class FinalTargetedTester:
         print("\n🧪 Testing External API Connections...")
         
         # Test Stripe API
-        self.test_endpoint("/admin-config/integrations/stripe/test", "GET", test_name="External API - Stripe Test", system="external_api_integration")
+        self.test_endpoint("/admin-config/integrations/stripe/test", "POST", {}, "External API - Stripe Test", "external_api_integration")
         
         # Test OpenAI API
-        self.test_endpoint("/admin-config/integrations/openai/test", "GET", test_name="External API - OpenAI Test", system="external_api_integration")
+        self.test_endpoint("/admin-config/integrations/openai/test", "POST", {}, "External API - OpenAI Test", "external_api_integration")
         
         # Test ElasticMail API
-        self.test_endpoint("/admin-config/integrations/elasticmail/test", "GET", test_name="External API - ElasticMail Test", system="external_api_integration")
+        self.test_endpoint("/admin-config/integrations/elasticmail/test", "POST", {}, "External API - ElasticMail Test", "external_api_integration")
         
         # Test Twitter API
-        self.test_endpoint("/admin-config/integrations/twitter/test", "GET", test_name="External API - Twitter Test", system="external_api_integration")
+        self.test_endpoint("/admin-config/integrations/twitter/test", "POST", {}, "External API - Twitter Test", "external_api_integration")
         
         # Test TikTok API (if available)
-        self.test_endpoint("/admin-config/integrations/tiktok/test", "GET", test_name="External API - TikTok Test", system="external_api_integration")
+        self.test_endpoint("/admin-config/integrations/tiktok/test", "POST", {}, "External API - TikTok Test", "external_api_integration")
 
     def calculate_success_rates(self):
         """Calculate and display success rates for each system"""
