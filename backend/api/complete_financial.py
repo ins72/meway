@@ -123,8 +123,8 @@ async def get_invoices(
     """Get user invoices with real data"""
     try:
         result = await complete_financial_service.get_user_invoices(
-            user_id=user['id'],
-            status=status,
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
+            filters={'status': status} if status else {},
             limit=limit,
             offset=offset
         )
