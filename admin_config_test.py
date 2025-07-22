@@ -9,7 +9,7 @@ import json
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://d33eb8ac-7127-4f8c-84c6-cd6985146bee.preview.emergentagent.com"
+BACKEND_URL = "https://e0ab52c3-9e31-486e-974d-41e6b1129712.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
