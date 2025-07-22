@@ -479,6 +479,14 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Multi-Workspace router: {str(e)}")
 
+try:
+    from api.complete_subscription import router as subscription_router
+    app.include_router(subscription_router, prefix="/api/subscriptions", tags=["Subscription Management"])
+    included_count += 1
+    print("  ✅ Included Complete 3-Tier Subscription Management with Stripe router")
+except Exception as e:
+    print(f"  ❌ Failed to include Subscription Management router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
