@@ -467,120 +467,175 @@ class CompleteFinancialService:
                 'error': str(e)
             }
     
-    async def get_financial_dashboard(self, user_id: str, date_range: Dict = None) -> Dict[str, Any]:
-        """
-        Get comprehensive financial dashboard
-        """
+    async def get_user_invoices(self, user_id: str, filters: Dict = None, 
+                               limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """Get user invoices with filtering"""
         try:
             db = await self.get_database()
             
-            # Date range filter
-            if date_range:
-                start_date = datetime.fromisoformat(date_range['start_date']) if date_range.get('start_date') else datetime.utcnow() - timedelta(days=30)
-                end_date = datetime.fromisoformat(date_range['end_date']) if date_range.get('end_date') else datetime.utcnow()
-            else:
-                end_date = datetime.utcnow()
-                start_date = end_date - timedelta(days=30)
+            # Build query
+            query = {'user_id': user_id}
+            if filters:
+                if filters.get('status'):
+                    query['status'] = filters['status']
             
-            date_filter = {'created_at': {'$gte': start_date, '$lte': end_date}}
-            
-            # Invoice analytics
-            invoice_pipeline = [
-                {'$match': {'user_id': user_id, **date_filter}},
-                {'$group': {
-                    '_id': '$payment_info.status',
-                    'count': {'$sum': 1},
-                    'total_amount': {'$sum': '$financial_details.total_amount'},
-                    'total_paid': {'$sum': '$payment_info.total_paid'}
-                }}
-            ]
-            
-            invoice_stats = await db.invoices.aggregate(invoice_pipeline).to_list(length=None)
-            
-            # Expense analytics
-            expense_pipeline = [
-                {'$match': {'user_id': user_id, **date_filter}},
-                {'$group': {
-                    '_id': '$category',
-                    'count': {'$sum': 1},
-                    'total_amount': {'$sum': '$amount'}
-                }}
-            ]
-            
-            expense_stats = await db.expenses.aggregate(expense_pipeline).to_list(length=None)
-            
-            # Recent invoices
-            recent_invoices = await db.invoices.find(
-                {'user_id': user_id}
-            ).sort('created_at', -1).limit(10).to_list(length=10)
-            
-            # Recent expenses
-            recent_expenses = await db.expenses.find(
-                {'user_id': user_id}
-            ).sort('created_at', -1).limit(10).to_list(length=10)
-            
-            # Outstanding invoices
-            outstanding_invoices = await db.invoices.find({
-                'user_id': user_id,
-                'payment_info.status': {'$in': ['sent', 'overdue', 'partial']}
-            }).sort('dates.due_date', 1).to_list(length=None)
-            
-            # Calculate totals
-            total_invoiced = sum(stat['total_amount'] for stat in invoice_stats)
-            total_paid = sum(stat['total_paid'] for stat in invoice_stats)
-            total_expenses = sum(stat['total_amount'] for stat in expense_stats)
-            net_profit = total_paid - total_expenses
-            
-            # Convert ObjectIds and Decimals
-            for invoice in recent_invoices + outstanding_invoices:
-                invoice['_id'] = str(invoice['_id'])
-                if 'created_at' in invoice:
-                    invoice['created_at'] = invoice['created_at'].isoformat()
-                if 'dates' in invoice:
-                    for key, value in invoice['dates'].items():
-                        if value:
-                            invoice['dates'][key] = value.isoformat()
-            
-            for expense in recent_expenses:
-                expense['_id'] = str(expense['_id'])
-                expense['amount'] = float(expense['amount'])
-                if 'created_at' in expense:
-                    expense['created_at'] = expense['created_at'].isoformat()
-                if 'expense_date' in expense:
-                    expense['expense_date'] = expense['expense_date'].isoformat()
-            
-            dashboard = {
-                'user_id': user_id,
-                'period': {
-                    'start_date': start_date.isoformat(),
-                    'end_date': end_date.isoformat()
-                },
-                'summary': {
-                    'total_invoiced': total_invoiced,
-                    'total_paid': total_paid,
-                    'total_expenses': total_expenses,
-                    'net_profit': net_profit,
-                    'outstanding_amount': sum(inv['payment_info']['balance_due'] for inv in outstanding_invoices)
-                },
-                'invoice_breakdown': invoice_stats,
-                'expense_breakdown': expense_stats,
-                'recent_invoices': recent_invoices,
-                'recent_expenses': recent_expenses,
-                'outstanding_invoices': outstanding_invoices,
-                'generated_at': datetime.utcnow().isoformat()
-            }
+            # Get invoices with pagination
+            invoices = await db.invoices.find(query).skip(offset).limit(limit).sort('created_at', -1).to_list(length=limit)
+            total_count = await db.invoices.count_documents(query)
             
             return {
-                'success': True,
-                'dashboard': dashboard
+                'invoices': invoices,
+                'total_count': total_count
             }
             
         except Exception as e:
-            logger.error(f"Get financial dashboard error: {str(e)}")
-            return {
-                'success': False,
-                'error': str(e)
+            logger.error(f"Get user invoices error: {str(e)}")
+            return {'invoices': [], 'total_count': 0}
+    
+    async def get_invoice(self, invoice_id: str, user_id: str) -> Dict[str, Any]:
+        """Get specific invoice"""
+        try:
+            db = await self.get_database()
+            
+            invoice = await db.invoices.find_one({
+                'invoice_id': invoice_id,
+                'user_id': user_id
+            })
+            
+            return invoice
+            
+        except Exception as e:
+            logger.error(f"Get invoice error: {str(e)}")
+            return None
+    
+    async def update_invoice(self, invoice_id: str, user_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update invoice"""
+        try:
+            db = await self.get_database()
+            
+            # Update invoice
+            result = await db.invoices.update_one(
+                {'invoice_id': invoice_id, 'user_id': user_id},
+                {'$set': {**update_data, 'updated_at': datetime.utcnow()}}
+            )
+            
+            if result.modified_count:
+                return await db.invoices.find_one({'invoice_id': invoice_id})
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Update invoice error: {str(e)}")
+            return None
+    
+    async def delete_invoice(self, invoice_id: str, user_id: str) -> bool:
+        """Delete invoice"""
+        try:
+            db = await self.get_database()
+            
+            result = await db.invoices.delete_one({
+                'invoice_id': invoice_id,
+                'user_id': user_id
+            })
+            
+            return result.deleted_count > 0
+            
+        except Exception as e:
+            logger.error(f"Delete invoice error: {str(e)}")
+            return False
+    
+    async def create_expense(self, user_id: str, category: str, amount: float,
+                           description: str, date: datetime, receipt_url: str = None,
+                           tags: List[str] = None) -> Dict[str, Any]:
+        """Create expense record"""
+        try:
+            db = await self.get_database()
+            
+            expense_id = str(uuid.uuid4())
+            expense_data = {
+                'expense_id': expense_id,
+                'user_id': user_id,
+                'category': category,
+                'amount': amount,
+                'description': description,
+                'date': date,
+                'receipt_url': receipt_url,
+                'tags': tags or [],
+                'created_at': datetime.utcnow()
             }
+            
+            await db.expenses.insert_one(expense_data)
+            return expense_data
+            
+        except Exception as e:
+            logger.error(f"Create expense error: {str(e)}")
+            return None
+    
+    async def get_user_expenses(self, user_id: str, category: str = None,
+                              start_date: datetime = None, end_date: datetime = None,
+                              limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """Get user expenses with filtering"""
+        try:
+            db = await self.get_database()
+            
+            # Build query
+            query = {'user_id': user_id}
+            if category:
+                query['category'] = category
+            if start_date or end_date:
+                date_filter = {}
+                if start_date:
+                    date_filter['$gte'] = start_date
+                if end_date:
+                    date_filter['$lte'] = end_date
+                query['date'] = date_filter
+            
+            expenses = await db.expenses.find(query).skip(offset).limit(limit).sort('date', -1).to_list(length=limit)
+            total_count = await db.expenses.count_documents(query)
+            
+            return {
+                'expenses': expenses,
+                'total_count': total_count
+            }
+            
+        except Exception as e:
+            logger.error(f"Get user expenses error: {str(e)}")
+            return {'expenses': [], 'total_count': 0}
+            
+    async def update_expense(self, expense_id: str, user_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update expense"""
+        try:
+            db = await self.get_database()
+            
+            result = await db.expenses.update_one(
+                {'expense_id': expense_id, 'user_id': user_id},
+                {'$set': {**update_data, 'updated_at': datetime.utcnow()}}
+            )
+            
+            if result.modified_count:
+                return await db.expenses.find_one({'expense_id': expense_id})
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Update expense error: {str(e)}")
+            return None
+    
+    async def delete_expense(self, expense_id: str, user_id: str) -> bool:
+        """Delete expense"""
+        try:
+            db = await self.get_database()
+            
+            result = await db.expenses.delete_one({
+                'expense_id': expense_id,
+                'user_id': user_id
+            })
+            
+            return result.deleted_count > 0
+            
+        except Exception as e:
+            logger.error(f"Delete expense error: {str(e)}")
+            return False
     
     async def _generate_invoice_pdf(self, invoice_id: str) -> str:
         """Generate PDF for invoice using real PDF generation"""
