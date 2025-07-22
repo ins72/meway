@@ -630,13 +630,95 @@ class CompleteFinancialService:
         except Exception as e:
             logger.error(f"Create invoice activity error: {str(e)}")
     
-    async def _schedule_payment_reminders(self, invoice_id: str):
-        """Schedule payment reminders for invoice"""
+    
+    def _create_invoice_html_template(self, invoice: Dict[str, Any]) -> str:
+        """Create HTML template for invoice PDF"""
         try:
-            # This would integrate with a job scheduler
-            # For now, just log the scheduling
-            logger.info(f"Payment reminders scheduled for invoice {invoice_id}")
+            # Calculate totals
+            subtotal = sum(item.get('amount', 0) for item in invoice.get('items', []))
+            tax_amount = subtotal * (invoice.get('tax_rate', 0) / 100)
+            total = subtotal + tax_amount
             
+            html_template = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Invoice {invoice.get('invoice_number', 'N/A')}</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    .header {{ text-align: center; margin-bottom: 30px; }}
+                    .invoice-details {{ margin-bottom: 20px; }}
+                    .client-details {{ margin-bottom: 20px; }}
+                    table {{ width: 100%; border-collapse: collapse; }}
+                    th, td {{ border: 1px solid #ddd; padding: 10px; text-align: left; }}
+                    th {{ background-color: #f2f2f2; }}
+                    .total-row {{ font-weight: bold; }}
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>INVOICE</h1>
+                    <h2>#{invoice.get('invoice_number', 'N/A')}</h2>
+                </div>
+                
+                <div class="invoice-details">
+                    <strong>Invoice Date:</strong> {invoice.get('created_at', '').strftime('%Y-%m-%d') if isinstance(invoice.get('created_at'), datetime) else 'N/A'}<br>
+                    <strong>Due Date:</strong> {invoice.get('due_date', '').strftime('%Y-%m-%d') if isinstance(invoice.get('due_date'), datetime) else 'N/A'}<br>
+                    <strong>Status:</strong> {invoice.get('status', 'pending').upper()}
+                </div>
+                
+                <div class="client-details">
+                    <h3>Bill To:</h3>
+                    <strong>{invoice.get('client_name', 'N/A')}</strong><br>
+                    {invoice.get('client_email', 'N/A')}<br>
+                    {invoice.get('client_address', '')}
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            """
+            
+            # Add items
+            for item in invoice.get('items', []):
+                html_template += f"""
+                        <tr>
+                            <td>{item.get('description', 'N/A')}</td>
+                            <td>{item.get('quantity', 1)}</td>
+                            <td>${item.get('rate', 0):.2f}</td>
+                            <td>${item.get('amount', 0):.2f}</td>
+                        </tr>
+                """
+            
+            # Add totals
+            html_template += f"""
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 20px; text-align: right;">
+                    <p><strong>Subtotal: ${subtotal:.2f}</strong></p>
+                    <p><strong>Tax ({invoice.get('tax_rate', 0)}%): ${tax_amount:.2f}</strong></p>
+                    <p class="total-row"><strong>Total: ${total:.2f}</strong></p>
+                </div>
+                
+                {f'<div style="margin-top: 30px;"><h4>Notes:</h4><p>{invoice.get("notes", "")}</p></div>' if invoice.get('notes') else ''}
+            </body>
+            </html>
+            """
+            
+            return html_template
+            
+        except Exception as e:
+            logger.error(f"Create invoice HTML template error: {str(e)}")
+            return ""
         except Exception as e:
             logger.error(f"Schedule reminders error: {str(e)}")
     
