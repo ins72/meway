@@ -22,3 +22,5 @@ aiofiles
 b2sdk
 croniter
 numpy
+aiohttp
+requests
