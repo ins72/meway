@@ -1,18 +1,24 @@
 """
-Complete E-commerce System Service - 100% Real Data & Full CRUD
-Mewayz v2 - July 22, 2025
-NO MOCK DATA - REAL INTEGRATIONS ONLY
+Complete E-commerce System Service
+Professional Multi-Vendor Marketplace with Real Payment Integration
+Version: 1.0.0 - Production Ready
 """
 
-import uuid
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
-from motor.motor_asyncio import AsyncIOMotorDatabase
-import os
-import aiohttp
-import json
-from enum import Enum
 import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Any, Optional
+import httpx
+import os
+import uuid
+from decimal import Decimal
+from motor.motor_asyncio import AsyncIOMotorDatabase
+from core.database import get_database
+from core.config import get_api_key
+import stripe
+from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 class ProductStatus(str, Enum):
     ACTIVE = "active"
@@ -42,8 +48,32 @@ class ProductType(str, Enum):
     SUBSCRIPTION = "subscription"
 
 class CompleteEcommerceService:
+    """
+    Complete E-commerce System with real Stripe integration
+    Features:
+    - Multi-vendor marketplace
+    - Product management with variants
+    - Inventory tracking and low-stock alerts
+    - Order processing and fulfillment
+    - Payment processing with Stripe
+    - Digital and physical product support
+    - Shipping integration
+    - Tax calculation
+    - Customer management
+    - Analytics and reporting
+    - Subscription products
+    - Discount codes and promotions
+    """
+    
     def __init__(self, db: AsyncIOMotorDatabase):
         self.db = db
+        self.stripe_secret_key = get_api_key('STRIPE_SECRET_KEY')
+        self.stripe_publishable_key = get_api_key('STRIPE_PUBLISHABLE_KEY')
+        self.stripe_webhook_secret = get_api_key('STRIPE_WEBHOOK_SECRET')
+        
+        # Initialize Stripe
+        stripe.api_key = self.stripe_secret_key
+        
         # Real database collections - no mock data
         self.products = db["products"]
         self.product_categories = db["product_categories"]
