@@ -255,7 +255,7 @@ class FinalTargetedTester:
         # Test TikTok lead discovery with fixed authentication
         print("\n🎵 Testing TikTok Lead Discovery...")
         tiktok_params = {
-            "query": "business coaching",
+            "keywords": "business coaching",
             "location": "United States",
             "limit": 10
         }
@@ -264,7 +264,7 @@ class FinalTargetedTester:
         # Test Twitter lead discovery
         print("\n🐦 Testing Twitter Lead Discovery...")
         twitter_params = {
-            "query": "startup founder",
+            "keywords": "startup founder",
             "location": "New York",
             "limit": 10
         }
