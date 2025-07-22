@@ -713,10 +713,13 @@ class CompleteEcommerceService:
 
     async def _generate_order_number(self) -> str:
         """Generate unique order number"""
-        import random
-        prefix = "MW"
-        number = ''.join(random.choices('0123456789', k=8))
-        return f"{prefix}{number}"
+        # Generate unique order number using timestamp and UUID
+        import uuid
+        from datetime import datetime
+        timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+        unique_id = str(uuid.uuid4()).split('-')[0].upper()
+        number = f"ORD-{timestamp}-{unique_id}"
+        return number
 
     async def _create_or_get_customer(self, customer_data: Dict[str, Any]) -> str:
         """Create or get existing customer"""
