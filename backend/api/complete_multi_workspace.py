@@ -334,7 +334,7 @@ async def get_user_permissions(
     try:
         permissions = await complete_multi_workspace_service.get_user_permissions(
             workspace_id=workspace_id,
-            user_id=user['id']
+            user_id=user.get('_id') or user.get('id') or user.get('user_id')
         )
         
         return {
