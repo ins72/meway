@@ -607,7 +607,7 @@ async def get_available_services(
                 "description": "Access Twitter user data, tweets, and analytics"
             },
             "instagram": {
-                "name": "Instagram Graph API",
+                "name": "TikTok Business API", "Twitter API v2",
                 "required_fields": ["instagram_access_token", "instagram_app_id"],
                 "description": "Access Instagram business account data and media"
             },

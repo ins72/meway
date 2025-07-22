@@ -1,6 +1,6 @@
 """
-Complete Social Media Lead Generation API
-Real TikTok and Twitter API Integration (replacing Instagram)
+Complete Social Media Lead Generation (TikTok & Twitter/X Focus) API
+Real TikTok and Twitter API Integration (replacing )
 """
 
 from datetime import datetime, timedelta
@@ -546,7 +546,7 @@ async def social_media_leads_health_check():
     """Health check for social media leads system"""
     return {
         "status": "healthy",
-        "service": "Complete Social Media Lead Generation",
+        "service": "Complete Social Media Lead Generation (TikTok & Twitter/X Focus)",
         "features": [
             "TikTok Creator Discovery",
             "Twitter User Discovery", 

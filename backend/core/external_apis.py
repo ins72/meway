@@ -100,9 +100,9 @@ class ExternalAPIManager:
         if self.api_keys.get("twitter_bearer_token"):
             test_results["twitter"] = await self._test_twitter_api()
         
-        # Test Instagram API
+        # Test tiktok_api
         if self.api_keys.get("instagram_access_token"):
-            test_results["instagram"] = await self._test_instagram_api()
+            test_results["instagram"] = await self._test_tiktok_api()
         
         # Test Facebook API
         if self.api_keys.get("facebook_access_token"):
@@ -158,7 +158,7 @@ class ExternalAPIManager:
                 "last_tested": datetime.utcnow().isoformat()
             }
     
-    async def _test_instagram_api(self) -> Dict[str, Any]:
+    async def _test_tiktok_api(self) -> Dict[str, Any]:
         """Test Instagram Graph API connection"""
         try:
             start_time = datetime.now()
@@ -361,7 +361,7 @@ class ExternalAPIManager:
     async def get_instagram_user_media(self, user_id: str) -> Dict[str, Any]:
         """Get real Instagram media for user"""
         if not self.api_keys.get("instagram_access_token"):
-            raise ValueError("Instagram API not configured")
+            raise ValueError("tiktok_api not configured")
         
         start_time = datetime.now()
         
@@ -399,7 +399,7 @@ class ExternalAPIManager:
             else:
                 return {
                     "success": False,
-                    "error": f"Instagram API error: {response.status_code} - {response.text}"
+                    "error": f"tiktok_api error: {response.status_code} - {response.text}"
                 }
                 
         except Exception as e:

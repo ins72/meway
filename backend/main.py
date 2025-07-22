@@ -407,13 +407,7 @@ except Exception as e:
     print(f"  ❌ Failed to include Complete Link in Bio router: {str(e)}")
 
 # Include new comprehensive feature routers
-try:
-    from api.complete_instagram_leads import router as instagram_leads_router
-    app.include_router(instagram_leads_router, prefix="/api/instagram", tags=["Instagram Lead Generation"])
-    included_count += 1
-    print("  ✅ Included Complete Instagram Lead Generation router")
-except Exception as e:
-    print(f"  ❌ Failed to include Instagram Lead Generation router: {str(e)}")
+# Instagram router removed - replaced with TikTok/X in complete_social_media_leads
 
 try:
     from api.complete_ecommerce import router as complete_ecommerce_router

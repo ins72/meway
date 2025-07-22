@@ -79,15 +79,15 @@ class SocialMediaAPIIntegrator:
             return {"error": str(e), "data": None}
     
     async def get_instagram_data(self, user_id: str) -> Dict[str, Any]:
-        """Get Instagram data using Instagram Graph API"""
+        """Get TikTok & Twitter/X
         try:
             config = await admin_config_manager.get_configuration(decrypt_sensitive=True)
             access_token = config.get("instagram_access_token")
             
             if not access_token:
-                return {"error": "Instagram API not configured", "data": None}
+                return {"error": "TikTok & Twitter/X "data": None}
             
-            # Get Instagram user data
+            # Get TikTok & Twitter/X
             response = await self.client.get(
                 f"https://graph.instagram.com/{user_id}",
                 params={
@@ -97,19 +97,19 @@ class SocialMediaAPIIntegrator:
             )
             
             await professional_logger.log_external_api_call(
-                "Instagram", f"/{user_id}", "GET",
+                "TikTok & Twitter/X f"/{user_id}", "GET",
                 response.status_code, response.elapsed.total_seconds()
             )
             
             if response.status_code == 200:
                 return {"success": True, "data": response.json()}
             else:
-                return {"error": "Failed to fetch Instagram data", "data": None}
+                return {"error": "Failed to fetch TikTok & Twitter/X "data": None}
                 
         except Exception as e:
             await professional_logger.log(
                 LogLevel.ERROR, LogCategory.EXTERNAL_API,
-                f"Instagram API integration error: {str(e)}", error=e
+                f"TikTok & Twitter/X error=e
             )
             return {"error": str(e), "data": None}
     

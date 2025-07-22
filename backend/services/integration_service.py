@@ -17,8 +17,8 @@ class IntegrationService:
         integrations = {
     "social_media": [
     {
-    "name": "Instagram",
-    "description": "Connect your Instagram account",
+    "name": "TikTok & Twitter/X
+    "description": "Connect your TikTok & Twitter/X
     "icon": "instagram.png",
     "status": "available",
     "features": ["post_scheduling", "analytics", "dm_management"]

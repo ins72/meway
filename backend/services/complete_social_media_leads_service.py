@@ -1,6 +1,6 @@
 """
 Complete Social Media Lead Generation Service
-Real TikTok and Twitter API Integration for Lead Discovery (replacing Instagram)
+Real TikTok and Twitter API Integration for Lead Discovery (replacing tiktok_leads)
 Version: 1.0.0 - Production Ready
 """
 

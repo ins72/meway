@@ -50,8 +50,8 @@ class IntegrationsService:
                 },
                 {
                     "id": "instagram",
-                    "name": "Instagram",
-                    "description": "Instagram business account integration",
+                    "name": "TikTok & Twitter/X
+                    "description": "TikTok & Twitter/X
                     "category": "social",
                     "icon": "instagram.png",
                     "status": "available",
