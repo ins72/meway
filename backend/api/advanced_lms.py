@@ -4,9 +4,9 @@ Advanced Learning Management System API Endpoints
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Dict, List, Optional
 from pydantic import BaseModel
-from ..core.auth import get_current_user
-from ..core.database import get_database
-from ..services.advanced_lms_service import AdvancedLMSService
+from core.auth import get_current_user
+from core.database import get_database
+from services.advanced_lms_service import AdvancedLMSService
 
 router = APIRouter(prefix="/api/lms", tags=["Learning Management System"])
 
