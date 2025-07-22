@@ -439,6 +439,22 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Escrow System router: {str(e)}")
 
+try:
+    from api.complete_referral_system import router as referral_router
+    app.include_router(referral_router, prefix="/api/referrals", tags=["Referral System"])
+    included_count += 1
+    print("  ✅ Included Complete Referral/Affiliate System router")
+except Exception as e:
+    print(f"  ❌ Failed to include Referral System router: {str(e)}")
+
+try:
+    from api.complete_admin_dashboard import router as admin_router
+    app.include_router(admin_router, prefix="/api/admin", tags=["Admin Dashboard"])
+    included_count += 1
+    print("  ✅ Included Complete Advanced Admin Dashboard router")
+except Exception as e:
+    print(f"  ❌ Failed to include Admin Dashboard router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
