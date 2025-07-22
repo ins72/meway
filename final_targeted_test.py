@@ -213,12 +213,13 @@ class FinalTargetedTester:
         print("\n📋 Testing Subscription Plans...")
         self.test_endpoint("/subscriptions/plans", "GET", test_name="Subscriptions - Get Plans", system="subscription_management")
         
-        # Test creating subscription with "professional" plan tier
+        # Test creating subscription with "professional" plan tier (with workspace_id)
         print("\n✨ Testing Subscription Creation (professional)...")
         subscription_data_professional = {
             "plan_tier": "professional",
             "payment_method_id": "pm_test_card_visa",
-            "billing_cycle": "monthly"
+            "billing_cycle": "monthly",
+            "workspace_id": "default-workspace-id"
         }
         self.test_endpoint("/subscriptions/subscriptions", "POST", subscription_data_professional, "Subscriptions - Create (professional)", "subscription_management")
         
@@ -227,7 +228,8 @@ class FinalTargetedTester:
         subscription_data_pro = {
             "plan_tier": "pro",
             "payment_method_id": "pm_test_card_visa",
-            "billing_cycle": "monthly"
+            "billing_cycle": "monthly",
+            "workspace_id": "default-workspace-id"
         }
         self.test_endpoint("/subscriptions/subscriptions", "POST", subscription_data_pro, "Subscriptions - Create (pro)", "subscription_management")
         
