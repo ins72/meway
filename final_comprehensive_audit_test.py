@@ -326,32 +326,23 @@ class FinalAuditTester:
         
         # Test Admin Dashboard Overview
         print("\n📊 Testing Admin Dashboard Overview...")
-        self.test_endpoint("/admin-dashboard/overview", "GET", test_name="Admin Dashboard - Overview")
-        self.test_endpoint("/admin-dashboard/stats", "GET", test_name="Admin Dashboard - Statistics")
+        self.test_endpoint("/admin/dashboard", "GET", test_name="Admin Dashboard - Overview")
         
         # Test User Management
         print("\n👥 Testing User Management...")
-        self.test_endpoint("/admin-dashboard/users", "GET", test_name="Admin Dashboard - READ All Users")
-        self.test_endpoint("/admin-dashboard/users/active", "GET", test_name="Admin Dashboard - READ Active Users")
+        self.test_endpoint("/admin/users", "GET", test_name="Admin Dashboard - READ All Users")
+        self.test_endpoint("/admin/users/stats", "GET", test_name="Admin Dashboard - READ User Stats")
         
         # Test System Metrics
         print("\n📈 Testing System Metrics...")
-        self.test_endpoint("/admin-dashboard/metrics", "GET", test_name="Admin Dashboard - System Metrics")
-        self.test_endpoint("/admin-dashboard/analytics", "GET", test_name="Admin Dashboard - Analytics Data")
+        self.test_endpoint("/admin/system/metrics", "GET", test_name="Admin Dashboard - System Metrics")
         
-        # Test Configuration Management
-        print("\n⚙️ Testing Configuration Management...")
-        self.test_endpoint("/admin-dashboard/config", "GET", test_name="Admin Dashboard - READ Configuration")
-        
-        config_data = {
-            "maintenance_mode": False,
-            "max_users": 10000,
-            "feature_flags": {
-                "new_ui": True,
-                "beta_features": False
-            }
-        }
-        self.test_endpoint("/admin-dashboard/config", "PUT", config_data, "Admin Dashboard - UPDATE Configuration")
+        # Test Admin Configuration System
+        print("\n⚙️ Testing Admin Configuration System...")
+        self.test_endpoint("/admin-config/configuration", "GET", test_name="Admin Config - READ Configuration")
+        self.test_endpoint("/admin-config/system/health", "GET", test_name="Admin Config - System Health")
+        self.test_endpoint("/admin-config/integrations/status", "GET", test_name="Admin Config - Integration Status")
+        self.test_endpoint("/admin-config/available-services", "GET", test_name="Admin Config - Available Services")
         
         print("\n⚙️ Admin Dashboard System Testing Complete!")
 
