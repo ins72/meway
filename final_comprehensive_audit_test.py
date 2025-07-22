@@ -450,15 +450,25 @@ class FinalAuditTester:
         elif success1 and success2:
             self.log_result("Data Consistency - Financial Dashboard", False, "Data inconsistent - may be using random generation")
         
-        # Test user profile consistency
-        success1, data1 = self.test_endpoint("/user/profile", "GET", test_name="Data Consistency - User Profile (Call 1)")
+        # Test admin dashboard consistency
+        success1, data1 = self.test_endpoint("/admin/dashboard", "GET", test_name="Data Consistency - Admin Dashboard (Call 1)")
         time.sleep(1)
-        success2, data2 = self.test_endpoint("/user/profile", "GET", test_name="Data Consistency - User Profile (Call 2)")
+        success2, data2 = self.test_endpoint("/admin/dashboard", "GET", test_name="Data Consistency - Admin Dashboard (Call 2)")
         
         if success1 and success2 and data1 == data2:
-            self.log_result("Data Consistency - User Profile", True, "Data consistent across calls - confirms real database usage")
+            self.log_result("Data Consistency - Admin Dashboard", True, "Data consistent across calls - confirms real database usage")
         elif success1 and success2:
-            self.log_result("Data Consistency - User Profile", False, "Data inconsistent - may be using random generation")
+            self.log_result("Data Consistency - Admin Dashboard", False, "Data inconsistent - may be using random generation")
+        
+        # Test multi-workspace consistency
+        success1, data1 = self.test_endpoint("/multi-workspace/workspaces", "GET", test_name="Data Consistency - Workspaces (Call 1)")
+        time.sleep(1)
+        success2, data2 = self.test_endpoint("/multi-workspace/workspaces", "GET", test_name="Data Consistency - Workspaces (Call 2)")
+        
+        if success1 and success2 and data1 == data2:
+            self.log_result("Data Consistency - Workspaces", True, "Data consistent across calls - confirms real database usage")
+        elif success1 and success2:
+            self.log_result("Data Consistency - Workspaces", False, "Data inconsistent - may be using random generation")
 
     def run_final_comprehensive_audit(self):
         """Run the complete final comprehensive audit"""
