@@ -303,7 +303,7 @@ async def remove_member(
     try:
         success = await complete_multi_workspace_service.remove_member(
             workspace_id=workspace_id,
-            admin_id=user['id'],
+            admin_id=user.get('_id') or user.get('id') or user.get('user_id'),
             member_id=member_id
         )
         
