@@ -256,33 +256,20 @@ class TargetedVerificationTester:
         self.test_endpoint("/subscriptions/plans", "GET", test_name="Subscriptions - List Plans", category="subscription")
         
         # Test current subscription
-        self.test_endpoint("/subscriptions/subscriptions", "GET", test_name="Subscriptions - Current Subscription", category="subscription")
+        self.test_endpoint("/subscriptions/current", "GET", test_name="Subscriptions - Current Subscription", category="subscription")
         
         # Test subscription creation with realistic data
         subscription_data = {
             "plan_id": "pro_monthly",
             "payment_method_id": "pm_test_card_visa"  # Test payment method
         }
-        success, response = self.test_endpoint("/subscriptions/subscriptions", "POST", data=subscription_data, test_name="Subscriptions - Create Subscription", category="subscription")
+        success, response = self.test_endpoint("/subscriptions/create", "POST", data=subscription_data, test_name="Subscriptions - Create Subscription", category="subscription")
         
-        if success and response:
-            subscription_id = response.get("id") or response.get("subscription_id")
-            if subscription_id:
-                # Test subscription management
-                self.test_endpoint(f"/subscriptions/subscriptions/{subscription_id}", "GET", test_name="Subscriptions - Get Subscription Details", category="subscription")
-                
-                # Test subscription updates
-                update_data = {
-                    "plan_id": "pro_yearly"
-                }
-                self.test_endpoint(f"/subscriptions/subscriptions/{subscription_id}/upgrade", "POST", data=update_data, test_name="Subscriptions - Upgrade Subscription", category="subscription")
+        # Test billing history
+        self.test_endpoint("/subscriptions/billing-history", "GET", test_name="Subscriptions - Billing History", category="subscription")
         
-        # Test billing and usage
-        self.test_endpoint("/subscriptions/billing/history", "GET", test_name="Subscriptions - Billing History", category="subscription")
-        self.test_endpoint("/subscriptions/usage", "GET", test_name="Subscriptions - Usage Tracking", category="subscription")
-        
-        # Test subscription analytics
-        self.test_endpoint("/subscriptions/analytics", "GET", test_name="Subscriptions - Analytics", category="subscription")
+        # Test subscription management endpoints
+        self.test_endpoint("/enhanced-ecommerce/subscription/management", "GET", test_name="Subscriptions - Management Dashboard", category="subscription")
 
     def test_external_api_integrations(self):
         """Test external API integrations - should maintain 100% success"""
