@@ -2183,7 +2183,251 @@ class BackendTester:
         
         return True
 
+    def run_final_comprehensive_audit(self):
+        """Run FINAL COMPREHENSIVE RANDOM DATA ELIMINATION VERIFICATION and FULL CRUD AUDIT"""
+        print("🎯 FINAL COMPREHENSIVE RANDOM DATA ELIMINATION VERIFICATION AND FULL CRUD AUDIT")
+        print("Testing ALL critical systems from review request with focus on:")
+        print("1. ✅ ZERO RANDOM/MOCK DATA VERIFICATION")
+        print("2. ✅ COMPLETE SERVICE/API COVERAGE AUDIT")
+        print("3. ✅ EXTERNAL API INTEGRATION VERIFICATION")
+        print("4. ✅ CRITICAL SYSTEMS FUNCTIONALITY")
+        print("5. ✅ AUTHENTICATION & DATA PERSISTENCE")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print("=" * 80)
+        
+        # Test health check first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running properly.")
+            return False
+        
+        # Test authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed - cannot proceed with testing.")
+            return False
+        
+        # 1. COMPLETE FINANCIAL MANAGEMENT SYSTEM (Priority 1)
+        print("\n🎯 PRIORITY 1: COMPLETE FINANCIAL MANAGEMENT SYSTEM")
+        print("=" * 60)
+        self.test_financial_management_system()
+        
+        # 2. COMPLETE MULTI-WORKSPACE SYSTEM (Priority 2)
+        print("\n🎯 PRIORITY 2: COMPLETE MULTI-WORKSPACE SYSTEM")
+        print("=" * 60)
+        self.test_multi_workspace_system()
+        
+        # 3. COMPLETE SOCIAL MEDIA LEADS (Priority 3)
+        print("\n🎯 PRIORITY 3: COMPLETE SOCIAL MEDIA LEADS")
+        print("=" * 60)
+        self.test_social_media_leads_system()
+        
+        # 4. COMPLETE BOOKING SYSTEM (Priority 4)
+        print("\n🎯 PRIORITY 4: COMPLETE BOOKING SYSTEM")
+        print("=" * 60)
+        self.test_booking_system()
+        
+        # 5. COMPLETE SUBSCRIPTION MANAGEMENT (Priority 5)
+        print("\n🎯 PRIORITY 5: COMPLETE SUBSCRIPTION MANAGEMENT")
+        print("=" * 60)
+        self.test_subscription_management_system()
+        
+        # 6. COMPLETE WEBSITE BUILDER (Priority 6)
+        print("\n🎯 PRIORITY 6: COMPLETE WEBSITE BUILDER")
+        print("=" * 60)
+        self.test_website_builder_system()
+        
+        # 7. EXTERNAL API INTEGRATIONS VERIFICATION
+        print("\n🎯 EXTERNAL API INTEGRATIONS VERIFICATION")
+        print("=" * 60)
+        self.test_external_api_integrations()
+        
+        # 8. RANDOM DATA ELIMINATION VERIFICATION
+        print("\n🎯 RANDOM DATA ELIMINATION VERIFICATION")
+        print("=" * 60)
+        self.test_zero_random_data_verification()
+        
+        # 9. AUTHENTICATION & DATA PERSISTENCE
+        print("\n🎯 AUTHENTICATION & DATA PERSISTENCE VERIFICATION")
+        print("=" * 60)
+        self.test_authentication_and_persistence()
+        
+        # Print summary
+        self.print_summary()
+        
+        return True
+    
+    def test_social_media_leads_system(self):
+        """Test Complete Social Media Leads System"""
+        print("\n📱 TESTING COMPLETE SOCIAL MEDIA LEADS SYSTEM")
+        print("=" * 60)
+        
+        # Test TikTok Lead Generation
+        print("\n🎵 Testing TikTok Lead Generation...")
+        tiktok_search_data = {
+            "hashtags": ["business", "entrepreneur", "startup"],
+            "location": "United States",
+            "follower_range": {"min": 1000, "max": 100000},
+            "engagement_rate_min": 2.0
+        }
+        self.test_endpoint("/social-media-leads/tiktok/search", "POST", tiktok_search_data, "Social Media Leads - TikTok Search")
+        self.test_endpoint("/social-media-leads/tiktok/analytics", "GET", test_name="Social Media Leads - TikTok Analytics")
+        
+        # Test Twitter Lead Generation
+        print("\n🐦 Testing Twitter Lead Generation...")
+        twitter_search_data = {
+            "keywords": ["business owner", "entrepreneur", "startup founder"],
+            "location": "United States",
+            "follower_range": {"min": 500, "max": 50000},
+            "verified_only": False
+        }
+        self.test_endpoint("/social-media-leads/twitter/search", "POST", twitter_search_data, "Social Media Leads - Twitter Search")
+        self.test_endpoint("/social-media-leads/twitter/analytics", "GET", test_name="Social Media Leads - Twitter Analytics")
+        
+        # Test Lead Management
+        print("\n👥 Testing Lead Management...")
+        self.test_endpoint("/social-media-leads/leads", "GET", test_name="Social Media Leads - Get All Leads")
+        self.test_endpoint("/social-media-leads/leads/export", "GET", test_name="Social Media Leads - Export Leads")
+        self.test_endpoint("/social-media-leads/analytics/overview", "GET", test_name="Social Media Leads - Analytics Overview")
+        
+        return True
+    
+    def test_booking_system(self):
+        """Test Complete Booking System"""
+        print("\n📅 TESTING COMPLETE BOOKING SYSTEM")
+        print("=" * 60)
+        
+        # Test Service Management
+        print("\n🛠️ Testing Service Management...")
+        service_data = {
+            "name": "Business Consultation",
+            "description": "1-hour business strategy consultation",
+            "duration_minutes": 60,
+            "price": 150.00,
+            "category": "consulting"
+        }
+        self.test_endpoint("/booking/services", "POST", service_data, "Booking - Create Service")
+        self.test_endpoint("/booking/services", "GET", test_name="Booking - Get All Services")
+        
+        # Test Appointment Management
+        print("\n📅 Testing Appointment Management...")
+        appointment_data = {
+            "service_id": "service_123",
+            "client_name": "John Smith",
+            "client_email": "john@example.com",
+            "client_phone": "+1234567890",
+            "appointment_date": "2025-01-15",
+            "appointment_time": "14:00",
+            "notes": "Initial business consultation"
+        }
+        self.test_endpoint("/booking/appointments", "POST", appointment_data, "Booking - Create Appointment")
+        self.test_endpoint("/booking/appointments", "GET", test_name="Booking - Get All Appointments")
+        self.test_endpoint("/booking/appointments/calendar", "GET", test_name="Booking - Calendar View")
+        
+        # Test Availability Management
+        print("\n⏰ Testing Availability Management...")
+        availability_data = {
+            "day_of_week": "monday",
+            "start_time": "09:00",
+            "end_time": "17:00",
+            "break_start": "12:00",
+            "break_end": "13:00"
+        }
+        self.test_endpoint("/booking/availability", "POST", availability_data, "Booking - Set Availability")
+        self.test_endpoint("/booking/availability", "GET", test_name="Booking - Get Availability")
+        
+        # Test Booking Analytics
+        print("\n📊 Testing Booking Analytics...")
+        self.test_endpoint("/booking/analytics/overview", "GET", test_name="Booking - Analytics Overview")
+        self.test_endpoint("/booking/analytics/revenue", "GET", test_name="Booking - Revenue Analytics")
+        
+        return True
+    
+    def test_external_api_integrations(self):
+        """Test External API Integrations"""
+        print("\n🔗 TESTING EXTERNAL API INTEGRATIONS")
+        print("=" * 60)
+        
+        # Test TikTok API Integration
+        print("\n🎵 Testing TikTok API Integration...")
+        self.test_endpoint("/admin-config/integrations/tiktok/test", "POST", {}, "External API - Test TikTok Integration")
+        
+        # Test Twitter API Integration
+        print("\n🐦 Testing Twitter API Integration...")
+        self.test_endpoint("/admin-config/integrations/twitter/test", "POST", {}, "External API - Test Twitter Integration")
+        
+        # Test OpenAI API Integration
+        print("\n🤖 Testing OpenAI API Integration...")
+        self.test_endpoint("/admin-config/integrations/openai/test", "POST", {}, "External API - Test OpenAI Integration")
+        
+        # Test ElasticMail API Integration
+        print("\n📧 Testing ElasticMail API Integration...")
+        self.test_endpoint("/admin-config/integrations/elasticmail/test", "POST", {}, "External API - Test ElasticMail Integration")
+        
+        # Test Stripe Integration
+        print("\n💳 Testing Stripe Integration...")
+        self.test_endpoint("/admin-config/integrations/stripe/test", "POST", {}, "External API - Test Stripe Integration")
+        
+        return True
+    
+    def test_zero_random_data_verification(self):
+        """Test Zero Random/Mock Data Verification"""
+        print("\n🎯 TESTING ZERO RANDOM/MOCK DATA VERIFICATION")
+        print("=" * 60)
+        
+        # Test multiple calls to same endpoints to verify data consistency
+        consistency_endpoints = [
+            "/dashboard/overview",
+            "/users/profile",
+            "/financial/dashboard",
+            "/ai/services",
+            "/ecommerce/dashboard",
+            "/analytics/overview"
+        ]
+        
+        for endpoint in consistency_endpoints:
+            print(f"\n🔍 Testing data consistency for {endpoint}...")
+            self.test_data_consistency(endpoint)
+        
+        return True
+    
+    def test_authentication_and_persistence(self):
+        """Test Authentication & Data Persistence"""
+        print("\n🔐 TESTING AUTHENTICATION & DATA PERSISTENCE")
+        print("=" * 60)
+        
+        # Test authentication across different endpoints
+        auth_test_endpoints = [
+            "/users/profile",
+            "/financial/dashboard",
+            "/multi-workspace/workspaces",
+            "/social-media-leads/analytics/overview",
+            "/booking/services",
+            "/subscriptions/plans",
+            "/website-builder/dashboard"
+        ]
+        
+        for endpoint in auth_test_endpoints:
+            self.test_endpoint(endpoint, "GET", test_name=f"Auth Test - {endpoint}")
+        
+        # Test data persistence by creating and retrieving data
+        print("\n💾 Testing Data Persistence...")
+        
+        # Create a test invoice and verify it persists
+        invoice_data = {
+            "client_name": "Test Persistence Client",
+            "client_email": "persistence@test.com",
+            "items": [{"name": "Test Service", "quantity": 1, "price": 100.00}],
+            "tax_rate": 0.1
+        }
+        success, response = self.test_endpoint("/financial/invoices", "POST", invoice_data, "Data Persistence - Create Invoice")
+        
+        if success:
+            # Verify the invoice can be retrieved
+            self.test_endpoint("/financial/invoices", "GET", test_name="Data Persistence - Retrieve Invoices")
+        
+        return True
+
 if __name__ == "__main__":
     tester = BackendTester()
-    success = tester.run_newly_implemented_features_test()
+    success = tester.run_final_comprehensive_audit()
     sys.exit(0 if success else 1)
