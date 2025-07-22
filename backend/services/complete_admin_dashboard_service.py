@@ -606,25 +606,64 @@ class CompleteAdminDashboardService:
         return (new_today / total) * 100
     
     async def _get_feature_usage_stats(self) -> Dict[str, Any]:
-        """Get feature usage statistics"""
+        """Get feature usage statistics from real database tracking"""
         try:
             db = await self.get_database()
             
-            # This would track actual feature usage
-            # For now, return sample data structure
+            # Get actual feature usage from database
+            feature_usage = await db.feature_usage.find().to_list(length=None)
+            
+            # Process usage data
+            usage_stats = {}
+            for usage in feature_usage:
+                feature = usage.get('feature_name')
+                if feature not in usage_stats:
+                    usage_stats[feature] = {'usage_count': 0, 'active_users': set()}
+                
+                usage_stats[feature]['usage_count'] += usage.get('usage_count', 1)
+                usage_stats[feature]['active_users'].add(usage.get('user_id'))
+            
+            # Convert sets to counts and sort by usage
+            most_used_features = []
+            total_activations = 0
+            
+            for feature, stats in usage_stats.items():
+                feature_data = {
+                    'feature': feature,
+                    'usage_count': stats['usage_count'],
+                    'active_users': len(stats['active_users'])
+                }
+                most_used_features.append(feature_data)
+                total_activations += stats['usage_count']
+            
+            # Sort by usage count
+            most_used_features.sort(key=lambda x: x['usage_count'], reverse=True)
+            
+            # Calculate adoption rate
+            total_users = await db.users.count_documents({})
+            unique_users_with_activity = set()
+            for stats in usage_stats.values():
+                unique_users_with_activity.update(stats['active_users'])
+            
+            adoption_rate = len(unique_users_with_activity) / max(total_users, 1)
+            
             return {
-                'most_used_features': [
-                    {'feature': 'link_in_bio', 'usage_count': 1500, 'active_users': 800},
-                    {'feature': 'social_media_leads', 'usage_count': 1200, 'active_users': 600},
-                    {'feature': 'email_marketing', 'usage_count': 1000, 'active_users': 500}
-                ],
-                'feature_adoption_rate': 0.75,
-                'total_feature_activations': 5000
+                'most_used_features': most_used_features[:10],  # Top 10
+                'feature_adoption_rate': round(adoption_rate, 2),
+                'total_feature_activations': total_activations,
+                'active_feature_users': len(unique_users_with_activity),
+                'tracked_features': len(usage_stats)
             }
             
         except Exception as e:
             logger.error(f"Get feature usage stats error: {str(e)}")
-            return {}
+            return {
+                'most_used_features': [],
+                'feature_adoption_rate': 0.0,
+                'total_feature_activations': 0,
+                'active_feature_users': 0,
+                'tracked_features': 0
+            }
     
     def _serialize_user(self, user: Dict) -> Dict:
         """Serialize user data for response"""
