@@ -406,6 +406,39 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Complete Link in Bio router: {str(e)}")
 
+# Include new comprehensive feature routers
+try:
+    from api.complete_instagram_leads import router as instagram_leads_router
+    app.include_router(instagram_leads_router, prefix="/api/instagram", tags=["Instagram Lead Generation"])
+    included_count += 1
+    print("  ✅ Included Complete Instagram Lead Generation router")
+except Exception as e:
+    print(f"  ❌ Failed to include Instagram Lead Generation router: {str(e)}")
+
+try:
+    from api.complete_ecommerce import router as complete_ecommerce_router
+    app.include_router(complete_ecommerce_router, prefix="/api/ecommerce", tags=["Complete E-commerce"])
+    included_count += 1
+    print("  ✅ Included Complete E-commerce System router")
+except Exception as e:
+    print(f"  ❌ Failed to include Complete E-commerce router: {str(e)}")
+
+try:
+    from api.complete_course_community import router as course_community_router
+    app.include_router(course_community_router, prefix="/api/courses", tags=["Course & Community"])
+    included_count += 1
+    print("  ✅ Included Complete Course & Community Platform router")
+except Exception as e:
+    print(f"  ❌ Failed to include Course & Community router: {str(e)}")
+
+try:
+    from api.complete_escrow import router as escrow_router
+    app.include_router(escrow_router, prefix="/api/escrow", tags=["Escrow System"])
+    included_count += 1
+    print("  ✅ Included Complete Escrow System router")
+except Exception as e:
+    print(f"  ❌ Failed to include Escrow System router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
