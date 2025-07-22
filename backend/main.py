@@ -392,7 +392,7 @@ except Exception as e:
 
 try:
     from api.complete_onboarding import router as complete_onboarding_router
-    app.include_router(complete_onboarding_router, tags=["Complete Onboarding"])
+    app.include_router(complete_onboarding_router, prefix="/api/complete-onboarding", tags=["Complete Onboarding"])
     included_count += 1
     print("  ✅ Included Complete Onboarding System router")
 except Exception as e:
@@ -400,7 +400,7 @@ except Exception as e:
 
 try:
     from api.complete_link_in_bio import router as complete_link_in_bio_router
-    app.include_router(complete_link_in_bio_router, tags=["Complete Link in Bio"])
+    app.include_router(complete_link_in_bio_router, prefix="/api/link-in-bio", tags=["Complete Link in Bio"])
     included_count += 1
     print("  ✅ Included Complete Link in Bio Builder router")
 except Exception as e:
