@@ -2427,6 +2427,25 @@ class BackendTester:
         
         return True
     
+    def test_data_consistency(self, endpoint):
+        """Test data consistency for a specific endpoint"""
+        print(f"\n🔍 Testing data consistency for {endpoint}...")
+        
+        # Make two calls to the same endpoint
+        success1, data1 = self.test_endpoint(endpoint, "GET", test_name=f"Data Consistency - {endpoint} (Call 1)")
+        time.sleep(1)  # Small delay
+        success2, data2 = self.test_endpoint(endpoint, "GET", test_name=f"Data Consistency - {endpoint} (Call 2)")
+        
+        if success1 and success2:
+            if data1 == data2:
+                self.log_result(f"Data Consistency - {endpoint}", True, "Data consistent across calls - confirms real database usage")
+            else:
+                self.log_result(f"Data Consistency - {endpoint}", False, "Data inconsistent - may still be using random generation")
+        else:
+            self.log_result(f"Data Consistency - {endpoint}", False, "Could not test consistency - endpoint failed")
+        
+        return True
+    
     def test_subscription_management_system(self):
         """Test Complete Subscription Management System"""
         print("\n💳 TESTING COMPLETE SUBSCRIPTION MANAGEMENT SYSTEM")
