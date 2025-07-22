@@ -1197,6 +1197,166 @@ class BackendTester:
         for endpoint, _ in db_services[:5]:  # Test first 5 services
             self.test_data_consistency(endpoint)
 
+    def test_complete_onboarding_system(self):
+        """Test the Complete Onboarding System with real data and full CRUD operations"""
+        print("\n=== COMPLETE ONBOARDING SYSTEM TESTING ===")
+        print("Testing the newly implemented Complete Onboarding System with:")
+        print("1. Authentication System - Test login with existing credentials")
+        print("2. Complete Onboarding APIs - Test all new endpoints")
+        print("3. Real Data Verification - Verify MongoDB storage")
+        print("4. Full CRUD Operations - Test CREATE, READ, UPDATE, DELETE")
+        print("5. Database Operations - Verify data persistence")
+        
+        # Test all onboarding endpoints with real data
+        onboarding_session_id = None
+        
+        # 1. CREATE: Create new onboarding session
+        session_data = {
+            "workspace_name": "Mewayz Business Solutions",
+            "workspace_description": "Complete business automation platform for entrepreneurs",
+            "industry": "Technology"
+        }
+        print("\n--- Testing CREATE Operations ---")
+        response = self.test_endpoint_with_response("/onboarding/session", "POST", session_data, "Onboarding - CREATE Session")
+        if response and response.get("success"):
+            onboarding_session_id = response.get("data", {}).get("session_id")
+            print(f"   Created session ID: {onboarding_session_id}")
+        
+        if not onboarding_session_id:
+            print("❌ Cannot continue testing without session ID")
+            return False
+        
+        # 2. READ: Get onboarding session
+        print("\n--- Testing READ Operations ---")
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}", "GET", test_name="Onboarding - READ Session")
+        self.test_endpoint("/onboarding/goals", "GET", test_name="Onboarding - READ Available Goals")
+        self.test_endpoint("/onboarding/subscription-plans", "GET", test_name="Onboarding - READ Subscription Plans")
+        self.test_endpoint("/onboarding/sessions", "GET", test_name="Onboarding - READ User Sessions")
+        self.test_endpoint("/onboarding/analytics", "GET", test_name="Onboarding - READ Analytics")
+        self.test_endpoint("/onboarding/health", "GET", test_name="Onboarding - READ Health Check")
+        
+        # 3. UPDATE: Update onboarding steps with real data
+        print("\n--- Testing UPDATE Operations ---")
+        
+        # Update goals selection
+        goals_data = {
+            "selected_goals": ["social_media", "ecommerce", "analytics"]
+        }
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/goals", "POST", goals_data, "Onboarding - UPDATE Goals Selection")
+        
+        # Update subscription plan
+        subscription_data = {
+            "selected_plan": "pro",
+            "billing_cycle": "monthly",
+            "feature_count": 5
+        }
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/subscription", "POST", subscription_data, "Onboarding - UPDATE Subscription Plan")
+        
+        # Update team setup
+        team_data = {
+            "team_members": [
+                {
+                    "email": "team@mewayz.com",
+                    "first_name": "John",
+                    "last_name": "Smith",
+                    "role": "editor"
+                }
+            ]
+        }
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/team", "POST", team_data, "Onboarding - UPDATE Team Setup")
+        
+        # Update branding
+        branding_data = {
+            "company_name": "Mewayz Solutions",
+            "logo_url": "https://example.com/logo.png",
+            "primary_color": "#3B82F6",
+            "secondary_color": "#1E40AF",
+            "custom_domain": "mewayz.business"
+        }
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/branding", "POST", branding_data, "Onboarding - UPDATE Branding")
+        
+        # Update integrations
+        integrations_data = {
+            "integrations": {
+                "stripe": {"configured": True, "settings": {"test_mode": True}},
+                "openai": {"configured": True, "settings": {"model": "gpt-3.5-turbo"}}
+            }
+        }
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/integrations", "POST", integrations_data, "Onboarding - UPDATE Integrations")
+        
+        # Update step with generic data
+        step_data = {
+            "step": "branding_setup",
+            "data": branding_data
+        }
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/step", "PUT", step_data, "Onboarding - UPDATE Step")
+        
+        # 4. CREATE: Complete onboarding (creates workspace)
+        print("\n--- Testing Complete Onboarding (CREATE Workspace) ---")
+        self.test_endpoint(f"/onboarding/session/{onboarding_session_id}/complete", "POST", test_name="Onboarding - CREATE Complete Onboarding")
+        
+        # 5. DELETE: Delete onboarding session
+        print("\n--- Testing DELETE Operations ---")
+        # Create a new session to delete (don't delete the main one yet)
+        delete_session_data = {
+            "workspace_name": "Test Delete Session",
+            "workspace_description": "Session for testing deletion",
+            "industry": "Testing"
+        }
+        delete_response = self.test_endpoint_with_response("/onboarding/session", "POST", delete_session_data, "Onboarding - CREATE Session for Deletion")
+        if delete_response and delete_response.get("success"):
+            delete_session_id = delete_response.get("data", {}).get("session_id")
+            if delete_session_id:
+                self.test_endpoint(f"/onboarding/session/{delete_session_id}", "DELETE", test_name="Onboarding - DELETE Session")
+        
+        # Test data consistency and real database operations
+        print("\n--- Testing Data Consistency and Real Database Operations ---")
+        self.test_data_consistency("/onboarding/goals")
+        self.test_data_consistency("/onboarding/subscription-plans")
+        self.test_data_consistency("/onboarding/analytics")
+        
+        return True
+    
+    def test_endpoint_with_response(self, endpoint: str, method: str = "GET", data: Dict = None, test_name: str = None):
+        """Test endpoint and return response data for further processing"""
+        if not test_name:
+            test_name = f"{method} {endpoint}"
+            
+        try:
+            url = f"{API_BASE}{endpoint}"
+            
+            headers = {}
+            if self.access_token:
+                headers["Authorization"] = f"Bearer {self.access_token}"
+            
+            if method.upper() == "GET":
+                response = self.session.get(url, headers=headers, timeout=10)
+            elif method.upper() == "POST":
+                response = self.session.post(url, json=data, headers=headers, timeout=10)
+            elif method.upper() == "PUT":
+                response = self.session.put(url, json=data, headers=headers, timeout=10)
+            elif method.upper() == "DELETE":
+                response = self.session.delete(url, headers=headers, timeout=10)
+            else:
+                self.log_result(test_name, False, f"Unsupported method: {method}")
+                return None
+            
+            if response.status_code in [200, 201]:
+                try:
+                    response_data = response.json()
+                    self.log_result(test_name, True, f"Endpoint accessible - Status {response.status_code}", response_data)
+                    return response_data
+                except:
+                    self.log_result(test_name, True, f"Endpoint accessible - Status {response.status_code} (non-JSON response)")
+                    return {"success": True, "status_code": response.status_code}
+            else:
+                self.log_result(test_name, False, f"Endpoint error - Status {response.status_code}: {response.text}")
+                return None
+                
+        except Exception as e:
+            self.log_result(test_name, False, f"Request error: {str(e)}")
+            return None
+
     def run_comprehensive_specification_test(self):
         """Run comprehensive testing of the THREE MAJOR SPECIFICATION AREAS - JULY 2025"""
         print("🎯 COMPREHENSIVE SPECIFICATION IMPLEMENTATION TESTING - JULY 2025")
