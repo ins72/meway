@@ -365,6 +365,31 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Security Compliance router: {str(e)}")
 
+# Include new real API integration routers
+try:
+    from api.real_social_media_leads import router as social_media_leads_router
+    app.include_router(social_media_leads_router, tags=["Social Media Lead Generation"])
+    included_count += 1
+    print("  ✅ Included Real Social Media Lead Generation router")
+except Exception as e:
+    print(f"  ❌ Failed to include Social Media Lead Generation router: {str(e)}")
+
+try:
+    from api.real_ai_automation import router as ai_automation_router
+    app.include_router(ai_automation_router, tags=["AI Automation"])
+    included_count += 1
+    print("  ✅ Included Real AI Automation router")
+except Exception as e:
+    print(f"  ❌ Failed to include AI Automation router: {str(e)}")
+
+try:
+    from api.real_email_automation import router as email_automation_router
+    app.include_router(email_automation_router, tags=["Email Automation"])
+    included_count += 1
+    print("  ✅ Included Real Email Automation router")
+except Exception as e:
+    print(f"  ❌ Failed to include Email Automation router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
