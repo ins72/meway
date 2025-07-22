@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 class SubscriptionTier(str, Enum):
     FREE = "free"
     PROFESSIONAL = "professional"
+    PRO = "professional"  # Alias for professional
     ENTERPRISE = "enterprise"
 
 class SubscriptionStatus(str, Enum):
