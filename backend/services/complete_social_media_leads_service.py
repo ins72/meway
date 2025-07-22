@@ -1,0 +1,612 @@
+"""
+Complete Social Media Lead Generation Service
+Real TikTok and Twitter API Integration for Lead Discovery (replacing Instagram)
+Version: 1.0.0 - Production Ready
+"""
+
+import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Any, Optional
+import httpx
+import os
+import uuid
+from motor.motor_asyncio import AsyncIOMotorDatabase
+from core.database import get_database
+
+logger = logging.getLogger(__name__)
+
+class CompleteSocialMediaLeadsService:
+    """
+    Complete Social Media Lead Generation Service with real TikTok and Twitter API integration
+    Features:
+    - TikTok Creator Discovery and Analysis
+    - Twitter User Profile Analysis and Lead Scoring
+    - Contact Information Extraction
+    - Engagement Metrics Analysis
+    - Real-time Data Population
+    - CSV Export Functionality
+    - Advanced Filtering and Search
+    """
+    
+    def __init__(self):
+        # TikTok API credentials
+        self.tiktok_client_key = os.environ.get('TIKTOK_CLIENT_KEY')
+        self.tiktok_client_secret = os.environ.get('TIKTOK_CLIENT_SECRET')
+        
+        # Twitter API credentials  
+        self.twitter_api_key = os.environ.get('TWITTER_API_KEY')
+        self.twitter_api_secret = os.environ.get('TWITTER_API_SECRET')
+        
+        # API endpoints
+        self.tiktok_base_url = "https://open-api.tiktok.com"
+        self.twitter_base_url = "https://api.twitter.com/2"
+        
+    async def get_database(self) -> AsyncIOMotorDatabase:
+        """Get database connection"""
+        return get_database()
+    
+    async def discover_tiktok_creators(self, search_params: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Discover TikTok creators based on search criteria
+        Real TikTok API integration for creator discovery
+        """
+        try:
+            db = await self.get_database()
+            
+            # Get TikTok access token
+            access_token = await self._get_tiktok_access_token()
+            if not access_token:
+                return {'success': False, 'error': 'Failed to authenticate with TikTok API'}
+            
+            # Search parameters
+            keywords = search_params.get('keywords', [])
+            location = search_params.get('location', '')
+            min_followers = search_params.get('min_followers', 1000)
+            max_followers = search_params.get('max_followers', 1000000)
+            content_type = search_params.get('content_type', 'all')
+            
+            discovered_creators = []
+            
+            # TikTok API call to discover creators
+            async with httpx.AsyncClient() as client:
+                headers = {
+                    'Authorization': f'Bearer {access_token}',
+                    'Content-Type': 'application/json'
+                }
+                
+                # Search for creators (using TikTok Business API)
+                search_url = f"{self.tiktok_base_url}/v2/research/user/list/"
+                
+                params = {
+                    'fields': 'display_name,username,follower_count,following_count,likes_count,video_count,profile_image_url,bio_description',
+                    'max_count': 100
+                }
+                
+                if keywords:
+                    params['query'] = ' '.join(keywords)
+                
+                response = await client.get(search_url, headers=headers, params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    users = data.get('data', {}).get('users', [])
+                    
+                    for user in users:
+                        follower_count = user.get('follower_count', 0)
+                        
+                        # Filter by follower count
+                        if min_followers <= follower_count <= max_followers:
+                            creator_data = {
+                                'lead_id': str(uuid.uuid4()),
+                                'platform': 'tiktok',
+                                'username': user.get('username', ''),
+                                'display_name': user.get('display_name', ''),
+                                'profile_image': user.get('profile_image_url', ''),
+                                'bio': user.get('bio_description', ''),
+                                'follower_count': follower_count,
+                                'following_count': user.get('following_count', 0),
+                                'likes_count': user.get('likes_count', 0),
+                                'video_count': user.get('video_count', 0),
+                                'engagement_rate': self._calculate_tiktok_engagement_rate(user),
+                                'lead_score': self._calculate_lead_score(user, 'tiktok'),
+                                'contact_info': await self._extract_contact_info(user.get('bio_description', '')),
+                                'location': location,
+                                'keywords_match': keywords,
+                                'discovered_at': datetime.utcnow(),
+                                'last_updated': datetime.utcnow()
+                            }
+                            
+                            discovered_creators.append(creator_data)
+            
+            # Store discovered creators in database
+            if discovered_creators:
+                await db.social_media_leads.insert_many(discovered_creators)
+                
+            return {
+                'success': True,
+                'platform': 'tiktok',
+                'total_discovered': len(discovered_creators),
+                'creators': discovered_creators,
+                'search_params': search_params,
+                'discovered_at': datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"TikTok creator discovery error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def discover_twitter_users(self, search_params: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Discover Twitter users based on search criteria
+        Real Twitter API v2 integration for user discovery
+        """
+        try:
+            db = await self.get_database()
+            
+            # Get Twitter Bearer token
+            bearer_token = await self._get_twitter_bearer_token()
+            if not bearer_token:
+                return {'success': False, 'error': 'Failed to authenticate with Twitter API'}
+            
+            # Search parameters
+            keywords = search_params.get('keywords', [])
+            location = search_params.get('location', '')
+            min_followers = search_params.get('min_followers', 1000)
+            max_followers = search_params.get('max_followers', 1000000)
+            
+            discovered_users = []
+            
+            # Twitter API call to search users
+            async with httpx.AsyncClient() as client:
+                headers = {
+                    'Authorization': f'Bearer {bearer_token}',
+                    'Content-Type': 'application/json'
+                }
+                
+                # Search for users
+                search_url = f"{self.twitter_base_url}/users/by"
+                
+                # Build search query
+                query_parts = []
+                if keywords:
+                    query_parts.extend(keywords)
+                if location:
+                    query_parts.append(f'place:"{location}"')
+                
+                query = ' '.join(query_parts)
+                
+                params = {
+                    'user.fields': 'id,name,username,description,public_metrics,profile_image_url,location,verified,created_at',
+                    'max_results': 100
+                }
+                
+                if query:
+                    search_tweets_url = f"{self.twitter_base_url}/tweets/search/recent"
+                    tweet_params = {
+                        'query': query,
+                        'tweet.fields': 'author_id,public_metrics',
+                        'expansions': 'author_id',
+                        'user.fields': 'id,name,username,description,public_metrics,profile_image_url,location,verified',
+                        'max_results': 100
+                    }
+                    
+                    response = await client.get(search_tweets_url, headers=headers, params=tweet_params)
+                    
+                    if response.status_code == 200:
+                        data = response.json()
+                        users = data.get('includes', {}).get('users', [])
+                        
+                        for user in users:
+                            metrics = user.get('public_metrics', {})
+                            follower_count = metrics.get('followers_count', 0)
+                            
+                            # Filter by follower count
+                            if min_followers <= follower_count <= max_followers:
+                                user_data = {
+                                    'lead_id': str(uuid.uuid4()),
+                                    'platform': 'twitter',
+                                    'user_id': user.get('id', ''),
+                                    'username': user.get('username', ''),
+                                    'display_name': user.get('name', ''),
+                                    'profile_image': user.get('profile_image_url', ''),
+                                    'bio': user.get('description', ''),
+                                    'location': user.get('location', location),
+                                    'verified': user.get('verified', False),
+                                    'follower_count': follower_count,
+                                    'following_count': metrics.get('following_count', 0),
+                                    'tweet_count': metrics.get('tweet_count', 0),
+                                    'listed_count': metrics.get('listed_count', 0),
+                                    'engagement_rate': self._calculate_twitter_engagement_rate(user, metrics),
+                                    'lead_score': self._calculate_lead_score(user, 'twitter'),
+                                    'contact_info': await self._extract_contact_info(user.get('description', '')),
+                                    'keywords_match': keywords,
+                                    'discovered_at': datetime.utcnow(),
+                                    'last_updated': datetime.utcnow()
+                                }
+                                
+                                discovered_users.append(user_data)
+            
+            # Store discovered users in database
+            if discovered_users:
+                await db.social_media_leads.insert_many(discovered_users)
+                
+            return {
+                'success': True,
+                'platform': 'twitter',
+                'total_discovered': len(discovered_users),
+                'users': discovered_users,
+                'search_params': search_params,
+                'discovered_at': datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Twitter user discovery error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def get_social_media_leads(self, user_id: str, filters: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Get social media leads with filtering and pagination
+        """
+        try:
+            db = await self.get_database()
+            
+            # Build query
+            query = {'user_id': user_id} if user_id else {}
+            
+            if filters:
+                if filters.get('platform'):
+                    query['platform'] = filters['platform']
+                if filters.get('min_followers'):
+                    query['follower_count'] = {'$gte': filters['min_followers']}
+                if filters.get('max_followers'):
+                    if 'follower_count' in query:
+                        query['follower_count']['$lte'] = filters['max_followers']
+                    else:
+                        query['follower_count'] = {'$lte': filters['max_followers']}
+                if filters.get('verified_only'):
+                    query['verified'] = True
+                if filters.get('has_contact_info'):
+                    query['contact_info.email'] = {'$exists': True, '$ne': ''}
+            
+            # Get leads with pagination
+            limit = filters.get('limit', 50) if filters else 50
+            offset = filters.get('offset', 0) if filters else 0
+            
+            leads = await db.social_media_leads.find(query).skip(offset).limit(limit).sort('discovered_at', -1).to_list(length=limit)
+            total_count = await db.social_media_leads.count_documents(query)
+            
+            return {
+                'success': True,
+                'leads': leads,
+                'total_count': total_count,
+                'filters_applied': filters or {},
+                'timestamp': datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Get social media leads error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def update_lead(self, lead_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Update a social media lead
+        """
+        try:
+            db = await self.get_database()
+            
+            # Prepare update data
+            allowed_fields = ['notes', 'status', 'tags', 'contact_attempted', 'response_received']
+            update_fields = {k: v for k, v in update_data.items() if k in allowed_fields}
+            update_fields['last_updated'] = datetime.utcnow()
+            
+            # Update lead
+            result = await db.social_media_leads.update_one(
+                {'lead_id': lead_id},
+                {'$set': update_fields}
+            )
+            
+            if result.modified_count:
+                updated_lead = await db.social_media_leads.find_one({'lead_id': lead_id})
+                return {
+                    'success': True,
+                    'lead': updated_lead
+                }
+            else:
+                return {
+                    'success': False,
+                    'error': 'Lead not found or no changes made'
+                }
+                
+        except Exception as e:
+            logger.error(f"Update lead error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def delete_lead(self, lead_id: str) -> Dict[str, Any]:
+        """
+        Delete a social media lead
+        """
+        try:
+            db = await self.get_database()
+            
+            result = await db.social_media_leads.delete_one({'lead_id': lead_id})
+            
+            return {
+                'success': result.deleted_count > 0,
+                'deleted': result.deleted_count > 0
+            }
+            
+        except Exception as e:
+            logger.error(f"Delete lead error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    async def export_leads_csv(self, user_id: str, filters: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Export social media leads to CSV format
+        """
+        try:
+            # Get leads
+            leads_data = await self.get_social_media_leads(user_id, filters)
+            
+            if not leads_data['success']:
+                return leads_data
+            
+            leads = leads_data['leads']
+            
+            # Convert to CSV format
+            csv_data = []
+            headers = [
+                'Platform', 'Username', 'Display Name', 'Followers', 'Following', 
+                'Engagement Rate', 'Lead Score', 'Email', 'Phone', 'Bio', 'Location', 
+                'Verified', 'Discovered Date'
+            ]
+            
+            csv_data.append(headers)
+            
+            for lead in leads:
+                contact_info = lead.get('contact_info', {})
+                row = [
+                    lead.get('platform', ''),
+                    lead.get('username', ''),
+                    lead.get('display_name', ''),
+                    lead.get('follower_count', 0),
+                    lead.get('following_count', 0),
+                    f"{lead.get('engagement_rate', 0):.2f}%",
+                    lead.get('lead_score', 0),
+                    contact_info.get('email', ''),
+                    contact_info.get('phone', ''),
+                    lead.get('bio', '')[:100] + '...' if len(lead.get('bio', '')) > 100 else lead.get('bio', ''),
+                    lead.get('location', ''),
+                    'Yes' if lead.get('verified', False) else 'No',
+                    lead.get('discovered_at', datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S')
+                ]
+                csv_data.append(row)
+            
+            return {
+                'success': True,
+                'csv_data': csv_data,
+                'total_records': len(csv_data) - 1,  # Subtract header row
+                'export_timestamp': datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Export leads CSV error: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            }
+    
+    # Private helper methods
+    async def _get_tiktok_access_token(self) -> Optional[str]:
+        """Get TikTok API access token"""
+        try:
+            async with httpx.AsyncClient() as client:
+                token_url = "https://open-api.tiktok.com/oauth/access_token/"
+                
+                data = {
+                    'client_key': self.tiktok_client_key,
+                    'client_secret': self.tiktok_client_secret,
+                    'grant_type': 'client_credentials'
+                }
+                
+                response = await client.post(token_url, data=data)
+                
+                if response.status_code == 200:
+                    token_data = response.json()
+                    return token_data.get('data', {}).get('access_token')
+                    
+                return None
+                
+        except Exception as e:
+            logger.error(f"TikTok token error: {str(e)}")
+            return None
+    
+    async def _get_twitter_bearer_token(self) -> Optional[str]:
+        """Get Twitter API Bearer token"""
+        try:
+            async with httpx.AsyncClient() as client:
+                token_url = "https://api.twitter.com/oauth2/token"
+                
+                auth = (self.twitter_api_key, self.twitter_api_secret)
+                headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+                data = {'grant_type': 'client_credentials'}
+                
+                response = await client.post(token_url, auth=auth, headers=headers, data=data)
+                
+                if response.status_code == 200:
+                    token_data = response.json()
+                    return token_data.get('access_token')
+                    
+                return None
+                
+        except Exception as e:
+            logger.error(f"Twitter token error: {str(e)}")
+            return None
+    
+    def _calculate_tiktok_engagement_rate(self, user_data: Dict) -> float:
+        """Calculate TikTok engagement rate"""
+        try:
+            likes = user_data.get('likes_count', 0)
+            followers = user_data.get('follower_count', 1)  # Avoid division by zero
+            videos = user_data.get('video_count', 1)
+            
+            # Estimate average engagement per video
+            avg_likes_per_video = likes / videos if videos > 0 else 0
+            engagement_rate = (avg_likes_per_video / followers) * 100 if followers > 0 else 0
+            
+            return min(engagement_rate, 100)  # Cap at 100%
+            
+        except Exception:
+            return 0.0
+    
+    def _calculate_twitter_engagement_rate(self, user_data: Dict, metrics: Dict) -> float:
+        """Calculate Twitter engagement rate"""
+        try:
+            followers = metrics.get('followers_count', 1)
+            tweets = metrics.get('tweet_count', 1)
+            listed = metrics.get('listed_count', 0)
+            
+            # Estimate engagement based on listed ratio and follower/tweet ratio
+            listed_ratio = (listed / followers) * 100 if followers > 0 else 0
+            activity_ratio = min((tweets / 365), 10)  # Tweets per day, capped at 10
+            
+            engagement_rate = (listed_ratio + activity_ratio) / 2
+            
+            return min(engagement_rate, 100)  # Cap at 100%
+            
+        except Exception:
+            return 0.0
+    
+    def _calculate_lead_score(self, user_data: Dict, platform: str) -> int:
+        """Calculate lead score based on various factors"""
+        try:
+            score = 0
+            
+            if platform == 'tiktok':
+                # TikTok scoring factors
+                followers = user_data.get('follower_count', 0)
+                engagement_rate = self._calculate_tiktok_engagement_rate(user_data)
+                videos = user_data.get('video_count', 0)
+                
+                # Follower count score (0-40 points)
+                if followers > 100000:
+                    score += 40
+                elif followers > 50000:
+                    score += 30
+                elif followers > 10000:
+                    score += 20
+                elif followers > 1000:
+                    score += 10
+                
+                # Engagement rate score (0-30 points)
+                if engagement_rate > 10:
+                    score += 30
+                elif engagement_rate > 5:
+                    score += 20
+                elif engagement_rate > 2:
+                    score += 10
+                
+                # Content activity score (0-20 points)
+                if videos > 100:
+                    score += 20
+                elif videos > 50:
+                    score += 15
+                elif videos > 10:
+                    score += 10
+                
+                # Bio completeness (0-10 points)
+                bio = user_data.get('bio_description', '')
+                if len(bio) > 50:
+                    score += 10
+                elif len(bio) > 20:
+                    score += 5
+                    
+            elif platform == 'twitter':
+                # Twitter scoring factors
+                followers = user_data.get('public_metrics', {}).get('followers_count', 0)
+                verified = user_data.get('verified', False)
+                tweets = user_data.get('public_metrics', {}).get('tweet_count', 0)
+                
+                # Follower count score (0-40 points)
+                if followers > 100000:
+                    score += 40
+                elif followers > 50000:
+                    score += 30
+                elif followers > 10000:
+                    score += 20
+                elif followers > 1000:
+                    score += 10
+                
+                # Verification bonus (0-20 points)
+                if verified:
+                    score += 20
+                
+                # Activity score (0-25 points)
+                if tweets > 10000:
+                    score += 25
+                elif tweets > 1000:
+                    score += 15
+                elif tweets > 100:
+                    score += 10
+                
+                # Bio completeness (0-15 points)
+                bio = user_data.get('description', '')
+                if len(bio) > 100:
+                    score += 15
+                elif len(bio) > 50:
+                    score += 10
+                elif len(bio) > 20:
+                    score += 5
+            
+            return min(score, 100)  # Cap at 100
+            
+        except Exception:
+            return 0
+    
+    async def _extract_contact_info(self, bio_text: str) -> Dict[str, str]:
+        """Extract contact information from bio text"""
+        import re
+        
+        contact_info = {'email': '', 'phone': '', 'website': ''}
+        
+        try:
+            # Extract email
+            email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            email_match = re.search(email_pattern, bio_text)
+            if email_match:
+                contact_info['email'] = email_match.group()
+            
+            # Extract phone (simple pattern)
+            phone_pattern = r'[\+]?[1-9]?[0-9]{7,15}'
+            phone_match = re.search(phone_pattern, bio_text.replace('-', '').replace(' ', ''))
+            if phone_match:
+                contact_info['phone'] = phone_match.group()
+            
+            # Extract website/URL
+            url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+            url_match = re.search(url_pattern, bio_text)
+            if url_match:
+                contact_info['website'] = url_match.group()
+            
+        except Exception as e:
+            logger.error(f"Contact extraction error: {str(e)}")
+        
+        return contact_info
+
+# Global service instance
+complete_social_media_leads_service = CompleteSocialMediaLeadsService()
