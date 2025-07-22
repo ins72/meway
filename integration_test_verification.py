@@ -129,25 +129,30 @@ class IntegrationTestVerifier:
             return False
     
     def test_integration_test_endpoints(self):
-        """Test the new integration test endpoints at /api/integration-tests/"""
+        """Test the new integration test endpoints"""
         print("\n=== 1. API INTEGRATION TESTING ===")
-        print("Testing the new integration test endpoints at /api/integration-tests/")
+        print("Testing the integration endpoints and external API connections")
         
-        # Test individual integration endpoints
+        # Test integration management endpoints
         integration_endpoints = [
-            ("/integration-tests/elasticmail", "Integration Tests - ElasticMail Email Service"),
-            ("/integration-tests/twitter", "Integration Tests - Twitter/X API"),
-            ("/integration-tests/tiktok", "Integration Tests - TikTok API"),
-            ("/integration-tests/openai", "Integration Tests - OpenAI GPT Integration"),
-            ("/integration-tests/google-oauth", "Integration Tests - Google OAuth"),
-            ("/integration-tests/stripe", "Integration Tests - Stripe Payments")
+            ("/integration/api/integration/available", "Integration - Available Services"),
+            ("/integration/api/integration/connected", "Integration - Connected Services"),
+            ("/admin-config/integrations/status", "Integration - Status Check")
         ]
         
         for endpoint, test_name in integration_endpoints:
             self.test_endpoint(endpoint, test_name=test_name)
         
-        # Test the comprehensive endpoint
-        self.test_endpoint("/integration-tests/all", test_name="Integration Tests - Comprehensive All APIs Test")
+        # Test external API integration tests via admin config
+        external_api_tests = [
+            ("/admin-config/integrations/stripe/test", "POST", {}, "Integration Tests - Stripe API"),
+            ("/admin-config/integrations/openai/test", "POST", {}, "Integration Tests - OpenAI API"),
+            ("/admin-config/integrations/sendgrid/test", "POST", {}, "Integration Tests - SendGrid API"),
+            ("/admin-config/integrations/twitter/test", "POST", {}, "Integration Tests - Twitter API")
+        ]
+        
+        for endpoint, method, data, test_name in external_api_tests:
+            self.test_endpoint(endpoint, method, data, test_name)
     
     def test_enhanced_features(self):
         """Test the enhanced features verification"""
