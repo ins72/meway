@@ -159,13 +159,13 @@ class IntegrationTestVerifier:
         print("\n=== 2. ENHANCED FEATURES VERIFICATION ===")
         print("Testing enhanced AI Analytics, real-time notifications, and workflow automation")
         
-        # Test enhanced AI Analytics endpoints
+        # Test enhanced AI Analytics endpoints (correct paths)
         print("\n--- Enhanced AI Analytics (/api/ai-analytics) ---")
         ai_analytics_endpoints = [
-            ("/ai-analytics/insights", "AI Analytics - Get Insights"),
-            ("/ai-analytics/insights/generate", "POST", {"data_source": "user_behavior", "time_range": "30_days"}, "AI Analytics - Generate Insights"),
-            ("/ai-analytics/analytics/summary", "AI Analytics - Analytics Summary"),
-            ("/ai-analytics/insights/anomaly-detection", "POST", {"dataset": "user_activity", "threshold": 0.95}, "AI Analytics - Anomaly Detection")
+            ("/ai-analytics/api/ai-analytics/insights", "AI Analytics - Get Insights"),
+            ("/ai-analytics/api/ai-analytics/insights/generate", "POST", {"data_source": "user_behavior", "time_range": "30_days"}, "AI Analytics - Generate Insights"),
+            ("/ai-analytics/api/ai-analytics/analytics/summary", "AI Analytics - Analytics Summary"),
+            ("/ai-analytics/api/ai-analytics/insights/anomaly-detection", "POST", {"dataset": "user_activity", "threshold": 0.95}, "AI Analytics - Anomaly Detection")
         ]
         
         for item in ai_analytics_endpoints:
@@ -176,13 +176,13 @@ class IntegrationTestVerifier:
                 endpoint, test_name = item
                 self.test_endpoint(endpoint, test_name=test_name)
         
-        # Test real-time notifications
-        print("\n--- Real-time Notifications (/api/notifications) ---")
+        # Test real-time notifications (correct paths)
+        print("\n--- Real-time Notifications (/api/notifications-system) ---")
         notification_endpoints = [
-            ("/notifications/history", "Notifications - Get History"),
-            ("/notifications/stats", "Notifications - Get Statistics"),
-            ("/notifications/connection-status", "Notifications - Connection Status"),
-            ("/notifications/send", "POST", {"title": "Test", "message": "Test notification", "type": "info"}, "Notifications - Send Notification")
+            ("/notifications-system/history", "Notifications - Get History"),
+            ("/notifications-system/analytics/overview", "Notifications - Get Statistics"),
+            ("/notifications-system/channels", "Notifications - Get Channels"),
+            ("/notifications-system/send", "POST", {"title": "Test", "message": "Test notification", "type": "info"}, "Notifications - Send Notification")
         ]
         
         for item in notification_endpoints:
@@ -193,12 +193,12 @@ class IntegrationTestVerifier:
                 endpoint, test_name = item
                 self.test_endpoint(endpoint, test_name=test_name)
         
-        # Test workflow automation
-        print("\n--- Workflow Automation (/api/workflows) ---")
+        # Test workflow automation (correct paths)
+        print("\n--- Workflow Automation (/api/automation) ---")
         workflow_endpoints = [
-            ("/workflows/list", "Workflows - List User Workflows"),
-            ("/workflows/templates/list", "Workflows - Get Templates"),
-            ("/workflows/stats", "Workflows - Get Statistics")
+            ("/automation/workflows", "Workflows - List User Workflows"),
+            ("/automation/workflows/advanced", "Workflows - Get Advanced Workflows"),
+            ("/automation/integrations/available", "Workflows - Available Integrations")
         ]
         
         for endpoint, test_name in workflow_endpoints:
