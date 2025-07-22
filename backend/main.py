@@ -26,17 +26,17 @@ ALL_API_MODULES = [
     'admin', 'advanced_ai', 'advanced_ai_analytics', 'advanced_ai_suite', 'advanced_analytics', 
     'advanced_financial', 'advanced_financial_analytics', 'ai', 'ai_content', 'ai_content_generation', 
     'ai_token_management', 'analytics', 'analytics_system', 'auth', 'automation_system',
-    'backup_system', 'bio_sites', 'blog', 'booking', 'bookings', 'business_intelligence',
+    'backup_system', 'bio_sites', 'blog', 'business_intelligence',
     'compliance_system', 'content', 'content_creation', 'content_creation_suite',
     'course_management', 'crm_management', 'customer_experience', 'customer_experience_suite',
-    'dashboard', 'ecommerce', 'email_marketing', 'enhanced_ecommerce', 'escrow_system',
-    'financial_management', 'form_builder', 'google_oauth', 'i18n_system', 'integration',
+    'dashboard', 'email_marketing', 'escrow_system',
+    'form_builder', 'google_oauth', 'i18n_system', 'integration',
     'integrations', 'link_shortener', 'marketing', 'media', 'media_library',
-    'monitoring_system', 'notification_system', 'onboarding_system', 'promotions_referrals',
+    'monitoring_system', 'notification_system', 'promotions_referrals',
     'rate_limiting_system', 'realtime_notifications', 'social_email', 'social_email_integration', 
-    'social_media', 'social_media_suite', 'subscription_management', 'support_system', 'survey_system',
-    'team_management', 'template_marketplace', 'user', 'users', 'website_builder',
-    'webhook_system', 'workflow_automation', 'workspace', 'workspaces'
+    'social_media', 'social_media_suite', 'support_system', 'survey_system',
+    'team_management', 'template_marketplace', 'user',
+    'webhook_system', 'workflow_automation'
 ]
 
 working_modules = []
