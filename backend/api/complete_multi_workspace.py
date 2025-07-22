@@ -103,7 +103,7 @@ async def get_workspace_details(
     try:
         workspace = await complete_multi_workspace_service.get_workspace_details(
             workspace_id=workspace_id,
-            user_id=user['id']
+            user_id=user.get('_id') or user.get('id') or user.get('user_id')
         )
         
         if not workspace:
