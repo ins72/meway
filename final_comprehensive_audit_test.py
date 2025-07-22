@@ -361,8 +361,8 @@ class FinalAuditTester:
             "location": "United States",
             "max_results": 10
         }
-        self.test_endpoint("/social-media/twitter/leads", "POST", twitter_search_data, "Social Media - Twitter Lead Search")
-        self.test_endpoint("/social-media/twitter/analytics", "GET", test_name="Social Media - Twitter Analytics")
+        self.test_endpoint("/social-media-leads/twitter/search", "POST", twitter_search_data, "Social Media - Twitter Lead Search")
+        self.test_endpoint("/social-media-leads/analytics/overview", "GET", test_name="Social Media - Analytics Overview")
         
         # TikTok API Integration
         tiktok_search_data = {
@@ -370,7 +370,7 @@ class FinalAuditTester:
             "region": "US",
             "limit": 10
         }
-        self.test_endpoint("/social-media/tiktok/leads", "POST", tiktok_search_data, "Social Media - TikTok Lead Search")
+        self.test_endpoint("/social-media-leads/tiktok/search", "POST", tiktok_search_data, "Social Media - TikTok Lead Search")
         
         # Test AI Automation with OpenAI
         print("\n🤖 Testing AI Automation with OpenAI...")
@@ -381,7 +381,7 @@ class FinalAuditTester:
             "type": "email",
             "tone": "professional"
         }
-        self.test_endpoint("/ai/generate-content", "POST", content_data, "AI Automation - Generate Content")
+        self.test_endpoint("/ai-automation/generate-content", "POST", content_data, "AI Automation - Generate Content")
         
         # Lead Enrichment
         lead_data = {
@@ -389,7 +389,10 @@ class FinalAuditTester:
             "website": "techstartup.com",
             "industry": "technology"
         }
-        self.test_endpoint("/ai/enrich-lead", "POST", lead_data, "AI Automation - Enrich Lead")
+        self.test_endpoint("/ai-automation/enrich-lead", "POST", lead_data, "AI Automation - Enrich Lead")
+        
+        # Analytics Overview
+        self.test_endpoint("/ai-automation/analytics/overview", "GET", test_name="AI Automation - Analytics Overview")
         
         # Test Email Automation with ElasticMail
         print("\n📧 Testing Email Automation with ElasticMail...")
@@ -401,7 +404,7 @@ class FinalAuditTester:
             "content": "Thank you for joining our platform. We're excited to help you grow your business!",
             "template": "welcome_email"
         }
-        self.test_endpoint("/email/send", "POST", email_data, "Email Automation - Send Email")
+        self.test_endpoint("/email-automation/send-email", "POST", email_data, "Email Automation - Send Email")
         
         # Create Email Campaign
         campaign_data = {
@@ -410,12 +413,21 @@ class FinalAuditTester:
             "template": "marketing_template",
             "recipients": ["subscriber1@example.com", "subscriber2@example.com"]
         }
-        self.test_endpoint("/email/campaigns", "POST", campaign_data, "Email Automation - Create Campaign")
+        self.test_endpoint("/email-automation/campaigns", "POST", campaign_data, "Email Automation - Create Campaign")
+        
+        # Analytics Overview
+        self.test_endpoint("/email-automation/analytics/overview", "GET", test_name="Email Automation - Analytics Overview")
         
         # Test API Configuration and Status
         print("\n⚙️ Testing API Configuration...")
-        self.test_endpoint("/integrations/status", "GET", test_name="External APIs - Status Check")
-        self.test_endpoint("/integrations/config", "GET", test_name="External APIs - Configuration")
+        self.test_endpoint("/admin-config/integrations/status", "GET", test_name="External APIs - Status Check")
+        self.test_endpoint("/admin-config/configuration", "GET", test_name="External APIs - Configuration")
+        
+        # Test individual API connections
+        self.test_endpoint("/admin-config/integrations/stripe/test", "POST", {}, "External APIs - Test Stripe")
+        self.test_endpoint("/admin-config/integrations/openai/test", "POST", {}, "External APIs - Test OpenAI")
+        self.test_endpoint("/admin-config/integrations/elasticmail/test", "POST", {}, "External APIs - Test ElasticMail")
+        self.test_endpoint("/admin-config/integrations/twitter/test", "POST", {}, "External APIs - Test Twitter")
         
         print("\n🌐 External API Integrations Testing Complete!")
 
