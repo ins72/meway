@@ -381,7 +381,7 @@ async def get_subscription_plans(
 
 @router.get("/sessions")
 async def get_user_onboarding_sessions(
-    status: Optional[str] = Query(None, regex="^(in_progress|completed|expired)$"),
+    status: Optional[str] = Query(None, pattern="^(in_progress|completed|expired)$"),
     limit: int = Query(10, ge=1, le=50),
     current_user: dict = Depends(get_current_user),
     db = Depends(get_database)
