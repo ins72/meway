@@ -339,6 +339,32 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Advanced Business Intelligence router: {str(e)}")
 
+
+# Include comprehensive feature routers
+try:
+    from api.comprehensive_marketing_website import router as marketing_website_router
+    app.include_router(marketing_website_router, tags=["Marketing Website"])
+    included_count += 1
+    print("  ✅ Included Comprehensive Marketing Website router")
+except Exception as e:
+    print(f"  ❌ Failed to include Marketing Website router: {str(e)}")
+
+try:
+    from api.advanced_social_media_suite import router as social_media_suite_router
+    app.include_router(social_media_suite_router, tags=["Social Media Suite"])
+    included_count += 1
+    print("  ✅ Included Advanced Social Media Suite router")
+except Exception as e:
+    print(f"  ❌ Failed to include Social Media Suite router: {str(e)}")
+
+try:
+    from api.enterprise_security_compliance import router as security_compliance_router
+    app.include_router(security_compliance_router, tags=["Enterprise Security"])
+    included_count += 1
+    print("  ✅ Included Enterprise Security & Compliance router")
+except Exception as e:
+    print(f"  ❌ Failed to include Security Compliance router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
