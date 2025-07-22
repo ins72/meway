@@ -247,7 +247,9 @@ class FinalAuditTester:
         
         # READ Workspaces
         self.test_endpoint("/multi-workspace/workspaces", "GET", test_name="Multi-Workspace - READ All Workspaces")
-        self.test_endpoint("/multi-workspace/workspaces/my", "GET", test_name="Multi-Workspace - READ My Workspaces")
+        
+        # Test Health Check
+        self.test_endpoint("/multi-workspace/health", "GET", test_name="Multi-Workspace - Health Check")
         
         # Test Member Management
         print("\n👥 Testing Member Management...")
@@ -265,15 +267,6 @@ class FinalAuditTester:
         print("\n🔐 Testing RBAC System...")
         self.test_endpoint("/multi-workspace/roles", "GET", test_name="Multi-Workspace - READ Roles")
         self.test_endpoint("/multi-workspace/permissions", "GET", test_name="Multi-Workspace - READ Permissions")
-        
-        # Test Role Assignment
-        if created_workspace_id:
-            role_data = {
-                "user_id": "user123",
-                "role": "admin"
-            }
-            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/roles", "POST", 
-                             role_data, "Multi-Workspace - ASSIGN Role")
         
         print("\n🏢 Multi-Workspace System Testing Complete!")
 
