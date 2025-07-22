@@ -630,22 +630,49 @@ class CompleteEcommerceService:
         await self.store_analytics.insert_one(analytics_doc)
 
     async def _setup_stripe_account(self, store_id: str, store_data: Dict[str, Any]):
-        """Setup Stripe account for store"""
+        """Setup Stripe account for store with real Stripe Connect integration"""
         try:
-            # This would integrate with Stripe Connect API
-            # For now, we'll create a placeholder record
-            stripe_account = {
+            # Real Stripe Connect API integration
+            import stripe
+            stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
+            
+            # Create Stripe Connect account
+            stripe_account = stripe.Account.create(
+                type='express',
+                country='US',
+                email=store_data.get('email', ''),
+                capabilities={
+                    'card_payments': {'requested': True},
+                    'transfers': {'requested': True}
+                }
+            )
+            
+            # Store Stripe account info in database
+            account_record = {
                 "_id": str(uuid.uuid4()),
                 "store_id": store_id,
-                "stripe_account_id": f"acct_{store_id[:24]}",
-                "status": "pending",
-                "created_at": datetime.utcnow()
+                "stripe_account_id": stripe_account.id,
+                "status": stripe_account.details_submitted,
+                "charges_enabled": stripe_account.charges_enabled,
+                "payouts_enabled": stripe_account.payouts_enabled,
+                "created_at": datetime.utcnow(),
+                "last_updated": datetime.utcnow()
             }
             
-            await self.db["stripe_accounts"].insert_one(stripe_account)
+            await self.db["stripe_accounts"].insert_one(account_record)
             
         except Exception as e:
-            print(f"Error setting up Stripe account: {str(e)}")
+            logger.error(f"Error setting up Stripe account: {str(e)}")
+            # Fallback: create pending account record
+            account_record = {
+                "_id": str(uuid.uuid4()),
+                "store_id": store_id,
+                "stripe_account_id": f"acct_pending_{store_id[:8]}",
+                "status": "pending_setup",
+                "error": str(e),
+                "created_at": datetime.utcnow()
+            }
+            await self.db["stripe_accounts"].insert_one(account_record)
 
     async def _create_inventory_record(self, product_id: str, quantity: int):
         """Create inventory record for product"""
