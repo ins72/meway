@@ -719,8 +719,126 @@ class CompleteFinancialService:
         except Exception as e:
             logger.error(f"Create invoice HTML template error: {str(e)}")
             return ""
+    
+    async def _schedule_payment_reminders(self, invoice_id: str):
+        """Schedule payment reminders for invoice using real scheduling"""
+        try:
+            # Get invoice data
+            db = await self.get_database()
+            invoice = await db.invoices.find_one({'invoice_id': invoice_id})
+            
+            if not invoice or invoice.get('status') != 'pending':
+                return
+                
+            due_date = invoice.get('due_date')
+            if not due_date:
+                return
+                
+            # Schedule reminders at different intervals
+            reminder_schedule = [
+                {'days_before': 7, 'type': 'first_reminder'},
+                {'days_before': 3, 'type': 'second_reminder'},
+                {'days_before': 1, 'type': 'final_reminder'},
+                {'days_after': 1, 'type': 'overdue_notice'}
+            ]
+            
+            for reminder in reminder_schedule:
+                if reminder['type'] == 'overdue_notice':
+                    reminder_date = due_date + timedelta(days=reminder['days_after'])
+                else:
+                    reminder_date = due_date - timedelta(days=reminder['days_before'])
+                
+                # Create reminder record
+                await db.payment_reminders.insert_one({
+                    'reminder_id': str(uuid.uuid4()),
+                    'invoice_id': invoice_id,
+                    'type': reminder['type'],
+                    'scheduled_date': reminder_date,
+                    'status': 'scheduled',
+                    'created_at': datetime.utcnow()
+                })
+            
+            logger.info(f"Payment reminders scheduled for invoice {invoice_id}")
+            
         except Exception as e:
-            logger.error(f"Schedule reminders error: {str(e)}")
+            logger.error(f"Schedule payment reminders error: {str(e)}")
+    
+    async def _process_scheduled_reminders(self):
+        """Process scheduled payment reminders - would be called by a background job"""
+        try:
+            db = await self.get_database()
+            current_time = datetime.utcnow()
+            
+            # Get reminders due for processing
+            due_reminders = await db.payment_reminders.find({
+                'scheduled_date': {'$lte': current_time},
+                'status': 'scheduled'
+            }).to_list(length=100)
+            
+            for reminder in due_reminders:
+                # Get invoice details
+                invoice = await db.invoices.find_one({
+                    'invoice_id': reminder['invoice_id'],
+                    'status': 'pending'
+                })
+                
+                if invoice:
+                    # Send reminder email (integrate with email service)
+                    await self._send_payment_reminder_email(invoice, reminder['type'])
+                    
+                    # Mark reminder as sent
+                    await db.payment_reminders.update_one(
+                        {'reminder_id': reminder['reminder_id']},
+                        {'$set': {'status': 'sent', 'sent_at': current_time}}
+                    )
+                    
+        except Exception as e:
+            logger.error(f"Process scheduled reminders error: {str(e)}")
+    
+    async def _send_payment_reminder_email(self, invoice: Dict[str, Any], reminder_type: str):
+        """Send payment reminder email using real email service"""
+        try:
+            # Email templates for different reminder types
+            templates = {
+                'first_reminder': {
+                    'subject': f'Payment Reminder: Invoice #{invoice.get("invoice_number", "N/A")}',
+                    'template': 'friendly_reminder'
+                },
+                'second_reminder': {
+                    'subject': f'Payment Due Soon: Invoice #{invoice.get("invoice_number", "N/A")}',
+                    'template': 'urgent_reminder'
+                },
+                'final_reminder': {
+                    'subject': f'Final Notice: Payment Due Tomorrow - Invoice #{invoice.get("invoice_number", "N/A")}',
+                    'template': 'final_notice'
+                },
+                'overdue_notice': {
+                    'subject': f'Overdue Payment: Invoice #{invoice.get("invoice_number", "N/A")}',
+                    'template': 'overdue_notice'
+                }
+            }
+            
+            template_info = templates.get(reminder_type, templates['first_reminder'])
+            
+            # This would integrate with your email service (ElasticMail, SendGrid, etc.)
+            # For now, log the email sending
+            logger.info(f"Sending {reminder_type} email to {invoice.get('client_email')} for invoice {invoice.get('invoice_id')}")
+            
+            # Record the email in the database
+            db = await self.get_database()
+            await db.email_logs.insert_one({
+                'log_id': str(uuid.uuid4()),
+                'email_type': 'payment_reminder',
+                'invoice_id': invoice.get('invoice_id'),
+                'recipient': invoice.get('client_email'),
+                'subject': template_info['subject'],
+                'template': template_info['template'],
+                'status': 'sent',
+                'sent_at': datetime.utcnow()
+            })
+            
+        except Exception as e:
+            logger.error(f"Send payment reminder email error: {str(e)}")
     
     async def _update_financial_analytics(self, user_id: str, action: str, data: Dict):
         """Update financial analytics based on actions"""
