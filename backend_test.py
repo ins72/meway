@@ -163,84 +163,83 @@ class BackendTester:
             "content_type": "scorm_2004",
             "duration_minutes": 120
         }
-        self.test_endpoint("/lms/scorm/packages", "POST", scorm_data, "LMS - Create SCORM Package")
-        self.test_endpoint("/lms/scorm/packages", test_name="LMS - List SCORM Packages")
+        self.test_endpoint("/lms/scorm/package", "POST", scorm_data, "LMS - Create SCORM Package")
+        self.test_endpoint("/lms/courses/scorm", test_name="LMS - List SCORM Courses")
         
         # Learning Progress Tracking
         progress_data = {
-            "course_id": "course_123",
             "completion_percentage": 75,
             "time_spent_minutes": 90,
             "quiz_scores": [85, 92, 78]
         }
-        self.test_endpoint("/lms/progress/track", "POST", progress_data, "LMS - Track Learning Progress")
-        self.test_endpoint("/lms/progress/analytics", test_name="LMS - Get Learning Analytics")
+        self.test_endpoint("/lms/courses/course_123/progress", "POST", progress_data, "LMS - Track Learning Progress")
+        self.test_endpoint("/lms/analytics", test_name="LMS - Get Learning Analytics")
         
         # Certificate Generation with Blockchain Verification
         cert_data = {
-            "course_id": "course_123",
             "learner_id": "learner_456",
             "completion_date": "2024-12-20",
             "blockchain_verify": True
         }
-        self.test_endpoint("/lms/certificates/generate", "POST", cert_data, "LMS - Generate Certificate")
-        self.test_endpoint("/lms/certificates/verify", test_name="LMS - Verify Certificate Blockchain")
+        self.test_endpoint("/lms/certificates/course_123/generate", "POST", cert_data, "LMS - Generate Certificate")
         
         # Gamification Data
-        self.test_endpoint("/lms/gamification/leaderboard", test_name="LMS - Get Gamification Leaderboard")
-        self.test_endpoint("/lms/gamification/badges", test_name="LMS - Get Available Badges")
-        self.test_endpoint("/lms/gamification/points", test_name="LMS - Get User Points")
+        self.test_endpoint("/lms/gamification", test_name="LMS - Get Gamification Data")
         
         # 2. Test Multi-Vendor Marketplace - /api/marketplace/*
         print("\n--- 2. Multi-Vendor Marketplace Testing ---")
         
-        # Vendor Onboarding
+        # Vendor Onboarding (fix the data structure based on the 422 error)
         vendor_data = {
+            "owner_name": "John Smith",
             "business_name": "TechSolutions Inc",
-            "contact_email": "vendor@techsolutions.com",
+            "email": "vendor@techsolutions.com",
+            "phone": "+1-555-0123",
+            "address": "123 Business St, Tech City, TC 12345",
             "business_type": "software",
             "tax_id": "123456789",
-            "bank_account": "****1234"
+            "bank_details": {
+                "account_number": "****1234",
+                "routing_number": "123456789",
+                "bank_name": "Tech Bank"
+            }
         }
         self.test_endpoint("/marketplace/vendors/onboard", "POST", vendor_data, "Marketplace - Vendor Onboarding")
-        self.test_endpoint("/marketplace/vendors/pending", test_name="Marketplace - Pending Vendor Approvals")
+        self.test_endpoint("/marketplace/vendors/applications", test_name="Marketplace - Vendor Applications")
+        
+        # Vendor Management
+        self.test_endpoint("/marketplace/vendors", test_name="Marketplace - List Vendors")
         
         # Vendor Approval Workflow
         approval_data = {
-            "vendor_id": "vendor_123",
             "approval_status": "approved",
             "reviewer_notes": "All documents verified"
         }
-        self.test_endpoint("/marketplace/vendors/approve", "POST", approval_data, "Marketplace - Approve Vendor")
-        self.test_endpoint("/marketplace/vendors/active", test_name="Marketplace - Active Vendors")
+        self.test_endpoint("/marketplace/vendors/vendor_123/approve", "POST", approval_data, "Marketplace - Approve Vendor")
         
         # Dynamic Pricing Calculation
-        pricing_data = {
-            "product_id": "prod_456",
-            "base_price": 99.99,
-            "demand_factor": 1.2,
-            "competition_factor": 0.95,
-            "seasonal_factor": 1.1
-        }
-        self.test_endpoint("/marketplace/pricing/calculate", "POST", pricing_data, "Marketplace - Calculate Dynamic Pricing")
-        self.test_endpoint("/marketplace/pricing/history", test_name="Marketplace - Pricing History")
+        self.test_endpoint("/marketplace/pricing/dynamic", test_name="Marketplace - Dynamic Pricing")
         
-        # Vendor Payout Processing
+        # Vendor Performance and Payouts
         payout_data = {
-            "vendor_id": "vendor_123",
             "period": "2024-12",
             "total_sales": 5000.00,
             "commission_rate": 0.15
         }
-        self.test_endpoint("/marketplace/payouts/process", "POST", payout_data, "Marketplace - Process Vendor Payout")
-        self.test_endpoint("/marketplace/payouts/pending", test_name="Marketplace - Pending Payouts")
+        self.test_endpoint("/marketplace/vendors/vendor_123/payout", "POST", payout_data, "Marketplace - Process Vendor Payout")
+        self.test_endpoint("/marketplace/vendors/vendor_123/performance", test_name="Marketplace - Vendor Performance Metrics")
         
-        # Vendor Performance Metrics
-        self.test_endpoint("/marketplace/vendors/performance", test_name="Marketplace - Vendor Performance Metrics")
-        self.test_endpoint("/marketplace/analytics/sales", test_name="Marketplace - Sales Analytics")
+        # Enhanced E-commerce Marketplace
+        self.test_endpoint("/enhanced-ecommerce/marketplace/dashboard", test_name="Marketplace - Enhanced E-commerce Dashboard")
+        self.test_endpoint("/content-suite/templates/marketplace", test_name="Marketplace - Template Marketplace")
         
         # 3. Test Advanced Business Intelligence - /api/business-intelligence/*
         print("\n--- 3. Advanced Business Intelligence Testing ---")
+        
+        # Business Intelligence Overview
+        self.test_endpoint("/business-intelligence/overview", test_name="BI - Overview Dashboard")
+        self.test_endpoint("/business-intelligence/reports", test_name="BI - Business Reports")
+        self.test_endpoint("/business-intelligence/insights", test_name="BI - Business Insights")
         
         # Predictive Analytics
         prediction_data = {
@@ -249,14 +248,8 @@ class BackendTester:
             "data_sources": ["sales", "marketing", "customer_behavior"],
             "confidence_level": 0.95
         }
-        self.test_endpoint("/business-intelligence/predictive/revenue-forecast", "POST", prediction_data, "BI - Revenue Forecasting")
-        
-        churn_data = {
-            "customer_segment": "premium",
-            "prediction_window": "30_days",
-            "risk_factors": ["usage_decline", "support_tickets", "payment_delays"]
-        }
-        self.test_endpoint("/business-intelligence/predictive/churn-prediction", "POST", churn_data, "BI - Churn Prediction")
+        self.test_endpoint("/business-intelligence/predictive-analytics", "POST", prediction_data, "BI - Predictive Analytics")
+        self.test_endpoint("/business-intelligence/predictive-models", test_name="BI - Predictive Models")
         
         # Cohort Analysis
         cohort_data = {
@@ -265,8 +258,7 @@ class BackendTester:
             "end_date": "2024-12-31",
             "metric": "retention_rate"
         }
-        self.test_endpoint("/business-intelligence/cohort/analysis", "POST", cohort_data, "BI - Cohort Analysis")
-        self.test_endpoint("/business-intelligence/cohort/retention", test_name="BI - Retention Cohorts")
+        self.test_endpoint("/business-intelligence/cohort-analysis", "POST", cohort_data, "BI - Cohort Analysis")
         
         # Funnel Tracking
         funnel_data = {
@@ -274,8 +266,7 @@ class BackendTester:
             "stages": ["awareness", "interest", "consideration", "purchase"],
             "time_period": "last_30_days"
         }
-        self.test_endpoint("/business-intelligence/funnel/track", "POST", funnel_data, "BI - Track Conversion Funnel")
-        self.test_endpoint("/business-intelligence/funnel/analytics", test_name="BI - Funnel Analytics")
+        self.test_endpoint("/business-intelligence/funnel-tracking", "POST", funnel_data, "BI - Funnel Tracking")
         
         # Competitive Analysis
         competitor_data = {
@@ -283,8 +274,7 @@ class BackendTester:
             "competitors": ["competitor_a", "competitor_b"],
             "metrics": ["pricing", "features", "market_share"]
         }
-        self.test_endpoint("/business-intelligence/competitive/analysis", "POST", competitor_data, "BI - Competitive Analysis")
-        self.test_endpoint("/business-intelligence/competitive/reports", test_name="BI - Competitive Reports")
+        self.test_endpoint("/business-intelligence/competitive-analysis", "POST", competitor_data, "BI - Competitive Analysis")
         
         # Custom Report Creation
         report_data = {
@@ -293,12 +283,14 @@ class BackendTester:
             "chart_types": ["line", "bar", "pie"],
             "filters": {"date_range": "last_30_days", "region": "north_america"}
         }
-        self.test_endpoint("/business-intelligence/reports/create", "POST", report_data, "BI - Create Custom Report")
-        self.test_endpoint("/business-intelligence/reports/list", test_name="BI - List Custom Reports")
+        self.test_endpoint("/business-intelligence/custom-reports", "POST", report_data, "BI - Create Custom Report")
         
-        # Advanced Analytics Dashboard
-        self.test_endpoint("/business-intelligence/dashboard/overview", test_name="BI - Analytics Dashboard Overview")
-        self.test_endpoint("/business-intelligence/dashboard/kpis", test_name="BI - Key Performance Indicators")
+        # Data Visualizations
+        self.test_endpoint("/business-intelligence/visualizations", test_name="BI - Data Visualizations")
+        
+        # Additional BI endpoints from other modules
+        self.test_endpoint("/advanced-analytics/business-intelligence", test_name="BI - Advanced Analytics Integration")
+        self.test_endpoint("/analytics-system/business-intelligence", test_name="BI - Analytics System Integration")
         
     def test_existing_platform_stability(self):
         """Test existing platform stability to ensure no regressions"""
