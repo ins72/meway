@@ -257,7 +257,7 @@ class FinalTargetedTester:
             "location": "United States",
             "limit": 10
         }
-        self.test_endpoint("/social-media-leads/discover/tiktok", "GET", test_name="Social Media - TikTok Discovery", system="social_media_leads")
+        self.test_endpoint("/social-media-leads/discover/tiktok", "POST", tiktok_params, "Social Media - TikTok Discovery", "social_media_leads")
         
         # Test Twitter lead discovery
         print("\n🐦 Testing Twitter Lead Discovery...")
@@ -266,11 +266,11 @@ class FinalTargetedTester:
             "location": "New York",
             "limit": 10
         }
-        self.test_endpoint("/social-media-leads/discover/twitter", "GET", test_name="Social Media - Twitter Discovery", system="social_media_leads")
+        self.test_endpoint("/social-media-leads/discover/twitter", "POST", twitter_params, "Social Media - Twitter Discovery", "social_media_leads")
         
         # Test social media analytics
         print("\n📊 Testing Social Media Analytics...")
-        self.test_endpoint("/social-media-leads/analytics", "GET", test_name="Social Media - Analytics", system="social_media_leads")
+        self.test_endpoint("/social-media-leads/analytics/overview", "GET", test_name="Social Media - Analytics", system="social_media_leads")
 
     def test_external_api_integration(self):
         """Test External API Integration - Maintain: 100%"""
