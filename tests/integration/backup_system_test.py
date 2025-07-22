@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://9fb7b81f-9f5a-4259-b2f2-bf50fd3ed214.preview.emergentagent.com"
+BASE_URL = "https://35b0c12d-8622-4a0d-9b9c-d891d48a2c32.preview.emergentagent.com"
 LOGIN_EMAIL = "tmonnens@outlook.com"
 LOGIN_PASSWORD = "Voetballen5"
 
