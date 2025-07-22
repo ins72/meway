@@ -947,13 +947,14 @@ class BackendTester:
         for endpoint, _ in db_services[:5]:  # Test first 5 services
             self.test_data_consistency(endpoint)
 
-    def run_comprehensive_test(self):
-        """Run comprehensive backend testing for newly created Advanced AI Analytics, Real-time Notifications, and Workflow Automation APIs"""
-        print("🎯 TESTING NEWLY CREATED API ENDPOINTS - MEWAYZ PLATFORM")
-        print("Testing the newly created Advanced AI Analytics, Real-time Notifications, and Workflow Automation API endpoints:")
-        print("- 🔧 Advanced AI Analytics (/api/ai-analytics): Predictive insights, anomaly detection, analytics summary")
-        print("- 🔧 Real-time Notifications (/api/notifications): Send notifications, history, stats, connection status")
-        print("- 🔧 Workflow Automation (/api/workflows): List workflows, templates, statistics")
+    def run_enterprise_features_test(self):
+        """Run comprehensive testing of NEW ENTERPRISE FEATURES as requested in the review"""
+        print("🎯 TESTING NEW ENTERPRISE FEATURES - MEWAYZ PLATFORM")
+        print("Testing the NEW ENTERPRISE FEATURES as requested in the review:")
+        print("- 🎓 Advanced Learning Management System (LMS) - /api/lms/*")
+        print("- 🏪 Multi-Vendor Marketplace - /api/marketplace/*") 
+        print("- 📊 Advanced Business Intelligence - /api/business-intelligence/*")
+        print("- ✅ Existing Platform Stability verification")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
@@ -968,16 +969,18 @@ class BackendTester:
             print("❌ Authentication failed - cannot proceed with testing.")
             return False
         
-        # Test the newly created APIs (main focus)
+        # Test the NEW ENTERPRISE FEATURES (main focus of review request)
+        self.test_enterprise_features()
+        
+        # Test existing platform stability
+        self.test_existing_platform_stability()
+        
+        # Test previously created APIs for completeness
         self.test_newly_created_apis()
         
-        # Test some core functionality to ensure integration works
-        print("\n=== Testing Core Integration ===")
-        self.test_endpoint("/dashboard/overview", test_name="Core - Dashboard Overview")
-        self.test_endpoint("/users/profile", test_name="Core - User Profile")
-        
-        # Test platform health
+        # Test platform health and performance
         self.test_platform_startup_health()
+        self.test_performance_reliability()
         
         # Print summary
         self.print_summary()
