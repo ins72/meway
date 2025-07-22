@@ -455,6 +455,22 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Admin Dashboard router: {str(e)}")
 
+try:
+    from api.complete_financial import router as financial_router
+    app.include_router(financial_router, prefix="/api/financial", tags=["Financial Management"])
+    included_count += 1
+    print("  ✅ Included Complete Financial Management System router")
+except Exception as e:
+    print(f"  ❌ Failed to include Financial Management router: {str(e)}")
+
+try:
+    from api.complete_website_builder import router as website_builder_router
+    app.include_router(website_builder_router, prefix="/api/website-builder", tags=["Website Builder"])
+    included_count += 1
+    print("  ✅ Included Complete Website Builder System router")
+except Exception as e:
+    print(f"  ❌ Failed to include Website Builder router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
