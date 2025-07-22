@@ -156,10 +156,22 @@ class BackendTester:
         # Test variables to store created resources
         created_page_id = None
         created_link_id = None
+        workspace_id = None
+        
+        # First, get available workspaces to use workspace_id
+        print("\n🏢 Getting Available Workspaces...")
+        success, workspaces_data = self.test_endpoint("/workspaces", "GET", test_name="Link in Bio - Get Workspaces")
+        if success and workspaces_data and workspaces_data.get("data", {}).get("workspaces"):
+            workspace_id = workspaces_data["data"]["workspaces"][0]["_id"]
+            print(f"   Using workspace ID: {workspace_id}")
+        
+        if not workspace_id:
+            print("❌ Cannot proceed without workspace_id")
+            return False
         
         # 1. Test Templates System
         print("\n📋 Testing Template System...")
-        success, templates_data = self.test_endpoint("/link-in-bio/templates", "GET", test_name="Link in Bio - Get Templates")
+        success, templates_data = self.test_endpoint(f"/link-in-bio/templates?workspace_id={workspace_id}", "GET", test_name="Link in Bio - Get Templates")
         
         # 2. Test Health Check
         print("\n🏥 Testing Health Check...")
@@ -185,14 +197,14 @@ class BackendTester:
             }
         }
         
-        success, page_data = self.test_endpoint("/link-in-bio/pages", "POST", create_page_data, "Link in Bio - Create Bio Page")
+        success, page_data = self.test_endpoint(f"/link-in-bio/pages?workspace_id={workspace_id}", "POST", create_page_data, "Link in Bio - Create Bio Page")
         if success and page_data:
-            created_page_id = page_data.get("id") or page_data.get("page_id")
+            created_page_id = page_data.get("id") or page_data.get("page_id") or page_data.get("data", {}).get("id")
             print(f"   Created page ID: {created_page_id}")
         
         # 4. Test READ - Get Bio Pages List
         print("\n📖 Testing READ Operations...")
-        self.test_endpoint("/link-in-bio/pages", "GET", test_name="Link in Bio - Get User Bio Pages")
+        self.test_endpoint(f"/link-in-bio/pages?workspace_id={workspace_id}", "GET", test_name="Link in Bio - Get User Bio Pages")
         
         # 5. Test READ - Get Specific Bio Page
         if created_page_id:
@@ -212,7 +224,7 @@ class BackendTester:
             
             success, link_data = self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/links", "POST", create_link_data, "Link in Bio - Create Bio Link")
             if success and link_data:
-                created_link_id = link_data.get("id") or link_data.get("link_id")
+                created_link_id = link_data.get("id") or link_data.get("link_id") or link_data.get("data", {}).get("id")
                 print(f"   Created link ID: {created_link_id}")
             
             # 7. Test READ - Get Bio Page Links
@@ -292,6 +304,7 @@ class BackendTester:
             self.test_endpoint(f"/link-in-bio/pages/{created_page_id}", "DELETE", test_name="Link in Bio - Delete Bio Page")
         
         print("\n🔗 Link in Bio System Testing Complete!")
+        return True
         
     def test_data_consistency(self):
         """Test data consistency to verify real database usage"""
