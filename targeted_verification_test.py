@@ -238,10 +238,11 @@ class TargetedVerificationTester:
         # Test current subscription
         self.test_endpoint("/subscriptions/current", "GET", test_name="Subscriptions - Current Subscription", category="subscription")
         
-        # Test subscription creation with realistic data
+        # Test subscription creation with correct schema
         subscription_data = {
             "plan_id": "pro_monthly",
-            "payment_method_id": "pm_test_card_visa"  # Test payment method
+            "payment_method_id": "pm_test_card_visa",
+            "billing_cycle": "monthly"
         }
         success, response = self.test_endpoint("/subscriptions/create", "POST", data=subscription_data, test_name="Subscriptions - Create Subscription", category="subscription")
         
@@ -250,6 +251,10 @@ class TargetedVerificationTester:
         
         # Test subscription management endpoints
         self.test_endpoint("/enhanced-ecommerce/subscription/management", "GET", test_name="Subscriptions - Management Dashboard", category="subscription")
+        
+        # Test subscription cancel and reactivate
+        self.test_endpoint("/subscriptions/cancel", "POST", test_name="Subscriptions - Cancel", category="subscription")
+        self.test_endpoint("/subscriptions/reactivate", "POST", test_name="Subscriptions - Reactivate", category="subscription")
 
     def test_external_api_integrations(self):
         """Test external API integrations - should maintain 100% success"""
