@@ -314,6 +314,31 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include admin configuration router: {str(e)}")
 
+# Include new enterprise feature routers
+try:
+    from api.advanced_lms import router as advanced_lms_router
+    app.include_router(advanced_lms_router, tags=["Learning Management System"])
+    included_count += 1
+    print("  ✅ Included Advanced LMS router at /api/lms")
+except Exception as e:
+    print(f"  ❌ Failed to include Advanced LMS router: {str(e)}")
+
+try:
+    from api.multi_vendor_marketplace import router as marketplace_router
+    app.include_router(marketplace_router, tags=["Multi-Vendor Marketplace"])
+    included_count += 1
+    print("  ✅ Included Multi-Vendor Marketplace router at /api/marketplace")
+except Exception as e:
+    print(f"  ❌ Failed to include Multi-Vendor Marketplace router: {str(e)}")
+
+try:
+    from api.advanced_business_intelligence import router as bi_router
+    app.include_router(bi_router, tags=["Business Intelligence"])
+    included_count += 1
+    print("  ✅ Included Advanced Business Intelligence router at /api/business-intelligence")
+except Exception as e:
+    print(f"  ❌ Failed to include Advanced Business Intelligence router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
