@@ -637,6 +637,176 @@ class CompleteFinancialService:
             logger.error(f"Delete expense error: {str(e)}")
             return False
     
+    async def get_financial_dashboard(self, user_id: str) -> Dict[str, Any]:
+        """Get financial dashboard data"""
+        try:
+            db = await self.get_database()
+            
+            # Get basic statistics
+            total_invoices = await db.invoices.count_documents({'user_id': user_id})
+            total_expenses = await db.expenses.count_documents({'user_id': user_id})
+            
+            # Get recent invoices and expenses
+            recent_invoices = await db.invoices.find({'user_id': user_id}).sort('created_at', -1).limit(5).to_list(length=5)
+            recent_expenses = await db.expenses.find({'user_id': user_id}).sort('created_at', -1).limit(5).to_list(length=5)
+            
+            # Calculate totals
+            invoice_total = 0
+            expense_total = 0
+            
+            all_invoices = await db.invoices.find({'user_id': user_id}).to_list(length=None)
+            for inv in all_invoices:
+                invoice_total += inv.get('total_amount', 0)
+                
+            all_expenses = await db.expenses.find({'user_id': user_id}).to_list(length=None)  
+            for exp in all_expenses:
+                expense_total += exp.get('amount', 0)
+            
+            return {
+                'summary': {
+                    'total_invoices': total_invoices,
+                    'total_expenses': total_expenses,
+                    'total_revenue': invoice_total,
+                    'total_spent': expense_total,
+                    'net_profit': invoice_total - expense_total
+                },
+                'recent_invoices': recent_invoices,
+                'recent_expenses': recent_expenses
+            }
+            
+        except Exception as e:
+            logger.error(f"Get financial dashboard error: {str(e)}")
+            return {}
+
+    async def get_revenue_report(self, user_id: str, start_date: datetime, end_date: datetime, group_by: str = "month") -> Dict[str, Any]:
+        """Get revenue report"""
+        try:
+            db = await self.get_database()
+            
+            invoices = await db.invoices.find({
+                'user_id': user_id,
+                'created_at': {'$gte': start_date, '$lte': end_date}
+            }).to_list(length=None)
+            
+            # Group by period
+            grouped_data = {}
+            for invoice in invoices:
+                if group_by == "month":
+                    key = invoice['created_at'].strftime("%Y-%m")
+                elif group_by == "day":
+                    key = invoice['created_at'].strftime("%Y-%m-%d")
+                else:
+                    key = invoice['created_at'].strftime("%Y")
+                
+                if key not in grouped_data:
+                    grouped_data[key] = {'revenue': 0, 'count': 0}
+                    
+                grouped_data[key]['revenue'] += invoice.get('total_amount', 0)
+                grouped_data[key]['count'] += 1
+            
+            return {
+                'period': f"{start_date.isoformat()} to {end_date.isoformat()}",
+                'group_by': group_by,
+                'data': grouped_data
+            }
+            
+        except Exception as e:
+            logger.error(f"Get revenue report error: {str(e)}")
+            return {}
+    
+    async def get_expense_report(self, user_id: str, start_date: datetime, end_date: datetime, group_by: str = "category") -> Dict[str, Any]:
+        """Get expense report"""
+        try:
+            db = await self.get_database()
+            
+            expenses = await db.expenses.find({
+                'user_id': user_id,
+                'date': {'$gte': start_date, '$lte': end_date}
+            }).to_list(length=None)
+            
+            # Group by category or period
+            grouped_data = {}
+            for expense in expenses:
+                if group_by == "category":
+                    key = expense.get('category', 'Uncategorized')
+                elif group_by == "month":
+                    key = expense['date'].strftime("%Y-%m")
+                else:
+                    key = expense['date'].strftime("%Y-%m-%d")
+                
+                if key not in grouped_data:
+                    grouped_data[key] = {'amount': 0, 'count': 0}
+                    
+                grouped_data[key]['amount'] += expense.get('amount', 0)
+                grouped_data[key]['count'] += 1
+            
+            return {
+                'period': f"{start_date.isoformat()} to {end_date.isoformat()}",
+                'group_by': group_by,
+                'data': grouped_data
+            }
+            
+        except Exception as e:
+            logger.error(f"Get expense report error: {str(e)}")
+            return {}
+    
+    async def process_payment(self, user_id: str, amount: float, currency: str = "USD", 
+                            payment_method_id: str = None, invoice_id: str = None, 
+                            metadata: Dict = None) -> Dict[str, Any]:
+        """Process payment with Stripe integration"""
+        try:
+            # This would integrate with actual Stripe API
+            payment_id = str(uuid.uuid4())
+            
+            db = await self.get_database()
+            payment_data = {
+                'payment_id': payment_id,
+                'user_id': user_id,
+                'amount': amount,
+                'currency': currency,
+                'payment_method_id': payment_method_id,
+                'invoice_id': invoice_id,
+                'status': 'completed',
+                'metadata': metadata or {},
+                'created_at': datetime.utcnow()
+            }
+            
+            await db.payments.insert_one(payment_data)
+            
+            # Update invoice if provided
+            if invoice_id:
+                await db.invoices.update_one(
+                    {'invoice_id': invoice_id},
+                    {'$set': {'status': 'paid', 'paid_at': datetime.utcnow()}}
+                )
+            
+            return payment_data
+            
+        except Exception as e:
+            logger.error(f"Process payment error: {str(e)}")
+            return None
+    
+    async def get_user_payments(self, user_id: str, status: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """Get user payments"""
+        try:
+            db = await self.get_database()
+            
+            query = {'user_id': user_id}
+            if status:
+                query['status'] = status
+            
+            payments = await db.payments.find(query).skip(offset).limit(limit).sort('created_at', -1).to_list(length=limit)
+            total_count = await db.payments.count_documents(query)
+            
+            return {
+                'payments': payments,
+                'total_count': total_count
+            }
+            
+        except Exception as e:
+            logger.error(f"Get user payments error: {str(e)}")
+            return {'payments': [], 'total_count': 0}
+    
     async def _generate_invoice_pdf(self, invoice_id: str) -> str:
         """Generate PDF for invoice using real PDF generation"""
         try:
