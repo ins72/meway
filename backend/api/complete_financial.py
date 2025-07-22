@@ -74,7 +74,7 @@ async def create_invoice(
     """Create a new invoice with real data persistence"""
     try:
         result = await complete_financial_service.create_invoice(
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             client_email=invoice_data.client_email,
             client_name=invoice_data.client_name,
             items=invoice_data.items,
