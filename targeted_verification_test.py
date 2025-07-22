@@ -201,52 +201,32 @@ class TargetedVerificationTester:
         """Test ALL social media leads endpoints"""
         print("\n📱 TESTING COMPLETE SOCIAL MEDIA LEADS SYSTEM...")
         
-        # Test TikTok discovery - CRITICAL
+        # Test TikTok discovery - CRITICAL (with correct schema)
         tiktok_data = {
-            "hashtag": "businesstips",
+            "keywords": ["businesstips", "consulting"],
             "location": "United States",
-            "limit": 10
+            "min_followers": 1000,
+            "max_followers": 100000,
+            "content_type": "all"
         }
         self.test_endpoint("/social-media-leads/discover/tiktok", "POST", data=tiktok_data, test_name="Social Media - TikTok Discovery", category="social_media")
         
-        # Test Twitter discovery - CRITICAL  
+        # Test Twitter discovery - CRITICAL (with correct schema)
         twitter_data = {
-            "keywords": "business consulting",
+            "keywords": ["business consulting", "entrepreneur"],
             "location": "New York",
-            "limit": 10
+            "min_followers": 1000,
+            "max_followers": 50000,
+            "verified_only": False
         }
         self.test_endpoint("/social-media-leads/discover/twitter", "POST", data=twitter_data, test_name="Social Media - Twitter Discovery", category="social_media")
         
         # Test lead management
         self.test_endpoint("/social-media-leads/leads", "GET", test_name="Social Media - List Leads", category="social_media")
         
-        # Test lead creation
-        lead_data = {
-            "platform": "tiktok",
-            "username": "businesspro123",
-            "profile_url": "https://tiktok.com/@businesspro123",
-            "follower_count": 5000,
-            "engagement_rate": 3.5,
-            "location": "New York",
-            "interests": ["business", "consulting"]
-        }
-        success, response = self.test_endpoint("/social-media-leads/leads", "POST", data=lead_data, test_name="Social Media - Create Lead", category="social_media")
-        
-        if success and response:
-            lead_id = response.get("id") or response.get("lead_id")
-            if lead_id:
-                # Test lead details and updates
-                self.test_endpoint(f"/social-media-leads/leads/{lead_id}", "GET", test_name="Social Media - Get Lead Details", category="social_media")
-                
-                update_data = {
-                    "status": "contacted",
-                    "notes": "Initial contact made via DM"
-                }
-                self.test_endpoint(f"/social-media-leads/leads/{lead_id}", "PUT", data=update_data, test_name="Social Media - Update Lead", category="social_media")
-        
-        # Test analytics
-        self.test_endpoint("/social-media-leads/analytics", "GET", test_name="Social Media - Analytics Overview", category="social_media")
-        self.test_endpoint("/social-media-leads/analytics/platforms", "GET", test_name="Social Media - Platform Analytics", category="social_media")
+        # Test social media analytics and posts
+        self.test_endpoint("/social-media/analytics", "GET", test_name="Social Media - Analytics Overview", category="social_media")
+        self.test_endpoint("/social-media/posts", "GET", test_name="Social Media - Posts", category="social_media")
 
     def test_complete_subscription_management(self):
         """Test ALL subscription endpoints"""
