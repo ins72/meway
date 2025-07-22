@@ -390,6 +390,14 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Email Automation router: {str(e)}")
 
+try:
+    from api.complete_onboarding import router as complete_onboarding_router
+    app.include_router(complete_onboarding_router, tags=["Complete Onboarding"])
+    included_count += 1
+    print("  ✅ Included Complete Onboarding System router")
+except Exception as e:
+    print(f"  ❌ Failed to include Complete Onboarding router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
