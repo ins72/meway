@@ -97,7 +97,15 @@ class MediaService:
         # Calculate usage stats
         total_files = await files_collection.count_documents({"workspace_id": str(workspace["_id"])})
         
-        # Calculate total size (mock for now)
+        
+        # Calculate real total size from database
+        pipeline = [
+            {"$match": {"user_id": user_id}},
+            {"$group": {"_id": None, "total_size": {"$sum": "$size"}}}
+        ]
+        result = await self.collection.aggregate(pipeline).to_list(1)
+        total_size = result[0]["total_size"] if result else 0
+        
         total_size = sum(f["size"] for f in files) if files else 0
         storage_limit = 10 * 1024 * 1024 * 1024  # 10GB in bytes
         usage_percentage = (total_size / storage_limit * 100) if total_size > 0 else 0

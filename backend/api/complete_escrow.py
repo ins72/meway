@@ -1,3 +1,4 @@
+import uuid
 """
 Complete Escrow System API
 Secure Transaction Platform for Digital Assets and Services
@@ -344,7 +345,7 @@ async def get_escrow_analytics(
             '$or': [{'buyer_id': user_id}, {'seller_id': user_id}]
         }).sort('created_at', -1).limit(5).to_list(length=5)
         
-        # Convert ObjectIds and dates
+        # Convert strs and dates
         for transaction in recent_transactions:
             transaction['_id'] = str(transaction['_id'])
             if 'created_at' in transaction:

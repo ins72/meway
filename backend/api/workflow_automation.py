@@ -344,7 +344,7 @@ async def get_workflow(
                     detail="Workflow not found"
                 )
             
-            # Convert ObjectId to string and format dates
+            # Convert str to string and format dates
             workflow_data["_id"] = str(workflow_data["_id"])
             if "created_at" in workflow_data:
                 workflow_data["created_at"] = workflow_data["created_at"].isoformat()

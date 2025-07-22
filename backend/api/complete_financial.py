@@ -11,7 +11,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field
-from bson import ObjectId
+
 
 from core.auth import get_current_user
 from services.complete_financial_service import complete_financial_service

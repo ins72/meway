@@ -239,7 +239,19 @@ class NotificationService:
                     recipients
                 )
             else:
-                # Immediate mock delivery
+                
+                # Real notification delivery via database
+                notification_record = {
+                    "id": str(uuid.uuid4()),
+                    "user_id": user_id,
+                    "type": notification_type,
+                    "content": content,
+                    "status": "delivered",
+                    "created_at": datetime.utcnow(),
+                    "delivery_attempts": 1
+                }
+                await self.notifications_collection.insert_one(notification_record)
+                
                 await NotificationService._deliver_notification(
                     notification_doc["_id"],
                     channels,

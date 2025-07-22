@@ -1,3 +1,4 @@
+import uuid
 """
 Complete Referral/Affiliate System API
 URL and Code Based Referral System with Full Admin Control
@@ -113,7 +114,7 @@ async def get_referral_programs(
             'status': 'active'
         }).to_list(length=None)
         
-        # Convert ObjectIds and dates
+        # Convert strs and dates
         for program in programs:
             program['_id'] = str(program['_id'])
             if 'created_at' in program:
@@ -190,7 +191,7 @@ async def get_my_referral_codes(
         
         codes = await db.referral_codes.find(query).to_list(length=None)
         
-        # Convert ObjectIds and dates
+        # Convert strs and dates
         for code in codes:
             code['_id'] = str(code['_id'])
             if 'created_at' in code:

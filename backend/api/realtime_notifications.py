@@ -375,7 +375,7 @@ async def get_notification_history(
             .limit(limit)\
             .to_list(length=limit)
         
-        # Convert ObjectId to string and format dates
+        # Convert str to string and format dates
         for notification in notifications:
             notification["_id"] = str(notification["_id"])
             if "created_at" in notification:

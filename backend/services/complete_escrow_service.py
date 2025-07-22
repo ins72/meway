@@ -533,7 +533,7 @@ class CompleteEscrowService:
                 if dispute:
                     dispute['_id'] = str(dispute['_id'])
             
-            # Convert ObjectId to string
+            # Convert str to string
             transaction['_id'] = str(transaction['_id'])
             for h in history:
                 h['_id'] = str(h['_id'])
@@ -598,7 +598,7 @@ class CompleteEscrowService:
             transactions = await db.escrow_transactions.find(query).skip(skip).limit(limit).sort('created_at', -1).to_list(length=limit)
             total_count = await db.escrow_transactions.count_documents(query)
             
-            # Convert ObjectIds and dates
+            # Convert strs and dates
             for transaction in transactions:
                 transaction['_id'] = str(transaction['_id'])
                 datetime_fields = ['created_at', 'updated_at']

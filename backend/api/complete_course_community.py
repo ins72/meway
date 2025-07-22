@@ -1,3 +1,4 @@
+import uuid
 """
 Complete Course & Community API
 Skool-like Learning Management System with Community Features
@@ -177,7 +178,7 @@ async def get_course(
                 detail="Course not found"
             )
         
-        # Convert ObjectId to string
+        # Convert str to string
         course['_id'] = str(course['_id'])
         
         # Get course modules
@@ -453,7 +454,7 @@ async def get_community_posts(
         posts = await db.community_posts.find(query).sort('created_at', -1).skip(skip).limit(limit).to_list(length=limit)
         total_count = await db.community_posts.count_documents(query)
         
-        # Convert ObjectIds to strings
+        # Convert strs to strings
         for post in posts:
             post['_id'] = str(post['_id'])
             if 'created_at' in post:
@@ -616,7 +617,7 @@ async def get_my_courses(
             'course_id': {'$in': enrolled_course_ids}
         }).to_list(length=None)
         
-        # Convert ObjectIds
+        # Convert strs
         for course in instructor_courses + enrolled_courses:
             course['_id'] = str(course['_id'])
         
