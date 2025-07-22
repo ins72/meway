@@ -719,24 +719,66 @@ class CompleteEcommerceService:
             }
             await self.product_variants.insert_one(variant_doc)
 
-    async def _generate_ai_product_description(self, product_id: str, product_name: str):
-        """Generate AI-powered product description using OpenAI"""
+    async def _generate_ai_product_description(self, product_id: str, product_name: str, product_data: Dict[str, Any] = None) -> str:
+        """Generate AI product description using OpenAI API"""
         try:
             if not self.openai_api_key:
-                return
+                return f"High-quality {product_name} with premium features and design."
             
-            # This would use OpenAI API to generate description
-            # For now, create a placeholder
-            ai_description = f"High-quality {product_name} designed for modern lifestyle. Features premium materials and innovative design."
+            # Real OpenAI API integration for product description generation
+            import openai
+            openai.api_key = self.openai_api_key
+            
+            # Create detailed prompt for product description
+            if product_data is None:
+                # Get product data from database if not provided
+                product = await self.products.find_one({"_id": product_id})
+                product_data = product or {}
+            
+            category = product_data.get('category', 'general')
+            price = product_data.get('price', 0)
+            features = product_data.get('features', [])
+            
+            prompt = f"""Generate a compelling product description for an e-commerce listing:
+            
+Product Name: {product_name}
+Category: {category}
+Price: ${price}
+Features: {', '.join(features) if features else 'Premium quality'}
+
+Write a 2-3 sentence product description that highlights benefits, quality, and value. Make it engaging for online shoppers."""
+
+            response = openai.Completion.create(
+                engine="text-davinci-003",
+                prompt=prompt,
+                max_tokens=150,
+                temperature=0.7,
+                n=1,
+                stop=None
+            )
+            
+            ai_description = response.choices[0].text.strip()
             
             # Update product with AI description
             await self.products.update_one(
                 {"_id": product_id},
-                {"$set": {"ai_description": ai_description}}
+                {"$set": {"ai_description": ai_description, "description_generated_at": datetime.utcnow()}}
             )
             
+            return ai_description
+            
         except Exception as e:
-            print(f"Error generating AI description: {str(e)}")
+            logger.error(f"Error generating AI description: {str(e)}")
+            # Fallback description
+            fallback_description = f"Premium {product_name} featuring high-quality materials and thoughtful design for exceptional value and performance."
+            
+            # Update product with fallback description
+            await self.products.update_one(
+                {"_id": product_id},
+                {"$set": {"ai_description": fallback_description, "description_generated_at": datetime.utcnow()}}
+            )
+            
+            return fallback_description
 
     async def _generate_order_number(self) -> str:
         """Generate unique order number"""
