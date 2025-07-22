@@ -360,7 +360,7 @@ async def check_user_permission(
         
         has_permission = await complete_multi_workspace_service.check_user_permission(
             workspace_id=workspace_id,
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             permission=permission
         )
         
