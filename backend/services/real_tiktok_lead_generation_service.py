@@ -112,6 +112,54 @@ class RealTikTokLeadGenerationService:
             self.log(f"Error searching TikTok creators: {str(e)}")
             return {"error": str(e)}
     
+    async def calculate_tiktok_engagement_mock(self, index: int) -> Dict:
+        """Calculate mock TikTok engagement metrics"""
+        base_engagement = 3.0 + (index * 0.2)
+        
+        return {
+            "engagement_rate": round(base_engagement, 2),
+            "avg_likes_per_video": 500 + (index * 100),
+            "likes_to_followers_ratio": round(base_engagement * 2, 2),
+            "content_frequency": round(2.5 + (index * 0.1), 2)
+        }
+    
+    async def extract_tiktok_contacts_mock(self, index: int) -> Dict:
+        """Extract mock contact information"""
+        contacts = [
+            {"email": "contact@creator1.com", "instagram": "creator1_official"},
+            {"email": "business@creator2.com", "instagram": "creator2_biz"},
+            {"email": "hello@creator3.com", "youtube": "creator3channel"},
+            {"email": None, "instagram": "creator4_insta"},
+            {"email": "info@creator5.com", "youtube": "creator5"}
+        ]
+        
+        if index < len(contacts):
+            return contacts[index]
+        
+        return {
+            "email": f"creator{index+1}@example.com" if index % 3 == 0 else None,
+            "instagram": f"creator{index+1}_insta" if index % 2 == 0 else None,
+            "youtube": f"creator{index+1}channel" if index % 4 == 0 else None,
+            "other_links": []
+        }
+    
+    async def identify_creator_niche_mock(self, keywords: List[str]) -> str:
+        """Identify creator niche based on keywords"""
+        keyword_text = " ".join(keywords).lower()
+        
+        if any(word in keyword_text for word in ["business", "entrepreneur", "startup"]):
+            return "business"
+        elif any(word in keyword_text for word in ["fitness", "health", "workout"]):
+            return "fitness"
+        elif any(word in keyword_text for word in ["food", "cooking", "recipe"]):
+            return "food"
+        elif any(word in keyword_text for word in ["tech", "technology", "coding"]):
+            return "tech"
+        elif any(word in keyword_text for word in ["travel", "adventure"]):
+            return "travel"
+        else:
+            return "lifestyle"
+    
     async def calculate_tiktok_engagement(self, creator: Dict) -> Dict:
         """Calculate real TikTok engagement metrics"""
         followers = creator.get("follower_count", 0)
