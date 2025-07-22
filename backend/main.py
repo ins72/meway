@@ -398,6 +398,14 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Complete Onboarding router: {str(e)}")
 
+try:
+    from api.complete_link_in_bio import router as complete_link_in_bio_router
+    app.include_router(complete_link_in_bio_router, tags=["Complete Link in Bio"])
+    included_count += 1
+    print("  ✅ Included Complete Link in Bio Builder router")
+except Exception as e:
+    print(f"  ❌ Failed to include Complete Link in Bio router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
