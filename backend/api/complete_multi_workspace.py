@@ -206,7 +206,7 @@ async def accept_invitation(
     try:
         result = await complete_multi_workspace_service.accept_invitation(
             invitation_token=accept_data.invitation_token,
-            user_id=user['id']
+            user_id=user.get('_id') or user.get('id') or user.get('user_id')
         )
         
         if not result:
