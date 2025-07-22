@@ -32,14 +32,14 @@ class GoalsSelectionData(BaseModel):
 
 class SubscriptionPlanData(BaseModel):
     selected_plan: SubscriptionTier
-    billing_cycle: str = Field(..., regex="^(monthly|yearly)$")
+    billing_cycle: str = Field(..., pattern="^(monthly|yearly)$")
     feature_count: int = Field(..., ge=1, le=50)
 
 class TeamMemberData(BaseModel):
-    email: str = Field(..., regex=r'^[\w\.-]+@[\w\.-]+\.\w+$')
+    email: str = Field(..., pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$')
     first_name: str = Field(..., min_length=1, max_length=50)
     last_name: str = Field(..., min_length=1, max_length=50)
-    role: str = Field(default="editor", regex="^(owner|admin|editor|viewer)$")
+    role: str = Field(default="editor", pattern="^(owner|admin|editor|viewer)$")
 
 class TeamSetupData(BaseModel):
     team_members: List[TeamMemberData] = Field(default_factory=list)
@@ -47,8 +47,8 @@ class TeamSetupData(BaseModel):
 class BrandingSetupData(BaseModel):
     company_name: str = Field(..., min_length=1, max_length=100)
     logo_url: Optional[str] = Field(None, max_length=500)
-    primary_color: str = Field(default="#3B82F6", regex=r'^#[0-9A-Fa-f]{6}$')
-    secondary_color: str = Field(default="#1E40AF", regex=r'^#[0-9A-Fa-f]{6}$')
+    primary_color: str = Field(default="#3B82F6", pattern=r'^#[0-9A-Fa-f]{6}$')
+    secondary_color: str = Field(default="#1E40AF", pattern=r'^#[0-9A-Fa-f]{6}$')
     custom_domain: Optional[str] = Field(None, max_length=100)
 
 class IntegrationConfig(BaseModel):
