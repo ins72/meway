@@ -2426,6 +2426,37 @@ class BackendTester:
             self.test_endpoint("/financial/invoices", "GET", test_name="Data Persistence - Retrieve Invoices")
         
         return True
+    
+    def test_subscription_management_system(self):
+        """Test Complete Subscription Management System"""
+        print("\n💳 TESTING COMPLETE SUBSCRIPTION MANAGEMENT SYSTEM")
+        print("=" * 60)
+        
+        # Test Subscription Plans
+        print("\n📋 Testing Subscription Plans...")
+        self.test_endpoint("/subscriptions/plans", "GET", test_name="Subscriptions - Get All Plans")
+        self.test_endpoint("/subscriptions/current", "GET", test_name="Subscriptions - Get Current Subscription")
+        
+        # Test Subscription Creation with Stripe
+        print("\n➕ Testing Subscription Creation...")
+        subscription_data = {
+            "plan_id": "pro_monthly",
+            "payment_method": "card",
+            "billing_cycle": "monthly"
+        }
+        self.test_endpoint("/subscriptions/create", "POST", subscription_data, "Subscriptions - Create Subscription")
+        
+        # Test Usage Tracking
+        print("\n📊 Testing Usage Tracking...")
+        self.test_endpoint("/subscriptions/usage", "GET", test_name="Subscriptions - Get Usage")
+        self.test_endpoint("/subscriptions/billing-history", "GET", test_name="Subscriptions - Billing History")
+        
+        # Test Subscription Management
+        print("\n⚙️ Testing Subscription Management...")
+        self.test_endpoint("/subscriptions/upgrade", "POST", {"new_plan": "enterprise"}, "Subscriptions - Upgrade Plan")
+        self.test_endpoint("/subscriptions/cancel", "POST", {"reason": "testing"}, "Subscriptions - Cancel Subscription")
+        
+        return True
 
 if __name__ == "__main__":
     tester = BackendTester()
