@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Configuration
-BACKEND_URL = "https://e0ab52c3-9e31-486e-974d-41e6b1129712.preview.emergentagent.com"
+BACKEND_URL = "https://45dd0222-7115-4628-8ad2-4a55a75fbfd1.preview.emergentagent.com"
 ADMIN_EMAIL = "tmonnens@outlook.com"
 ADMIN_PASSWORD = "Voetballen5"
 
