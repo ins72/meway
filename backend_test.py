@@ -1081,6 +1081,43 @@ class BackendTester:
         for endpoint, _ in db_services[:5]:  # Test first 5 services
             self.test_data_consistency(endpoint)
 
+    def run_comprehensive_specification_test(self):
+        """Run comprehensive testing of the THREE MAJOR SPECIFICATION AREAS - JULY 2025"""
+        print("🎯 COMPREHENSIVE SPECIFICATION IMPLEMENTATION TESTING - JULY 2025")
+        print("Testing the three critical specification areas that were just implemented:")
+        print("1. 🌐 COMPREHENSIVE MARKETING WEBSITE CAPABILITIES - /api/marketing-website/*")
+        print("2. 📱 ADVANCED SOCIAL MEDIA MANAGEMENT SUITE - /api/social-media-suite/*") 
+        print("3. 🔒 ENTERPRISE SECURITY & COMPLIANCE - /api/enterprise-security/*")
+        print("4. ✅ EXISTING PLATFORM STABILITY verification")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print("=" * 80)
+        
+        # Test health check first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running properly.")
+            return False
+        
+        # Test authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed - cannot proceed with testing.")
+            return False
+        
+        # Test the THREE MAJOR SPECIFICATION AREAS (main focus of review request)
+        self.test_comprehensive_specification_implementation()
+        
+        # Test existing platform stability to ensure no regressions
+        self.test_existing_platform_stability()
+        
+        # Test platform health and performance
+        self.test_platform_startup_health()
+        self.test_performance_reliability()
+        
+        # Print summary
+        self.print_summary()
+        
+        return True
+
     def run_enterprise_features_test(self):
         """Run comprehensive testing of NEW ENTERPRISE FEATURES as requested in the review"""
         print("🎯 TESTING NEW ENTERPRISE FEATURES - MEWAYZ PLATFORM")
