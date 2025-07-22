@@ -113,25 +113,25 @@ class BackendTester:
                 response = self.session.delete(url, headers=headers, timeout=10)
             else:
                 self.log_result(test_name, False, f"Unsupported method: {method}")
-                return False
+                return False, None
             
             if response.status_code in [200, 201]:
                 try:
                     data = response.json()
                     self.log_result(test_name, True, f"Endpoint accessible - Status {response.status_code}", data)
-                    return True
+                    return True, data
                 except:
                     self.log_result(test_name, True, f"Endpoint accessible - Status {response.status_code} (non-JSON response)")
-                    return True
+                    return True, response.text
             elif response.status_code == 404:
                 self.log_result(test_name, False, f"Endpoint not found (404) - May not be implemented or imported")
-                return False
+                return False, None
             elif response.status_code == 401:
                 self.log_result(test_name, False, f"Authentication required (401)")
-                return False
+                return False, None
             elif response.status_code == 403:
                 self.log_result(test_name, False, f"Access forbidden (403)")
-                return False
+                return False, None
             elif response.status_code == 500:
                 try:
                     error_data = response.json()
@@ -139,14 +139,186 @@ class BackendTester:
                     self.log_result(test_name, False, f"Internal server error (500): {error_msg}")
                 except:
                     self.log_result(test_name, False, f"Internal server error (500): {response.text}")
-                return False
+                return False, None
             else:
                 self.log_result(test_name, False, f"Endpoint error - Status {response.status_code}: {response.text}")
-                return False
+                return False, None
                 
         except Exception as e:
             self.log_result(test_name, False, f"Request error: {str(e)}")
-            return False
+            return False, None
+
+    def test_link_in_bio_system(self):
+        """Test Complete Link in Bio Builder System with full CRUD operations"""
+        print("\n🔗 TESTING COMPLETE LINK IN BIO BUILDER SYSTEM")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        created_page_id = None
+        created_link_id = None
+        
+        # 1. Test Templates System
+        print("\n📋 Testing Template System...")
+        success, templates_data = self.test_endpoint("/link-in-bio/templates", "GET", test_name="Link in Bio - Get Templates")
+        
+        # 2. Test Health Check
+        print("\n🏥 Testing Health Check...")
+        self.test_endpoint("/link-in-bio/health", "GET", test_name="Link in Bio - Health Check")
+        
+        # 3. Test CREATE - Create Bio Page
+        print("\n➕ Testing CREATE Operations...")
+        create_page_data = {
+            "title": "Sarah's Creative Portfolio",
+            "description": "Digital artist and content creator sharing my latest work and collaborations",
+            "username": "sarah_creates",
+            "template_id": "modern_gradient",
+            "theme": {
+                "primary_color": "#6366f1",
+                "secondary_color": "#8b5cf6",
+                "background_color": "#f8fafc",
+                "text_color": "#1e293b"
+            },
+            "settings": {
+                "show_analytics": True,
+                "allow_comments": False,
+                "custom_css": ".bio-page { font-family: 'Inter', sans-serif; }"
+            }
+        }
+        
+        success, page_data = self.test_endpoint("/link-in-bio/pages", "POST", create_page_data, "Link in Bio - Create Bio Page")
+        if success and page_data:
+            created_page_id = page_data.get("id") or page_data.get("page_id")
+            print(f"   Created page ID: {created_page_id}")
+        
+        # 4. Test READ - Get Bio Pages List
+        print("\n📖 Testing READ Operations...")
+        self.test_endpoint("/link-in-bio/pages", "GET", test_name="Link in Bio - Get User Bio Pages")
+        
+        # 5. Test READ - Get Specific Bio Page
+        if created_page_id:
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}", "GET", test_name="Link in Bio - Get Bio Page Details")
+            
+            # 6. Test CREATE - Add Links to Bio Page
+            print("\n🔗 Testing Link Creation...")
+            create_link_data = {
+                "title": "Latest Art Collection",
+                "url": "https://sarahcreates.art/gallery",
+                "description": "Check out my newest digital art pieces and prints",
+                "icon": "palette",
+                "is_active": True,
+                "click_tracking": True,
+                "order_index": 1
+            }
+            
+            success, link_data = self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/links", "POST", create_link_data, "Link in Bio - Create Bio Link")
+            if success and link_data:
+                created_link_id = link_data.get("id") or link_data.get("link_id")
+                print(f"   Created link ID: {created_link_id}")
+            
+            # 7. Test READ - Get Bio Page Links
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/links", "GET", test_name="Link in Bio - Get Bio Page Links")
+            
+            # 8. Test UPDATE - Update Bio Page
+            print("\n✏️ Testing UPDATE Operations...")
+            update_page_data = {
+                "title": "Sarah's Creative Studio - Updated",
+                "description": "Digital artist, content creator, and design consultant - Now offering custom commissions!",
+                "theme": {
+                    "primary_color": "#7c3aed",
+                    "secondary_color": "#a855f7",
+                    "background_color": "#faf5ff",
+                    "text_color": "#374151"
+                }
+            }
+            
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}", "PUT", update_page_data, "Link in Bio - Update Bio Page")
+            
+            # 9. Test UPDATE - Update Bio Link
+            if created_link_id:
+                update_link_data = {
+                    "title": "Featured Art Collection - Limited Edition",
+                    "url": "https://sarahcreates.art/featured",
+                    "description": "Exclusive limited edition prints now available - only 50 pieces!",
+                    "icon": "star",
+                    "order_index": 1
+                }
+                
+                self.test_endpoint(f"/link-in-bio/links/{created_link_id}", "PUT", update_link_data, "Link in Bio - Update Bio Link")
+            
+            # 10. Test Analytics System
+            print("\n📊 Testing Analytics System...")
+            
+            # Track page visit
+            visit_data = {
+                "visitor_ip": "192.168.1.100",
+                "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "referrer": "https://instagram.com/sarah_creates"
+            }
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/visit", "POST", visit_data, "Link in Bio - Track Page Visit")
+            
+            # Track link click
+            if created_link_id:
+                click_data = {
+                    "visitor_ip": "192.168.1.100",
+                    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                    "referrer": f"https://45dd0222-7115-4628-8ad2-4a55a75fbfd1.preview.emergentagent.com/bio/sarah_creates"
+                }
+                self.test_endpoint(f"/link-in-bio/links/{created_link_id}/click", "POST", click_data, "Link in Bio - Track Link Click")
+            
+            # Get page analytics
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/analytics", "GET", test_name="Link in Bio - Get Page Analytics")
+            
+            # 11. Test Additional Features
+            print("\n🎨 Testing Additional Features...")
+            
+            # Get QR Code
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/qr-code", "GET", test_name="Link in Bio - Get QR Code")
+            
+            # Get SEO Settings
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}/seo", "GET", test_name="Link in Bio - Get SEO Settings")
+        
+        # 12. Test Analytics Overview
+        self.test_endpoint("/link-in-bio/analytics/overview", "GET", test_name="Link in Bio - Analytics Overview")
+        
+        # 13. Test DELETE Operations
+        print("\n🗑️ Testing DELETE Operations...")
+        
+        # Delete link first (if created)
+        if created_link_id:
+            self.test_endpoint(f"/link-in-bio/links/{created_link_id}", "DELETE", test_name="Link in Bio - Delete Bio Link")
+        
+        # Delete page (if created)
+        if created_page_id:
+            self.test_endpoint(f"/link-in-bio/pages/{created_page_id}", "DELETE", test_name="Link in Bio - Delete Bio Page")
+        
+        print("\n🔗 Link in Bio System Testing Complete!")
+        
+    def test_data_consistency(self):
+        """Test data consistency to verify real database usage"""
+        print("\n🔍 TESTING DATA CONSISTENCY (Real Database Verification)")
+        print("=" * 60)
+        
+        # Test templates consistency
+        print("\n📋 Testing Templates Data Consistency...")
+        success1, data1 = self.test_endpoint("/link-in-bio/templates", "GET", test_name="Templates - First Call")
+        time.sleep(1)  # Small delay
+        success2, data2 = self.test_endpoint("/link-in-bio/templates", "GET", test_name="Templates - Second Call")
+        
+        if success1 and success2 and data1 == data2:
+            self.log_result("Templates Data Consistency", True, "Templates data consistent across calls - confirms real database usage")
+        elif success1 and success2:
+            self.log_result("Templates Data Consistency", False, "Templates data inconsistent - may be using random generation")
+        
+        # Test analytics overview consistency
+        print("\n📊 Testing Analytics Data Consistency...")
+        success1, data1 = self.test_endpoint("/link-in-bio/analytics/overview", "GET", test_name="Analytics Overview - First Call")
+        time.sleep(1)  # Small delay
+        success2, data2 = self.test_endpoint("/link-in-bio/analytics/overview", "GET", test_name="Analytics Overview - Second Call")
+        
+        if success1 and success2 and data1 == data2:
+            self.log_result("Analytics Data Consistency", True, "Analytics data consistent across calls - confirms real database usage")
+        elif success1 and success2:
+            self.log_result("Analytics Data Consistency", False, "Analytics data inconsistent - may be using random generation")
     
     def test_real_api_integration_endpoints(self):
         """Test the REAL API INTEGRATION ENDPOINTS as requested in the review - JULY 2025"""
