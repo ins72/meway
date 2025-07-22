@@ -42,6 +42,11 @@ class APIConfiguration(BaseModel):
     preferred_payment_processor: str = "stripe"
     enabled_payment_processors: List[str] = ["stripe"]
     
+    
+    # ElasticMail Configuration
+    elasticmail_api_key: Optional[str] = None
+    elasticmail_from_email: Optional[str] = None
+    elasticmail_from_name: Optional[str] = None
     # Email Services
     sendgrid_api_key: Optional[str] = None
     sendgrid_from_email: Optional[str] = None
