@@ -487,6 +487,22 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Subscription Management router: {str(e)}")
 
+try:
+    from api.complete_booking import router as booking_router
+    app.include_router(booking_router, prefix="/api/booking", tags=["Booking System"])
+    included_count += 1
+    print("  ✅ Included Complete Booking System with Calendar Integration router")
+except Exception as e:
+    print(f"  ❌ Failed to include Booking System router: {str(e)}")
+
+try:
+    from api.complete_social_media_leads import router as social_media_leads_router
+    app.include_router(social_media_leads_router, prefix="/api/social-media-leads", tags=["Social Media Leads"])
+    included_count += 1
+    print("  ✅ Included Complete Social Media Lead Generation (TikTok/Twitter) router")
+except Exception as e:
+    print(f"  ❌ Failed to include Social Media Leads router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
