@@ -286,17 +286,17 @@ class FinalAuditTester:
             "experience_level": "intermediate"
         }
         
-        success, session_response = self.test_endpoint("/complete-onboarding/sessions", "POST", session_data, "Onboarding - CREATE Session")
+        success, session_response = self.test_endpoint("/complete-onboarding/api/onboarding/session", "POST", session_data, "Onboarding - CREATE Session")
         created_session_id = None
         if success and session_response:
             created_session_id = session_response.get("data", {}).get("_id") or session_response.get("data", {}).get("id")
         
         # READ Onboarding Data
-        self.test_endpoint("/complete-onboarding/goals", "GET", test_name="Onboarding - READ Available Goals")
-        self.test_endpoint("/complete-onboarding/plans", "GET", test_name="Onboarding - READ Subscription Plans")
+        self.test_endpoint("/complete-onboarding/api/onboarding/goals", "GET", test_name="Onboarding - READ Available Goals")
+        self.test_endpoint("/complete-onboarding/api/onboarding/subscription-plans", "GET", test_name="Onboarding - READ Subscription Plans")
         
         if created_session_id:
-            self.test_endpoint(f"/complete-onboarding/sessions/{created_session_id}", "GET", 
+            self.test_endpoint(f"/complete-onboarding/api/onboarding/session/{created_session_id}", "GET", 
                              test_name="Onboarding - READ Session Details")
         
         # Test Onboarding Completion
@@ -310,11 +310,11 @@ class FinalAuditTester:
                     "setup_integrations": ["stripe", "mailchimp"]
                 }
             }
-            self.test_endpoint(f"/complete-onboarding/sessions/{created_session_id}/complete", "POST", 
+            self.test_endpoint(f"/complete-onboarding/api/onboarding/session/{created_session_id}/complete", "POST", 
                              completion_data, "Onboarding - COMPLETE Session")
         
         # Test Health Check
-        self.test_endpoint("/complete-onboarding/health", "GET", test_name="Onboarding - Health Check")
+        self.test_endpoint("/complete-onboarding/api/onboarding/health", "GET", test_name="Onboarding - Health Check")
         
         print("\n🚀 Complete Onboarding System Testing Complete!")
 
