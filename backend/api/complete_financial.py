@@ -73,15 +73,31 @@ async def create_invoice(
 ):
     """Create a new invoice with real data persistence"""
     try:
+        # Convert API data to service format
+        service_data = {
+            'client_info': {
+                'email': invoice_data.client_email,
+                'name': invoice_data.client_name,
+                'address': invoice_data.client_address or ""
+            },
+            'line_items': [
+                {
+                    'description': item.get('description', item.get('name', 'Service')),
+                    'quantity': item.get('quantity', 1),
+                    'rate': item.get('rate', item.get('price', item.get('amount', 0))),
+                    'amount': item.get('amount', item.get('price', 0)) * item.get('quantity', 1)
+                }
+                for item in invoice_data.items
+            ],
+            'due_date': invoice_data.due_date,
+            'tax_rate': invoice_data.tax_rate or 0.0,
+            'notes': invoice_data.notes or "",
+            'currency': 'USD'
+        }
+        
         result = await complete_financial_service.create_invoice(
-            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
-            client_email=invoice_data.client_email,
-            client_name=invoice_data.client_name,
-            items=invoice_data.items,
-            due_date=invoice_data.due_date,
-            client_address=invoice_data.client_address,
-            tax_rate=invoice_data.tax_rate,
-            notes=invoice_data.notes
+            invoice_data=service_data,
+            user_id=user.get('_id') or user.get('id') or user.get('user_id')
         )
         
         if not result:
