@@ -80,7 +80,7 @@ async def get_user_workspaces(
     """Get all workspaces for the current user"""
     try:
         workspaces = await complete_multi_workspace_service.get_user_workspaces(
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             include_archived=include_archived
         )
         
