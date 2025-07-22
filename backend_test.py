@@ -148,9 +148,211 @@ class BackendTester:
             self.log_result(test_name, False, f"Request error: {str(e)}")
             return False
     
+    def test_enterprise_features(self):
+        """Test the NEW ENTERPRISE FEATURES as requested in the review"""
+        print("\n=== Testing NEW ENTERPRISE FEATURES ===")
+        print("Testing Advanced Learning Management System (LMS), Multi-Vendor Marketplace, and Advanced Business Intelligence")
+        
+        # 1. Test Advanced Learning Management System (LMS) - /api/lms/*
+        print("\n--- 1. Advanced Learning Management System (LMS) Testing ---")
+        
+        # SCORM Package Management
+        scorm_data = {
+            "package_name": "Introduction to Digital Marketing",
+            "version": "1.0",
+            "content_type": "scorm_2004",
+            "duration_minutes": 120
+        }
+        self.test_endpoint("/lms/scorm/packages", "POST", scorm_data, "LMS - Create SCORM Package")
+        self.test_endpoint("/lms/scorm/packages", test_name="LMS - List SCORM Packages")
+        
+        # Learning Progress Tracking
+        progress_data = {
+            "course_id": "course_123",
+            "completion_percentage": 75,
+            "time_spent_minutes": 90,
+            "quiz_scores": [85, 92, 78]
+        }
+        self.test_endpoint("/lms/progress/track", "POST", progress_data, "LMS - Track Learning Progress")
+        self.test_endpoint("/lms/progress/analytics", test_name="LMS - Get Learning Analytics")
+        
+        # Certificate Generation with Blockchain Verification
+        cert_data = {
+            "course_id": "course_123",
+            "learner_id": "learner_456",
+            "completion_date": "2024-12-20",
+            "blockchain_verify": True
+        }
+        self.test_endpoint("/lms/certificates/generate", "POST", cert_data, "LMS - Generate Certificate")
+        self.test_endpoint("/lms/certificates/verify", test_name="LMS - Verify Certificate Blockchain")
+        
+        # Gamification Data
+        self.test_endpoint("/lms/gamification/leaderboard", test_name="LMS - Get Gamification Leaderboard")
+        self.test_endpoint("/lms/gamification/badges", test_name="LMS - Get Available Badges")
+        self.test_endpoint("/lms/gamification/points", test_name="LMS - Get User Points")
+        
+        # 2. Test Multi-Vendor Marketplace - /api/marketplace/*
+        print("\n--- 2. Multi-Vendor Marketplace Testing ---")
+        
+        # Vendor Onboarding
+        vendor_data = {
+            "business_name": "TechSolutions Inc",
+            "contact_email": "vendor@techsolutions.com",
+            "business_type": "software",
+            "tax_id": "123456789",
+            "bank_account": "****1234"
+        }
+        self.test_endpoint("/marketplace/vendors/onboard", "POST", vendor_data, "Marketplace - Vendor Onboarding")
+        self.test_endpoint("/marketplace/vendors/pending", test_name="Marketplace - Pending Vendor Approvals")
+        
+        # Vendor Approval Workflow
+        approval_data = {
+            "vendor_id": "vendor_123",
+            "approval_status": "approved",
+            "reviewer_notes": "All documents verified"
+        }
+        self.test_endpoint("/marketplace/vendors/approve", "POST", approval_data, "Marketplace - Approve Vendor")
+        self.test_endpoint("/marketplace/vendors/active", test_name="Marketplace - Active Vendors")
+        
+        # Dynamic Pricing Calculation
+        pricing_data = {
+            "product_id": "prod_456",
+            "base_price": 99.99,
+            "demand_factor": 1.2,
+            "competition_factor": 0.95,
+            "seasonal_factor": 1.1
+        }
+        self.test_endpoint("/marketplace/pricing/calculate", "POST", pricing_data, "Marketplace - Calculate Dynamic Pricing")
+        self.test_endpoint("/marketplace/pricing/history", test_name="Marketplace - Pricing History")
+        
+        # Vendor Payout Processing
+        payout_data = {
+            "vendor_id": "vendor_123",
+            "period": "2024-12",
+            "total_sales": 5000.00,
+            "commission_rate": 0.15
+        }
+        self.test_endpoint("/marketplace/payouts/process", "POST", payout_data, "Marketplace - Process Vendor Payout")
+        self.test_endpoint("/marketplace/payouts/pending", test_name="Marketplace - Pending Payouts")
+        
+        # Vendor Performance Metrics
+        self.test_endpoint("/marketplace/vendors/performance", test_name="Marketplace - Vendor Performance Metrics")
+        self.test_endpoint("/marketplace/analytics/sales", test_name="Marketplace - Sales Analytics")
+        
+        # 3. Test Advanced Business Intelligence - /api/business-intelligence/*
+        print("\n--- 3. Advanced Business Intelligence Testing ---")
+        
+        # Predictive Analytics
+        prediction_data = {
+            "analysis_type": "revenue_forecasting",
+            "time_horizon": "6_months",
+            "data_sources": ["sales", "marketing", "customer_behavior"],
+            "confidence_level": 0.95
+        }
+        self.test_endpoint("/business-intelligence/predictive/revenue-forecast", "POST", prediction_data, "BI - Revenue Forecasting")
+        
+        churn_data = {
+            "customer_segment": "premium",
+            "prediction_window": "30_days",
+            "risk_factors": ["usage_decline", "support_tickets", "payment_delays"]
+        }
+        self.test_endpoint("/business-intelligence/predictive/churn-prediction", "POST", churn_data, "BI - Churn Prediction")
+        
+        # Cohort Analysis
+        cohort_data = {
+            "cohort_type": "monthly",
+            "start_date": "2024-01-01",
+            "end_date": "2024-12-31",
+            "metric": "retention_rate"
+        }
+        self.test_endpoint("/business-intelligence/cohort/analysis", "POST", cohort_data, "BI - Cohort Analysis")
+        self.test_endpoint("/business-intelligence/cohort/retention", test_name="BI - Retention Cohorts")
+        
+        # Funnel Tracking
+        funnel_data = {
+            "funnel_name": "sales_conversion",
+            "stages": ["awareness", "interest", "consideration", "purchase"],
+            "time_period": "last_30_days"
+        }
+        self.test_endpoint("/business-intelligence/funnel/track", "POST", funnel_data, "BI - Track Conversion Funnel")
+        self.test_endpoint("/business-intelligence/funnel/analytics", test_name="BI - Funnel Analytics")
+        
+        # Competitive Analysis
+        competitor_data = {
+            "industry": "saas",
+            "competitors": ["competitor_a", "competitor_b"],
+            "metrics": ["pricing", "features", "market_share"]
+        }
+        self.test_endpoint("/business-intelligence/competitive/analysis", "POST", competitor_data, "BI - Competitive Analysis")
+        self.test_endpoint("/business-intelligence/competitive/reports", test_name="BI - Competitive Reports")
+        
+        # Custom Report Creation
+        report_data = {
+            "report_name": "Monthly Performance Dashboard",
+            "data_sources": ["sales", "marketing", "support"],
+            "chart_types": ["line", "bar", "pie"],
+            "filters": {"date_range": "last_30_days", "region": "north_america"}
+        }
+        self.test_endpoint("/business-intelligence/reports/create", "POST", report_data, "BI - Create Custom Report")
+        self.test_endpoint("/business-intelligence/reports/list", test_name="BI - List Custom Reports")
+        
+        # Advanced Analytics Dashboard
+        self.test_endpoint("/business-intelligence/dashboard/overview", test_name="BI - Analytics Dashboard Overview")
+        self.test_endpoint("/business-intelligence/dashboard/kpis", test_name="BI - Key Performance Indicators")
+        
+    def test_existing_platform_stability(self):
+        """Test existing platform stability to ensure no regressions"""
+        print("\n--- 4. Existing Platform Stability Testing ---")
+        
+        # Core authentication and user management
+        self.test_endpoint("/users/profile", test_name="Stability - User Profile")
+        self.test_endpoint("/users/stats", test_name="Stability - User Statistics")
+        
+        # Dashboard functionality
+        self.test_endpoint("/dashboard/overview", test_name="Stability - Dashboard Overview")
+        self.test_endpoint("/dashboard/activity-summary", test_name="Stability - Dashboard Activity")
+        
+        # Analytics functionality
+        self.test_endpoint("/analytics/overview", test_name="Stability - Analytics Overview")
+        self.test_endpoint("/analytics/features/usage", test_name="Stability - Feature Usage Analytics")
+        
+        # AI services
+        self.test_endpoint("/ai/services", test_name="Stability - AI Services")
+        self.test_endpoint("/ai/conversations", test_name="Stability - AI Conversations")
+        
+        # E-commerce functionality
+        self.test_endpoint("/ecommerce/products", test_name="Stability - E-commerce Products")
+        self.test_endpoint("/ecommerce/orders", test_name="Stability - E-commerce Orders")
+        self.test_endpoint("/ecommerce/dashboard", test_name="Stability - E-commerce Dashboard")
+        
+        # Marketing functionality
+        self.test_endpoint("/marketing/campaigns", test_name="Stability - Marketing Campaigns")
+        self.test_endpoint("/marketing/contacts", test_name="Stability - Marketing Contacts")
+        self.test_endpoint("/marketing/analytics", test_name="Stability - Marketing Analytics")
+        
+        # Admin functionality
+        self.test_endpoint("/admin/users", test_name="Stability - Admin Users")
+        self.test_endpoint("/admin/system/metrics", test_name="Stability - Admin System Metrics")
+        
+        # Workspace management
+        self.test_endpoint("/workspaces", test_name="Stability - Workspaces")
+        
+        # Test data consistency for core features
+        print("\nTesting data consistency for core platform features:")
+        core_consistency_endpoints = [
+            "/dashboard/overview",
+            "/users/profile",
+            "/ai/services",
+            "/ecommerce/dashboard",
+            "/marketing/analytics"
+        ]
+        
+        for endpoint in core_consistency_endpoints:
+            self.test_data_consistency(endpoint)
+    
     def test_newly_created_apis(self):
         """Test the newly created Advanced AI Analytics, Real-time Notifications, and Workflow Automation API endpoints"""
-        print("\n=== Testing Newly Created API Modules ===")
+        print("\n=== Testing Previously Created API Modules ===")
         print("Testing Advanced AI Analytics, Real-time Notifications, and Workflow Automation endpoints")
         
         # Test Advanced AI Analytics API (/api/ai-analytics/api/ai-analytics)
