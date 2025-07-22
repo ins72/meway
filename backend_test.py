@@ -1500,8 +1500,43 @@ class BackendTester:
         self.print_summary()
         
         return True
+    
+    def run_complete_onboarding_test(self):
+        """Run Complete Onboarding System testing as requested in review"""
+        print("🎯 COMPLETE ONBOARDING SYSTEM TESTING - MEWAYZ PLATFORM")
+        print("Testing the newly implemented Complete Onboarding System with:")
+        print("- Authentication System with existing credentials")
+        print("- Complete Onboarding APIs with all new endpoints")
+        print("- Real Data Verification with MongoDB storage")
+        print("- Full CRUD Operations (CREATE, READ, UPDATE, DELETE)")
+        print("- Database Operations with data persistence verification")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print("=" * 80)
+        
+        # Test health check first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running properly.")
+            return False
+        
+        # Test authentication with existing credentials
+        if not self.test_authentication():
+            print("❌ Authentication failed - cannot proceed with testing.")
+            return False
+        
+        # Test the Complete Onboarding System
+        self.test_complete_onboarding_system()
+        
+        # Test platform health and performance
+        self.test_platform_startup_health()
+        self.test_performance_reliability()
+        
+        # Print summary
+        self.print_summary()
+        
+        return True
 
 if __name__ == "__main__":
     tester = BackendTester()
-    success = tester.run_real_api_integration_test()
+    success = tester.run_complete_onboarding_test()
     sys.exit(0 if success else 1)
