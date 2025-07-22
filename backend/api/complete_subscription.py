@@ -42,8 +42,12 @@ async def create_subscription(
 ):
     """Create a new subscription with Stripe integration"""
     try:
-        # Validate plan tier
-        if subscription_data.plan_tier not in [tier.value for tier in SubscriptionTier]:
+        # Validate plan tier - support both "professional" and "pro"
+        plan_tier_normalized = subscription_data.plan_tier
+        if subscription_data.plan_tier == "pro":
+            plan_tier_normalized = "professional"
+            
+        if plan_tier_normalized not in [tier.value for tier in SubscriptionTier]:
             raise HTTPException(status_code=400, detail="Invalid subscription tier")
         
         # Validate billing cycle
@@ -53,7 +57,7 @@ async def create_subscription(
         result = await complete_subscription_service.create_subscription(
             user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             workspace_id=subscription_data.workspace_id,
-            plan_tier=subscription_data.plan_tier,
+            plan_tier=plan_tier_normalized,  # Use normalized plan tier
             billing_cycle=subscription_data.billing_cycle,
             payment_method_id=subscription_data.payment_method_id
         )
