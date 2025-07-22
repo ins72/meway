@@ -573,9 +573,9 @@ class CompleteEcommerceService:
         import re
         base_sku = re.sub(r'[^a-zA-Z0-9]+', '', name.upper())[:8]
         
-        # Add random suffix
-        import random
-        suffix = ''.join(random.choices('0123456789', k=4))
+        # Generate unique SKU suffix using UUID
+        import uuid
+        suffix = str(uuid.uuid4()).split('-')[0].upper()
         sku = f"{base_sku}-{suffix}"
         
         # Check if SKU exists
