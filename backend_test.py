@@ -148,56 +148,172 @@ class BackendTester:
             self.log_result(test_name, False, f"Request error: {str(e)}")
             return False
     
-    def test_comprehensive_specification_implementation(self):
-        """Test the THREE MAJOR SPECIFICATION AREAS as requested in the review - JULY 2025"""
-        print("\n=== Testing COMPREHENSIVE SPECIFICATION IMPLEMENTATION - JULY 2025 ===")
-        print("Testing the three critical specification areas that were just implemented:")
-        print("1. COMPREHENSIVE MARKETING WEBSITE CAPABILITIES - /api/marketing-website/*")
-        print("2. ADVANCED SOCIAL MEDIA MANAGEMENT SUITE - /api/social-media-suite/*") 
-        print("3. ENTERPRISE SECURITY & COMPLIANCE - /api/enterprise-security/*")
+    def test_real_api_integration_endpoints(self):
+        """Test the REAL API INTEGRATION ENDPOINTS as requested in the review - JULY 2025"""
+        print("\n=== Testing REAL API INTEGRATION ENDPOINTS - JULY 2025 ===")
+        print("Testing newly implemented real API integration endpoints:")
+        print("1. Real Social Media Lead Generation APIs (Twitter/TikTok)")
+        print("2. Real AI Automation APIs (OpenAI GPT integration)")
+        print("3. Real Email Automation APIs (ElasticMail)")
+        print("4. Database operations verification")
+        print("5. Authentication & error handling")
         
-        # 1. Test COMPREHENSIVE MARKETING WEBSITE CAPABILITIES
-        print("\n--- 1. COMPREHENSIVE MARKETING WEBSITE CAPABILITIES Testing ---")
+        # 1. Test REAL SOCIAL MEDIA LEAD GENERATION APIs
+        print("\n--- 1. REAL SOCIAL MEDIA LEAD GENERATION APIs Testing ---")
         
-        # Marketing page creation with SEO optimization
-        marketing_page_data = {
-            "title": "Digital Marketing Solutions",
-            "content": "Comprehensive digital marketing services for modern businesses",
-            "seo_title": "Best Digital Marketing Services | Mewayz",
-            "seo_description": "Transform your business with our comprehensive digital marketing solutions",
-            "seo_keywords": ["digital marketing", "SEO", "social media", "content marketing"],
-            "template_id": "modern_business_template"
+        # Twitter Lead Generation with real Twitter API v2
+        twitter_search_data = {
+            "keywords": ["entrepreneur", "startup", "business owner"],
+            "hashtags": ["#entrepreneur", "#startup"],
+            "location": "United States",
+            "max_results": 20,
+            "verified_only": False,
+            "min_followers": 1000
         }
-        self.test_endpoint("/marketing-website/pages", "POST", marketing_page_data, "Marketing Website - Create Page with SEO")
-        self.test_endpoint("/marketing-website/pages", test_name="Marketing Website - List Pages")
+        self.test_endpoint("/social-media-leads/twitter/search", "POST", twitter_search_data, "Twitter Lead Generation - Search")
         
-        # A/B testing platform functionality
-        ab_test_data = {
-            "test_name": "Homepage CTA Test",
-            "variant_a": {"cta_text": "Get Started Now", "cta_color": "blue"},
-            "variant_b": {"cta_text": "Start Free Trial", "cta_color": "green"},
-            "traffic_split": 50,
-            "duration_days": 14
+        # TikTok Lead Generation with real TikTok Business API
+        tiktok_search_data = {
+            "keywords": ["business", "marketing", "entrepreneur"],
+            "region": "US",
+            "max_results": 15,
+            "min_followers": 5000,
+            "niche": "business",
+            "cursor": 0
         }
-        self.test_endpoint("/marketing-website/ab-tests", "POST", ab_test_data, "Marketing Website - Create A/B Test")
-        self.test_endpoint("/marketing-website/ab-tests", test_name="Marketing Website - List A/B Tests")
+        self.test_endpoint("/social-media-leads/tiktok/search", "POST", tiktok_search_data, "TikTok Lead Generation - Search")
         
-        # Template marketplace availability (50+ templates)
-        self.test_endpoint("/marketing-website/templates", test_name="Marketing Website - Template Marketplace")
-        self.test_endpoint("/marketing-website/templates/categories", test_name="Marketing Website - Template Categories")
+        # Lead retrieval and analytics
+        self.test_endpoint("/social-media-leads/search-history", test_name="Social Media Leads - Search History")
+        self.test_endpoint("/social-media-leads/analytics/overview", test_name="Social Media Leads - Analytics Overview")
         
-        # SEO analysis and optimization features
-        seo_analysis_data = {
-            "url": "https://example.com/landing-page",
-            "target_keywords": ["digital marketing", "SEO services"],
-            "competitor_urls": ["https://competitor1.com", "https://competitor2.com"]
+        # 2. Test REAL AI AUTOMATION APIs
+        print("\n--- 2. REAL AI AUTOMATION APIs Testing ---")
+        
+        # OpenAI GPT Content Generation
+        content_generation_data = {
+            "platform": "linkedin",
+            "topic": "digital transformation",
+            "tone": "professional",
+            "target_audience": "business executives",
+            "content_type": "post",
+            "additional_context": "Focus on ROI and business value"
         }
-        self.test_endpoint("/marketing-website/seo/analyze", "POST", seo_analysis_data, "Marketing Website - SEO Analysis")
-        self.test_endpoint("/marketing-website/seo/recommendations", test_name="Marketing Website - SEO Recommendations")
+        self.test_endpoint("/ai-automation/generate-content", "POST", content_generation_data, "AI Automation - Generate Content")
         
-        # Marketing analytics overview
-        self.test_endpoint("/marketing-website/analytics", test_name="Marketing Website - Analytics Overview")
-        self.test_endpoint("/marketing-website/analytics/performance", test_name="Marketing Website - Performance Metrics")
+        # AI Lead Enrichment
+        lead_enrichment_data = {
+            "username": "business_leader_2024",
+            "bio": "CEO of tech startup, passionate about innovation and growth",
+            "platform": "twitter",
+            "follower_count": 15000,
+            "location": "San Francisco"
+        }
+        self.test_endpoint("/ai-automation/enrich-lead", "POST", lead_enrichment_data, "AI Automation - Enrich Lead")
+        
+        # Workflow Creation
+        workflow_data = {
+            "name": "Lead Nurturing Workflow",
+            "trigger_type": "new_lead",
+            "actions": [
+                {"type": "send_email", "template": "welcome_email"},
+                {"type": "add_to_crm", "list": "prospects"},
+                {"type": "schedule_followup", "days": 3}
+            ]
+        }
+        self.test_endpoint("/ai-automation/create-workflow", "POST", workflow_data, "AI Automation - Create Workflow")
+        
+        # AI Analytics and History
+        self.test_endpoint("/ai-automation/workflows", test_name="AI Automation - List Workflows")
+        self.test_endpoint("/ai-automation/content-history", test_name="AI Automation - Content History")
+        self.test_endpoint("/ai-automation/enrichment-history", test_name="AI Automation - Enrichment History")
+        self.test_endpoint("/ai-automation/analytics/overview", test_name="AI Automation - Analytics Overview")
+        
+        # Bulk Operations
+        bulk_content_data = {
+            "content_requests": [
+                {"platform": "twitter", "topic": "productivity", "tone": "casual"},
+                {"platform": "linkedin", "topic": "leadership", "tone": "professional"},
+                {"platform": "facebook", "topic": "team building", "tone": "friendly"}
+            ]
+        }
+        self.test_endpoint("/ai-automation/bulk-content-generation", "POST", bulk_content_data, "AI Automation - Bulk Content Generation")
+        
+        # 3. Test REAL EMAIL AUTOMATION APIs
+        print("\n--- 3. REAL EMAIL AUTOMATION APIs Testing ---")
+        
+        # Real Email Sending with ElasticMail
+        email_data = {
+            "to_email": "test@example.com",
+            "subject": "Welcome to Mewayz Platform",
+            "text_content": "Thank you for joining our platform. We're excited to help you grow your business.",
+            "html_content": "<h1>Welcome!</h1><p>Thank you for joining our platform.</p>",
+            "from_email": "hello@mewayz.com",
+            "from_name": "Mewayz Team",
+            "is_transactional": True
+        }
+        self.test_endpoint("/email-automation/send-email", "POST", email_data, "Email Automation - Send Real Email")
+        
+        # Email Campaign Management
+        campaign_data = {
+            "name": "Q4 Business Growth Campaign",
+            "subject": "Unlock Your Business Potential",
+            "html_content": "<h1>Grow Your Business</h1><p>Discover powerful tools for business growth.</p>",
+            "text_content": "Grow Your Business - Discover powerful tools for business growth.",
+            "from_email": "campaigns@mewayz.com",
+            "from_name": "Mewayz Growth Team"
+        }
+        self.test_endpoint("/email-automation/campaigns", "POST", campaign_data, "Email Automation - Create Campaign")
+        self.test_endpoint("/email-automation/campaigns", test_name="Email Automation - List Campaigns")
+        
+        # Subscriber Management
+        subscriber_data = {
+            "action": "add",
+            "email": "newsubscriber@example.com",
+            "first_name": "John",
+            "last_name": "Doe",
+            "tags": ["prospect", "interested"]
+        }
+        self.test_endpoint("/email-automation/subscribers", "POST", subscriber_data, "Email Automation - Manage Subscribers")
+        self.test_endpoint("/email-automation/subscribers", test_name="Email Automation - List Subscribers")
+        
+        # Email Templates
+        template_data = {
+            "name": "Welcome Email Template",
+            "subject": "Welcome to {{company_name}}",
+            "html_content": "<h1>Welcome {{first_name}}!</h1><p>Thank you for joining us.</p>",
+            "text_content": "Welcome {{first_name}}! Thank you for joining us.",
+            "category": "onboarding",
+            "tags": ["welcome", "onboarding"]
+        }
+        self.test_endpoint("/email-automation/templates", "POST", template_data, "Email Automation - Create Template")
+        self.test_endpoint("/email-automation/templates", test_name="Email Automation - List Templates")
+        
+        # Email Analytics and Logs
+        self.test_endpoint("/email-automation/email-logs", test_name="Email Automation - Email Logs")
+        self.test_endpoint("/email-automation/analytics/overview", test_name="Email Automation - Analytics Overview")
+        
+        # Automation Sequences
+        sequence_data = {
+            "name": "Lead Nurturing Sequence",
+            "trigger_type": "new_subscriber",
+            "emails": [
+                {"delay_days": 0, "template_id": "welcome_template", "subject": "Welcome!"},
+                {"delay_days": 3, "template_id": "value_template", "subject": "Here's how we can help"},
+                {"delay_days": 7, "template_id": "case_study_template", "subject": "Success story"}
+            ]
+        }
+        self.test_endpoint("/email-automation/automation-sequence", "POST", sequence_data, "Email Automation - Create Sequence")
+        
+        # Bulk Email Sending
+        bulk_email_data = {
+            "recipients": ["test1@example.com", "test2@example.com"],
+            "subject": "Important Business Update",
+            "text_content": "We have important updates to share with you.",
+            "html_content": "<h1>Important Update</h1><p>We have important updates to share.</p>",
+            "campaign_id": "bulk_campaign_2025"
+        }
+        self.test_endpoint("/email-automation/bulk-email", "POST", bulk_email_data, "Email Automation - Bulk Email Send")
         
         # 2. Test ADVANCED SOCIAL MEDIA MANAGEMENT SUITE
         print("\n--- 2. ADVANCED SOCIAL MEDIA MANAGEMENT SUITE Testing ---")
