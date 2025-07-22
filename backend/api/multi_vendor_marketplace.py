@@ -1,296 +1,144 @@
 """
-Multi-Vendor Marketplace API
-Complete seller management, commission automation, and marketplace operations
+Multi-Vendor Marketplace API Endpoints
 """
-from fastapi import APIRouter, HTTPException, Depends, status, Query
-from typing import Dict, Any, List, Optional
-from datetime import datetime
+from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Dict, List, Optional
 from pydantic import BaseModel
-
-from core.auth import get_current_user
-from services.multi_vendor_marketplace_service import marketplace_service
-from core.professional_logger import professional_logger, LogLevel, LogCategory
+from ..core.auth import get_current_user
+from ..core.database import get_database
+from ..services.multi_vendor_marketplace_service import MultiVendorMarketplaceService
 
 router = APIRouter(prefix="/api/marketplace", tags=["Multi-Vendor Marketplace"])
 
-class SellerOnboarding(BaseModel):
+class VendorOnboardingRequest(BaseModel):
     business_name: str
-    business_type: str = "individual"
+    owner_name: str
     email: str
-    phone: Optional[str] = None
-    address: Dict[str, Any] = {}
-    tax_id: Optional[str] = None
-    business_license: Optional[str] = None
-    bank_account: Dict[str, Any] = {}
+    phone: str
+    business_type: str
+    tax_id: str
+    address: Dict
+    bank_details: Dict
+    documents: List[str] = []
 
-class SellerVerification(BaseModel):
-    identity_documents_valid: bool = False
-    business_license_valid: bool = False
-    bank_account_valid: bool = False
-    verification_notes: Optional[str] = None
+class DynamicPricingRequest(BaseModel):
+    product_id: str
+    base_price: float
+    demand_factor: float = 1.0
+    competition_avg: Optional[float] = None
+    inventory_level: int = 100
 
-@router.post("/sellers/onboard")
-async def onboard_new_seller(
-    seller_data: SellerOnboarding,
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.post("/vendors/onboard")
+async def onboard_vendor(
+    vendor_data: VendorOnboardingRequest,
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Onboard new seller with complete profile setup"""
-    try:
-        user_id = current_user.get("_id")
-        if not user_id:
-            raise HTTPException(status_code=401, detail="Invalid authentication")
-        
-        seller_dict = seller_data.dict()
-        seller_dict["user_id"] = user_id
-        
-        seller_id = await marketplace_service.onboard_seller(seller_dict)
-        
-        return {
-            "success": True,
-            "seller_id": seller_id,
-            "message": "Seller onboarding initiated",
-            "next_steps": [
-                "Upload required documents",
-                "Complete identity verification", 
-                "Set up bank account details",
-                "Wait for approval"
-            ],
-            "status": "pending_verification"
-        }
-        
-    except Exception as e:
-        await professional_logger.log(
-            LogLevel.ERROR, LogCategory.MARKETPLACE,
-            f"Seller onboarding failed: {str(e)}",
-            error=e, user_id=current_user.get("_id")
-        )
-        raise HTTPException(status_code=500, detail=str(e))
+    """Onboard new vendor to marketplace"""
+    marketplace_service = MultiVendorMarketplaceService(db)
+    result = await marketplace_service.vendor_onboarding(vendor_data.dict())
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return {"message": "Vendor application submitted successfully", "data": result}
 
-@router.put("/sellers/{seller_id}/verify")
-async def verify_seller_documents(
-    seller_id: str,
-    verification_data: SellerVerification,
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.post("/vendors/{vendor_id}/approve")
+async def approve_vendor(
+    vendor_id: str,
+    admin_notes: str = "",
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Verify seller documents (admin only)"""
-    try:
-        if not current_user.get("is_admin", False):
-            raise HTTPException(status_code=403, detail="Admin access required")
-        
-        verification_result = await marketplace_service.verify_seller(seller_id, verification_data.dict())
-        
-        return {
-            "success": True,
-            "seller_id": seller_id,
-            "verification_completed": verification_result,
-            "status": "approved" if verification_result else "pending",
-            "message": "Seller verification updated"
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """Approve vendor application (Admin only)"""
+    # In real implementation, check if user is admin
+    marketplace_service = MultiVendorMarketplaceService(db)
+    result = await marketplace_service.approve_vendor(vendor_id, admin_notes)
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return {"message": "Vendor approved successfully", "data": result}
 
-@router.get("/sellers/{seller_id}/dashboard")
-async def get_seller_dashboard(
-    seller_id: str,
-    days: int = Query(30, description="Analytics period in days"),
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.post("/pricing/dynamic")
+async def calculate_dynamic_pricing(
+    pricing_request: DynamicPricingRequest,
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Get comprehensive seller dashboard with analytics"""
-    try:
-        user_id = current_user.get("_id")
-        
-        # Verify seller access
-        from core.database import get_database
-        db = get_database()
-        
-        seller = await db.marketplace_sellers.find_one({"seller_id": seller_id})
-        if not seller:
-            raise HTTPException(status_code=404, detail="Seller not found")
-        
-        if seller["user_id"] != user_id and not current_user.get("is_admin", False):
-            raise HTTPException(status_code=403, detail="Access denied")
-        
-        # Get seller analytics
-        analytics = await marketplace_service.get_seller_analytics(seller_id, days)
-        
-        # Get seller profile
-        dashboard = {
-            "seller_info": {
-                "seller_id": seller_id,
-                "business_name": seller.get("business_name"),
-                "status": seller.get("status"),
-                "tier": seller.get("commission_settings", {}).get("tier", "bronze"),
-                "commission_rate": seller.get("commission_settings", {}).get("rate", 15.0),
-                "verification": seller.get("verification", {})
-            },
-            "performance": seller.get("performance_metrics", {}),
-            "analytics": analytics,
-            "payout_settings": seller.get("payout_settings", {})
-        }
-        
-        return {
-            "success": True,
-            "dashboard": dashboard,
-            "period_days": days
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """Calculate AI-optimized dynamic pricing"""
+    marketplace_service = MultiVendorMarketplaceService(db)
+    
+    market_data = pricing_request.dict()
+    result = await marketplace_service.calculate_dynamic_pricing(
+        pricing_request.product_id, 
+        market_data
+    )
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return {"message": "Dynamic pricing calculated", "data": result}
 
-@router.post("/sellers/{seller_id}/payout")
-async def process_seller_payout(
-    seller_id: str,
-    period: str = Query("weekly", description="Payout period: weekly, biweekly, monthly"),
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.post("/vendors/{vendor_id}/payout")
+async def process_vendor_payout(
+    vendor_id: str,
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Process automated seller payout"""
-    try:
-        # Verify admin access or seller ownership
-        if not current_user.get("is_admin", False):
-            from core.database import get_database
-            db = get_database()
-            seller = await db.marketplace_sellers.find_one({"seller_id": seller_id})
-            if not seller or seller["user_id"] != current_user.get("_id"):
-                raise HTTPException(status_code=403, detail="Access denied")
-        
-        payout_result = await marketplace_service.process_payout(seller_id, period)
-        
-        return {
-            "success": payout_result["payout_processed"],
-            "payout_result": payout_result,
-            "message": "Payout processed successfully" if payout_result["payout_processed"] else "Payout not processed"
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """Process automated vendor payout"""
+    marketplace_service = MultiVendorMarketplaceService(db)
+    result = await marketplace_service.process_vendor_payout(vendor_id)
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return {"message": "Payout processed successfully", "data": result}
 
-@router.get("/sellers/analytics/overview")
-async def get_marketplace_overview(
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.get("/vendors/{vendor_id}/performance")
+async def get_vendor_performance(
+    vendor_id: str,
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Get marketplace overview analytics (admin only)"""
-    try:
-        if not current_user.get("is_admin", False):
-            raise HTTPException(status_code=403, detail="Admin access required")
-        
-        from core.database import get_database
-        db = get_database()
-        
-        # Get marketplace statistics
-        total_sellers = await db.marketplace_sellers.count_documents({})
-        active_sellers = await db.marketplace_sellers.count_documents({"status": "approved"})
-        pending_sellers = await db.marketplace_sellers.count_documents({"status": "pending"})
-        
-        # Get sales overview
-        sales_pipeline = [
-            {
-                "$group": {
-                    "_id": None,
-                    "total_sales": {"$sum": "$total_amount"},
-                    "total_orders": {"$sum": 1},
-                    "total_commission": {"$sum": "$commission"}
-                }
-            }
-        ]
-        
-        sales_result = await db.orders.aggregate(sales_pipeline).to_list(length=1)
-        sales_data = sales_result[0] if sales_result else {"total_sales": 0, "total_orders": 0, "total_commission": 0}
-        
-        # Top performing sellers
-        top_sellers = await db.marketplace_sellers.find({}).sort("performance_metrics.total_sales", -1).limit(5).to_list(length=5)
-        
-        for seller in top_sellers:
-            seller["_id"] = str(seller["_id"])
-        
-        overview = {
-            "marketplace_stats": {
-                "total_sellers": total_sellers,
-                "active_sellers": active_sellers,
-                "pending_sellers": pending_sellers,
-                "approval_rate": (active_sellers / total_sellers * 100) if total_sellers > 0 else 0
-            },
-            "sales_overview": sales_data,
-            "top_performers": top_sellers,
-            "generated_at": datetime.utcnow().isoformat()
-        }
-        
-        return {
-            "success": True,
-            "overview": overview
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """Get comprehensive vendor performance metrics"""
+    marketplace_service = MultiVendorMarketplaceService(db)
+    result = await marketplace_service.get_seller_performance_metrics(vendor_id)
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return {"message": "Performance metrics retrieved", "data": result}
 
-@router.get("/commission/calculate")
-async def calculate_order_commission(
-    seller_id: str,
-    order_amount: float,
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.get("/vendors")
+async def list_vendors(
+    status: Optional[str] = None,
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Calculate commission for an order"""
-    try:
-        commission_data = await marketplace_service.calculate_commission(seller_id, order_amount)
-        
-        return {
-            "success": True,
-            "commission_breakdown": commission_data,
-            "order_amount": order_amount
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """List all vendors with optional status filter"""
+    filter_query = {}
+    if status:
+        filter_query["status"] = status
+    
+    vendors = await db["vendors"].find(filter_query).to_list(length=100)
+    
+    return {
+        "message": "Vendors retrieved successfully",
+        "data": vendors,
+        "count": len(vendors)
+    }
 
-@router.get("/sellers/{seller_id}/performance")
-async def get_seller_performance_metrics(
-    seller_id: str,
-    current_user: Dict[str, Any] = Depends(get_current_user)
+@router.get("/vendors/applications")
+async def list_vendor_applications(
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_database)
 ):
-    """Get detailed seller performance metrics"""
-    try:
-        from core.database import get_database
-        db = get_database()
-        
-        # Verify access
-        seller = await db.marketplace_sellers.find_one({"seller_id": seller_id})
-        if not seller:
-            raise HTTPException(status_code=404, detail="Seller not found")
-        
-        if seller["user_id"] != current_user.get("_id") and not current_user.get("is_admin", False):
-            raise HTTPException(status_code=403, detail="Access denied")
-        
-        # Get comprehensive performance data
-        performance = seller.get("performance_metrics", {})
-        
-        # Get recent reviews/ratings
-        reviews = await db.seller_reviews.find({"seller_id": seller_id}).sort("created_at", -1).limit(10).to_list(length=10)
-        
-        for review in reviews:
-            review["_id"] = str(review["_id"])
-            if "created_at" in review:
-                review["created_at"] = review["created_at"].isoformat()
-        
-        return {
-            "success": True,
-            "performance": {
-                "metrics": performance,
-                "commission_tier": seller.get("commission_settings", {}).get("tier"),
-                "verification_status": seller.get("verification", {}),
-                "recent_reviews": reviews,
-                "status": seller.get("status")
-            }
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """List all vendor applications (Admin only)"""
+    applications = await db["vendor_applications"].find({}).sort("submitted_at", -1).to_list(length=50)
+    
+    return {
+        "message": "Vendor applications retrieved",
+        "data": applications,
+        "count": len(applications)
+    }
