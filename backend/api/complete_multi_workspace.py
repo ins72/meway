@@ -240,7 +240,7 @@ async def get_workspace_members(
         
         members = await complete_multi_workspace_service.get_workspace_members(
             workspace_id=workspace_id,
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             role_filter=role_filter
         )
         
