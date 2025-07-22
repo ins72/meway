@@ -405,7 +405,69 @@ async def get_usage_analytics(
         logger.error(f"Get usage analytics error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/health", tags=["Subscription Management"])
+@router.post("/subscriptions/{subscription_id}/reactivate", tags=["Subscription Management"])
+async def reactivate_subscription(
+    subscription_id: str,
+    user = Depends(get_current_user)
+):
+    """Reactivate a canceled subscription"""
+    try:
+        # This would reactivate a canceled subscription
+        result = await complete_subscription_service.reactivate_subscription(subscription_id)
+        
+        if not result.get('success', True):
+            raise HTTPException(status_code=400, detail="Failed to reactivate subscription")
+        
+        return {
+            "success": True,
+            "message": "Subscription reactivated successfully",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Reactivate subscription error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/management/dashboard", tags=["Subscription Management"])
+async def get_subscription_dashboard(
+    user = Depends(get_current_user)
+):
+    """Get subscription management dashboard"""
+    try:
+        user_id = user.get('_id') or user.get('id') or user.get('user_id')
+        subscriptions = await complete_subscription_service.get_user_subscriptions(user_id)
+        
+        # Calculate dashboard metrics
+        total_subscriptions = len(subscriptions)
+        active_subscriptions = len([s for s in subscriptions if s.get('status') == 'active'])
+        total_revenue = sum(s.get('plan_config', {}).get('monthly_price', 0) for s in subscriptions if s.get('status') == 'active')
+        
+        dashboard_data = {
+            'overview': {
+                'total_subscriptions': total_subscriptions,
+                'active_subscriptions': active_subscriptions,
+                'total_monthly_revenue': total_revenue,
+                'conversion_rate': (active_subscriptions / max(total_subscriptions, 1)) * 100
+            },
+            'recent_subscriptions': subscriptions[:5],  # Last 5 subscriptions
+            'plan_distribution': {},
+            'revenue_trends': []
+        }
+        
+        # Calculate plan distribution
+        for subscription in subscriptions:
+            plan = subscription.get('plan_tier', 'unknown')
+            dashboard_data['plan_distribution'][plan] = dashboard_data['plan_distribution'].get(plan, 0) + 1
+        
+        return {
+            "success": True,
+            "dashboard": dashboard_data,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get subscription dashboard error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 async def subscription_health_check():
     """Health check for subscription management system"""
     return {
