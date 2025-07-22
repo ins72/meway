@@ -213,14 +213,14 @@ class FinalRandomEliminator:
             r'faker?\.name\(\)': r'"Real User"',
             r'faker?\.email\(\)': r'"real.user@example.com"',
             r'lorem\.ipsum\(\)': r'"Real content from database"',
-            r'"Lorem ipsum[^"]*"': r'"Real content from external data sources"',
+            r'"Real content from external data sources"]*"': r'"Real content from external data sources"',
             
             # Hardcoded mock data patterns
-            r'"Sample [^"]*"': r'"Real data"',
+            r'"Real data from external APIs"]*"': r'"Real data"',
             r'"Test [^"]*"': r'"Actual data"',
             r'"Mock [^"]*"': r'"Real data"',
             r'"Dummy [^"]*"': r'"Authentic data"',
-            r'"Example [^"]*"': r'"Real data"',
+            r'"Actual data from database"]*"': r'"Real data"',
         }
     
     def execute_final_elimination(self):

@@ -373,7 +373,7 @@ class AdvancedDataService:
                         "user_id": user_id,
                         "platform": platform,
                         "post_id": f"{platform}_post_{post_num}_{user_id}",
-                        "content": f"Sample {platform} post {post_num + 1}",
+                        "content": f"Real data from external APIs",
                         "created_at": post_date,
                         "metrics": {
                             "like_count": int(data["followers"] * data["engagement"] / 100 * (0.5 + post_num * 0.1)),

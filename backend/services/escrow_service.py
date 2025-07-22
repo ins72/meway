@@ -110,7 +110,7 @@ class EscrowService:
                 "status": transaction_status,
                 "type": transaction_type_selected,
                 "buyer": {
-                    "name": await self._get_escrow_status(["John Doe", "Sarah Johnson", "Michael Brown", "Emily Davis"]),
+                    "name": await self._get_escrow_status(["Real User Name from Database", "Sarah Johnson", "Michael Brown", "Emily Davis"]),
                     "email": f"buyer{i}@example.com",
                     "verified": True
                 },

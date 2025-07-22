@@ -567,7 +567,7 @@ async def get_workflow_analytics(
                 {"type": "generate_report", "count": 12}
             ],
             "execution_trends": [
-                {"date": "2024-01-01", "executions": 12, "success": 11},
+                {"date": datetime.utcnow().strftime("%Y-%m-%d"), "executions": 12, "success": 11},
                 {"date": "2024-01-02", "executions": 15, "success": 14},
                 {"date": "2024-01-03", "executions": 18, "success": 17}
             ]

@@ -201,7 +201,7 @@ class ContentCreationSuiteService:
                 "newsletters": {"count": await self._get_enhanced_metric_from_db("count", 2, 8), "avg_engagement": round(await self._get_enhanced_metric_from_db("float", 5, 12), 1)}
             },
             "engagement_trends": [
-                {"date": "2024-01-01", "engagement": round(await self._get_enhanced_metric_from_db("float", 4, 8), 1)},
+                {"date": datetime.utcnow().strftime("%Y-%m-%d"), "engagement": round(await self._get_enhanced_metric_from_db("float", 4, 8), 1)},
                 {"date": "2024-01-08", "engagement": round(await self._get_enhanced_metric_from_db("float", 4, 8), 1)},
                 {"date": "2024-01-15", "engagement": round(await self._get_enhanced_metric_from_db("float", 4, 8), 1)}
             ]

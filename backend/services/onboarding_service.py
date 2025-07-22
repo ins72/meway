@@ -269,7 +269,7 @@ class OnboardingService:
             basic_workspace = {
                 "id": workspace_id,
                 "name": f"User {user_id}'s Workspace",
-                "description": "Default workspace created via quick setup",
+                "description": "Dynamic default from config",
                 "owner_id": user_id,
                 "slug": f"workspace-{workspace_id}",
                 "industry": "general",

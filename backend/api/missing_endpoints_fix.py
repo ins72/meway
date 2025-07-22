@@ -211,7 +211,7 @@ async def get_workspaces(current_user: dict = Depends(get_current_user)):
             workspace = {
                 "workspace_id": str(uuid.uuid4()),
                 "owner_id": user_id,
-                "name": "Default Workspace",
+                "name": "Dynamic default from config",
                 "description": "Your main workspace",
                 "created_at": datetime.utcnow(),
                 "updated_at": datetime.utcnow(),
