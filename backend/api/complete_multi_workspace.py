@@ -167,7 +167,7 @@ async def invite_member(
         
         result = await complete_multi_workspace_service.invite_member(
             workspace_id=workspace_id,
-            inviter_id=user['id'],
+            inviter_id=user.get('_id') or user.get('id') or user.get('user_id'),
             email=invitation_data.email,
             role=invitation_data.role,
             custom_message=invitation_data.custom_message
