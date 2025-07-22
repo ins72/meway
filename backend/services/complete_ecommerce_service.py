@@ -861,31 +861,66 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
             )
 
     async def _process_stripe_payment(self, order_id: str, amount: float) -> Dict[str, Any]:
-        """Process payment with Stripe"""
+        """Process payment with real Stripe API integration"""
         try:
-            # This would integrate with Stripe Payment API
-            # For now, create a placeholder payment record
+            # Real Stripe Payment API integration
+            import stripe
+            stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
+            
+            # Create Stripe payment intent
+            payment_intent = stripe.PaymentIntent.create(
+                amount=int(amount * 100),  # Convert to cents
+                currency='usd',
+                automatic_payment_methods={
+                    'enabled': True,
+                },
+                metadata={
+                    'order_id': order_id
+                }
+            )
+            
+            # Create payment record in database
+            payment_doc = {
+                "_id": str(uuid.uuid4()),
+                "order_id": order_id,
+                "stripe_payment_intent_id": payment_intent.id,
+                "amount": amount,
+                "currency": "USD",
+                "status": payment_intent.status,
+                "client_secret": payment_intent.client_secret,
+                "payment_method_types": payment_intent.payment_method_types,
+                "created_at": datetime.utcnow(),
+                "last_updated": datetime.utcnow()
+            }
+            
+            await self.db["payments"].insert_one(payment_doc)
+            
+            return {
+                "success": True,
+                "payment_intent_id": payment_intent.id,
+                "client_secret": payment_intent.client_secret,
+                "status": payment_intent.status
+            }
+            
+        except Exception as e:
+            logger.error(f"Error processing Stripe payment: {str(e)}")
+            # Create failed payment record
             payment_doc = {
                 "_id": str(uuid.uuid4()),
                 "order_id": order_id,
                 "amount": amount,
                 "currency": "USD",
-                "payment_method": "stripe",
-                "stripe_payment_id": f"pi_{order_id[:24]}",
-                "status": "completed",
+                "status": "failed",
+                "error": str(e),
                 "created_at": datetime.utcnow()
             }
             
             await self.db["payments"].insert_one(payment_doc)
             
             return {
-                "payment_id": payment_doc["_id"],
-                "status": "completed",
-                "stripe_payment_id": payment_doc["stripe_payment_id"]
+                "success": False,
+                "error": str(e)
             }
-            
-        except Exception as e:
-            return {"error": str(e)}
 
     async def _send_order_status_notification(self, order_id: str, status: OrderStatus):
         """Send order status notification to customer"""
