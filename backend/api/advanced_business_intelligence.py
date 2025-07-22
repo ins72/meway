@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Dict, List, Optional
 from pydantic import BaseModel
 from datetime import datetime
-from ..core.auth import get_current_user
-from ..core.database import get_database
-from ..services.advanced_business_intelligence_service import AdvancedBusinessIntelligenceService
+from core.auth import get_current_user
+from core.database import get_database
+from services.advanced_business_intelligence_service import AdvancedBusinessIntelligenceService
 
 router = APIRouter(prefix="/api/business-intelligence", tags=["Business Intelligence"])
 
