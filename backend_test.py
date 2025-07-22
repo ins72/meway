@@ -1300,7 +1300,48 @@ class BackendTester:
             if result["success"]:
                 print(f"  - {result['test']}: {result['message']}")
 
+    def run_real_api_integration_test(self):
+        """Run comprehensive testing of REAL API INTEGRATION ENDPOINTS - JULY 2025"""
+        print("🎯 REAL API INTEGRATION ENDPOINTS TESTING - JULY 2025")
+        print("Testing newly implemented real API integration endpoints:")
+        print("1. 🐦 Real Social Media Lead Generation APIs (Twitter/TikTok)")
+        print("2. 🤖 Real AI Automation APIs (OpenAI GPT integration)")
+        print("3. 📧 Real Email Automation APIs (ElasticMail)")
+        print("4. 💾 Database operations verification")
+        print("5. 🔐 Authentication & error handling")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print("=" * 80)
+        
+        # Test health check first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running properly.")
+            return False
+        
+        # Test authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed - cannot proceed with testing.")
+            return False
+        
+        # Test the REAL API INTEGRATION ENDPOINTS (main focus of review request)
+        self.test_real_api_integration_endpoints()
+        
+        # Test database operations to verify no mock data
+        self.test_random_data_elimination_verification()
+        
+        # Test existing platform stability to ensure no regressions
+        self.test_core_platform_functionality_after_changes()
+        
+        # Test platform health and performance
+        self.test_platform_startup_health()
+        self.test_performance_reliability()
+        
+        # Print summary
+        self.print_summary()
+        
+        return True
+
 if __name__ == "__main__":
     tester = BackendTester()
-    success = tester.run_comprehensive_specification_test()
+    success = tester.run_real_api_integration_test()
     sys.exit(0 if success else 1)
