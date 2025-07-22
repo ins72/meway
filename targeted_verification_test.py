@@ -238,9 +238,9 @@ class TargetedVerificationTester:
         # Test current subscription
         self.test_endpoint("/subscriptions/current", "GET", test_name="Subscriptions - Current Subscription", category="subscription")
         
-        # Test subscription creation with correct schema
+        # Test subscription creation with correct schema and valid plan ID
         subscription_data = {
-            "plan_id": "pro_monthly",
+            "plan_id": "pro",  # Valid plan ID from the plans endpoint
             "payment_method_id": "pm_test_card_visa",
             "billing_cycle": "monthly"
         }
