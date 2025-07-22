@@ -471,6 +471,14 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Website Builder router: {str(e)}")
 
+try:
+    from api.complete_multi_workspace import router as multi_workspace_router
+    app.include_router(multi_workspace_router, prefix="/api/multi-workspace", tags=["Multi-Workspace System"])
+    included_count += 1
+    print("  ✅ Included Complete Multi-Workspace System with RBAC router")
+except Exception as e:
+    print(f"  ❌ Failed to include Multi-Workspace router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
