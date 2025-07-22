@@ -4,9 +4,9 @@ Multi-Vendor Marketplace API Endpoints
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Dict, List, Optional
 from pydantic import BaseModel
-from ..core.auth import get_current_user
-from ..core.database import get_database
-from ..services.multi_vendor_marketplace_service import MultiVendorMarketplaceService
+from core.auth import get_current_user
+from core.database import get_database
+from services.multi_vendor_marketplace_service import MultiVendorMarketplaceService
 
 router = APIRouter(prefix="/api/marketplace", tags=["Multi-Vendor Marketplace"])
 
