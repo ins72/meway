@@ -387,7 +387,7 @@ async def get_workspace_analytics(
     try:
         analytics = await complete_multi_workspace_service.get_workspace_analytics(
             workspace_id=workspace_id,
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             days=days
         )
         
