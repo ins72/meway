@@ -1737,7 +1737,9 @@ class BackendTester:
         self.test_link_in_bio_system()
         
         # Test data consistency to verify real database usage
-        self.test_data_consistency()
+        print("\n🔍 Testing Data Consistency for Link in Bio System...")
+        self.test_data_consistency("/link-in-bio/templates")
+        self.test_data_consistency("/link-in-bio/analytics/overview")
         
         # Test platform health and performance
         self.test_platform_startup_health()
