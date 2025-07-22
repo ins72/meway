@@ -275,20 +275,23 @@ class TargetedVerificationTester:
         """Test external API integrations - should maintain 100% success"""
         print("\n🔗 TESTING EXTERNAL API INTEGRATIONS...")
         
-        # Test TikTok API integration
-        self.test_endpoint("/admin-config/test-integrations/tiktok", "POST", test_name="External API - TikTok Integration", category="external_api")
+        # Test external API integrations using correct admin-config paths
+        self.test_endpoint("/admin-config/integrations/tiktok/test", "POST", test_name="External API - TikTok Integration", category="external_api")
         
         # Test Twitter API integration  
-        self.test_endpoint("/admin-config/test-integrations/twitter", "POST", test_name="External API - Twitter Integration", category="external_api")
+        self.test_endpoint("/admin-config/integrations/twitter/test", "POST", test_name="External API - Twitter Integration", category="external_api")
         
         # Test OpenAI integration
-        self.test_endpoint("/admin-config/test-integrations/openai", "POST", test_name="External API - OpenAI Integration", category="external_api")
+        self.test_endpoint("/admin-config/integrations/openai/test", "POST", test_name="External API - OpenAI Integration", category="external_api")
         
         # Test ElasticMail integration
-        self.test_endpoint("/admin-config/test-integrations/elasticmail", "POST", test_name="External API - ElasticMail Integration", category="external_api")
+        self.test_endpoint("/admin-config/integrations/elasticmail/test", "POST", test_name="External API - ElasticMail Integration", category="external_api")
         
         # Test Stripe integration
-        self.test_endpoint("/admin-config/test-integrations/stripe", "POST", test_name="External API - Stripe Integration", category="external_api")
+        self.test_endpoint("/admin-config/integrations/stripe/test", "POST", test_name="External API - Stripe Integration", category="external_api")
+        
+        # Test integration status
+        self.test_endpoint("/admin-config/integrations/status", "GET", test_name="External API - Integration Status", category="external_api")
 
     def calculate_success_rates(self):
         """Calculate success rates for each category"""
