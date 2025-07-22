@@ -704,25 +704,67 @@ class CompleteLinkInBioService:
             await self.bio_links.insert_one(link_doc)
 
     async def _generate_qr_code(self, page_id: str, slug: str) -> Dict[str, Any]:
-        """Generate QR code for bio page"""
+        """Generate real QR code for bio page using qrcode library"""
         try:
-            # In a real implementation, this would generate actual QR code
-            # For now, we'll create a placeholder
+            # Generate real QR code using qrcode library
+            import qrcode
+            import qrcode.image.svg
+            import base64
+            from io import BytesIO
+            
+            # Create bio page URL
+            bio_url = f"https://mewayz.bio/{slug}"
+            
+            # Generate QR code
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(bio_url)
+            qr.make(fit=True)
+            
+            # Create image
+            img = qr.make_image(fill_color="black", back_color="white")
+            
+            # Convert to base64 for storage
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            img_str = base64.b64encode(buffered.getvalue()).decode()
+            
+            # Store real QR code data
+            qr_code_doc = {
+                "_id": str(uuid.uuid4()),
+                "page_id": page_id,
+                "url": bio_url,
+                "qr_code_image": img_str,  # Base64 encoded PNG
+                "qr_code_format": "PNG",
+                "generated_at": datetime.utcnow(),
+                "expires_at": None  # QR codes don't expire
+            }
+            
+            await self.bio_qr_codes.insert_one(qr_code_doc)
+            
+            return qr_code_doc
+            
+        except Exception as e:
+            # Import logger if not already imported
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error generating QR code: {str(e)}")
+            # Fallback: create basic QR code record without image
             qr_code_doc = {
                 "_id": str(uuid.uuid4()),
                 "page_id": page_id,
                 "url": f"https://mewayz.bio/{slug}",
-                "qr_code_data": f"qr_code_data_for_{page_id}",
-                "qr_code_image": f"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
-                "created_at": datetime.utcnow()
+                "qr_code_image": "",
+                "qr_code_format": "text",
+                "error": str(e),
+                "generated_at": datetime.utcnow()
             }
-            
             await self.bio_qr_codes.insert_one(qr_code_doc)
             return qr_code_doc
-            
-        except Exception as e:
-            print(f"Error generating QR code: {str(e)}")
-            return {}
 
     async def _initialize_page_analytics(self, page_id: str, user_id: str, workspace_id: str):
         """Initialize analytics for new page"""
