@@ -130,7 +130,7 @@ async def update_workspace(
     try:
         result = await complete_multi_workspace_service.update_workspace(
             workspace_id=workspace_id,
-            user_id=user['id'],
+            user_id=user.get('_id') or user.get('id') or user.get('user_id'),
             update_data=workspace_data.dict(exclude_unset=True)
         )
         
