@@ -1186,5 +1186,5 @@ class BackendTester:
 
 if __name__ == "__main__":
     tester = BackendTester()
-    success = tester.run_enterprise_features_test()
+    success = tester.run_comprehensive_specification_test()
     sys.exit(0 if success else 1)
