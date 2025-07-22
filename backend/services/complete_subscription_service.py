@@ -688,5 +688,45 @@ class CompleteSubscriptionService:
         except Exception as e:
             logger.error(f"Log subscription activity error: {str(e)}")
 
-# Global service instance
+    async def reactivate_subscription(self, subscription_id: str) -> Dict[str, Any]:
+        """Reactivate a canceled subscription"""
+        try:
+            db = await self.get_database()
+            
+            subscription = await db.subscriptions.find_one({'subscription_id': subscription_id})
+            if not subscription:
+                return {"success": False, "error": "Subscription not found"}
+            
+            if subscription.get('status') != SubscriptionStatus.CANCELED.value:
+                return {"success": False, "error": "Only canceled subscriptions can be reactivated"}
+            
+            # Reactivate subscription
+            result = await db.subscriptions.update_one(
+                {'subscription_id': subscription_id},
+                {
+                    '$set': {
+                        'status': SubscriptionStatus.ACTIVE.value,
+                        'reactivated_at': datetime.utcnow(),
+                        'updated_at': datetime.utcnow(),
+                        'cancel_at_period_end': False
+                    }
+                }
+            )
+            
+            if result.modified_count:
+                # Log reactivation
+                await self._log_subscription_activity(
+                    subscription_id=subscription_id,
+                    action='subscription_reactivated',
+                    details={}
+                )
+                return {"success": True}
+            
+            return {"success": False, "error": "Failed to reactivate subscription"}
+            
+        except Exception as e:
+            logger.error(f"Reactivate subscription error: {str(e)}")
+            return {"success": False, "error": str(e)}
+
+    # Global service instance
 complete_subscription_service = CompleteSubscriptionService()
