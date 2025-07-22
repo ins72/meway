@@ -148,6 +148,387 @@ class BackendTester:
             self.log_result(test_name, False, f"Request error: {str(e)}")
             return False, None
 
+    def test_newly_implemented_features(self):
+        """Test the newly implemented features from the review request"""
+        print("\n🎯 TESTING NEWLY IMPLEMENTED FEATURES - DECEMBER 2024")
+        print("=" * 80)
+        print("Testing the three major new features:")
+        print("1. Complete Financial Management System")
+        print("2. Complete Website Builder System") 
+        print("3. Complete Multi-Workspace System with RBAC")
+        print("4. Verifying all previous features still work")
+        
+        # Test all new features
+        self.test_financial_management_system()
+        self.test_website_builder_system()
+        self.test_multi_workspace_system()
+        self.test_previous_features_regression()
+        
+    def test_financial_management_system(self):
+        """Test Complete Financial Management System at /api/financial/*"""
+        print("\n💰 TESTING COMPLETE FINANCIAL MANAGEMENT SYSTEM")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        created_invoice_id = None
+        created_expense_id = None
+        
+        # 1. Test Financial Dashboard
+        print("\n📊 Testing Financial Dashboard...")
+        success, dashboard_data = self.test_endpoint("/financial/dashboard", "GET", test_name="Financial - Dashboard Overview")
+        success, dashboard_data = self.test_endpoint("/financial/dashboard?period=quarter", "GET", test_name="Financial - Dashboard Quarterly")
+        success, dashboard_data = self.test_endpoint("/financial/dashboard?period=year", "GET", test_name="Financial - Dashboard Yearly")
+        
+        # 2. Test Invoice Management - CREATE
+        print("\n📄 Testing Invoice Management - CREATE...")
+        create_invoice_data = {
+            "client_name": "TechCorp Solutions",
+            "client_email": "billing@techcorp.com",
+            "client_address": "123 Business Ave, Tech City, TC 12345",
+            "items": [
+                {"name": "Website Development", "quantity": 1, "price": 2500.00},
+                {"name": "SEO Optimization", "quantity": 3, "price": 300.00},
+                {"name": "Content Creation", "quantity": 5, "price": 150.00}
+            ],
+            "tax_rate": 0.08,
+            "notes": "Payment due within 30 days. Thank you for your business!"
+        }
+        
+        success, invoice_data = self.test_endpoint("/financial/invoices", "POST", create_invoice_data, "Financial - Create Invoice")
+        if success and invoice_data:
+            created_invoice_id = invoice_data.get("data", {}).get("_id") or invoice_data.get("data", {}).get("id")
+            print(f"   Created invoice ID: {created_invoice_id}")
+        
+        # 3. Test Invoice Management - READ
+        print("\n📖 Testing Invoice Management - READ...")
+        self.test_endpoint("/financial/invoices", "GET", test_name="Financial - Get All Invoices")
+        self.test_endpoint("/financial/invoices?status_filter=draft", "GET", test_name="Financial - Get Draft Invoices")
+        self.test_endpoint("/financial/invoices?client_filter=TechCorp", "GET", test_name="Financial - Filter Invoices by Client")
+        
+        # 4. Test Invoice Status Updates
+        if created_invoice_id:
+            print("\n✏️ Testing Invoice Status Updates...")
+            self.test_endpoint(f"/financial/invoices/{created_invoice_id}/status", "PUT", {"new_status": "sent"}, "Financial - Update Invoice to Sent")
+            self.test_endpoint(f"/financial/invoices/{created_invoice_id}/status", "PUT", {"new_status": "paid"}, "Financial - Update Invoice to Paid")
+        
+        # 5. Test Payment Processing
+        if created_invoice_id:
+            print("\n💳 Testing Payment Processing...")
+            payment_data = {
+                "invoice_id": created_invoice_id,
+                "amount": 1000.00,
+                "payment_method": "bank_transfer",
+                "notes": "Partial payment received via bank transfer"
+            }
+            self.test_endpoint("/financial/payments", "POST", payment_data, "Financial - Record Payment")
+        
+        # 6. Test Expense Management - CREATE
+        print("\n💸 Testing Expense Management - CREATE...")
+        create_expense_data = {
+            "category": "Software & Tools",
+            "description": "Adobe Creative Suite Annual Subscription",
+            "amount": 599.88,
+            "tax_deductible": True
+        }
+        
+        success, expense_data = self.test_endpoint("/financial/expenses", "POST", create_expense_data, "Financial - Create Expense")
+        if success and expense_data:
+            created_expense_id = expense_data.get("data", {}).get("_id") or expense_data.get("data", {}).get("id")
+            print(f"   Created expense ID: {created_expense_id}")
+        
+        # Create additional expenses for better testing
+        additional_expenses = [
+            {"category": "Marketing", "description": "Google Ads Campaign", "amount": 450.00, "tax_deductible": True},
+            {"category": "Office Supplies", "description": "Printer Paper and Ink", "amount": 89.99, "tax_deductible": False},
+            {"category": "Travel", "description": "Client Meeting Transportation", "amount": 125.50, "tax_deductible": True}
+        ]
+        
+        for expense in additional_expenses:
+            self.test_endpoint("/financial/expenses", "POST", expense, f"Financial - Create {expense['category']} Expense")
+        
+        # 7. Test Expense Management - READ
+        print("\n📊 Testing Expense Management - READ...")
+        self.test_endpoint("/financial/expenses", "GET", test_name="Financial - Get All Expenses")
+        self.test_endpoint("/financial/expenses?category=Software & Tools", "GET", test_name="Financial - Filter Expenses by Category")
+        
+        # 8. Test Financial Reports
+        print("\n📈 Testing Financial Reports...")
+        self.test_endpoint("/financial/reports/profit-loss", "GET", test_name="Financial - Profit & Loss Report (Month)")
+        self.test_endpoint("/financial/reports/profit-loss?period=year", "GET", test_name="Financial - Profit & Loss Report (Year)")
+        self.test_endpoint("/financial/reports/profit-loss?period=month&year=2024&month=12", "GET", test_name="Financial - Profit & Loss Report (December 2024)")
+        
+        print("\n💰 Financial Management System Testing Complete!")
+        return True
+        
+    def test_website_builder_system(self):
+        """Test Complete Website Builder System at /api/website-builder/*"""
+        print("\n🌐 TESTING COMPLETE WEBSITE BUILDER SYSTEM")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        created_website_id = None
+        
+        # 1. Test Website Builder Dashboard
+        print("\n📊 Testing Website Builder Dashboard...")
+        success, dashboard_data = self.test_endpoint("/website-builder/dashboard", "GET", test_name="Website Builder - Dashboard Overview")
+        
+        # 2. Test Templates System
+        print("\n📋 Testing Templates System...")
+        self.test_endpoint("/website-builder/templates", "GET", test_name="Website Builder - Get All Templates")
+        self.test_endpoint("/website-builder/templates?category=business", "GET", test_name="Website Builder - Get Business Templates")
+        self.test_endpoint("/website-builder/templates?category=portfolio", "GET", test_name="Website Builder - Get Portfolio Templates")
+        
+        # 3. Test Website Creation - CREATE
+        print("\n➕ Testing Website Creation - CREATE...")
+        create_website_data = {
+            "name": "Digital Marketing Agency",
+            "title": "Premier Digital Marketing Solutions",
+            "description": "We help businesses grow through strategic digital marketing, web development, and brand optimization.",
+            "template_id": "modern_business_template",
+            "theme": {
+                "primary_color": "#2563EB",
+                "secondary_color": "#7C3AED",
+                "font_family": "Inter",
+                "background_color": "#FFFFFF"
+            },
+            "seo_settings": {
+                "meta_title": "Digital Marketing Agency - Grow Your Business Online",
+                "meta_description": "Professional digital marketing services including SEO, PPC, social media marketing, and web development. Get results that matter.",
+                "keywords": ["digital marketing", "SEO", "web development", "social media marketing"]
+            },
+            "is_published": False
+        }
+        
+        success, website_data = self.test_endpoint("/website-builder/websites", "POST", create_website_data, "Website Builder - Create Website")
+        if success and website_data:
+            created_website_id = website_data.get("data", {}).get("_id") or website_data.get("data", {}).get("id")
+            print(f"   Created website ID: {created_website_id}")
+        
+        # 4. Test Website Management - READ
+        print("\n📖 Testing Website Management - READ...")
+        self.test_endpoint("/website-builder/websites", "GET", test_name="Website Builder - Get All Websites")
+        self.test_endpoint("/website-builder/websites?status_filter=draft", "GET", test_name="Website Builder - Get Draft Websites")
+        self.test_endpoint("/website-builder/websites?status_filter=published", "GET", test_name="Website Builder - Get Published Websites")
+        
+        # 5. Test Website Updates - UPDATE
+        if created_website_id:
+            print("\n✏️ Testing Website Updates - UPDATE...")
+            update_website_data = {
+                "title": "Premier Digital Marketing Solutions - Updated",
+                "description": "We help businesses grow through strategic digital marketing, web development, brand optimization, and comprehensive analytics.",
+                "theme": {
+                    "primary_color": "#1D4ED8",
+                    "secondary_color": "#7C2D12",
+                    "font_family": "Poppins",
+                    "background_color": "#F8FAFC"
+                },
+                "is_published": True
+            }
+            
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}", "PUT", update_website_data, "Website Builder - Update Website")
+        
+        # 6. Test Page Management (if endpoints exist)
+        if created_website_id:
+            print("\n📄 Testing Page Management...")
+            # These endpoints might exist based on the website builder structure
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}/pages", "GET", test_name="Website Builder - Get Website Pages")
+            
+            # Test page creation
+            create_page_data = {
+                "title": "About Us",
+                "slug": "about-us",
+                "content": {
+                    "sections": [
+                        {
+                            "type": "hero",
+                            "title": "About Our Agency",
+                            "subtitle": "Driving digital success since 2020"
+                        },
+                        {
+                            "type": "text",
+                            "content": "We are a team of passionate digital marketing experts dedicated to helping businesses achieve their online goals."
+                        }
+                    ]
+                },
+                "is_published": True
+            }
+            
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}/pages", "POST", create_page_data, "Website Builder - Create Page")
+        
+        # 7. Test Website Analytics (if available)
+        if created_website_id:
+            print("\n📈 Testing Website Analytics...")
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}/analytics", "GET", test_name="Website Builder - Website Analytics")
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}/seo-analysis", "GET", test_name="Website Builder - SEO Analysis")
+        
+        # 8. Test Website Publishing
+        if created_website_id:
+            print("\n🚀 Testing Website Publishing...")
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}/publish", "POST", {}, "Website Builder - Publish Website")
+            self.test_endpoint(f"/website-builder/websites/{created_website_id}/unpublish", "POST", {}, "Website Builder - Unpublish Website")
+        
+        print("\n🌐 Website Builder System Testing Complete!")
+        return True
+        
+    def test_multi_workspace_system(self):
+        """Test Complete Multi-Workspace System with RBAC at /api/multi-workspace/*"""
+        print("\n👥 TESTING COMPLETE MULTI-WORKSPACE SYSTEM WITH RBAC")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        created_workspace_id = None
+        invitation_token = None
+        
+        # 1. Test Workspace Creation - CREATE
+        print("\n➕ Testing Workspace Creation - CREATE...")
+        create_workspace_data = {
+            "name": "Digital Marketing Team",
+            "description": "Collaborative workspace for our digital marketing team to manage campaigns, content, and client projects.",
+            "workspace_type": "business",
+            "settings": {
+                "allow_external_sharing": True,
+                "require_approval_for_invites": False,
+                "default_member_role": "member"
+            }
+        }
+        
+        success, workspace_data = self.test_endpoint("/multi-workspace/workspaces", "POST", create_workspace_data, "Multi-Workspace - Create Workspace")
+        if success and workspace_data:
+            created_workspace_id = workspace_data.get("workspace", {}).get("id") or workspace_data.get("workspace", {}).get("_id")
+            print(f"   Created workspace ID: {created_workspace_id}")
+        
+        # 2. Test Workspace Management - READ
+        print("\n📖 Testing Workspace Management - READ...")
+        self.test_endpoint("/multi-workspace/workspaces", "GET", test_name="Multi-Workspace - Get User Workspaces")
+        self.test_endpoint("/multi-workspace/workspaces?include_archived=true", "GET", test_name="Multi-Workspace - Get All Workspaces (Including Archived)")
+        
+        if created_workspace_id:
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}", "GET", test_name="Multi-Workspace - Get Workspace Details")
+        
+        # 3. Test Workspace Updates - UPDATE
+        if created_workspace_id:
+            print("\n✏️ Testing Workspace Updates - UPDATE...")
+            update_workspace_data = {
+                "name": "Digital Marketing & Content Team",
+                "description": "Enhanced collaborative workspace for digital marketing, content creation, and client project management with advanced analytics.",
+                "settings": {
+                    "allow_external_sharing": True,
+                    "require_approval_for_invites": True,
+                    "default_member_role": "viewer"
+                },
+                "features_enabled": ["analytics", "advanced_reporting", "api_access"]
+            }
+            
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}", "PUT", update_workspace_data, "Multi-Workspace - Update Workspace")
+        
+        # 4. Test Member Invitation System
+        if created_workspace_id:
+            print("\n📧 Testing Member Invitation System...")
+            invitation_data = {
+                "email": "newteammember@example.com",
+                "role": "member",
+                "custom_message": "Welcome to our digital marketing team! We're excited to have you collaborate with us on upcoming campaigns."
+            }
+            
+            success, invite_data = self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/invitations", "POST", invitation_data, "Multi-Workspace - Send Member Invitation")
+            if success and invite_data:
+                invitation_token = invite_data.get("invitation", {}).get("invitation_id")
+                print(f"   Created invitation token: {invitation_token}")
+        
+        # 5. Test Member Management
+        if created_workspace_id:
+            print("\n👥 Testing Member Management...")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/members", "GET", test_name="Multi-Workspace - Get Workspace Members")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/members?role_filter=admin", "GET", test_name="Multi-Workspace - Get Admin Members")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/members?role_filter=member", "GET", test_name="Multi-Workspace - Get Regular Members")
+        
+        # 6. Test RBAC (Role-Based Access Control)
+        if created_workspace_id:
+            print("\n🔐 Testing RBAC (Role-Based Access Control)...")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/permissions", "GET", test_name="Multi-Workspace - Get User Permissions")
+            
+            # Test permission checking
+            permission_check_data = {"permission": "manage_workspace"}
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/permissions/check", "POST", permission_check_data, "Multi-Workspace - Check Manage Workspace Permission")
+            
+            permission_check_data = {"permission": "invite_members"}
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/permissions/check", "POST", permission_check_data, "Multi-Workspace - Check Invite Members Permission")
+            
+            permission_check_data = {"permission": "view_analytics"}
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/permissions/check", "POST", permission_check_data, "Multi-Workspace - Check View Analytics Permission")
+        
+        # 7. Test Role Management
+        print("\n🎭 Testing Role Management...")
+        self.test_endpoint("/multi-workspace/roles", "GET", test_name="Multi-Workspace - Get Available Roles")
+        self.test_endpoint("/multi-workspace/permissions", "GET", test_name="Multi-Workspace - Get All Permissions")
+        
+        # 8. Test Workspace Analytics
+        if created_workspace_id:
+            print("\n📊 Testing Workspace Analytics...")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/analytics", "GET", test_name="Multi-Workspace - Get Workspace Analytics (30 days)")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/analytics?days=7", "GET", test_name="Multi-Workspace - Get Workspace Analytics (7 days)")
+            self.test_endpoint(f"/multi-workspace/workspaces/{created_workspace_id}/analytics?days=90", "GET", test_name="Multi-Workspace - Get Workspace Analytics (90 days)")
+        
+        # 9. Test Invitation Acceptance (simulated)
+        if invitation_token:
+            print("\n✅ Testing Invitation Acceptance...")
+            accept_invitation_data = {"invitation_token": invitation_token}
+            self.test_endpoint("/multi-workspace/invitations/accept", "POST", accept_invitation_data, "Multi-Workspace - Accept Invitation")
+        
+        # 10. Test Health Check
+        print("\n🏥 Testing System Health...")
+        self.test_endpoint("/multi-workspace/health", "GET", test_name="Multi-Workspace - Health Check")
+        
+        print("\n👥 Multi-Workspace System Testing Complete!")
+        return True
+        
+    def test_previous_features_regression(self):
+        """Test that all previous features still work (no regressions)"""
+        print("\n🔄 TESTING PREVIOUS FEATURES - REGRESSION CHECK")
+        print("=" * 60)
+        
+        # Test Complete Onboarding System
+        print("\n🎯 Testing Complete Onboarding System...")
+        self.test_endpoint("/complete-onboarding/health", "GET", test_name="Regression - Onboarding Health Check")
+        self.test_endpoint("/complete-onboarding/goals", "GET", test_name="Regression - Onboarding Goals")
+        self.test_endpoint("/complete-onboarding/subscription-plans", "GET", test_name="Regression - Subscription Plans")
+        
+        # Test Complete Link in Bio
+        print("\n🔗 Testing Complete Link in Bio...")
+        self.test_endpoint("/link-in-bio/health", "GET", test_name="Regression - Link in Bio Health")
+        self.test_endpoint("/link-in-bio/templates", "GET", test_name="Regression - Link in Bio Templates")
+        self.test_endpoint("/link-in-bio/analytics/overview", "GET", test_name="Regression - Link in Bio Analytics")
+        
+        # Test Complete E-commerce
+        print("\n🛒 Testing Complete E-commerce...")
+        self.test_endpoint("/ecommerce/products", "GET", test_name="Regression - E-commerce Products")
+        self.test_endpoint("/ecommerce/orders", "GET", test_name="Regression - E-commerce Orders")
+        self.test_endpoint("/ecommerce/dashboard", "GET", test_name="Regression - E-commerce Dashboard")
+        
+        # Test Complete Course & Community
+        print("\n🎓 Testing Complete Course & Community...")
+        self.test_endpoint("/courses/list", "GET", test_name="Regression - Courses List")
+        self.test_endpoint("/courses/analytics", "GET", test_name="Regression - Courses Analytics")
+        
+        # Test Complete Escrow System
+        print("\n🔒 Testing Complete Escrow System...")
+        self.test_endpoint("/escrow/transactions", "GET", test_name="Regression - Escrow Transactions")
+        self.test_endpoint("/escrow/analytics", "GET", test_name="Regression - Escrow Analytics")
+        
+        # Test Complete Referral System
+        print("\n🎁 Testing Complete Referral System...")
+        self.test_endpoint("/referrals/dashboard", "GET", test_name="Regression - Referrals Dashboard")
+        self.test_endpoint("/referrals/analytics", "GET", test_name="Regression - Referrals Analytics")
+        
+        # Test Complete Admin Dashboard
+        print("\n⚙️ Testing Complete Admin Dashboard...")
+        self.test_endpoint("/admin/users", "GET", test_name="Regression - Admin Users")
+        self.test_endpoint("/admin/system/metrics", "GET", test_name="Regression - Admin System Metrics")
+        self.test_endpoint("/admin/dashboard", "GET", test_name="Regression - Admin Dashboard")
+        
+        print("\n🔄 Previous Features Regression Testing Complete!")
+        return True
+
     def test_link_in_bio_system(self):
         """Test Complete Link in Bio Builder System with full CRUD operations"""
         print("\n🔗 TESTING COMPLETE LINK IN BIO BUILDER SYSTEM")
