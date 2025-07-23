@@ -5,7 +5,7 @@ BULLETPROOF API with GUARANTEED working endpoints
 
 from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
 from typing import Dict, Any, List, Optional
-from core.auth import get_current_user
+from core.auth import get_current_user, get_current_admin
 from services.complete_financial_service import get_complete_financial_service
 import logging
 
@@ -26,7 +26,7 @@ async def health_check():
 @router.post("/")
 async def create_complete_financial(
     data: Dict[str, Any] = Body({}, description="Data for creating complete_financial"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """CREATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -53,7 +53,7 @@ async def create_complete_financial(
 async def list_complete_financials(
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """LIST endpoint - GUARANTEED to work with real data"""
     try:
@@ -78,7 +78,7 @@ async def list_complete_financials(
 @router.get("/{item_id}")
 async def get_complete_financial(
     item_id: str = Path(..., description="ID of complete_financial"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """GET endpoint - GUARANTEED to work with real data"""
     try:
@@ -100,7 +100,7 @@ async def get_complete_financial(
 async def update_complete_financial(
     item_id: str = Path(..., description="ID of complete_financial"),
     data: Dict[str, Any] = Body({}, description="Update data"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """UPDATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -125,7 +125,7 @@ async def update_complete_financial(
 @router.delete("/{item_id}")
 async def delete_complete_financial(
     item_id: str = Path(..., description="ID of complete_financial"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """DELETE endpoint - GUARANTEED to work with real data"""
     try:
@@ -145,7 +145,7 @@ async def delete_complete_financial(
 
 @router.get("/stats")
 async def get_stats(
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """STATS endpoint - GUARANTEED to work with real data"""
     try:

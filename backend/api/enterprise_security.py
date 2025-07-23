@@ -5,7 +5,7 @@ BULLETPROOF API with GUARANTEED working endpoints
 
 from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
 from typing import Dict, Any, List, Optional
-from core.auth import get_current_user
+from core.auth import get_current_user, get_current_admin
 from services.enterprise_security_service import get_enterprise_security_service
 import logging
 
@@ -26,7 +26,7 @@ async def health_check():
 @router.post("/")
 async def create_enterprise_security(
     data: Dict[str, Any] = Body({}, description="Data for creating enterprise_security"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """CREATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -53,7 +53,7 @@ async def create_enterprise_security(
 async def list_enterprise_securitys(
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """LIST endpoint - GUARANTEED to work with real data"""
     try:
@@ -78,7 +78,7 @@ async def list_enterprise_securitys(
 @router.get("/{item_id}")
 async def get_enterprise_security(
     item_id: str = Path(..., description="ID of enterprise_security"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """GET endpoint - GUARANTEED to work with real data"""
     try:
@@ -100,7 +100,7 @@ async def get_enterprise_security(
 async def update_enterprise_security(
     item_id: str = Path(..., description="ID of enterprise_security"),
     data: Dict[str, Any] = Body({}, description="Update data"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """UPDATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -125,7 +125,7 @@ async def update_enterprise_security(
 @router.delete("/{item_id}")
 async def delete_enterprise_security(
     item_id: str = Path(..., description="ID of enterprise_security"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """DELETE endpoint - GUARANTEED to work with real data"""
     try:
@@ -145,7 +145,7 @@ async def delete_enterprise_security(
 
 @router.get("/stats")
 async def get_stats(
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """STATS endpoint - GUARANTEED to work with real data"""
     try:

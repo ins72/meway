@@ -5,7 +5,7 @@ BULLETPROOF API with GUARANTEED working endpoints
 
 from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
 from typing import Dict, Any, List, Optional
-from core.auth import get_current_user
+from core.auth import get_current_user, get_current_admin
 from services.auth_service import get_auth_service
 import logging
 import uuid
@@ -152,7 +152,7 @@ async def register(register_data: RegisterRequest):
 @router.post("/")
 async def create_auth(
     data: Dict[str, Any] = Body({}, description="Data for creating auth"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """CREATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -179,7 +179,7 @@ async def create_auth(
 async def list_auths(
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """LIST endpoint - GUARANTEED to work with real data"""
     try:
@@ -204,7 +204,7 @@ async def list_auths(
 @router.get("/{item_id}")
 async def get_auth(
     item_id: str = Path(..., description="ID of auth"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """GET endpoint - GUARANTEED to work with real data"""
     try:
@@ -226,7 +226,7 @@ async def get_auth(
 async def update_auth(
     item_id: str = Path(..., description="ID of auth"),
     data: Dict[str, Any] = Body({}, description="Update data"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """UPDATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -251,7 +251,7 @@ async def update_auth(
 @router.delete("/{item_id}")
 async def delete_auth(
     item_id: str = Path(..., description="ID of auth"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """DELETE endpoint - GUARANTEED to work with real data"""
     try:
@@ -271,7 +271,7 @@ async def delete_auth(
 
 @router.get("/stats")
 async def get_stats(
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """STATS endpoint - GUARANTEED to work with real data"""
     try:

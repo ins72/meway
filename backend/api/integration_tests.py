@@ -5,7 +5,7 @@ BULLETPROOF API with GUARANTEED working endpoints
 
 from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
 from typing import Dict, Any, List, Optional
-from core.auth import get_current_user
+from core.auth import get_current_user, get_current_admin
 from services.integration_tests_service import get_integration_tests_service
 import logging
 
@@ -26,7 +26,7 @@ async def health_check():
 @router.post("/")
 async def create_integration_tests(
     data: Dict[str, Any] = Body({}, description="Data for creating integration_tests"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """CREATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -53,7 +53,7 @@ async def create_integration_tests(
 async def list_integration_testss(
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """LIST endpoint - GUARANTEED to work with real data"""
     try:
@@ -78,7 +78,7 @@ async def list_integration_testss(
 @router.get("/{item_id}")
 async def get_integration_tests(
     item_id: str = Path(..., description="ID of integration_tests"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """GET endpoint - GUARANTEED to work with real data"""
     try:
@@ -100,7 +100,7 @@ async def get_integration_tests(
 async def update_integration_tests(
     item_id: str = Path(..., description="ID of integration_tests"),
     data: Dict[str, Any] = Body({}, description="Update data"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """UPDATE endpoint - GUARANTEED to work with real data"""
     try:
@@ -125,7 +125,7 @@ async def update_integration_tests(
 @router.delete("/{item_id}")
 async def delete_integration_tests(
     item_id: str = Path(..., description="ID of integration_tests"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """DELETE endpoint - GUARANTEED to work with real data"""
     try:
@@ -145,7 +145,7 @@ async def delete_integration_tests(
 
 @router.get("/stats")
 async def get_stats(
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_admin)
 ):
     """STATS endpoint - GUARANTEED to work with real data"""
     try:
