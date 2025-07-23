@@ -14,7 +14,7 @@ from core.database import get_database
 
 class MediaService:
     @staticmethod
-    async def get_media_library(user_id: str) -> Dict[str, Any]:
+    async def get_media_library(user_id: str, folder: str = "", file_type: str = "all", search: str = "", limit: int = 50) -> Dict[str, Any]:
         """Get media library with files and folders"""
         database = get_database()
         
@@ -90,16 +90,6 @@ class MediaService:
         
         # Calculate usage stats
         total_files = await files_collection.count_documents({"workspace_id": str(workspace["_id"])})
-        
-        
-        # Calculate real total size from database
-        pipeline = [
-            {"$match": {"user_id": user_id}},
-            {"$group": {"_id": None, "total_size": {"$sum": "$size"}}}
-        ]
-        result = await self.collection.aggregate(pipeline).to_list(1)
-        total_size = result[0]["total_size"] if result else 0
-        
         total_size = sum(f["size"] for f in files) if files else 0
         storage_limit = 10 * 1024 * 1024 * 1024  # 10GB in bytes
         usage_percentage = (total_size / storage_limit * 100) if total_size > 0 else 0
@@ -296,12 +286,12 @@ class MediaService:
             raise Exception("Folder already exists")
         
         # Create folder path
-        folder_path = f"{parent_folder}/{name}" if parent_folder else name
+        folder_path = f"{parent_folder}/{folder_name}" if parent_folder else folder_name
         
         folder_doc = {
             "_id": str(uuid.uuid4()),
             "workspace_id": str(workspace["_id"]),
-            "name": name,
+            "name": folder_name,
             "path": folder_path,
             "parent_folder": parent_folder,
             "created_by": user_id,
@@ -413,7 +403,7 @@ class MediaService:
         }
     
     @staticmethod
-    async def search_files(user_id: str, query: str, file_type: str = "", limit: int = 50) -> Dict[str, Any]:
+    async def search_files(user_id: str, query: str, file_type: str = "", folder: str = "", limit: int = 50) -> Dict[str, Any]:
         """Search media files"""
         database = get_database()
         
@@ -503,7 +493,7 @@ class MediaService:
         if not workspace:
             raise Exception("Workspace not found")
         
-        # Update files
+        # Update files folder
         files_collection = database.media_files
         result = await files_collection.update_many(
             {
@@ -534,8 +524,6 @@ class MediaService:
         else:
             return 'other'
     
-
-    
     @staticmethod
     def _format_file_size(size_bytes: int) -> str:
         """Format file size in human readable format"""
@@ -549,128 +537,3 @@ class MediaService:
             i += 1
         
         return f"{size_bytes:.1f} {size_names[i]}"
-        """Format file size in human readable format"""
-        if size_bytes == 0:
-            return "0 B"
-        
-        size_names = ["B", "KB", "MB", "GB", "TB"]
-        i = 0
-        while size_bytes >= 1024 and i < len(size_names) - 1:
-            size_bytes /= 1024.0
-            i += 1
-        
-        return f"{size_bytes:.1f} {size_names[i]}"
-# Global service instance
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
-
-    async def update_media(self, media_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update media by ID"""
-        try:
-            # Add update timestamp
-            update_data["updated_at"] = datetime.utcnow().isoformat()
-            
-            result = await self.db["media"].update_one(
-                {"id": media_id},
-                {"$set": update_data}
-            if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Media not found"
-                }
-            
-            # Get updated document
-            updated_doc = await self.db["media"].find_one({"id": media_id})
-            updated_doc.pop('_id', None)
-            
-            return {
-                "success": True,
-                "message": f"Media updated successfully",
-                "data": updated_doc
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update media: {str(e)}"
-            }
-
-            
-            if not item:
-                return {"success": False, "message": "Item not found"}
-            
-            return {
-                "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
-            
-            return {
-
-    async def delete_media(self, media_id: str) -> Dict[str, Any]:
-        """Delete media by ID"""
-        try:
-            result = await self.db["media"].delete_one({"id": media_id})
-            
-            if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Media not found"
-                }
-            
-            return {
-                "success": True,
-                "message": f"Media deleted successfully",
-                "deleted_count": result.deleted_count
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete media: {str(e)}"
-            }
-
-                "success": True,
-                "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
