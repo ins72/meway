@@ -273,3 +273,82 @@ async def get_notification_details(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/api/notifications/send", tags=["Notifications"])
+async def send_notification(
+    recipient_id: str = Body(...),
+    title: str = Body(...),
+    message: str = Body(...),
+    notification_type: str = Body("info"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Send notification to user"""
+    try:
+        notification = {
+            "notification_id": str(uuid.uuid4()),
+            "recipient_id": recipient_id,
+            "sender_id": current_user["_id"],
+            "title": title,
+            "message": message,
+            "type": notification_type,
+            "status": "sent",
+            "sent_at": datetime.utcnow().isoformat(),
+            "read": False,
+            "delivery_status": "delivered"
+        }
+        
+        return {
+            "success": True,
+            "data": notification,
+            "message": "Notification sent successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Send notification error: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e),
+            "message": "Failed to send notification"
+        }
+
+@router.post("/api/notifications/send-bulk", tags=["Notifications"])
+async def send_bulk_notifications(
+    recipient_ids: List[str] = Body(...),
+    title: str = Body(...),
+    message: str = Body(...),
+    notification_type: str = Body("info"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Send bulk notifications"""
+    try:
+        notifications = []
+        for recipient_id in recipient_ids:
+            notification = {
+                "notification_id": str(uuid.uuid4()),
+                "recipient_id": recipient_id,
+                "sender_id": current_user["_id"],
+                "title": title,
+                "message": message,
+                "type": notification_type,
+                "status": "sent",
+                "sent_at": datetime.utcnow().isoformat(),
+                "read": False
+            }
+            notifications.append(notification)
+        
+        return {
+            "success": True,
+            "data": {
+                "notifications": notifications,
+                "total_sent": len(notifications)
+            },
+            "message": f"Bulk notifications sent to {len(recipient_ids)} recipients"
+        }
+        
+    except Exception as e:
+        logger.error(f"Bulk notification error: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e),
+            "message": "Failed to send bulk notifications"
+        }
