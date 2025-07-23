@@ -604,7 +604,7 @@ class EmailMarketingService:
         """Get contacts in a specific list"""
         
         contacts = []
-        contact_count = await self._calculate_count(user_id))
+        contact_count = await self._calculate_count(user_id)
         
         for i in range(contact_count):
             contacts.append({
