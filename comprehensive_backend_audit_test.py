@@ -87,11 +87,6 @@ class ComprehensiveBackendTester:
         """Test various authentication endpoints to find working one"""
         auth_endpoints = [
             "/api/auth/login",
-            "/api/authentication/login", 
-            "/api/user/login",
-            "/api/login",
-            "/auth/login",
-            "/login"
         ]
         
         for endpoint in auth_endpoints:
