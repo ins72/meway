@@ -4,7 +4,7 @@ Production-ready service with comprehensive CRUD operations and real data
 """
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional, Union
 from core.database import get_database
 from core.auth import get_password_hash, verify_password
