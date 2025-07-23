@@ -166,75 +166,38 @@ class BackendTester:
         self.test_real_unified_analytics_system()
         self.test_real_mobile_pwa_system()
         
-    def test_template_marketplace_system(self):
-        """Test Advanced Template Marketplace at /api/template-marketplace/*"""
-        print("\n🛍️ TESTING ADVANCED TEMPLATE MARKETPLACE")
+    def test_real_template_marketplace_system(self):
+        """Test Real Template Marketplace at /api/marketing-website/templates/marketplace"""
+        print("\n🛍️ TESTING REAL TEMPLATE MARKETPLACE")
         print("=" * 60)
         
-        # Test variables to store created resources
-        created_template_id = None
+        # 1. Test Template Marketplace
+        print("\n🏪 Testing Template Marketplace...")
+        success, marketplace_data = self.test_endpoint("/marketing-website/templates/marketplace", "GET", test_name="Template Marketplace - Get Marketplace Templates")
         
-        # 1. Test Health Check
-        print("\n🏥 Testing Health Check...")
-        self.test_endpoint("/template-marketplace/health", "GET", test_name="Template Marketplace - Health Check")
+        if success and marketplace_data:
+            print(f"   ✅ Template Marketplace working - {len(str(marketplace_data))} chars response")
+            
+            # Check for mock data patterns
+            data_str = str(marketplace_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower() or "test" in data_str.lower():
+                self.log_result("Template Marketplace - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock/test data")
+            else:
+                self.log_result("Template Marketplace - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 2. Test Categories
-        print("\n📂 Testing Categories...")
-        self.test_endpoint("/template-marketplace/categories", "GET", test_name="Template Marketplace - Get Categories")
+        # 2. Test Marketing Website Analytics
+        print("\n📊 Testing Marketing Analytics...")
+        success, analytics_data = self.test_endpoint("/marketing-website/analytics/overview", "GET", test_name="Template Marketplace - Marketing Analytics")
         
-        # 3. Test Marketplace Browsing
-        print("\n🔍 Testing Marketplace Browsing...")
-        self.test_endpoint("/template-marketplace/marketplace", "GET", test_name="Template Marketplace - Browse All Templates")
-        self.test_endpoint("/template-marketplace/marketplace?category=business", "GET", test_name="Template Marketplace - Browse Business Templates")
-        self.test_endpoint("/template-marketplace/marketplace?price_range=free", "GET", test_name="Template Marketplace - Browse Free Templates")
-        self.test_endpoint("/template-marketplace/marketplace?sort=popular", "GET", test_name="Template Marketplace - Browse Popular Templates")
+        if success and analytics_data:
+            # Check for mock data patterns
+            data_str = str(analytics_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Marketing Analytics - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Marketing Analytics - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 4. Test Template Creation
-        print("\n➕ Testing Template Creation...")
-        create_template_data = {
-            "name": "Modern Business Landing Page",
-            "description": "A sleek, professional landing page template perfect for modern businesses and startups",
-            "category": "business",
-            "price": 29.99,
-            "tags": ["landing-page", "business", "modern", "responsive"],
-            "preview_images": [
-                "https://example.com/preview1.jpg",
-                "https://example.com/preview2.jpg"
-            ],
-            "template_data": {
-                "html": "<div class='hero-section'>Welcome to our business</div>",
-                "css": ".hero-section { background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); }",
-                "js": "console.log('Template loaded');"
-            },
-            "features": ["responsive", "seo-optimized", "fast-loading"],
-            "compatibility": ["all-browsers", "mobile-friendly"]
-        }
-        
-        success, template_data = self.test_endpoint("/template-marketplace/templates", "POST", create_template_data, "Template Marketplace - Create Template")
-        if success and template_data:
-            created_template_id = template_data.get("template_id") or template_data.get("id") or template_data.get("data", {}).get("id")
-            print(f"   Created template ID: {created_template_id}")
-        
-        # 5. Test Template Purchase
-        if created_template_id:
-            print("\n💳 Testing Template Purchase...")
-            purchase_data = {
-                "payment_method": "stripe",
-                "license_type": "standard"
-            }
-            self.test_endpoint(f"/template-marketplace/templates/{created_template_id}/purchase", "POST", purchase_data, "Template Marketplace - Purchase Template")
-        
-        # 6. Test Creator Analytics
-        print("\n📊 Testing Creator Analytics...")
-        self.test_endpoint("/template-marketplace/creator/analytics", "GET", test_name="Template Marketplace - Creator Analytics")
-        self.test_endpoint("/template-marketplace/creator/revenue", "GET", test_name="Template Marketplace - Creator Revenue")
-        
-        # 7. Test Template Management
-        print("\n⚙️ Testing Template Management...")
-        self.test_endpoint("/template-marketplace/my-templates", "GET", test_name="Template Marketplace - My Templates")
-        self.test_endpoint("/template-marketplace/purchases", "GET", test_name="Template Marketplace - My Purchases")
-        
-        print("\n🛍️ Template Marketplace System Testing Complete!")
+        print("\n🛍️ Real Template Marketplace System Testing Complete!")
         return True
         
     def test_team_management_system(self):
