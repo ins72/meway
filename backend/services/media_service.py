@@ -14,8 +14,7 @@ from core.database import get_database
 
 class MediaService:
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def get_media_library(user_id: str) -> Dict[str, Any]:
         """Get media library with files and folders"""
         database = get_database()
         
