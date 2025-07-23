@@ -292,10 +292,10 @@ class UltimateFinalVerificationTester:
         
         # Test multiple calls to same endpoint to verify data consistency
         systems_to_test = [
-            ("Complete Financial System", "/api/complete-financial/list"),
-            ("Complete Admin Dashboard", "/api/complete-admin-dashboard/list"),
-            ("Analytics System", "/api/analytics/list"),
-            ("Workspace System", "/api/complete-multi-workspace/list")
+            ("Complete Financial System", "/api/complete-financial/"),
+            ("Complete Admin Dashboard", "/api/complete-admin-dashboard/"),
+            ("Analytics System", "/api/analytics/"),
+            ("Workspace System", "/api/complete-multi-workspace/")
         ]
         
         for system_name, endpoint in systems_to_test:
