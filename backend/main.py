@@ -312,7 +312,7 @@ try:
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
 
     
-    logger.info(f"✅ Successfully included 125 bulletproof routers")
+    logger.info(f"✅ Successfully included 128 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
