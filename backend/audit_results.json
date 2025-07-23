@@ -1,258 +1,101 @@
 {
-  "summary": {
-    "api_files_count": 76,
-    "service_files_count": 73,
-    "total_endpoints": 731,
-    "duplicate_groups": 44,
-    "missing_pairs_count": 53,
-    "instagram_files_count": 0
-  },
-  "duplicates": {
-    "auth": [
-      "auth",
-      "auth_service"
-    ],
-    "google_oauth": [
-      "google_oauth",
-      "google_oauth_service"
-    ],
-    "ecommerce": [
-      "complete_ecommerce",
-      "ecommerce",
-      "enhanced_ecommerce",
-      "complete_ecommerce_service",
-      "enhanced_ecommerce_service",
-      "ecommerce_service"
-    ],
-    "enterprise_security_compliance": [
-      "enterprise_security_compliance",
-      "enterprise_security_compliance_service"
-    ],
-    "admin_dashboard": [
-      "complete_admin_dashboard",
-      "complete_admin_dashboard_service"
-    ],
-    "business_intelligence": [
-      "business_intelligence",
-      "business_intelligence_service"
-    ],
-    "email_marketing": [
-      "email_marketing",
-      "email_marketing_service"
-    ],
-    "user": [
-      "user",
-      "user_service"
-    ],
-    "ai_automation": [
-      "real_ai_automation",
-      "real_ai_automation_service"
-    ],
-    "dashboard": [
-      "dashboard",
-      "dashboard_service"
-    ],
-    "integrations": [
-      "integrations",
-      "integrations_service"
-    ],
-    "users": [
-      "users",
-      "users_service"
-    ],
-    "multi_vendor_marketplace": [
-      "multi_vendor_marketplace",
-      "multi_vendor_marketplace_service"
-    ],
-    "integration": [
-      "integration",
-      "integration_service"
-    ],
-    "marketing_website": [
-      "comprehensive_marketing_website",
-      "comprehensive_marketing_website_service"
-    ],
-    "website_builder": [
-      "website_builder",
-      "complete_website_builder",
-      "professional_website_builder",
-      "professional_website_builder_service",
-      "website_builder_service",
-      "complete_website_builder_service"
-    ],
-    "escrow": [
-      "complete_escrow",
-      "complete_escrow_service",
-      "escrow_service"
-    ],
-    "bookings": [
-      "bookings",
-      "bookings_service"
-    ],
-    "blog": [
-      "blog",
-      "blog_service"
-    ],
-    "multi_workspace": [
-      "complete_multi_workspace",
-      "complete_multi_workspace_service"
-    ],
-    "media": [
-      "media",
-      "media_service"
-    ],
-    "link_shortener": [
-      "link_shortener",
-      "link_shortener_service"
-    ],
-    "onboarding": [
-      "complete_onboarding",
-      "complete_onboarding_service",
-      "onboarding_service"
-    ],
-    "subscription": [
-      "complete_subscription",
-      "subscription_service",
-      "complete_subscription_service"
-    ],
-    "ai_content": [
-      "ai_content",
-      "ai_content_service"
-    ],
-    "content": [
-      "content",
-      "content_service"
-    ],
-    "form_builder": [
-      "form_builder",
-      "form_builder_service"
-    ],
-    "referral_system": [
-      "complete_referral_system",
-      "complete_referral_system_service"
-    ],
-    "marketing": [
-      "marketing",
-      "marketing_service"
-    ],
-    "workspaces": [
-      "workspaces",
-      "workspaces_service"
-    ],
-    "workspace": [
-      "workspace",
-      "workspace_service"
-    ],
-    "ai": [
-      "ai",
-      "ai_service"
-    ],
-    "bio_sites": [
-      "bio_sites",
-      "bio_sites_service"
-    ],
-    "financial": [
-      "complete_financial",
-      "financial_service",
-      "complete_financial_service"
-    ],
-    "booking": [
-      "booking",
-      "complete_booking",
-      "booking_service",
-      "complete_booking_service"
-    ],
-    "customer_experience": [
-      "customer_experience",
-      "customer_experience_service"
-    ],
-    "course_community": [
-      "complete_course_community",
-      "complete_course_community_service"
-    ],
-    "promotions_referrals": [
-      "promotions_referrals",
-      "promotions_referrals_service"
-    ],
-    "social_media_leads": [
-      "complete_social_media_leads",
-      "complete_social_media_leads_service"
-    ],
-    "media_library": [
-      "media_library",
-      "media_library_service"
-    ],
-    "template_marketplace": [
-      "template_marketplace",
-      "template_marketplace_service"
-    ],
-    "link_in_bio": [
-      "complete_link_in_bio",
-      "complete_link_in_bio_service"
-    ],
-    "email_automation": [
-      "real_email_automation",
-      "real_email_automation_service"
-    ],
-    "data_population": [
-      "data_population",
-      "real_data_population_service"
-    ]
-  },
-  "missing_pairs": [
-    "API 'admin_configuration' has no corresponding service",
-    "API 'admin' has no corresponding service",
-    "API 'survey_system' has no corresponding service",
-    "API 'compliance_system' has no corresponding service",
-    "API 'i18n_system' has no corresponding service",
-    "API 'monitoring_system' has no corresponding service",
-    "API 'automation_system' has no corresponding service",
-    "API 'crm_management' has no corresponding service",
-    "API 'support_system' has no corresponding service",
-    "API 'subscription_management' has no corresponding service",
-    "API 'realtime_notifications' has no corresponding service",
-    "API 'team_management' has no corresponding service",
-    "API 'ai_token_management' has no corresponding service",
-    "API 'backup_system' has no corresponding service",
-    "API 'webhook_system' has no corresponding service",
-    "API 'ai_content_generation' has no corresponding service",
-    "API 'escrow_system' has no corresponding service",
-    "API 'content_creation' has no corresponding service",
-    "API 'enhanced_features' has no corresponding service",
-    "API 'integration_tests' has no corresponding service",
-    "API 'analytics' has no corresponding service",
-    "API 'workflow_automation' has no corresponding service",
-    "API 'financial_management' has no corresponding service",
-    "API 'rate_limiting_system' has no corresponding service",
-    "API 'notification_system' has no corresponding service",
-    "API 'onboarding_system' has no corresponding service",
-    "API 'missing_endpoints_fix' has no corresponding service",
-    "API 'analytics_system' has no corresponding service",
-    "Service 'rate_limiting_service' has no corresponding API",
-    "Service 'social_email_integration_service' has no corresponding API",
-    "Service 'automation_service' has no corresponding API",
-    "Service 'enterprise_security_service' has no corresponding API",
-    "Service 'webhook_service' has no corresponding API",
-    "Service 'social_media_service' has no corresponding API",
-    "Service 'escrow_service' has no corresponding API",
-    "Service 'content_creation_suite_service' has no corresponding API",
-    "Service 'financial_service' has no corresponding API",
-    "Service 'data_population' has no corresponding API",
-    "Service 'workspace_management_service' has no corresponding API",
-    "Service 'onboarding_service' has no corresponding API",
-    "Service 'notification_service' has no corresponding API",
-    "Service 'monitoring_service' has no corresponding API",
-    "Service 'backup_service' has no corresponding API",
-    "Service 'ai_token_service' has no corresponding API",
-    "Service 'crm_service' has no corresponding API",
-    "Service 'support_service' has no corresponding API",
-    "Service 'subscription_service' has no corresponding API",
-    "Service 'social_email_service' has no corresponding API",
-    "Service 'real_data_population_service' has no corresponding API",
-    "Service 'i18n_service' has no corresponding API",
-    "Service 'survey_service' has no corresponding API",
-    "Service 'customer_experience_suite_service' has no corresponding API",
-    "Service 'team_service' has no corresponding API"
+  "timestamp": "2025-01-23T18:30:00",
+  "missing_services": [
+    "missing_critical_endpoints",
+    "missing_endpoints_fix",
+    "import_api"
   ],
-  "instagram_files": []
+  "missing_apis": [
+    "import"
+  ],
+  "missing_integrations": [
+    {
+      "name": "twitter",
+      "description": "Twitter/X API Integration"
+    },
+    {
+      "name": "tiktok",
+      "description": "TikTok API Integration"
+    },
+    {
+      "name": "stripe_integration",
+      "description": "Stripe Payment Integration"
+    },
+    {
+      "name": "referral_system",
+      "description": "Referral System"
+    },
+    {
+      "name": "social_media_management",
+      "description": "Social Media Management"
+    }
+  ],
+  "incomplete_crud": [
+    {
+      "api": "missing_endpoints_fix",
+      "missing": [
+        "CREATE",
+        "READ",
+        "UPDATE",
+        "DELETE"
+      ],
+      "score": 0
+    },
+    {
+      "api": "referral",
+      "missing": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "score": 2
+    },
+    {
+      "api": "missing_critical_endpoints",
+      "missing": [
+        "CREATE",
+        "READ",
+        "UPDATE",
+        "DELETE"
+      ],
+      "score": 0
+    },
+    {
+      "api": "website_builder",
+      "missing": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "score": 2
+    }
+  ],
+  "mock_data_files": [
+    {
+      "service": "data_population",
+      "mock_items": [
+        "\"sample_user_id\"",
+        "\"sample_{username}\"",
+        "Sample social",
+        "sample users",
+        "sample AI",
+        "Sample usage",
+        "Sample activities",
+        "Sample page",
+        "Sample conversions",
+        "MOCK DATA"
+      ]
+    },
+    {
+      "service": "survey_service_backup",
+      "mock_items": [
+        "mock for"
+      ]
+    },
+    {
+      "service": "website_builder_service",
+      "mock_items": [
+        "Sample template"
+      ]
+    }
+  ],
+  "total_issues": 16
 }
