@@ -180,6 +180,7 @@ try:
     from api.twitter import router as twitter_router
     from api.tiktok import router as tiktok_router
     from api.stripe_integration import router as stripe_integration_router
+    from api.social_media_management import router as social_media_management_router
 
     # Include all routers
     app.include_router(rate_limiting_system_router, prefix="/api/rate-limiting-system", tags=["rate_limiting_system"])
