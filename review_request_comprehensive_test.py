@@ -358,8 +358,8 @@ class ComprehensiveBackendTester:
         # Test 2: Search Functionality
         results["total"] += 1
         try:
-            search_params = {"query": "business tips", "count": 10}
-            async with self.session.get(f"{self.api_url}/tiktok/posts/search", params=search_params, headers=headers) as response:
+            search_params = {"query": "business tips", "limit": 10}
+            async with self.session.get(f"{self.api_url}/tiktok/search", params=search_params, headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
