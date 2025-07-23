@@ -214,12 +214,12 @@ class UltimateFinalVerificationTester:
         print("\n🔗 TESTING EXTERNAL API INTEGRATIONS (Expected: 100% Success)")
         
         external_apis = [
-            ("Referral System", "/api/referral-system/health", "/api/referral-system/list"),
-            ("Stripe Integration", "/api/stripe-integration/health", "/api/stripe-integration/list"),
-            ("Twitter/X API", "/api/twitter/health", "/api/twitter/list"),
-            ("TikTok API", "/api/tiktok/health", "/api/tiktok/list"),
-            ("Google OAuth", "/api/google-oauth/health", "/api/google-oauth/list"),
-            ("OpenAI Integration", "/api/ai/health", "/api/ai/list")
+            ("Referral System", "/api/referral-system/health", "/api/referral-system/"),
+            ("Stripe Integration", "/api/stripe-integration/health", "/api/stripe-integration/"),
+            ("Twitter/X API", "/api/twitter/health", "/api/twitter/"),
+            ("TikTok API", "/api/tiktok/health", "/api/tiktok/"),
+            ("Google OAuth", "/api/google-oauth/health", "/api/google-oauth/"),
+            ("OpenAI Integration", "/api/ai/health", "/api/ai/")
         ]
         
         for api_name, health_endpoint, list_endpoint in external_apis:
