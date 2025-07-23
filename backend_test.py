@@ -152,19 +152,466 @@ class BackendTester:
 
     def test_newly_implemented_features(self):
         """Test the newly implemented features from the review request"""
-        print("\n🎯 TESTING NEWLY IMPLEMENTED FEATURES - DECEMBER 2024")
+        print("\n🎯 TESTING NEWLY IMPLEMENTED FEATURES - JANUARY 2025")
         print("=" * 80)
-        print("Testing the three major new features:")
-        print("1. Complete Financial Management System")
-        print("2. Complete Website Builder System") 
-        print("3. Complete Multi-Workspace System with RBAC")
-        print("4. Verifying all previous features still work")
+        print("Testing the four major new features:")
+        print("1. Advanced Template Marketplace")
+        print("2. Advanced Team Management") 
+        print("3. Unified Analytics with Gamification")
+        print("4. Mobile PWA Features")
         
         # Test all new features
-        self.test_financial_management_system()
-        self.test_website_builder_system()
-        self.test_multi_workspace_system()
-        self.test_previous_features_regression()
+        self.test_template_marketplace_system()
+        self.test_team_management_system()
+        self.test_unified_analytics_system()
+        self.test_mobile_pwa_system()
+        
+    def test_template_marketplace_system(self):
+        """Test Advanced Template Marketplace at /api/template-marketplace/*"""
+        print("\n🛍️ TESTING ADVANCED TEMPLATE MARKETPLACE")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        created_template_id = None
+        
+        # 1. Test Health Check
+        print("\n🏥 Testing Health Check...")
+        self.test_endpoint("/template-marketplace/health", "GET", test_name="Template Marketplace - Health Check")
+        
+        # 2. Test Categories
+        print("\n📂 Testing Categories...")
+        self.test_endpoint("/template-marketplace/categories", "GET", test_name="Template Marketplace - Get Categories")
+        
+        # 3. Test Marketplace Browsing
+        print("\n🔍 Testing Marketplace Browsing...")
+        self.test_endpoint("/template-marketplace/marketplace", "GET", test_name="Template Marketplace - Browse All Templates")
+        self.test_endpoint("/template-marketplace/marketplace?category=business", "GET", test_name="Template Marketplace - Browse Business Templates")
+        self.test_endpoint("/template-marketplace/marketplace?price_range=free", "GET", test_name="Template Marketplace - Browse Free Templates")
+        self.test_endpoint("/template-marketplace/marketplace?sort=popular", "GET", test_name="Template Marketplace - Browse Popular Templates")
+        
+        # 4. Test Template Creation
+        print("\n➕ Testing Template Creation...")
+        create_template_data = {
+            "name": "Modern Business Landing Page",
+            "description": "A sleek, professional landing page template perfect for modern businesses and startups",
+            "category": "business",
+            "price": 29.99,
+            "tags": ["landing-page", "business", "modern", "responsive"],
+            "preview_images": [
+                "https://example.com/preview1.jpg",
+                "https://example.com/preview2.jpg"
+            ],
+            "template_data": {
+                "html": "<div class='hero-section'>Welcome to our business</div>",
+                "css": ".hero-section { background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); }",
+                "js": "console.log('Template loaded');"
+            },
+            "features": ["responsive", "seo-optimized", "fast-loading"],
+            "compatibility": ["all-browsers", "mobile-friendly"]
+        }
+        
+        success, template_data = self.test_endpoint("/template-marketplace/templates", "POST", create_template_data, "Template Marketplace - Create Template")
+        if success and template_data:
+            created_template_id = template_data.get("template_id") or template_data.get("id") or template_data.get("data", {}).get("id")
+            print(f"   Created template ID: {created_template_id}")
+        
+        # 5. Test Template Purchase
+        if created_template_id:
+            print("\n💳 Testing Template Purchase...")
+            purchase_data = {
+                "payment_method": "stripe",
+                "license_type": "standard"
+            }
+            self.test_endpoint(f"/template-marketplace/templates/{created_template_id}/purchase", "POST", purchase_data, "Template Marketplace - Purchase Template")
+        
+        # 6. Test Creator Analytics
+        print("\n📊 Testing Creator Analytics...")
+        self.test_endpoint("/template-marketplace/creator/analytics", "GET", test_name="Template Marketplace - Creator Analytics")
+        self.test_endpoint("/template-marketplace/creator/revenue", "GET", test_name="Template Marketplace - Creator Revenue")
+        
+        # 7. Test Template Management
+        print("\n⚙️ Testing Template Management...")
+        self.test_endpoint("/template-marketplace/my-templates", "GET", test_name="Template Marketplace - My Templates")
+        self.test_endpoint("/template-marketplace/purchases", "GET", test_name="Template Marketplace - My Purchases")
+        
+        print("\n🛍️ Template Marketplace System Testing Complete!")
+        return True
+        
+    def test_team_management_system(self):
+        """Test Advanced Team Management at /api/team-management/*"""
+        print("\n👥 TESTING ADVANCED TEAM MANAGEMENT")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        created_team_id = None
+        invitation_id = None
+        
+        # 1. Test Health Check
+        print("\n🏥 Testing Health Check...")
+        self.test_endpoint("/team-management/health", "GET", test_name="Team Management - Health Check")
+        
+        # 2. Test Teams List
+        print("\n📋 Testing Teams List...")
+        self.test_endpoint("/team-management/teams", "GET", test_name="Team Management - Get Teams")
+        
+        # 3. Test Team Creation
+        print("\n➕ Testing Team Creation...")
+        create_team_data = {
+            "name": "Digital Marketing Squad",
+            "description": "Our core digital marketing team focused on growth and customer acquisition",
+            "team_type": "marketing",
+            "settings": {
+                "privacy": "private",
+                "auto_approve_invites": False,
+                "allow_member_invites": True,
+                "max_members": 25
+            },
+            "permissions": {
+                "can_create_projects": True,
+                "can_manage_content": True,
+                "can_view_analytics": True,
+                "can_export_data": False
+            }
+        }
+        
+        success, team_data = self.test_endpoint("/team-management/teams", "POST", create_team_data, "Team Management - Create Team")
+        if success and team_data:
+            created_team_id = team_data.get("team_id") or team_data.get("id") or team_data.get("data", {}).get("id")
+            print(f"   Created team ID: {created_team_id}")
+        
+        # 4. Test Team Invitations
+        if created_team_id:
+            print("\n📧 Testing Team Invitations...")
+            invitation_data = {
+                "email": "newmember@company.com",
+                "role": "member",
+                "permissions": ["view_projects", "create_content"],
+                "custom_message": "Welcome to our marketing team! We're excited to have you join us.",
+                "expires_in_days": 7
+            }
+            
+            success, invite_data = self.test_endpoint(f"/team-management/teams/{created_team_id}/invitations", "POST", invitation_data, "Team Management - Send Invitation")
+            if success and invite_data:
+                invitation_id = invite_data.get("invitation_id") or invite_data.get("id")
+                print(f"   Created invitation ID: {invitation_id}")
+        
+        # 5. Test Roles Management
+        if created_team_id:
+            print("\n🎭 Testing Roles Management...")
+            self.test_endpoint(f"/team-management/teams/{created_team_id}/roles", "GET", test_name="Team Management - Get Team Roles")
+            
+            # Create custom role
+            custom_role_data = {
+                "name": "Content Creator",
+                "description": "Can create and edit content but cannot manage team settings",
+                "permissions": [
+                    "create_content",
+                    "edit_own_content", 
+                    "view_team_analytics",
+                    "comment_on_content"
+                ]
+            }
+            self.test_endpoint(f"/team-management/teams/{created_team_id}/roles", "POST", custom_role_data, "Team Management - Create Custom Role")
+        
+        # 6. Test Member Management
+        if created_team_id:
+            print("\n👤 Testing Member Management...")
+            self.test_endpoint(f"/team-management/teams/{created_team_id}/members", "GET", test_name="Team Management - Get Team Members")
+            
+            # Update member role (if we had members)
+            member_update_data = {
+                "role": "admin",
+                "permissions": ["manage_team", "invite_members", "view_analytics"]
+            }
+            # This would normally use a real member ID
+            self.test_endpoint(f"/team-management/teams/{created_team_id}/members/member_123", "PUT", member_update_data, "Team Management - Update Member Role")
+        
+        # 7. Test Team Analytics
+        if created_team_id:
+            print("\n📊 Testing Team Analytics...")
+            self.test_endpoint(f"/team-management/teams/{created_team_id}/analytics", "GET", test_name="Team Management - Team Analytics")
+            self.test_endpoint(f"/team-management/teams/{created_team_id}/activity", "GET", test_name="Team Management - Team Activity")
+        
+        # 8. Test Multi-tier Support
+        print("\n🏢 Testing Multi-tier Support...")
+        self.test_endpoint("/team-management/organization/structure", "GET", test_name="Team Management - Organization Structure")
+        self.test_endpoint("/team-management/permissions/matrix", "GET", test_name="Team Management - Permissions Matrix")
+        
+        print("\n👥 Team Management System Testing Complete!")
+        return True
+        
+    def test_unified_analytics_system(self):
+        """Test Unified Analytics with Gamification at /api/unified-analytics/*"""
+        print("\n📊 TESTING UNIFIED ANALYTICS WITH GAMIFICATION")
+        print("=" * 60)
+        
+        # 1. Test Health Check
+        print("\n🏥 Testing Health Check...")
+        self.test_endpoint("/unified-analytics/health", "GET", test_name="Unified Analytics - Health Check")
+        
+        # 2. Test Analytics Dashboard
+        print("\n📈 Testing Analytics Dashboard...")
+        self.test_endpoint("/unified-analytics/dashboard", "GET", test_name="Unified Analytics - Dashboard Overview")
+        self.test_endpoint("/unified-analytics/dashboard?period=week", "GET", test_name="Unified Analytics - Dashboard Weekly")
+        self.test_endpoint("/unified-analytics/dashboard?period=month", "GET", test_name="Unified Analytics - Dashboard Monthly")
+        self.test_endpoint("/unified-analytics/dashboard?period=quarter", "GET", test_name="Unified Analytics - Dashboard Quarterly")
+        
+        # 3. Test Gamification Profile
+        print("\n🎮 Testing Gamification Profile...")
+        self.test_endpoint("/unified-analytics/gamification/profile", "GET", test_name="Unified Analytics - Gamification Profile")
+        
+        # 4. Test Points System
+        print("\n⭐ Testing Points System...")
+        add_points_data = {
+            "action": "template_created",
+            "points": 50,
+            "description": "Created a new template in the marketplace"
+        }
+        self.test_endpoint("/unified-analytics/gamification/points/add", "POST", add_points_data, "Unified Analytics - Add Points")
+        
+        # Add more points for different actions
+        point_actions = [
+            {"action": "team_invitation_sent", "points": 25, "description": "Invited a new team member"},
+            {"action": "analytics_viewed", "points": 10, "description": "Viewed analytics dashboard"},
+            {"action": "template_purchased", "points": 75, "description": "Purchased a premium template"}
+        ]
+        
+        for action_data in point_actions:
+            self.test_endpoint("/unified-analytics/gamification/points/add", "POST", action_data, f"Unified Analytics - Add Points ({action_data['action']})")
+        
+        # 5. Test Achievements System
+        print("\n🏆 Testing Achievements System...")
+        self.test_endpoint("/unified-analytics/gamification/achievements", "GET", test_name="Unified Analytics - Get Achievements")
+        
+        # Unlock achievement
+        achievement_data = {
+            "achievement_id": "first_template_creator",
+            "description": "Created your first template"
+        }
+        self.test_endpoint("/unified-analytics/gamification/achievements/unlock", "POST", achievement_data, "Unified Analytics - Unlock Achievement")
+        
+        # 6. Test Leaderboard
+        print("\n🥇 Testing Leaderboard...")
+        self.test_endpoint("/unified-analytics/gamification/leaderboard", "GET", test_name="Unified Analytics - Global Leaderboard")
+        self.test_endpoint("/unified-analytics/gamification/leaderboard?period=month", "GET", test_name="Unified Analytics - Monthly Leaderboard")
+        self.test_endpoint("/unified-analytics/gamification/leaderboard?category=templates", "GET", test_name="Unified Analytics - Template Creator Leaderboard")
+        
+        # 7. Test AI-powered Insights
+        print("\n🤖 Testing AI-powered Insights...")
+        self.test_endpoint("/unified-analytics/insights/ai", "GET", test_name="Unified Analytics - AI Insights")
+        
+        # Generate custom insights
+        insights_data = {
+            "data_sources": ["user_activity", "team_performance", "template_usage"],
+            "time_range": "30_days",
+            "insight_type": "performance_optimization"
+        }
+        self.test_endpoint("/unified-analytics/insights/generate", "POST", insights_data, "Unified Analytics - Generate AI Insights")
+        
+        # 8. Test Predictive Analytics
+        print("\n🔮 Testing Predictive Analytics...")
+        prediction_data = {
+            "metric": "user_engagement",
+            "forecast_period": "next_30_days",
+            "confidence_level": 0.85
+        }
+        self.test_endpoint("/unified-analytics/predictive/forecast", "POST", prediction_data, "Unified Analytics - Predictive Forecast")
+        
+        # 9. Test Custom Reports
+        print("\n📋 Testing Custom Reports...")
+        report_data = {
+            "report_name": "Team Performance Summary",
+            "metrics": ["team_activity", "template_creation", "collaboration_score"],
+            "time_period": "last_30_days",
+            "format": "pdf"
+        }
+        self.test_endpoint("/unified-analytics/reports/custom", "POST", report_data, "Unified Analytics - Generate Custom Report")
+        
+        # 10. Test Real-time Data
+        print("\n⚡ Testing Real-time Data...")
+        self.test_endpoint("/unified-analytics/realtime/activity", "GET", test_name="Unified Analytics - Real-time Activity")
+        self.test_endpoint("/unified-analytics/realtime/metrics", "GET", test_name="Unified Analytics - Real-time Metrics")
+        
+        print("\n📊 Unified Analytics System Testing Complete!")
+        return True
+        
+    def test_mobile_pwa_system(self):
+        """Test Mobile PWA Features at /api/mobile-pwa/*"""
+        print("\n📱 TESTING MOBILE PWA FEATURES")
+        print("=" * 60)
+        
+        # Test variables to store created resources
+        device_id = None
+        subscription_id = None
+        
+        # 1. Test Health Check
+        print("\n🏥 Testing Health Check...")
+        self.test_endpoint("/mobile-pwa/health", "GET", test_name="Mobile PWA - Health Check")
+        
+        # 2. Test PWA Manifest
+        print("\n📋 Testing PWA Manifest...")
+        self.test_endpoint("/mobile-pwa/pwa/manifest", "GET", test_name="Mobile PWA - Get Manifest")
+        
+        # Update manifest
+        manifest_data = {
+            "name": "Mewayz Business Platform",
+            "short_name": "Mewayz",
+            "description": "Complete business automation platform",
+            "theme_color": "#667eea",
+            "background_color": "#ffffff",
+            "display": "standalone",
+            "orientation": "portrait"
+        }
+        self.test_endpoint("/mobile-pwa/pwa/manifest", "PUT", manifest_data, "Mobile PWA - Update Manifest")
+        
+        # 3. Test Push Notifications
+        print("\n🔔 Testing Push Notifications...")
+        
+        # Subscribe to push notifications
+        subscription_data = {
+            "endpoint": "https://fcm.googleapis.com/fcm/send/example-endpoint",
+            "keys": {
+                "p256dh": "example-p256dh-key",
+                "auth": "example-auth-key"
+            },
+            "device_type": "mobile",
+            "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)"
+        }
+        
+        success, sub_data = self.test_endpoint("/mobile-pwa/push/subscribe", "POST", subscription_data, "Mobile PWA - Subscribe to Push")
+        if success and sub_data:
+            subscription_id = sub_data.get("subscription_id") or sub_data.get("id")
+            print(f"   Created subscription ID: {subscription_id}")
+        
+        # Send push notification
+        push_data = {
+            "title": "Welcome to Mewayz PWA!",
+            "body": "Your mobile experience is now enhanced with offline capabilities",
+            "icon": "/icons/notification-icon.png",
+            "badge": "/icons/badge-icon.png",
+            "data": {
+                "url": "/dashboard",
+                "action": "open_dashboard"
+            }
+        }
+        self.test_endpoint("/mobile-pwa/push/send", "POST", push_data, "Mobile PWA - Send Push Notification")
+        
+        # 4. Test Device Registration
+        print("\n📱 Testing Device Registration...")
+        device_data = {
+            "device_type": "mobile",
+            "platform": "ios",
+            "app_version": "1.0.0",
+            "device_info": {
+                "model": "iPhone 13",
+                "os_version": "15.0",
+                "screen_resolution": "1170x2532"
+            },
+            "capabilities": ["push_notifications", "offline_storage", "camera"]
+        }
+        
+        success, device_response = self.test_endpoint("/mobile-pwa/device/register", "POST", device_data, "Mobile PWA - Register Device")
+        if success and device_response:
+            device_id = device_response.get("device_id") or device_response.get("id")
+            print(f"   Registered device ID: {device_id}")
+        
+        # 5. Test Offline Caching
+        print("\n💾 Testing Offline Caching...")
+        
+        # Cache resources
+        cache_data = {
+            "resources": [
+                "/dashboard",
+                "/templates",
+                "/team-management",
+                "/analytics"
+            ],
+            "cache_strategy": "cache_first",
+            "max_age": 86400  # 24 hours
+        }
+        self.test_endpoint("/mobile-pwa/offline/cache", "POST", cache_data, "Mobile PWA - Cache Resources")
+        
+        # Get cached resources
+        self.test_endpoint("/mobile-pwa/offline/cached-resources", "GET", test_name="Mobile PWA - Get Cached Resources")
+        
+        # 6. Test Background Sync
+        print("\n🔄 Testing Background Sync...")
+        
+        # Queue background sync
+        sync_data = {
+            "action": "sync_analytics",
+            "data": {
+                "user_activity": "template_viewed",
+                "timestamp": "2025-01-15T10:30:00Z"
+            },
+            "retry_count": 3
+        }
+        self.test_endpoint("/mobile-pwa/sync/queue", "POST", sync_data, "Mobile PWA - Queue Background Sync")
+        
+        # Get sync status
+        self.test_endpoint("/mobile-pwa/sync/status", "GET", test_name="Mobile PWA - Get Sync Status")
+        
+        # 7. Test Mobile Analytics
+        print("\n📊 Testing Mobile Analytics...")
+        self.test_endpoint("/mobile-pwa/analytics/mobile", "GET", test_name="Mobile PWA - Mobile Analytics")
+        
+        # Track mobile events
+        event_data = {
+            "event_type": "app_launch",
+            "device_id": device_id or "test_device_123",
+            "timestamp": "2025-01-15T10:30:00Z",
+            "properties": {
+                "launch_time": 2.5,
+                "network_type": "wifi",
+                "battery_level": 85
+            }
+        }
+        self.test_endpoint("/mobile-pwa/analytics/track", "POST", event_data, "Mobile PWA - Track Mobile Event")
+        
+        # 8. Test PWA Installation
+        print("\n⬇️ Testing PWA Installation...")
+        
+        # Get installation prompt
+        self.test_endpoint("/mobile-pwa/pwa/install-prompt", "GET", test_name="Mobile PWA - Get Install Prompt")
+        
+        # Track installation
+        install_data = {
+            "device_id": device_id or "test_device_123",
+            "install_source": "browser_prompt",
+            "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)"
+        }
+        self.test_endpoint("/mobile-pwa/pwa/track-install", "POST", install_data, "Mobile PWA - Track Installation")
+        
+        # 9. Test Service Worker Management
+        print("\n⚙️ Testing Service Worker Management...")
+        self.test_endpoint("/mobile-pwa/service-worker/status", "GET", test_name="Mobile PWA - Service Worker Status")
+        
+        # Update service worker
+        sw_data = {
+            "version": "1.1.0",
+            "cache_strategy": "network_first",
+            "offline_fallback": "/offline.html"
+        }
+        self.test_endpoint("/mobile-pwa/service-worker/update", "POST", sw_data, "Mobile PWA - Update Service Worker")
+        
+        # 10. Test Device Management
+        if device_id:
+            print("\n📱 Testing Device Management...")
+            self.test_endpoint(f"/mobile-pwa/device/{device_id}", "GET", test_name="Mobile PWA - Get Device Info")
+            
+            # Update device settings
+            device_update_data = {
+                "notification_preferences": {
+                    "marketing": True,
+                    "system_updates": True,
+                    "team_notifications": False
+                },
+                "sync_frequency": "hourly"
+            }
+            self.test_endpoint(f"/mobile-pwa/device/{device_id}/settings", "PUT", device_update_data, "Mobile PWA - Update Device Settings")
+        
+        print("\n📱 Mobile PWA System Testing Complete!")
+        return True
         
     def test_financial_management_system(self):
         """Test Complete Financial Management System at /api/financial/*"""
