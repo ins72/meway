@@ -269,7 +269,7 @@ async def get_media_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=MediaResponse)
 async def bulk_create_medias(
-    items: items: List[MediaCreate] = Body(...),
+    items: List[MediaCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple medias"""

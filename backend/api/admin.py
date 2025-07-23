@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=AdminResponse, status_code=status.HTTP_201_CREATED)
 async def create_admin(
-    item: item: AdminCreate = Body(...),
+    item: AdminCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new admin with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_admin_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=AdminResponse)
 async def bulk_create_admins(
-    items: items: List[AdminCreate] = Body(...),
+    items: List[AdminCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple admins"""

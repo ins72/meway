@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=ContentResponse, status_code=status.HTTP_201_CREATED)
 async def create_content(
-    item: item: ContentCreate = Body(...),
+    item: ContentCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new content with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_content_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=ContentResponse)
 async def bulk_create_contents(
-    items: items: List[ContentCreate] = Body(...),
+    items: List[ContentCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple contents"""

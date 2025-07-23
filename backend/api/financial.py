@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=FinancialResponse, status_code=status.HTTP_201_CREATED)
 async def create_financial(
-    item: item: FinancialCreate = Body(...),
+    item: FinancialCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new financial with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_financial_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=FinancialResponse)
 async def bulk_create_financials(
-    items: items: List[FinancialCreate] = Body(...),
+    items: List[FinancialCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple financials"""

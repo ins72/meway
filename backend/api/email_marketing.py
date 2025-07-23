@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=EmailMarketingResponse, status_code=status.HTTP_201_CREATED)
 async def create_email_marketing(
-    item: item: EmailMarketingCreate = Body(...),
+    item: EmailMarketingCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new email_marketing with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_email_marketing_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=EmailMarketingResponse)
 async def bulk_create_email_marketings(
-    items: items: List[EmailMarketingCreate] = Body(...),
+    items: List[EmailMarketingCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple email_marketings"""

@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=SupportResponse, status_code=status.HTTP_201_CREATED)
 async def create_support(
-    item: item: SupportCreate = Body(...),
+    item: SupportCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new support with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_support_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=SupportResponse)
 async def bulk_create_supports(
-    items: items: List[SupportCreate] = Body(...),
+    items: List[SupportCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple supports"""

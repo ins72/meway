@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=MonitoringResponse, status_code=status.HTTP_201_CREATED)
 async def create_monitoring(
-    item: item: MonitoringCreate = Body(...),
+    item: MonitoringCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new monitoring with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_monitoring_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=MonitoringResponse)
 async def bulk_create_monitorings(
-    items: items: List[MonitoringCreate] = Body(...),
+    items: List[MonitoringCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple monitorings"""

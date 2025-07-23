@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=AiContentResponse, status_code=status.HTTP_201_CREATED)
 async def create_ai_content(
-    item: item: AiContentCreate = Body(...),
+    item: AiContentCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new ai_content with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_ai_content_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=AiContentResponse)
 async def bulk_create_ai_contents(
-    items: items: List[AiContentCreate] = Body(...),
+    items: List[AiContentCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple ai_contents"""

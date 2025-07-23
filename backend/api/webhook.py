@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=WebhookResponse, status_code=status.HTTP_201_CREATED)
 async def create_webhook(
-    item: item: WebhookCreate = Body(...),
+    item: WebhookCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new webhook with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_webhook_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=WebhookResponse)
 async def bulk_create_webhooks(
-    items: items: List[WebhookCreate] = Body(...),
+    items: List[WebhookCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple webhooks"""
