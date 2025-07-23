@@ -1,3 +1,6 @@
+import logging
+router = APIRouter()
+logger = logging.getLogger(__name__)
 """
 Real Email Automation API - ElasticMail Integration - NO MOCK DATA
 Endpoints for email campaigns, automation, and subscriber management
