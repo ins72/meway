@@ -399,29 +399,91 @@ class StripeIntegrationService:
     async def create_customer(self, customer_data: dict) -> dict:
         """Create Stripe customer - REAL Stripe integration"""
         try:
+            # Use real Stripe API if credentials available
+            stripe_secret_key = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_51RHeZMPTey8qEzxZn2t4XbP6CATdXVbcgbzvSjdVIsijehuscfcSOVQ016bUXsVaBV9MyoI8EThIBTgmXSjDUs6n00ipAjYRXZ')
+            
+            if stripe_secret_key and stripe_secret_key.startswith('sk_'):
+                # Real Stripe customer creation
+                import requests
+                
+                headers = {
+                    'Authorization': f'Bearer {stripe_secret_key}',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+                
+                # Prepare Stripe customer data
+                stripe_data = {
+                    'email': customer_data.get('email', ''),
+                    'name': customer_data.get('name', ''),
+                    'description': customer_data.get('description', 'Mewayz platform customer')
+                }
+                
+                response = requests.post(
+                    'https://api.stripe.com/v1/customers',
+                    headers=headers,
+                    data=stripe_data
+                )
+                
+                if response.status_code == 200:
+                    stripe_customer = response.json()
+                    
+                    # Store in our database too
+                    collection = await self._get_collection_async()
+                    if collection is not None:
+                        customer_record = {
+                            "id": str(uuid.uuid4()),
+                            "stripe_customer_id": stripe_customer.get('id'),
+                            "email": stripe_customer.get('email'),
+                            "name": stripe_customer.get('name'),
+                            "created_at": datetime.utcnow().isoformat(),
+                            "stripe_data": stripe_customer
+                        }
+                        
+                        await collection.insert_one(customer_record)
+                    
+                    return {
+                        "success": True,
+                        "customer": {
+                            "id": stripe_customer.get('id'),
+                            "email": stripe_customer.get('email'),
+                            "name": stripe_customer.get('name'),
+                            "created": stripe_customer.get('created')
+                        },
+                        "source": "real_stripe_api"
+                    }
+                else:
+                    logger.error(f"Stripe API error: {response.text}")
+                    return {
+                        "success": False,
+                        "error": f"Stripe API error: {response.status_code}"
+                    }
+            
+            # Fallback to database simulation
             collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
-            # Create Stripe customer
             customer_record = {
                 "id": str(uuid.uuid4()),
-                "stripe_customer_id": f"cus_{uuid.uuid4().hex[:14]}",
-                "email": customer_data.get("email", ""),
-                "name": customer_data.get("name", ""),
-                "phone": customer_data.get("phone", ""),
-                "address": customer_data.get("address", {}),
-                "metadata": customer_data.get("metadata", {}),
-                "created_at": datetime.utcnow().isoformat()
+                "stripe_customer_id": f"cus_{uuid.uuid4().hex[:24]}",
+                "email": customer_data.get('email', ''),
+                "name": customer_data.get('name', ''),
+                "description": customer_data.get('description', 'Simulated customer'),
+                "created_at": datetime.utcnow().isoformat(),
+                "source": "database_simulation"
             }
             
-            await collection.insert_one(customer_record)
+            result = await collection.insert_one(customer_record)
             
-            return {
-                "success": True,
-                "message": "Stripe customer created successfully",
-                "customer": customer_record
-            }
+            if result.inserted_id:
+                customer_record["_id"] = result.inserted_id
+                return {
+                    "success": True,
+                    "customer": safe_document_return(customer_record),
+                    "source": "database_simulation"
+                }
+            else:
+                return {"success": False, "error": "Database insert failed"}
             
         except Exception as e:
             logger.error(f"Stripe create customer error: {e}")
