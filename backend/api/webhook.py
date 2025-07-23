@@ -174,9 +174,8 @@ async def get_webhook(
 # Update Operation
 @router.put("/{item_id}", response_model=WebhookResponse)
 async def update_webhook(
-    item_id: str = Path(..., description="ID of the webhook to update"),    item: WebhookUpdate = Body(...),
-
-    
+    item_id: str = Path(..., description="ID to update"),
+    item: Update = Body(...),
     current_user: dict = Depends(get_current_user),
 ):
     """Update webhook with comprehensive validation"""

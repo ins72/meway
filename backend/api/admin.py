@@ -174,9 +174,8 @@ async def get_admin(
 # Update Operation
 @router.put("/{item_id}", response_model=AdminResponse)
 async def update_admin(
-    item_id: str = Path(..., description="ID of the admin to update"),    item: AdminUpdate = Body(...),
-
-    
+    item_id: str = Path(..., description="ID to update"),
+    item: Update = Body(...),
     current_user: dict = Depends(get_current_user),
 ):
     """Update admin with comprehensive validation"""
