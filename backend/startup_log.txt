@@ -1,0 +1,121 @@
+🚀 Loading Mewayz Professional Platform API modules...
+  ⚠️  Skipping admin: No module named 'services.analytics_service'...
+  ⚠️  Skipping advanced_ai: cannot import name 'advanced_ai' from 'api' (/app/...
+  ⚠️  Skipping advanced_ai_analytics: cannot import name 'advanced_ai_analytics' from 'a...
+  ⚠️  Skipping advanced_ai_suite: cannot import name 'advanced_ai_suite' from 'api' ...
+  ⚠️  Skipping advanced_analytics: cannot import name 'advanced_analytics' from 'api'...
+  ⚠️  Skipping advanced_financial: cannot import name 'advanced_financial' from 'api'...
+  ⚠️  Skipping advanced_financial_analytics: cannot import name 'advanced_financial_analytics' ...
+  ✅ ai
+  ✅ ai_content
+  ✅ ai_content_generation
+  ✅ ai_token_management
+  ⚠️  Skipping analytics: No module named 'services.analytics_service'...
+  ✅ analytics_system
+  ✅ auth
+  ✅ automation_system
+  ✅ backup_system
+  ⚠️  Skipping bio_sites: No module named 'services.analytics_service'...
+  ✅ blog
+  ⚠️  Skipping business_intelligence: No module named 'services.analytics_service'...
+  ⚠️  Skipping compliance_system: No module named 'services.compliance_service'...
+  ✅ content
+  ⚠️  Skipping content_creation: No module named 'services.content_creation_service...
+  ⚠️  Skipping content_creation_suite: cannot import name 'content_creation_suite' from '...
+  ⚠️  Skipping course_management: cannot import name 'course_management' from 'api' ...
+  ✅ crm_management
+  ✅ customer_experience
+  ⚠️  Skipping customer_experience_suite: cannot import name 'customer_experience_suite' fro...
+  ⚠️  Skipping dashboard: No module named 'services.analytics_service'...
+  ✅ email_marketing
+  ⚠️  Skipping escrow_system: unexpected indent (escrow_service.py, line 12)...
+  ✅ form_builder
+  ✅ google_oauth
+  ✅ i18n_system
+  ⚠️  Skipping integration: unterminated string literal (detected at line 20) ...
+  ✅ integrations
+  ⚠️  Skipping link_shortener: No module named 'services.analytics_service'...
+  ✅ marketing
+  ✅ media
+  ✅ media_library
+  ✅ monitoring_system
+  ✅ notification_system
+  ✅ promotions_referrals
+  ✅ rate_limiting_system
+  ⚠️  Skipping realtime_notifications: unterminated triple-quoted string literal (detecte...
+  ⚠️  Skipping social_email: cannot import name 'social_email' from 'api' (/app...
+  ⚠️  Skipping social_email_integration: cannot import name 'social_email_integration' from...
+  ⚠️  Skipping social_media: cannot import name 'social_media' from 'api' (/app...
+  ⚠️  Skipping social_media_suite: cannot import name 'social_media_suite' from 'api'...
+  ✅ support_system
+  ✅ survey_system
+  ✅ team_management
+  ⚠️  Skipping template_marketplace: closing parenthesis ')' does not match opening par...
+  ✅ user
+  ✅ webhook_system
+  ⚠️  Skipping workflow_automation: unterminated triple-quoted string literal (detecte...
+
+📊 Successfully imported 29 out of 55 API modules
+❌ Failed modules: 26
+  ✅ Included ai router at /api/ai
+  ✅ Included ai_content router at /api/ai-content
+  ✅ Included ai_content_generation router at /api/ai-content-generation
+  ✅ Included ai_token_management router at /api/ai-tokens
+  ✅ Included analytics_system router at /api/analytics-system
+  ✅ Included auth router at /api/auth
+  ✅ Included automation_system router at /api/automation
+  ✅ Included backup_system router at /api/backup
+  ✅ Included blog router at /api/blog
+  ✅ Included content router at /api/content
+  ✅ Included crm_management router at /api/crm
+  ✅ Included customer_experience router at /api/customer-experience
+  ✅ Included email_marketing router at /api/email-marketing
+  ✅ Included form_builder router at /api/forms
+  ✅ Included google_oauth router at /api/google-oauth
+  ✅ Included i18n_system router at /api/i18n
+  ✅ Included integrations router at /api/integrations
+  ✅ Included marketing router at /api/marketing
+  ✅ Included media router at /api/media
+  ✅ Included media_library router at /api/media-library
+  ✅ Included monitoring_system router at /api/monitoring
+  ✅ Included notification_system router at /api/notifications-system
+  ✅ Included promotions_referrals router at /api/promotions
+  ✅ Included rate_limiting_system router at /api/rate-limiting
+  ✅ Included support_system router at /api/support
+  ✅ Included survey_system router at /api/surveys
+  ✅ Included team_management router at /api/teams
+  ✅ Included user router at /api/user
+  ✅ Included webhook_system router at /api/webhooks
+
+🎉 Successfully included 29 routers in the FastAPI application!
+  ❌ Failed to include missing endpoints: unterminated string literal (detected at line 285) (missing_endpoints_fix.py, line 285)
+  ❌ Failed to include admin configuration router: ':' expected after dictionary key (admin_configuration.py, line 610)
+  ❌ Failed to include Advanced LMS router: No module named 'api.advanced_lms'
+  ✅ Included Multi-Vendor Marketplace router at /api/marketplace
+  ❌ Failed to include Advanced Business Intelligence router: No module named 'api.advanced_business_intelligence'
+  ✅ Included Comprehensive Marketing Website router
+  ❌ Failed to include Social Media Suite router: No module named 'api.advanced_social_media_suite'
+  ✅ Included Enterprise Security & Compliance router
+  ❌ Failed to include Social Media Lead Generation router: No module named 'api.real_social_media_leads'
+  ✅ Included Real AI Automation router
+  ✅ Included Real Email Automation router
+  ✅ Included Complete Onboarding System router
+  ✅ Included Complete Link in Bio Builder router
+  ❌ Failed to include Complete E-commerce router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ❌ Failed to include Course & Community router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ❌ Failed to include Escrow System router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ❌ Failed to include Referral System router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ❌ Failed to include Admin Dashboard router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ❌ Failed to include Financial Management router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ❌ Failed to include Website Builder router: cannot import name 'get_api_key' from 'core.config' (/app/backend/core/config.py)
+  ✅ Included Complete Multi-Workspace System with RBAC router
+  ✅ Included Complete 3-Tier Subscription Management with Stripe router
+  ✅ Included Complete Booking System with Calendar Integration router
+  ✅ Included Complete Social Media Lead Generation (TikTok/Twitter) router
+  ❌ Failed to include Template Marketplace router: 'NoneType' object is not subscriptable
+  ❌ Failed to include Team Management router: 'NoneType' object is not subscriptable
+  ❌ Failed to include Unified Analytics router: 'NoneType' object is not subscriptable
+  ❌ Failed to include Mobile PWA router: 'NoneType' object is not subscriptable
+📊 Platform ready with 40 operational API endpoints!
+INFO:     Will watch for changes in these directories: ['/app/backend']
+ERROR:    [Errno 98] Address already in use
