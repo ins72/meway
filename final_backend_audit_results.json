@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-07-23T23:41:47.371185",
+  "summary": {
+    "total_systems": 15,
+    "working_systems": 13,
+    "systems_success_rate": 86.66666666666667,
+    "total_endpoints": 38,
+    "working_endpoints": 34,
+    "endpoints_success_rate": 89.47368421052632,
+    "critical_systems_working": 6,
+    "critical_success_rate": 85.71428571428571
+  }
+}
