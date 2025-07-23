@@ -75,9 +75,16 @@ class WebsiteBuilderService:
             if user_id:
                 query["user_id"] = user_id
             
-            # Execute query - REAL DATA OPERATION
+            # Execute query with proper async handling
             cursor = collection.find(query).skip(offset).limit(limit)
-            docs = await cursor.to_list(length=limit)
+            docs = []
+            async for doc in cursor:
+                # Serialize ObjectId fields
+                if "_id" in doc:
+                    doc["_id"] = str(doc["_id"])
+                if "user_id" in doc and hasattr(doc["user_id"], "str"):
+                    doc["user_id"] = str(doc["user_id"])
+                docs.append(doc)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -87,7 +94,8 @@ class WebsiteBuilderService:
                 "data": docs,
                 "total": total,
                 "limit": limit,
-                "offset": offset
+                "offset": offset,
+                "message": f"Retrieved {len(docs)} websites"
             }
             
         except Exception as e:
