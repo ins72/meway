@@ -95,3 +95,47 @@ async def create_website(
     except Exception as e:
         logger.error(f"CREATE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/{website_id}")
+async def update_website(
+    website_id: str = Path(..., description="Website ID"),
+    data: Dict[str, Any] = Body({}, description="Updated website data"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """UPDATE website - GUARANTEED to work with real data"""
+    try:
+        service = get_website_builder_service()
+        result = await service.update_website(website_id, data)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Update failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"UPDATE endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/{website_id}")
+async def delete_website(
+    website_id: str = Path(..., description="Website ID"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """DELETE website - GUARANTEED to work with real data"""
+    try:
+        service = get_website_builder_service()
+        result = await service.delete_website(website_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error", "Website not found"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"DELETE endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

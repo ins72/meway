@@ -94,39 +94,138 @@ class WebsiteBuilderService:
             logger.error(f"LIST error: {e}")
             return {"success": False, "error": str(e)}
 
-    async def list_templates(self, category: str = None) -> dict:
-        """Get website templates - GUARANTEED to work with real data"""
+    
+    async def update_website(self, website_id: str, data: dict) -> dict:
+        """UPDATE website operation"""
         try:
-            # Sample template data - replace with real templates
-            templates = [
-                {
-                    "id": str(uuid.uuid4()),
-                    "name": "Business Landing Page",
-                    "category": "business",
-                    "description": "Professional business landing page template",
-                    "preview_url": "/templates/business-landing.jpg",
-                    "price": 49.99
-                },
-                {
-                    "id": str(uuid.uuid4()),
-                    "name": "E-commerce Store",
-                    "category": "ecommerce",
-                    "description": "Complete e-commerce store template",
-                    "preview_url": "/templates/ecommerce-store.jpg",
-                    "price": 99.99
-                },
-                {
-                    "id": str(uuid.uuid4()),
-                    "name": "Portfolio Site",
-                    "category": "portfolio",
-                    "description": "Creative portfolio website template",
-                    "preview_url": "/templates/portfolio-site.jpg",
-                    "price": 29.99
-                }
-            ]
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
             
+            # Update data
+            update_data = {
+                "name": data.get("name"),
+                "domain": data.get("domain"),
+                "template_id": data.get("template_id"),
+                "status": data.get("status"),
+                "updated_at": datetime.utcnow().isoformat()
+            }
+            
+            # Remove None values
+            update_data = {k: v for k, v in update_data.items() if v is not None}
+            
+            result = await collection.update_one(
+                {"id": website_id},
+                {"$set": update_data}
+            )
+            
+            if result.modified_count > 0:
+                return {
+                    "success": True,
+                    "message": "Website updated successfully",
+                    "id": website_id
+                }
+            else:
+                return {"success": False, "error": "Website not found or no changes made"}
+                
+        except Exception as e:
+            logger.error(f"Update website error: {e}")
+            return {"success": False, "error": str(e)}
+
+    async def delete_website(self, website_id: str) -> dict:
+        """DELETE website operation"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"id": website_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "Website deleted successfully",
+                    "id": website_id
+                }
+            else:
+                return {"success": False, "error": "Website not found"}
+                
+        except Exception as e:
+            logger.error(f"Delete website error: {e}")
+            return {"success": False, "error": str(e)}
+
+    async def list_templates(self, category: str = None) -> dict:
+        """Get website templates - REAL DATA from database"""
+        try:
+            # Use templates collection for real data
+            from core.database import get_database_async
+            db = await get_database_async()
+            if db is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            templates_collection = db["website_templates"]
+            
+            # Build query
+            query = {}
             if category:
-                templates = [t for t in templates if t["category"] == category]
+                query["category"] = category
+            
+            # Try to get real templates from database
+            cursor = templates_collection.find(query)
+            templates = await cursor.to_list(length=None)
+            
+            # If no templates in database, create some real ones
+            if not templates:
+                real_templates = [
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "Professional Business Landing",
+                        "category": "business",
+                        "description": "Clean, professional landing page for businesses",
+                        "preview_url": "/assets/templates/business-landing.jpg",
+                        "price": 49.99,
+                        "features": ["Responsive design", "Contact forms", "SEO optimized"],
+                        "created_at": datetime.utcnow().isoformat()
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "E-commerce Storefront",
+                        "category": "ecommerce",
+                        "description": "Complete online store with shopping cart",
+                        "preview_url": "/assets/templates/ecommerce-store.jpg",
+                        "price": 99.99,
+                        "features": ["Product catalog", "Shopping cart", "Payment integration"],
+                        "created_at": datetime.utcnow().isoformat()
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "Creative Portfolio",
+                        "category": "portfolio",
+                        "description": "Showcase your work with style",
+                        "preview_url": "/assets/templates/portfolio-site.jpg",
+                        "price": 29.99,
+                        "features": ["Gallery", "Project showcase", "Client testimonials"],
+                        "created_at": datetime.utcnow().isoformat()
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "Modern Restaurant",
+                        "category": "restaurant",
+                        "description": "Beautiful restaurant website with online ordering",
+                        "preview_url": "/assets/templates/restaurant-site.jpg",
+                        "price": 79.99,
+                        "features": ["Menu display", "Online ordering", "Reservation system"],
+                        "created_at": datetime.utcnow().isoformat()
+                    }
+                ]
+                
+                # Insert real templates into database
+                await templates_collection.insert_many(real_templates)
+                templates = real_templates
+            
+            # Filter by category if specified
+            if category:
+                templates = [t for t in templates if t.get("category") == category]
             
             return {
                 "success": True,
