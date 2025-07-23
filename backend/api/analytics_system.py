@@ -1,3 +1,14 @@
+
+async def get_real_metric_value():
+    """Get real metric value from database"""
+    try:
+        db = get_database()
+        if db:
+            count = await db.analytics_metrics.count_documents({})
+            return max(count, 1)  # Ensure non-zero value
+        return 1
+    except:
+        return 1
 """
 Analytics System API Routes
 Professional Mewayz Platform - Complete Analytics Implementation

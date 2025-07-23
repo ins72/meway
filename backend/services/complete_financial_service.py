@@ -1105,3 +1105,98 @@ class CompleteFinancialService:
 
 # Global service instance
 financial_service = CompleteFinancialService()
+    async def create_payment(self, user_id: str, payment_data: dict) -> dict:
+        """Create new payment"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            payment = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "amount": payment_data.get("amount", 0),
+                "currency": payment_data.get("currency", "USD"),
+                "description": payment_data.get("description", ""),
+                "status": "pending",
+                "payment_method": payment_data.get("payment_method", "stripe"),
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            
+            await collections['payments'].insert_one(payment)
+            return {"success": True, "payment": payment, "message": "Payment created successfully"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def get_payment(self, payment_id: str, user_id: str) -> dict:
+        """Get payment details"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            payment = await collections['payments'].find_one({
+                "_id": payment_id,
+                "user_id": user_id
+            })
+            
+            if payment:
+                return {"success": True, "payment": payment}
+            else:
+                return {"success": False, "message": "Payment not found"}
+                
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def update_payment(self, payment_id: str, user_id: str, updates: dict) -> dict:
+        """Update payment"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            updates["updated_at"] = datetime.utcnow()
+            
+            result = await collections['payments'].update_one(
+                {"_id": payment_id, "user_id": user_id},
+                {"$set": updates}
+            )
+            
+            if result.modified_count > 0:
+                updated_payment = await collections['payments'].find_one({"_id": payment_id})
+                return {"success": True, "payment": updated_payment, "message": "Payment updated successfully"}
+            else:
+                return {"success": False, "message": "Payment not found or unauthorized"}
+                
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def refund_payment(self, payment_id: str, user_id: str, reason: str = None) -> dict:
+        """Process payment refund"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Update payment status to refunded
+            result = await collections['payments'].update_one(
+                {"_id": payment_id, "user_id": user_id},
+                {
+                    "$set": {
+                        "status": "refunded",
+                        "refunded_at": datetime.utcnow(),
+                        "refund_reason": reason or "User requested refund",
+                        "updated_at": datetime.utcnow()
+                    }
+                }
+            )
+            
+            if result.modified_count > 0:
+                return {"success": True, "message": "Payment refunded successfully"}
+            else:
+                return {"success": False, "message": "Payment not found or unauthorized"}
+                
+        except Exception as e:
+            return {"success": False, "message": str(e)}

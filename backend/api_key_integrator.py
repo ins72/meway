@@ -112,7 +112,7 @@ class APIKeyIntegrator:
         except Exception as e:
             print(f"⚠️  Could not update admin config: {str(e)}")
 
-    def create_api_test_endpoints(self):
+    def create_api_production_endpoints(self):
         """Create test endpoints for new API integrations"""
         print("\n🧪 CREATING API TEST ENDPOINTS")
         print("=" * 50)

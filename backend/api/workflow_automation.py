@@ -5,6 +5,7 @@ Sophisticated workflow automation with triggers, actions, and steps
 from fastapi import APIRouter, HTTPException, Depends, status, Query
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from core.database import get_database
 from pydantic import BaseModel
 import uuid
 

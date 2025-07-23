@@ -1411,3 +1411,39 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
 
 # Global service instance
 ecommerce_service = CompleteEcommerceService
+    async def cancel_order(self, order_id: str, user_id: str, reason: str = None) -> dict:
+        """Cancel order"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Check if user owns the order or is admin
+            order = await collections['orders'].find_one({
+                "_id": order_id,
+                "$or": [{"customer_id": user_id}, {"store_owner_id": user_id}]
+            })
+            
+            if not order:
+                return {"success": False, "message": "Order not found or unauthorized"}
+            
+            # Update order status
+            update_data = {
+                "status": "cancelled",
+                "cancelled_at": datetime.utcnow(),
+                "cancelled_by": user_id,
+                "cancellation_reason": reason or "User requested cancellation"
+            }
+            
+            result = await collections['orders'].update_one(
+                {"_id": order_id},
+                {"$set": update_data}
+            )
+            
+            if result.modified_count > 0:
+                return {"success": True, "message": "Order cancelled successfully"}
+            else:
+                return {"success": False, "message": "Failed to cancel order"}
+                
+        except Exception as e:
+            return {"success": False, "message": str(e)}

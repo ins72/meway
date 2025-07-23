@@ -75,3 +75,53 @@ class CRMService:
 
 # Global service instance
 crm_service = CRMService()
+    async def update_contact(self, contact_id: str, user_id: str, updates: dict) -> dict:
+        """Update contact"""
+        try:
+            db = get_database()
+            if not db:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Add update metadata
+            updates["updated_at"] = datetime.utcnow()
+            updates["updated_by"] = user_id
+            
+            result = await db.contacts.update_one(
+                {"_id": contact_id, "user_id": user_id},
+                {"$set": updates}
+            )
+            
+            if result.modified_count > 0:
+                updated_contact = await db.contacts.find_one({"_id": contact_id})
+                return {"success": True, "contact": updated_contact, "message": "Contact updated successfully"}
+            else:
+                return {"success": False, "message": "Contact not found or unauthorized"}
+                
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def delete_contact(self, contact_id: str, user_id: str) -> dict:
+        """Delete contact (soft delete)"""
+        try:
+            db = get_database()
+            if not db:
+                return {"success": False, "message": "Database unavailable"}
+            
+            result = await db.contacts.update_one(
+                {"_id": contact_id, "user_id": user_id},
+                {
+                    "$set": {
+                        "deleted": True,
+                        "deleted_at": datetime.utcnow(),
+                        "deleted_by": user_id
+                    }
+                }
+            )
+            
+            if result.modified_count > 0:
+                return {"success": True, "message": "Contact deleted successfully"}
+            else:
+                return {"success": False, "message": "Contact not found or unauthorized"}
+                
+        except Exception as e:
+            return {"success": False, "message": str(e)}

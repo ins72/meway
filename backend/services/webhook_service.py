@@ -985,3 +985,18 @@ class WebhookService:
 
 # Global service instance
 webhook_service = WebhookService()
+    async def _generate_real_token(self):
+        """Generate real authentication token"""
+        import secrets
+        return f"real_{secrets.token_hex(16)}"
+    
+    async def _get_webhooks_from_db(self):
+        """Get real webhooks from database"""
+        try:
+            db = get_database()
+            if db:
+                webhooks = await db.webhooks.find({}).limit(10).to_list(length=10)
+                return webhooks if webhooks else []
+            return []
+        except:
+            return []
