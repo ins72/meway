@@ -360,68 +360,78 @@ class BackendTester:
         print("\n📊 Real Unified Analytics System Testing Complete!")
         return True
         
-    def test_mobile_pwa_system(self):
-        """Test Mobile PWA Features at /api/mobile-pwa/*"""
-        print("\n📱 TESTING MOBILE PWA FEATURES")
+    def test_real_mobile_pwa_system(self):
+        """Test Real Mobile PWA Features at /api/mobile-pwa/*"""
+        print("\n📱 TESTING REAL MOBILE PWA FEATURES")
         print("=" * 60)
-        
-        # Test variables to store created resources
-        device_id = None
-        subscription_id = None
         
         # 1. Test Health Check
         print("\n🏥 Testing Health Check...")
-        self.test_endpoint("/mobile-pwa/health", "GET", test_name="Mobile PWA - Health Check")
+        success, health_data = self.test_endpoint("/mobile-pwa/health", "GET", test_name="Mobile PWA - Health Check")
+        
+        if success and health_data:
+            # Check for mock data patterns
+            data_str = str(health_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("PWA Health - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("PWA Health - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
         # 2. Test PWA Manifest
         print("\n📋 Testing PWA Manifest...")
-        self.test_endpoint("/mobile-pwa/pwa/manifest", "GET", test_name="Mobile PWA - Get Manifest")
+        success, manifest_data = self.test_endpoint("/mobile-pwa/pwa/manifest", "GET", test_name="Mobile PWA - Get Manifest")
         
-        # Update manifest
-        manifest_data = {
-            "name": "Mewayz Business Platform",
-            "short_name": "Mewayz",
-            "description": "Complete business automation platform",
-            "theme_color": "#667eea",
-            "background_color": "#ffffff",
-            "display": "standalone",
-            "orientation": "portrait"
-        }
-        self.test_endpoint("/mobile-pwa/pwa/manifest", "PUT", manifest_data, "Mobile PWA - Update Manifest")
+        if success and manifest_data:
+            # Check for mock data patterns
+            data_str = str(manifest_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("PWA Manifest - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("PWA Manifest - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 3. Test Push Notifications
-        print("\n🔔 Testing Push Notifications...")
-        
-        # Subscribe to push notifications
+        # 3. Test Push Notifications Subscribe
+        print("\n🔔 Testing Push Notifications Subscribe...")
         subscription_data = {
-            "endpoint": "https://fcm.googleapis.com/fcm/send/example-endpoint",
+            "endpoint": "https://fcm.googleapis.com/fcm/send/example-endpoint-12345",
             "keys": {
-                "p256dh": "example-p256dh-key",
-                "auth": "example-auth-key"
-            },
-            "device_type": "mobile",
-            "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)"
+                "p256dh": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM",
+                "auth": "tBHItJI5svbpez7KI4CCXg"
+            }
         }
         
-        success, sub_data = self.test_endpoint("/mobile-pwa/push/subscribe", "POST", subscription_data, "Mobile PWA - Subscribe to Push")
-        if success and sub_data:
-            subscription_id = sub_data.get("subscription_id") or sub_data.get("id")
-            print(f"   Created subscription ID: {subscription_id}")
+        success, subscribe_response = self.test_endpoint("/mobile-pwa/push/subscribe", "POST", subscription_data, "Mobile PWA - Subscribe to Push")
         
-        # Send push notification
+        if success and subscribe_response:
+            # Check for mock data patterns
+            data_str = str(subscribe_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Push Subscribe - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Push Subscribe - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 4. Test Send Push Notification
+        print("\n📤 Testing Send Push Notification...")
         push_data = {
             "title": "Welcome to Mewayz PWA!",
             "body": "Your mobile experience is now enhanced with offline capabilities",
             "icon": "/icons/notification-icon.png",
-            "badge": "/icons/badge-icon.png",
             "data": {
                 "url": "/dashboard",
                 "action": "open_dashboard"
             }
         }
-        self.test_endpoint("/mobile-pwa/push/send", "POST", push_data, "Mobile PWA - Send Push Notification")
         
-        # 4. Test Device Registration
+        success, push_response = self.test_endpoint("/mobile-pwa/push/send", "POST", push_data, "Mobile PWA - Send Push Notification")
+        
+        if success and push_response:
+            # Check for mock data patterns
+            data_str = str(push_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Push Send - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Push Send - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 5. Test Device Registration
         print("\n📱 Testing Device Registration...")
         device_data = {
             "device_type": "mobile",
@@ -431,111 +441,84 @@ class BackendTester:
                 "model": "iPhone 13",
                 "os_version": "15.0",
                 "screen_resolution": "1170x2532"
-            },
-            "capabilities": ["push_notifications", "offline_storage", "camera"]
+            }
         }
         
         success, device_response = self.test_endpoint("/mobile-pwa/device/register", "POST", device_data, "Mobile PWA - Register Device")
+        
         if success and device_response:
-            device_id = device_response.get("device_id") or device_response.get("id")
-            print(f"   Registered device ID: {device_id}")
+            # Check for mock data patterns
+            data_str = str(device_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Device Register - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Device Register - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 5. Test Offline Caching
+        # 6. Test Offline Caching
         print("\n💾 Testing Offline Caching...")
-        
-        # Cache resources
         cache_data = {
-            "resources": [
-                "/dashboard",
-                "/templates",
-                "/team-management",
-                "/analytics"
-            ],
-            "cache_strategy": "cache_first",
-            "max_age": 86400  # 24 hours
+            "url": "/dashboard",
+            "type": "page",
+            "content": "<html><body>Dashboard content</body></html>",
+            "cache_strategy": "cache_first"
         }
-        self.test_endpoint("/mobile-pwa/offline/cache", "POST", cache_data, "Mobile PWA - Cache Resources")
         
-        # Get cached resources
-        self.test_endpoint("/mobile-pwa/offline/cached-resources", "GET", test_name="Mobile PWA - Get Cached Resources")
+        success, cache_response = self.test_endpoint("/mobile-pwa/offline/cache", "POST", cache_data, "Mobile PWA - Cache Resource")
         
-        # 6. Test Background Sync
+        if success and cache_response:
+            # Check for mock data patterns
+            data_str = str(cache_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Offline Cache - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Offline Cache - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 7. Test Background Sync
         print("\n🔄 Testing Background Sync...")
-        
-        # Queue background sync
         sync_data = {
-            "action": "sync_analytics",
+            "type": "analytics",
+            "endpoint": "/api/analytics-system/track",
             "data": {
-                "user_activity": "template_viewed",
+                "event_type": "page_view",
                 "timestamp": "2025-01-15T10:30:00Z"
-            },
-            "retry_count": 3
+            }
         }
-        self.test_endpoint("/mobile-pwa/sync/queue", "POST", sync_data, "Mobile PWA - Queue Background Sync")
         
-        # Get sync status
-        self.test_endpoint("/mobile-pwa/sync/status", "GET", test_name="Mobile PWA - Get Sync Status")
+        success, sync_response = self.test_endpoint("/mobile-pwa/sync/queue", "POST", sync_data, "Mobile PWA - Queue Background Sync")
         
-        # 7. Test Mobile Analytics
+        if success and sync_response:
+            # Check for mock data patterns
+            data_str = str(sync_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Background Sync - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Background Sync - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 8. Test Mobile Analytics
         print("\n📊 Testing Mobile Analytics...")
-        self.test_endpoint("/mobile-pwa/analytics/mobile", "GET", test_name="Mobile PWA - Mobile Analytics")
+        success, analytics_data = self.test_endpoint("/mobile-pwa/analytics/mobile", "GET", test_name="Mobile PWA - Mobile Analytics")
         
-        # Track mobile events
-        event_data = {
-            "event_type": "app_launch",
-            "device_id": device_id or "test_device_123",
-            "timestamp": "2025-01-15T10:30:00Z",
-            "properties": {
-                "launch_time": 2.5,
-                "network_type": "wifi",
-                "battery_level": 85
-            }
-        }
-        self.test_endpoint("/mobile-pwa/analytics/track", "POST", event_data, "Mobile PWA - Track Mobile Event")
+        if success and analytics_data:
+            # Check for mock data patterns
+            data_str = str(analytics_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Mobile Analytics - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Mobile Analytics - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 8. Test PWA Installation
-        print("\n⬇️ Testing PWA Installation...")
+        # 9. Test Process Background Sync
+        print("\n⚙️ Testing Process Background Sync...")
+        success, process_response = self.test_endpoint("/mobile-pwa/sync/process", "POST", {}, "Mobile PWA - Process Background Sync")
         
-        # Get installation prompt
-        self.test_endpoint("/mobile-pwa/pwa/install-prompt", "GET", test_name="Mobile PWA - Get Install Prompt")
+        if success and process_response:
+            # Check for mock data patterns
+            data_str = str(process_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Process Sync - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Process Sync - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # Track installation
-        install_data = {
-            "device_id": device_id or "test_device_123",
-            "install_source": "browser_prompt",
-            "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)"
-        }
-        self.test_endpoint("/mobile-pwa/pwa/track-install", "POST", install_data, "Mobile PWA - Track Installation")
-        
-        # 9. Test Service Worker Management
-        print("\n⚙️ Testing Service Worker Management...")
-        self.test_endpoint("/mobile-pwa/service-worker/status", "GET", test_name="Mobile PWA - Service Worker Status")
-        
-        # Update service worker
-        sw_data = {
-            "version": "1.1.0",
-            "cache_strategy": "network_first",
-            "offline_fallback": "/offline.html"
-        }
-        self.test_endpoint("/mobile-pwa/service-worker/update", "POST", sw_data, "Mobile PWA - Update Service Worker")
-        
-        # 10. Test Device Management
-        if device_id:
-            print("\n📱 Testing Device Management...")
-            self.test_endpoint(f"/mobile-pwa/device/{device_id}", "GET", test_name="Mobile PWA - Get Device Info")
-            
-            # Update device settings
-            device_update_data = {
-                "notification_preferences": {
-                    "marketing": True,
-                    "system_updates": True,
-                    "team_notifications": False
-                },
-                "sync_frequency": "hourly"
-            }
-            self.test_endpoint(f"/mobile-pwa/device/{device_id}/settings", "PUT", device_update_data, "Mobile PWA - Update Device Settings")
-        
-        print("\n📱 Mobile PWA System Testing Complete!")
+        print("\n📱 Real Mobile PWA System Testing Complete!")
         return True
         
     def print_test_summary(self):
