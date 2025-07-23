@@ -77,7 +77,7 @@ class DuplicateCleanupReviewTester:
                 "username": TEST_EMAIL,
                 "password": TEST_PASSWORD
             }
-            response = self.session.post(f"{API_BASE}/auth/login", data=login_data)
+            response = self.session.post(f"{API_BASE}/auth/login", json=login_data)
             
             if response.status_code == 200:
                 token_data = response.json()
