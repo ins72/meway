@@ -165,8 +165,8 @@ class FinalValidationTester:
         
         # Test additional AI automation endpoints
         print("\n🔧 Testing Additional AI Automation Endpoints...")
-        self.test_endpoint("/ai-automation/analytics", "GET", test_name="AI Automation - Analytics")
-        self.test_endpoint("/ai-automation/health", "GET", test_name="AI Automation - Health Check")
+        self.test_endpoint("/ai-automation/analytics/overview", "GET", test_name="AI Automation - Analytics Overview")
+        self.test_endpoint("/automation/workflows", "GET", test_name="Automation - Workflows")
         
         # Test additional email marketing endpoints
         print("\n📬 Testing Additional Email Marketing Endpoints...")
