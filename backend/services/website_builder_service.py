@@ -594,9 +594,14 @@ class WebsiteBuilderService:
             if user_id:
                 query["user_id"] = user_id
             
-            # Execute query
+            # Execute query with ObjectId serialization
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            
+            # Convert ObjectIds to strings for JSON serialization
+            for doc in docs:
+                if "_id" in doc:
+                    doc["_id"] = str(doc["_id"])
             
             # Get total count
             total = await collection.count_documents(query)
