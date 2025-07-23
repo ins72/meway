@@ -534,44 +534,7 @@ class MediaService:
         else:
             return 'other'
     
-    @staticmethod
-    async def move_files_to_folder(file_ids: List[str], folder_id: str, user_id: str) -> Dict[str, Any]:
-        """Move multiple files to folder"""
-        database = get_database()
-        
-        # Get user's workspace
-        workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
-        
-        if not workspace:
-            raise Exception("Workspace not found")
-        
-        # Update files folder
-        files_collection = database.media_files
-        result = await files_collection.update_many(
-            {
-                "_id": {"$in": file_ids},
-                "workspace_id": str(workspace["_id"])
-            },
-            {"$set": {"folder": folder_id, "updated_at": datetime.utcnow()}}
-        )
-        
-        return {
-            "moved_count": result.modified_count,
-            "requested_count": len(file_ids)
-        }
-            
-            return {
-                "success": True,
-                "message": f"Media created successfully",
-                "data": media_data,
-                "id": media_data["id"]
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create media: {str(e)}"
-            }
+
 
     def _format_file_size(size_bytes: int) -> str:
         """Format file size in human readable format"""
