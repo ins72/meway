@@ -98,7 +98,7 @@ class FocusedAuthenticationTester:
             
             response = self.session.post(
                 f"{API_BASE}/auth/login",
-                data=login_data,  # OAuth2PasswordRequestForm expects form data
+                json=login_data,  # Send as JSON data
                 timeout=15
             )
             
