@@ -171,7 +171,7 @@ class ComprehensiveBackendTester:
         # Test 2: List Referrals (READ)
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/referral/list", headers=headers) as response:
+            async with self.session.get(f"{self.api_url}/referral/referrals", headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
