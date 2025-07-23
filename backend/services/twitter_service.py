@@ -3,11 +3,13 @@ Twitter/X API Integration Service
 Real Twitter API integration using provided credentials
 """
 
+from bson import ObjectId
 import uuid
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 import requests
+from core.objectid_serializer import safe_document_return, safe_documents_return
 
 logger = logging.getLogger(__name__)
 
