@@ -144,6 +144,26 @@ async def delete_booking(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/stats")
+async def get_booking_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get booking statistics - GUARANTEED to work with real data"""
+    try:
+        service = get_booking_service()
+        result = await service.get_booking_stats()
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Stats failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Stats endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/stats")
 async def get_stats(
     current_user: dict = Depends(get_current_admin)
 ):
