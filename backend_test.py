@@ -4027,6 +4027,8 @@ class BackendTester:
         
         print("\n🔍 Existing Endpoints Testing Complete!")
         return True
+    
+    def generate_final_report(self):
         """Generate comprehensive final report"""
         print("\n" + "="*80)
         print("📊 FINAL COMPREHENSIVE BACKEND VERIFICATION REPORT")
@@ -4048,22 +4050,26 @@ class BackendTester:
         feature_results = {}
         for result in self.test_results:
             test_name = result["test"]
-            if "Team Management" in test_name or "Datetime Fix" in test_name:
-                feature = "Fixed Critical Issues - Team Management"
-            elif "AI Workflow" in test_name or "Instagram" in test_name or "PWA" in test_name:
-                feature = "Fixed Critical Issues - Other"
-            elif "Escrow" in test_name or "Dispute" in test_name:
-                feature = "New Features - Escrow System"
-            elif "Social Media" in test_name or "Schedule" in test_name:
-                feature = "New Features - Social Media"
-            elif "Template Marketplace" in test_name:
-                feature = "New Features - Template Marketplace"
+            if "Team Management" in test_name or "Teams" in test_name or "Datetime Fix" in test_name:
+                feature = "Team Management & Collaboration"
+            elif "AI" in test_name or "Workflow" in test_name:
+                feature = "AI & Automation"
+            elif "Instagram" in test_name or "Social Media" in test_name or "Twitter" in test_name:
+                feature = "Social Media Integration"
+            elif "PWA" in test_name or "Mobile" in test_name or "Manifest" in test_name:
+                feature = "Mobile PWA Features"
+            elif "Escrow" in test_name or "Dispute" in test_name or "Tokens" in test_name:
+                feature = "Payment & Escrow System"
+            elif "Template" in test_name or "Marketplace" in test_name:
+                feature = "Template Marketplace"
             elif "Validation" in test_name or "Error Handling" in test_name:
                 feature = "Validation & Error Handling"
             elif "Performance" in test_name or "Authentication" in test_name:
                 feature = "Performance & Integration"
+            elif "Analytics" in test_name or "Dashboard" in test_name:
+                feature = "Analytics & Dashboard"
             else:
-                feature = "API Endpoint Coverage"
+                feature = "Other Features"
             
             if feature not in feature_results:
                 feature_results[feature] = {"passed": 0, "failed": 0, "total": 0}
@@ -4081,13 +4087,27 @@ class BackendTester:
                 status = "✅" if feature_success_rate >= 75 else "⚠️" if feature_success_rate >= 50 else "❌"
                 print(f"   {status} {feature}: {stats['passed']}/{stats['total']} ({feature_success_rate:.1f}%)")
         
-        print(f"\n🔍 FAILED TESTS SUMMARY:")
+        print(f"\n🔍 CRITICAL ISSUES FOUND:")
         failed_results = [r for r in self.test_results if not r["success"]]
+        critical_issues = []
+        
         if failed_results:
-            for result in failed_results:
-                print(f"   ❌ {result['test']}: {result['message']}")
+            # Group failures by type
+            endpoint_404_count = len([r for r in failed_results if "404" in r["message"]])
+            validation_issues = len([r for r in failed_results if "422" in r["message"] or "400" in r["message"]])
+            server_errors = len([r for r in failed_results if "500" in r["message"]])
+            
+            if endpoint_404_count > 0:
+                critical_issues.append(f"❌ {endpoint_404_count} endpoints not implemented (404 errors)")
+            if validation_issues > 0:
+                critical_issues.append(f"⚠️ {validation_issues} validation schema issues")
+            if server_errors > 0:
+                critical_issues.append(f"🔴 {server_errors} server errors (500)")
+                
+            for issue in critical_issues:
+                print(f"   {issue}")
         else:
-            print("   🎉 No failed tests!")
+            print("   🎉 No critical issues found!")
         
         print(f"\n🎯 PRODUCTION READINESS ASSESSMENT:")
         if success_rate >= 90:
