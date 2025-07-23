@@ -226,8 +226,7 @@ class MediaService:
         }
     
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def update_file_metadata(file_id: str, user_id: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
         """Update file metadata"""
         database = get_database()
         
