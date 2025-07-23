@@ -238,12 +238,12 @@ class MediaService:
             raise Exception("Workspace not found")
         
         # Update file
-        updates["updated_at"] = datetime.utcnow()
+        metadata["updated_at"] = datetime.utcnow()
         
         files_collection = database.media_files
         result = await files_collection.update_one(
             {"_id": file_id, "workspace_id": str(workspace["_id"])},
-            {"$set": updates}
+            {"$set": metadata}
         if result.matched_count == 0:
             raise Exception("File not found")
         
