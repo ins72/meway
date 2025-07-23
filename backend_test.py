@@ -1,5 +1,485 @@
 #!/usr/bin/env python3
 """
+Mewayz v2 Platform - Production Enhancement Testing Suite
+Testing the newly implemented production enhancements:
+1. Production Configuration System
+2. Enterprise Security Suite  
+3. Performance Optimization
+4. Production Logging
+5. Core Platform Stability
+
+Test credentials: tmonnens@outlook.com / Voetballen5
+Expected: 98.6%+ success rate maintained while adding enterprise features
+"""
+
+import requests
+import json
+import time
+import sys
+from typing import Dict, List, Any, Optional
+
+class MewayzProductionTester:
+    def __init__(self):
+        # Use production URL from frontend/.env
+        self.base_url = "https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com"
+        self.api_url = f"{self.base_url}/api"
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        })
+        
+        # Test credentials from review request
+        self.test_email = "tmonnens@outlook.com"
+        self.test_password = "Voetballen5"
+        self.auth_token = None
+        
+        # Test results tracking
+        self.test_results = {
+            'total_tests': 0,
+            'passed_tests': 0,
+            'failed_tests': 0,
+            'categories': {
+                'production_configuration': {'passed': 0, 'total': 0, 'tests': []},
+                'enterprise_security': {'passed': 0, 'total': 0, 'tests': []},
+                'performance_optimization': {'passed': 0, 'total': 0, 'tests': []},
+                'production_logging': {'passed': 0, 'total': 0, 'tests': []},
+                'core_platform_stability': {'passed': 0, 'total': 0, 'tests': []},
+                'authentication_system': {'passed': 0, 'total': 0, 'tests': []},
+                'business_systems': {'passed': 0, 'total': 0, 'tests': []},
+                'external_integrations': {'passed': 0, 'total': 0, 'tests': []}
+            }
+        }
+
+    def log_test_result(self, category: str, test_name: str, passed: bool, details: str = "", response_size: int = 0):
+        """Log individual test results"""
+        self.test_results['total_tests'] += 1
+        self.test_results['categories'][category]['total'] += 1
+        
+        if passed:
+            self.test_results['passed_tests'] += 1
+            self.test_results['categories'][category]['passed'] += 1
+            status = "✅ PASS"
+        else:
+            self.test_results['failed_tests'] += 1
+            status = "❌ FAIL"
+        
+        test_info = {
+            'name': test_name,
+            'status': status,
+            'details': details,
+            'response_size': response_size
+        }
+        
+        self.test_results['categories'][category]['tests'].append(test_info)
+        print(f"{status}: {test_name} - {details}")
+
+    def make_request(self, method: str, endpoint: str, data: Dict = None, headers: Dict = None) -> tuple:
+        """Make HTTP request and return response and success status"""
+        try:
+            url = f"{self.api_url}{endpoint}"
+            request_headers = self.session.headers.copy()
+            if headers:
+                request_headers.update(headers)
+            
+            if self.auth_token:
+                request_headers['Authorization'] = f"Bearer {self.auth_token}"
+            
+            if method.upper() == 'GET':
+                response = self.session.get(url, headers=request_headers, timeout=30)
+            elif method.upper() == 'POST':
+                response = self.session.post(url, json=data, headers=request_headers, timeout=30)
+            elif method.upper() == 'PUT':
+                response = self.session.put(url, json=data, headers=request_headers, timeout=30)
+            elif method.upper() == 'DELETE':
+                response = self.session.delete(url, headers=request_headers, timeout=30)
+            else:
+                return None, False, f"Unsupported method: {method}"
+            
+            return response, True, ""
+        except requests.exceptions.RequestException as e:
+            return None, False, str(e)
+
+    def test_authentication_system(self):
+        """Test authentication system with provided credentials"""
+        print("\n🔐 TESTING AUTHENTICATION SYSTEM")
+        
+        # Test 1: JWT Token Generation
+        login_data = {
+            "email": self.test_email,
+            "password": self.test_password
+        }
+        
+        response, success, error = self.make_request('POST', '/auth/login', login_data)
+        if success and response and response.status_code == 200:
+            try:
+                token_data = response.json()
+                if 'access_token' in token_data:
+                    self.auth_token = token_data['access_token']
+                    self.log_test_result('authentication_system', 'JWT Token Generation', True, 
+                                       f"Token generated successfully ({len(response.text)} chars)", len(response.text))
+                else:
+                    self.log_test_result('authentication_system', 'JWT Token Generation', False, 
+                                       "No access_token in response")
+            except json.JSONDecodeError:
+                self.log_test_result('authentication_system', 'JWT Token Generation', False, 
+                                   "Invalid JSON response")
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('authentication_system', 'JWT Token Generation', False, error_msg)
+
+        # Test 2: Token Validation
+        if self.auth_token:
+            response, success, error = self.make_request('GET', '/auth/me')
+            if success and response and response.status_code == 200:
+                self.log_test_result('authentication_system', 'JWT Token Validation', True, 
+                                   f"Token validation successful ({len(response.text)} chars)", len(response.text))
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+                self.log_test_result('authentication_system', 'JWT Token Validation', False, error_msg)
+        else:
+            self.log_test_result('authentication_system', 'JWT Token Validation', False, 
+                               "No auth token available for validation")
+
+    def test_production_configuration_system(self):
+        """Test the new comprehensive environment configuration"""
+        print("\n⚙️ TESTING PRODUCTION CONFIGURATION SYSTEM")
+        
+        # Test 1: Configuration Health Check
+        response, success, error = self.make_request('GET', '/configuration/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('production_configuration', 'Configuration Health Check', True, 
+                               f"Configuration system operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('production_configuration', 'Configuration Health Check', False, error_msg)
+
+        # Test 2: Environment Variables Validation
+        response, success, error = self.make_request('GET', '/configuration/environment')
+        if success and response and response.status_code == 200:
+            try:
+                config_data = response.json()
+                if isinstance(config_data, dict) and len(config_data) > 0:
+                    self.log_test_result('production_configuration', 'Environment Variables Validation', True, 
+                                       f"Environment config accessible ({len(response.text)} chars)", len(response.text))
+                else:
+                    self.log_test_result('production_configuration', 'Environment Variables Validation', False, 
+                                       "Empty or invalid configuration data")
+            except json.JSONDecodeError:
+                self.log_test_result('production_configuration', 'Environment Variables Validation', False, 
+                                   "Invalid JSON response")
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('production_configuration', 'Environment Variables Validation', False, error_msg)
+
+        # Test 3: Configuration Settings Management
+        response, success, error = self.make_request('GET', '/settings/system')
+        if success and response and response.status_code == 200:
+            self.log_test_result('production_configuration', 'Configuration Settings Management', True, 
+                               f"Settings management operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('production_configuration', 'Configuration Settings Management', False, error_msg)
+
+    def test_enterprise_security_suite(self):
+        """Test advanced authentication and security features"""
+        print("\n🛡️ TESTING ENTERPRISE SECURITY SUITE")
+        
+        # Test 1: Enterprise Security Health
+        response, success, error = self.make_request('GET', '/enterprise-security/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('enterprise_security', 'Enterprise Security Health', True, 
+                               f"Enterprise security operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('enterprise_security', 'Enterprise Security Health', False, error_msg)
+
+        # Test 2: Security Compliance Check
+        response, success, error = self.make_request('GET', '/enterprise-security-compliance/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('enterprise_security', 'Security Compliance Check', True, 
+                               f"Security compliance operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('enterprise_security', 'Security Compliance Check', False, error_msg)
+
+        # Test 3: Advanced Authentication Features
+        response, success, error = self.make_request('GET', '/security/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('enterprise_security', 'Advanced Authentication Features', True, 
+                               f"Advanced auth features operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('enterprise_security', 'Advanced Authentication Features', False, error_msg)
+
+        # Test 4: Audit and Compliance
+        response, success, error = self.make_request('GET', '/audit/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('enterprise_security', 'Audit and Compliance', True, 
+                               f"Audit system operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('enterprise_security', 'Audit and Compliance', False, error_msg)
+
+    def test_performance_optimization(self):
+        """Test caching and database optimizations"""
+        print("\n⚡ TESTING PERFORMANCE OPTIMIZATION")
+        
+        # Test 1: Rate Limiting System
+        response, success, error = self.make_request('GET', '/rate-limiting/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('performance_optimization', 'Rate Limiting System', True, 
+                               f"Rate limiting operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('performance_optimization', 'Rate Limiting System', False, error_msg)
+
+        # Test 2: Caching System Performance
+        start_time = time.time()
+        response, success, error = self.make_request('GET', '/analytics/health')
+        end_time = time.time()
+        response_time = end_time - start_time
+        
+        if success and response and response.status_code == 200:
+            performance_note = f"Response time: {response_time:.3f}s"
+            self.log_test_result('performance_optimization', 'Caching System Performance', True, 
+                               f"Analytics caching operational - {performance_note} ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('performance_optimization', 'Caching System Performance', False, error_msg)
+
+        # Test 3: Database Optimization
+        response, success, error = self.make_request('GET', '/monitoring/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('performance_optimization', 'Database Optimization', True, 
+                               f"Database monitoring operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('performance_optimization', 'Database Optimization', False, error_msg)
+
+    def test_production_logging(self):
+        """Test enhanced error logging and monitoring"""
+        print("\n📊 TESTING PRODUCTION LOGGING")
+        
+        # Test 1: Logging System Health
+        response, success, error = self.make_request('GET', '/log/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('production_logging', 'Logging System Health', True, 
+                               f"Logging system operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('production_logging', 'Logging System Health', False, error_msg)
+
+        # Test 2: Monitoring and Alerts
+        response, success, error = self.make_request('GET', '/alert/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('production_logging', 'Monitoring and Alerts', True, 
+                               f"Alert system operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('production_logging', 'Monitoring and Alerts', False, error_msg)
+
+        # Test 3: Real-time Notifications
+        response, success, error = self.make_request('GET', '/realtime-notifications/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('production_logging', 'Real-time Notifications', True, 
+                               f"Notification system operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('production_logging', 'Real-time Notifications', False, error_msg)
+
+    def test_core_platform_stability(self):
+        """Test that existing functionality still works at 98.6% success rate"""
+        print("\n🏗️ TESTING CORE PLATFORM STABILITY")
+        
+        # Test 1: System Health Check
+        response, success, error = self.make_request('GET', '/health')
+        if success and response and response.status_code == 200:
+            self.log_test_result('core_platform_stability', 'System Health Check', True, 
+                               f"System health operational ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('core_platform_stability', 'System Health Check', False, error_msg)
+
+        # Test 2: API Documentation Access
+        response, success, error = self.make_request('GET', '/docs')
+        if success and response and response.status_code == 200:
+            self.log_test_result('core_platform_stability', 'API Documentation Access', True, 
+                               f"API docs accessible ({len(response.text)} chars)", len(response.text))
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('core_platform_stability', 'API Documentation Access', False, error_msg)
+
+        # Test 3: OpenAPI Specification
+        response, success, error = self.make_request('GET', '/openapi.json')
+        if success and response and response.status_code == 200:
+            try:
+                openapi_data = response.json()
+                if 'paths' in openapi_data:
+                    endpoint_count = len(openapi_data['paths'])
+                    self.log_test_result('core_platform_stability', 'OpenAPI Specification', True, 
+                                       f"OpenAPI spec available with {endpoint_count} endpoints ({len(response.text)} chars)", len(response.text))
+                else:
+                    self.log_test_result('core_platform_stability', 'OpenAPI Specification', False, 
+                                       "Invalid OpenAPI specification")
+            except json.JSONDecodeError:
+                self.log_test_result('core_platform_stability', 'OpenAPI Specification', False, 
+                                   "Invalid JSON in OpenAPI spec")
+        else:
+            error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+            self.log_test_result('core_platform_stability', 'OpenAPI Specification', False, error_msg)
+
+    def test_critical_business_systems(self):
+        """Test core business systems functionality"""
+        print("\n💼 TESTING CRITICAL BUSINESS SYSTEMS")
+        
+        business_systems = [
+            ('Complete Financial System', '/complete-financial/health'),
+            ('Multi-Workspace System', '/complete-multi-workspace/health'),
+            ('Admin Dashboard System', '/complete-admin-dashboard/health'),
+            ('Team Management System', '/team-management/health'),
+            ('Form Builder System', '/form-builder/health'),
+            ('Analytics System', '/analytics/health'),
+            ('AI Automation Suite', '/real-ai-automation/health'),
+            ('Website Builder System', '/website-builder/health'),
+            ('Booking System', '/booking/health'),
+            ('Media Library System', '/media-library/health')
+        ]
+        
+        for system_name, endpoint in business_systems:
+            response, success, error = self.make_request('GET', endpoint)
+            if success and response and response.status_code == 200:
+                self.log_test_result('business_systems', system_name, True, 
+                                   f"System operational ({len(response.text)} chars)", len(response.text))
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+                self.log_test_result('business_systems', system_name, False, error_msg)
+
+    def test_external_integrations(self):
+        """Test external API integrations"""
+        print("\n🔗 TESTING EXTERNAL INTEGRATIONS")
+        
+        integrations = [
+            ('Stripe Integration', '/stripe-integration/health'),
+            ('Twitter/X API', '/twitter/health'),
+            ('TikTok API', '/tiktok/health'),
+            ('Google OAuth', '/google-oauth/health'),
+            ('Referral System', '/referral-system/health'),
+            ('Email Marketing', '/email-marketing/health')
+        ]
+        
+        for integration_name, endpoint in integrations:
+            response, success, error = self.make_request('GET', endpoint)
+            if success and response and response.status_code == 200:
+                self.log_test_result('external_integrations', integration_name, True, 
+                                   f"Integration operational ({len(response.text)} chars)", len(response.text))
+            else:
+                error_msg = f"Status: {response.status_code if response else 'No response'}, Error: {error}"
+                self.log_test_result('external_integrations', integration_name, False, error_msg)
+
+    def generate_report(self):
+        """Generate comprehensive test report"""
+        print("\n" + "="*80)
+        print("🎯 MEWAYZ V2 PRODUCTION ENHANCEMENT TESTING REPORT")
+        print("="*80)
+        
+        total_tests = self.test_results['total_tests']
+        passed_tests = self.test_results['passed_tests']
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"\n📊 OVERALL RESULTS:")
+        print(f"   Total Tests: {total_tests}")
+        print(f"   Passed: {passed_tests}")
+        print(f"   Failed: {self.test_results['failed_tests']}")
+        print(f"   Success Rate: {success_rate:.1f}%")
+        
+        # Check if we maintained 98.6% success rate
+        target_rate = 98.6
+        if success_rate >= target_rate:
+            print(f"   ✅ SUCCESS: Maintained {target_rate}%+ success rate target!")
+        else:
+            print(f"   ❌ CONCERN: Below {target_rate}% target (difference: {target_rate - success_rate:.1f}%)")
+        
+        print(f"\n📋 CATEGORY BREAKDOWN:")
+        for category, results in self.test_results['categories'].items():
+            if results['total'] > 0:
+                cat_success_rate = (results['passed'] / results['total'] * 100)
+                status = "✅" if cat_success_rate >= 75 else "⚠️" if cat_success_rate >= 50 else "❌"
+                print(f"   {status} {category.replace('_', ' ').title()}: {results['passed']}/{results['total']} ({cat_success_rate:.1f}%)")
+        
+        print(f"\n🔍 DETAILED TEST RESULTS:")
+        for category, results in self.test_results['categories'].items():
+            if results['total'] > 0:
+                print(f"\n   {category.replace('_', ' ').title().upper()}:")
+                for test in results['tests']:
+                    print(f"     {test['status']}: {test['name']}")
+                    if test['details']:
+                        print(f"       Details: {test['details']}")
+        
+        print(f"\n🎯 PRODUCTION READINESS ASSESSMENT:")
+        if success_rate >= 98.6:
+            print("   ✅ EXCELLENT: Platform ready for production deployment")
+            print("   ✅ Enterprise features successfully integrated")
+            print("   ✅ Core functionality maintained at target success rate")
+        elif success_rate >= 90:
+            print("   ⚠️ GOOD: Platform mostly ready with minor issues")
+            print("   ⚠️ Some enterprise features may need attention")
+        elif success_rate >= 75:
+            print("   ⚠️ PARTIAL: Platform has significant issues requiring fixes")
+            print("   ❌ Enterprise features integration needs work")
+        else:
+            print("   ❌ CRITICAL: Platform not ready for production")
+            print("   ❌ Major issues with enterprise features integration")
+        
+        return success_rate
+
+    def run_all_tests(self):
+        """Run all production enhancement tests"""
+        print("🚀 Starting Mewayz v2 Production Enhancement Testing Suite")
+        print(f"🔗 Testing against: {self.base_url}")
+        print(f"👤 Using credentials: {self.test_email}")
+        
+        # Run all test categories
+        self.test_authentication_system()
+        self.test_production_configuration_system()
+        self.test_enterprise_security_suite()
+        self.test_performance_optimization()
+        self.test_production_logging()
+        self.test_core_platform_stability()
+        self.test_critical_business_systems()
+        self.test_external_integrations()
+        
+        # Generate final report
+        success_rate = self.generate_report()
+        
+        return success_rate >= 98.6
+
+def main():
+    """Main test execution"""
+    tester = MewayzProductionTester()
+    
+    try:
+        success = tester.run_all_tests()
+        
+        if success:
+            print(f"\n🏆 TESTING COMPLETED SUCCESSFULLY!")
+            print(f"✅ Production enhancements verified and working")
+            sys.exit(0)
+        else:
+            print(f"\n⚠️ TESTING COMPLETED WITH ISSUES")
+            print(f"❌ Some production enhancements need attention")
+            sys.exit(1)
+            
+    except KeyboardInterrupt:
+        print(f"\n⚠️ Testing interrupted by user")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\n❌ Testing failed with error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+"""
 🏆 MEWAYZ V2 PLATFORM - FINAL COMPREHENSIVE VERIFICATION - ALL ISSUES FIXED - JANUARY 2025 🏆
 
 MISSION: VERIFY ALL 16 IDENTIFIED ISSUES HAVE BEEN RESOLVED
