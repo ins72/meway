@@ -70,9 +70,9 @@ async def get_email_marketing_dashboard(current_user: dict = Depends(get_current
                 "total_campaigns": total_campaigns,
                 "total_subscribers": total_subscribers,
                 "total_emails_sent": total_sent,
-                "average_open_rate": round(await service.get_metric(), 1),
-                "average_click_rate": round(await service.get_metric(), 1),
-                "growth_rate": round(await service.get_metric(), 1)
+                "average_open_rate": round(await email_service.get_performance_metrics(user_id), 1),
+                "average_click_rate": round(await email_service.get_performance_metrics(user_id), 1),
+                "growth_rate": round(await email_service.get_subscriber_growth(user_id), 1)
             },
             "recent_campaigns": [
                 {
