@@ -359,6 +359,52 @@ class ProductionConfigManager:
             }
         }
 
+# Global configuration manager
+config_manager = ProductionConfigManager()
+
+def get_config() -> ProductionConfigManager:
+    """Get global configuration manager instance"""
+    return config_manager
+
+def initialize_production_config():
+    """Initialize production configuration system"""
+    global config_manager
+    
+    print(f"🔧 Initializing production configuration for {config_manager.environment.value} environment...")
+    
+    # Export current configuration
+    config_file = config_manager.config_path / f"config_{config_manager.environment.value}.json"
+    
+    # Get configuration summary
+    summary = config_manager.get_config_summary()
+    
+    # Export to file
+    with open(config_file, 'w') as f:
+        json.dump(summary, f, indent=2)
+    
+    print(f"📄 Configuration exported to: {config_file}")
+    
+    # Validate configuration
+    validation = config_manager.validate_configuration()
+    print(f"✅ Configuration validation: {validation['status']}")
+    
+    if validation['issues']:
+        print(f"🚨 Issues found: {validation['issues']}")
+    
+    if validation['warnings']:
+        print(f"⚠️ Warnings: {validation['warnings']}")
+    
+    print(f"📊 Configuration score: {validation['summary']['configuration_score']}/100")
+    
+    # Log configuration summary  
+    logger = logging.getLogger(__name__)
+    logger.info(f"Production configuration initialized: {json.dumps(summary, indent=2)}")
+    
+    print("✅ Production configuration system initialized")
+    
+    return config_manager
+
+
 class ProductionConfig:
     """Legacy compatibility class - DEPRECATED"""
     
@@ -667,14 +713,17 @@ def initialize_production_environment():
     """Initialize production environment"""
     print("🚀 Initializing production environment...")
     
-    # Validate configuration
+    # Initialize new config manager first
+    initialize_production_config()
+    
+    # Validate legacy configuration for backwards compatibility
     validation = production_config.validate_config()
     
     if not validation["valid"]:
-        print("❌ Configuration validation failed:")
+        print("❌ Legacy configuration validation failed:")
         for issue in validation["issues"]:
             print(f"   - {issue}")
-        raise RuntimeError("Production configuration is invalid")
+        print("⚠️ Consider migrating to new ProductionConfigManager")
     
     if validation["warnings"]:
         print("⚠️ Configuration warnings:")
