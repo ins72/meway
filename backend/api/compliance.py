@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=ComplianceResponse, status_code=status.HTTP_201_CREATED)
 async def create_compliance(
-    item: ComplianceCreate,
+    item: item: ComplianceCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new compliance with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_compliance_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=ComplianceResponse)
 async def bulk_create_compliances(
-    items: List[ComplianceCreate],
+    items: items: List[ComplianceCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple compliances"""

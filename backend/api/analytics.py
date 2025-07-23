@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=AnalyticsResponse, status_code=status.HTTP_201_CREATED)
 async def create_analytics(
-    item: AnalyticsCreate,
+    item: item: AnalyticsCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new analytics with comprehensive validation"""
@@ -268,7 +268,7 @@ async def get_analytics_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=AnalyticsResponse)
 async def bulk_create_analyticss(
-    items: List[AnalyticsCreate],
+    items: items: List[AnalyticsCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple analyticss"""

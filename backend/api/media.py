@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=MediaResponse, status_code=status.HTTP_201_CREATED)
 async def create_media(
-    item: MediaCreate,
+    item: item: MediaCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new media with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_media_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=MediaResponse)
 async def bulk_create_medias(
-    items: List[MediaCreate],
+    items: items: List[MediaCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple medias"""

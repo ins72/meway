@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=IntegrationResponse, status_code=status.HTTP_201_CREATED)
 async def create_integration(
-    item: IntegrationCreate,
+    item: item: IntegrationCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new integration with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_integration_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=IntegrationResponse)
 async def bulk_create_integrations(
-    items: List[IntegrationCreate],
+    items: items: List[IntegrationCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple integrations"""

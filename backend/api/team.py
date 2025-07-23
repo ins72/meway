@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=TeamResponse, status_code=status.HTTP_201_CREATED)
 async def create_team(
-    item: TeamCreate,
+    item: item: TeamCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new team with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_team_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=TeamResponse)
 async def bulk_create_teams(
-    items: List[TeamCreate],
+    items: items: List[TeamCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple teams"""

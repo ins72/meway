@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=AutomationResponse, status_code=status.HTTP_201_CREATED)
 async def create_automation(
-    item: AutomationCreate,
+    item: item: AutomationCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new automation with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_automation_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=AutomationResponse)
 async def bulk_create_automations(
-    items: List[AutomationCreate],
+    items: items: List[AutomationCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple automations"""

@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=CrmResponse, status_code=status.HTTP_201_CREATED)
 async def create_crm(
-    item: CrmCreate,
+    item: item: CrmCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new crm with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_crm_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=CrmResponse)
 async def bulk_create_crms(
-    items: List[CrmCreate],
+    items: items: List[CrmCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple crms"""

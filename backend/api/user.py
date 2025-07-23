@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(
-    item: UserCreate,
+    item: item: UserCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new user with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_user_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=UserResponse)
 async def bulk_create_users(
-    items: List[UserCreate],
+    items: items: List[UserCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple users"""

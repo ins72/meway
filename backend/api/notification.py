@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=NotificationResponse, status_code=status.HTTP_201_CREATED)
 async def create_notification(
-    item: NotificationCreate,
+    item: item: NotificationCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new notification with comprehensive validation"""
@@ -269,7 +269,7 @@ async def get_notification_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=NotificationResponse)
 async def bulk_create_notifications(
-    items: List[NotificationCreate],
+    items: items: List[NotificationCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple notifications"""
