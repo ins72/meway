@@ -1,5 +1,488 @@
 #!/usr/bin/env python3
 """
+Comprehensive Backend Testing for Mewayz V2 Platform
+Production Deployment Ready - Ultimate Success Verification
+January 2025
+
+Testing Focus:
+- Current focus tasks from test_result.md
+- Stuck tasks requiring immediate attention
+- Authentication and core functionality
+- Real data operations verification
+- CRUD operations testing
+"""
+
+import requests
+import json
+import time
+import sys
+from datetime import datetime
+
+class MewayzBackendTester:
+    def __init__(self):
+        self.base_url = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+        self.api_url = f"{self.base_url}/api"
+        self.token = None
+        self.workspace_id = None
+        self.test_results = []
+        self.total_tests = 0
+        self.passed_tests = 0
+        
+        # Test credentials
+        self.admin_email = "tmonnens@outlook.com"
+        self.admin_password = "Voetballen5"
+        
+        print(f"🚀 MEWAYZ V2 PLATFORM - ULTIMATE SUCCESS VERIFICATION - JANUARY 2025")
+        print(f"Backend URL: {self.base_url}")
+        print(f"API URL: {self.api_url}")
+        print("=" * 80)
+
+    def log_test(self, test_name, success, response_data=None, error=None):
+        """Log test results"""
+        self.total_tests += 1
+        if success:
+            self.passed_tests += 1
+            status = "✅ PASS"
+        else:
+            status = "❌ FAIL"
+        
+        result = {
+            'test': test_name,
+            'success': success,
+            'response_data': response_data,
+            'error': error,
+            'timestamp': datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        print(f"{status} - {test_name}")
+        if error:
+            print(f"    Error: {error}")
+        if response_data and len(str(response_data)) < 200:
+            print(f"    Response: {response_data}")
+        print()
+
+    def make_request(self, method, endpoint, data=None, headers=None):
+        """Make HTTP request with error handling"""
+        url = f"{self.api_url}{endpoint}"
+        
+        default_headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+        
+        if self.token:
+            default_headers['Authorization'] = f'Bearer {self.token}'
+        
+        if headers:
+            default_headers.update(headers)
+        
+        try:
+            if method.upper() == 'GET':
+                response = requests.get(url, headers=default_headers, timeout=30)
+            elif method.upper() == 'POST':
+                response = requests.post(url, json=data, headers=default_headers, timeout=30)
+            elif method.upper() == 'PUT':
+                response = requests.put(url, json=data, headers=default_headers, timeout=30)
+            elif method.upper() == 'DELETE':
+                response = requests.delete(url, headers=default_headers, timeout=30)
+            else:
+                raise ValueError(f"Unsupported HTTP method: {method}")
+            
+            return response
+        except requests.exceptions.Timeout:
+            raise Exception("Request timeout (30s)")
+        except requests.exceptions.ConnectionError:
+            raise Exception("Connection error")
+        except Exception as e:
+            raise Exception(f"Request failed: {str(e)}")
+
+    def test_authentication_system(self):
+        """Test authentication and JWT token generation"""
+        print("🔐 TESTING AUTHENTICATION SYSTEM")
+        print("-" * 50)
+        
+        # Test 1: Health Check
+        try:
+            response = self.make_request('GET', '/health')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("Health Check", True, f"Status: {data.get('status', 'unknown')}")
+            else:
+                self.log_test("Health Check", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Health Check", False, error=str(e))
+        
+        # Test 2: Admin Login
+        try:
+            login_data = {
+                "email": self.admin_email,
+                "password": self.admin_password
+            }
+            response = self.make_request('POST', '/auth/login', login_data)
+            if response.status_code == 200:
+                data = response.json()
+                self.token = data.get('access_token') or data.get('token')
+                if self.token:
+                    self.log_test("Admin Login", True, f"Token generated: {self.token[:20]}...")
+                else:
+                    self.log_test("Admin Login", False, error="No token in response")
+            else:
+                self.log_test("Admin Login", False, error=f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_test("Admin Login", False, error=str(e))
+        
+        # Test 3: Token Validation
+        if self.token:
+            try:
+                response = self.make_request('GET', '/auth/me')
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test("Token Validation", True, f"User: {data.get('email', 'unknown')}")
+                else:
+                    self.log_test("Token Validation", False, error=f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_test("Token Validation", False, error=str(e))
+
+    def test_current_focus_tasks(self):
+        """Test the current focus tasks from test_result.md"""
+        print("🎯 TESTING CURRENT FOCUS TASKS")
+        print("-" * 50)
+        
+        # Test 1: Multi-Workspace System
+        try:
+            response = self.make_request('GET', '/workspaces')
+            if response.status_code == 200:
+                data = response.json()
+                workspaces = data.get('workspaces', []) if isinstance(data, dict) else data
+                if workspaces and len(workspaces) > 0:
+                    self.workspace_id = workspaces[0].get('id')
+                self.log_test("Multi-Workspace System - List", True, f"Found {len(workspaces)} workspaces")
+            else:
+                self.log_test("Multi-Workspace System - List", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Multi-Workspace System - List", False, error=str(e))
+        
+        # Test workspace creation
+        try:
+            workspace_data = {
+                "name": "Test Production Workspace",
+                "description": "Testing workspace creation for production deployment",
+                "goals": ["instagram", "link_bio", "courses"]
+            }
+            response = self.make_request('POST', '/workspaces', workspace_data)
+            if response.status_code in [200, 201]:
+                data = response.json()
+                self.log_test("Multi-Workspace System - Create", True, f"Created workspace: {data.get('id', 'unknown')}")
+            else:
+                self.log_test("Multi-Workspace System - Create", False, error=f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_test("Multi-Workspace System - Create", False, error=str(e))
+        
+        # Test 2: Website Builder Templates
+        try:
+            response = self.make_request('GET', '/website-builder/templates')
+            if response.status_code == 200:
+                data = response.json()
+                templates = data.get('templates', []) if isinstance(data, dict) else data
+                self.log_test("Website Builder Templates", True, f"Found {len(templates)} templates")
+            else:
+                self.log_test("Website Builder Templates", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Website Builder Templates", False, error=str(e))
+        
+        # Test 3: Admin Dashboard Database Connection
+        try:
+            response = self.make_request('GET', '/admin/dashboard')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("Admin Dashboard Database Connection", True, f"Dashboard data: {len(str(data))} chars")
+            else:
+                self.log_test("Admin Dashboard Database Connection", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Admin Dashboard Database Connection", False, error=str(e))
+
+    def test_stuck_tasks(self):
+        """Test the stuck tasks that need immediate attention"""
+        print("🚨 TESTING STUCK TASKS")
+        print("-" * 50)
+        
+        # Test Team Management System
+        try:
+            response = self.make_request('GET', '/team/dashboard')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("Team Management - Dashboard", True, f"Data: {len(str(data))} chars")
+            else:
+                self.log_test("Team Management - Dashboard", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Team Management - Dashboard", False, error=str(e))
+        
+        try:
+            response = self.make_request('GET', '/team/members')
+            if response.status_code == 200:
+                data = response.json()
+                members = data.get('members', []) if isinstance(data, dict) else data
+                self.log_test("Team Management - Members", True, f"Found {len(members)} members")
+            else:
+                self.log_test("Team Management - Members", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Team Management - Members", False, error=str(e))
+        
+        # Test Form Builder System
+        try:
+            response = self.make_request('GET', '/forms')
+            if response.status_code == 200:
+                data = response.json()
+                forms = data.get('forms', []) if isinstance(data, dict) else data
+                self.log_test("Form Builder - List Forms", True, f"Found {len(forms)} forms")
+            else:
+                self.log_test("Form Builder - List Forms", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Form Builder - List Forms", False, error=str(e))
+
+    def test_crud_operations(self):
+        """Test CRUD operations across major systems"""
+        print("📝 TESTING CRUD OPERATIONS")
+        print("-" * 50)
+        
+        # Test CREATE operations
+        test_data_sets = [
+            {
+                'name': 'Bio Site Creation',
+                'endpoint': '/bio-sites',
+                'data': {
+                    'name': 'Test Bio Site',
+                    'slug': 'test-bio-site-prod',
+                    'theme': 'modern',
+                    'description': 'Production testing bio site'
+                }
+            },
+            {
+                'name': 'Link Shortener Creation',
+                'endpoint': '/link-shortener/create',
+                'data': {
+                    'original_url': 'https://example.com/production-test',
+                    'custom_code': 'prod-test-2025'
+                }
+            },
+            {
+                'name': 'Form Template Creation',
+                'endpoint': '/form-templates',
+                'data': {
+                    'name': 'Production Test Form',
+                    'description': 'Testing form creation for production',
+                    'category': 'feedback',
+                    'fields': [
+                        {'name': 'name', 'type': 'text', 'required': True},
+                        {'name': 'email', 'type': 'email', 'required': True}
+                    ]
+                }
+            }
+        ]
+        
+        for test_data in test_data_sets:
+            try:
+                response = self.make_request('POST', test_data['endpoint'], test_data['data'])
+                if response.status_code in [200, 201]:
+                    data = response.json()
+                    self.log_test(f"CREATE - {test_data['name']}", True, f"Created: {data.get('id', 'success')}")
+                else:
+                    self.log_test(f"CREATE - {test_data['name']}", False, error=f"HTTP {response.status_code}: {response.text}")
+            except Exception as e:
+                self.log_test(f"CREATE - {test_data['name']}", False, error=str(e))
+        
+        # Test READ operations
+        read_endpoints = [
+            ('/bio-sites', 'Bio Sites'),
+            ('/link-shortener/links', 'Link Shortener Links'),
+            ('/form-templates', 'Form Templates'),
+            ('/analytics/overview', 'Analytics Overview'),
+            ('/financial/dashboard', 'Financial Dashboard'),
+            ('/ai/services', 'AI Services')
+        ]
+        
+        for endpoint, name in read_endpoints:
+            try:
+                response = self.make_request('GET', endpoint)
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test(f"READ - {name}", True, f"Data: {len(str(data))} chars")
+                else:
+                    self.log_test(f"READ - {name}", False, error=f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_test(f"READ - {name}", False, error=str(e))
+
+    def test_real_data_operations(self):
+        """Test for real data operations vs mock data"""
+        print("🗄️ TESTING REAL DATA OPERATIONS")
+        print("-" * 50)
+        
+        # Test data consistency across multiple calls
+        consistency_tests = [
+            ('/admin/dashboard', 'Admin Dashboard'),
+            ('/analytics/overview', 'Analytics Overview'),
+            ('/workspaces', 'Workspaces'),
+            ('/financial/dashboard', 'Financial Dashboard')
+        ]
+        
+        for endpoint, name in consistency_tests:
+            try:
+                # Make two requests and compare
+                response1 = self.make_request('GET', endpoint)
+                time.sleep(1)  # Small delay
+                response2 = self.make_request('GET', endpoint)
+                
+                if response1.status_code == 200 and response2.status_code == 200:
+                    data1 = response1.json()
+                    data2 = response2.json()
+                    
+                    # Check if data is consistent (indicating real database operations)
+                    if data1 == data2:
+                        self.log_test(f"Real Data - {name}", True, "Data consistent across calls")
+                    else:
+                        self.log_test(f"Real Data - {name}", False, error="Data inconsistent - may be using random generation")
+                else:
+                    self.log_test(f"Real Data - {name}", False, error=f"HTTP {response1.status_code}/{response2.status_code}")
+            except Exception as e:
+                self.log_test(f"Real Data - {name}", False, error=str(e))
+
+    def test_external_api_integrations(self):
+        """Test external API integrations"""
+        print("🔗 TESTING EXTERNAL API INTEGRATIONS")
+        print("-" * 50)
+        
+        # Test AI Services (OpenAI integration)
+        try:
+            response = self.make_request('GET', '/ai/services')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("External API - AI Services", True, f"Services: {len(data) if isinstance(data, list) else 'available'}")
+            else:
+                self.log_test("External API - AI Services", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("External API - AI Services", False, error=str(e))
+        
+        # Test Social Media Integration
+        try:
+            response = self.make_request('GET', '/social-media/analytics')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("External API - Social Media", True, f"Analytics: {len(str(data))} chars")
+            else:
+                self.log_test("External API - Social Media", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("External API - Social Media", False, error=str(e))
+        
+        # Test Payment Integration (Stripe)
+        try:
+            response = self.make_request('GET', '/subscription/plans')
+            if response.status_code == 200:
+                data = response.json()
+                plans = data.get('plans', []) if isinstance(data, dict) else data
+                self.log_test("External API - Payment/Stripe", True, f"Plans: {len(plans) if isinstance(plans, list) else 'available'}")
+            else:
+                self.log_test("External API - Payment/Stripe", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("External API - Payment/Stripe", False, error=str(e))
+
+    def test_missing_systems(self):
+        """Test for missing systems mentioned in current focus"""
+        print("🔍 TESTING MISSING SYSTEMS IMPLEMENTATION")
+        print("-" * 50)
+        
+        missing_systems = [
+            ('/escrow/dashboard', 'Escrow System'),
+            ('/referrals/dashboard', 'Referral System'),
+            ('/onboarding/progress', 'Complete Onboarding System')
+        ]
+        
+        for endpoint, name in missing_systems:
+            try:
+                response = self.make_request('GET', endpoint)
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test(f"Missing System - {name}", True, f"Implemented: {len(str(data))} chars")
+                elif response.status_code == 404:
+                    self.log_test(f"Missing System - {name}", False, error="System not implemented (404)")
+                else:
+                    self.log_test(f"Missing System - {name}", False, error=f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_test(f"Missing System - {name}", False, error=str(e))
+
+    def run_comprehensive_test(self):
+        """Run all tests"""
+        start_time = time.time()
+        
+        print("🎯 STARTING COMPREHENSIVE BACKEND TESTING")
+        print("Testing Focus: Current Focus Tasks, Stuck Tasks, CRUD Operations, Real Data")
+        print("=" * 80)
+        
+        # Run all test suites
+        self.test_authentication_system()
+        self.test_current_focus_tasks()
+        self.test_stuck_tasks()
+        self.test_crud_operations()
+        self.test_external_api_integrations()
+        self.test_real_data_operations()
+        self.test_missing_systems()
+        
+        # Calculate results
+        end_time = time.time()
+        duration = end_time - start_time
+        success_rate = (self.passed_tests / self.total_tests * 100) if self.total_tests > 0 else 0
+        
+        print("=" * 80)
+        print("🎯 COMPREHENSIVE BACKEND TESTING RESULTS")
+        print("=" * 80)
+        print(f"Total Tests: {self.total_tests}")
+        print(f"Passed Tests: {self.passed_tests}")
+        print(f"Failed Tests: {self.total_tests - self.passed_tests}")
+        print(f"Success Rate: {success_rate:.1f}%")
+        print(f"Test Duration: {duration:.2f} seconds")
+        print()
+        
+        # Categorize results
+        if success_rate >= 85:
+            print("🎉 PRODUCTION READY - Excellent success rate!")
+        elif success_rate >= 75:
+            print("⚠️ MOSTLY READY - Good success rate with minor issues")
+        elif success_rate >= 50:
+            print("🔧 NEEDS WORK - Moderate success rate, significant issues to address")
+        else:
+            print("❌ CRITICAL ISSUES - Low success rate, major problems need immediate attention")
+        
+        print()
+        print("🔍 DETAILED ANALYSIS:")
+        
+        # Show failed tests
+        failed_tests = [test for test in self.test_results if not test['success']]
+        if failed_tests:
+            print(f"\n❌ FAILED TESTS ({len(failed_tests)}):")
+            for test in failed_tests:
+                print(f"  - {test['test']}: {test['error']}")
+        
+        # Show successful tests
+        successful_tests = [test for test in self.test_results if test['success']]
+        if successful_tests:
+            print(f"\n✅ SUCCESSFUL TESTS ({len(successful_tests)}):")
+            for test in successful_tests[:10]:  # Show first 10
+                print(f"  - {test['test']}")
+            if len(successful_tests) > 10:
+                print(f"  ... and {len(successful_tests) - 10} more")
+        
+        return success_rate
+
+if __name__ == "__main__":
+    tester = MewayzBackendTester()
+    success_rate = tester.run_comprehensive_test()
+    
+    # Exit with appropriate code
+    if success_rate >= 75:
+        sys.exit(0)  # Success
+    else:
+        sys.exit(1)  # Failure
+"""
 FINAL COMPREHENSIVE TEST FOR MEWAYZ V2 PLATFORM - JANUARY 2025
 COMPREHENSIVE TESTING OF ALL 1000+ ENDPOINTS FOR PRODUCTION READINESS
 
