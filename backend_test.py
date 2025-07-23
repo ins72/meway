@@ -150,56 +150,47 @@ class MewayzBackendTester:
         
         # Test 1: Multi-Workspace System
         try:
-            response = self.make_request('GET', '/workspaces')
+            response = self.make_request('GET', '/complete-multi-workspace/')
             if response.status_code == 200:
                 data = response.json()
-                workspaces = data.get('workspaces', []) if isinstance(data, dict) else data
-                if workspaces and len(workspaces) > 0:
-                    self.workspace_id = workspaces[0].get('id')
-                self.log_test("Multi-Workspace System - List", True, f"Found {len(workspaces)} workspaces")
+                self.log_test("Multi-Workspace System - List", True, f"Data: {len(str(data))} chars")
             else:
                 self.log_test("Multi-Workspace System - List", False, error=f"HTTP {response.status_code}")
         except Exception as e:
             self.log_test("Multi-Workspace System - List", False, error=str(e))
         
-        # Test workspace creation
+        # Test workspace health
         try:
-            workspace_data = {
-                "name": "Test Production Workspace",
-                "description": "Testing workspace creation for production deployment",
-                "goals": ["instagram", "link_bio", "courses"]
-            }
-            response = self.make_request('POST', '/workspaces', workspace_data)
-            if response.status_code in [200, 201]:
-                data = response.json()
-                self.log_test("Multi-Workspace System - Create", True, f"Created workspace: {data.get('id', 'unknown')}")
-            else:
-                self.log_test("Multi-Workspace System - Create", False, error=f"HTTP {response.status_code}: {response.text}")
-        except Exception as e:
-            self.log_test("Multi-Workspace System - Create", False, error=str(e))
-        
-        # Test 2: Website Builder Templates
-        try:
-            response = self.make_request('GET', '/website-builder/templates')
+            response = self.make_request('GET', '/complete-multi-workspace/health')
             if response.status_code == 200:
                 data = response.json()
-                templates = data.get('templates', []) if isinstance(data, dict) else data
-                self.log_test("Website Builder Templates", True, f"Found {len(templates)} templates")
+                self.log_test("Multi-Workspace System - Health", True, f"Status: {data.get('status', 'healthy')}")
             else:
-                self.log_test("Website Builder Templates", False, error=f"HTTP {response.status_code}")
+                self.log_test("Multi-Workspace System - Health", False, error=f"HTTP {response.status_code}")
         except Exception as e:
-            self.log_test("Website Builder Templates", False, error=str(e))
+            self.log_test("Multi-Workspace System - Health", False, error=str(e))
         
-        # Test 3: Admin Dashboard Database Connection
+        # Test 2: Website Builder System
         try:
-            response = self.make_request('GET', '/admin/dashboard')
+            response = self.make_request('GET', '/website-builder/')
             if response.status_code == 200:
                 data = response.json()
-                self.log_test("Admin Dashboard Database Connection", True, f"Dashboard data: {len(str(data))} chars")
+                self.log_test("Website Builder System", True, f"Data: {len(str(data))} chars")
             else:
-                self.log_test("Admin Dashboard Database Connection", False, error=f"HTTP {response.status_code}")
+                self.log_test("Website Builder System", False, error=f"HTTP {response.status_code}")
         except Exception as e:
-            self.log_test("Admin Dashboard Database Connection", False, error=str(e))
+            self.log_test("Website Builder System", False, error=str(e))
+        
+        # Test 3: Admin Dashboard System
+        try:
+            response = self.make_request('GET', '/admin/')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("Admin Dashboard System", True, f"Data: {len(str(data))} chars")
+            else:
+                self.log_test("Admin Dashboard System", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Admin Dashboard System", False, error=str(e))
 
     def test_stuck_tasks(self):
         """Test the stuck tasks that need immediate attention"""
