@@ -178,9 +178,14 @@ class WebsiteBuilderService:
             if category:
                 query["category"] = category
             
-            # Try to get real templates from database
+            # Try to get real templates from database with proper async handling
             cursor = templates_collection.find(query)
-            templates = await cursor.to_list(length=None)
+            templates = []
+            async for doc in cursor:
+                # Serialize ObjectId fields
+                if "_id" in doc:
+                    doc["_id"] = str(doc["_id"])
+                templates.append(doc)
             
             # If no templates in database, create some real ones
             if not templates:
@@ -228,17 +233,22 @@ class WebsiteBuilderService:
                 ]
                 
                 # Insert real templates into database
-                await templates_collection.insert_many(real_templates)
-                templates = real_templates
+                try:
+                    await templates_collection.insert_many(real_templates)
+                    templates = real_templates
+                except Exception as insert_error:
+                    logger.warning(f"Could not insert templates: {insert_error}")
+                    templates = real_templates
             
-            # Filter by category if specified
-            if category:
+            # Filter by category if specified and not already filtered by query
+            if category and not query:
                 templates = [t for t in templates if t.get("category") == category]
             
             return {
                 "success": True,
                 "data": templates,
-                "total": len(templates)
+                "total": len(templates),
+                "message": f"Retrieved {len(templates)} templates"
             }
             
         except Exception as e:
