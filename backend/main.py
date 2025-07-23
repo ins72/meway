@@ -307,6 +307,9 @@ try:
     app.include_router(social_email_router, prefix="/api/social-email", tags=["social_email"])
     app.include_router(website_builder_router, prefix="/api/website-builder", tags=["website_builder"])
     app.include_router(referral_router, prefix="/api/referral", tags=["referral"])
+    app.include_router(twitter_router, prefix="/api/twitter", tags=["twitter"])
+    app.include_router(tiktok_router, prefix="/api/tiktok", tags=["tiktok"])
+    app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
 
     
     logger.info(f"✅ Successfully included 125 bulletproof routers")
