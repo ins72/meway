@@ -1,5 +1,5 @@
 """
-Email Marketing Service
+Backup Service
 Production-ready service with comprehensive CRUD operations and real data
 """
 
@@ -13,10 +13,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class EmailMarketingService:
+class BackupService:
     def __init__(self):
-        self.service_name = "email_marketing"
-        self.collection_name = "emailmarketing"
+        self.service_name = "backup"
+        self.collection_name = "backup"
         self.db = None
         self.collection = None
         
@@ -124,8 +124,8 @@ class EmailMarketingService:
     
     # COMPREHENSIVE CRUD OPERATIONS
     
-    async def create_email_marketing(self, data: Dict[str, Any], user_id: str = None) -> Dict[str, Any]:
-        """Create new email_marketing with comprehensive validation and real data storage"""
+    async def create_backup(self, data: Dict[str, Any], user_id: str = None) -> Dict[str, Any]:
+        """Create new backup with comprehensive validation and real data storage"""
         try:
             # Validate input
             validation_result = self._validate_input(data)
@@ -161,8 +161,8 @@ class EmailMarketingService:
         except Exception as e:
             return self._handle_error("CREATE", e)
     
-    async def get_email_marketing(self, item_id: str, user_id: str = None) -> Dict[str, Any]:
-        """Get email_marketing by ID with comprehensive error handling"""
+    async def get_backup(self, item_id: str, user_id: str = None) -> Dict[str, Any]:
+        """Get backup by ID with comprehensive error handling"""
         try:
             if not item_id:
                 return {"success": False, "error": "ID is required"}
@@ -196,10 +196,10 @@ class EmailMarketingService:
         except Exception as e:
             return self._handle_error("GET", e)
     
-    async def list_email_marketings(self, user_id: str = None, limit: int = 50, offset: int = 0, 
+    async def list_backups(self, user_id: str = None, limit: int = 50, offset: int = 0, 
                                   filters: Dict[str, Any] = None, sort_by: str = "created_at",
                                   sort_order: int = -1) -> Dict[str, Any]:
-        """List email_marketings with comprehensive filtering, pagination, and sorting"""
+        """List backups with comprehensive filtering, pagination, and sorting"""
         try:
             # Validate parameters
             if limit < 1 or limit > 100:
@@ -248,9 +248,9 @@ class EmailMarketingService:
         except Exception as e:
             return self._handle_error("LIST", e)
     
-    async def update_email_marketing(self, item_id: str, update_data: Dict[str, Any], 
+    async def update_backup(self, item_id: str, update_data: Dict[str, Any], 
                                    user_id: str = None) -> Dict[str, Any]:
-        """Update email_marketing with comprehensive validation and real data storage"""
+        """Update backup with comprehensive validation and real data storage"""
         try:
             if not item_id:
                 return {"success": False, "error": "ID is required"}
@@ -302,9 +302,9 @@ class EmailMarketingService:
         except Exception as e:
             return self._handle_error("UPDATE", e)
     
-    async def delete_email_marketing(self, item_id: str, user_id: str = None, 
+    async def delete_backup(self, item_id: str, user_id: str = None, 
                                    soft_delete: bool = True) -> Dict[str, Any]:
-        """Delete email_marketing with comprehensive validation (soft delete by default)"""
+        """Delete backup with comprehensive validation (soft delete by default)"""
         try:
             if not item_id:
                 return {"success": False, "error": "ID is required"}
@@ -366,9 +366,9 @@ class EmailMarketingService:
     
     # ADDITIONAL OPERATIONS
     
-    async def search_email_marketings(self, search_query: str, user_id: str = None, 
+    async def search_backups(self, search_query: str, user_id: str = None, 
                                     limit: int = 50, offset: int = 0) -> Dict[str, Any]:
-        """Search email_marketings with text search capabilities"""
+        """Search backups with text search capabilities"""
         try:
             if not search_query:
                 return {"success": False, "error": "Search query is required"}
@@ -415,7 +415,7 @@ class EmailMarketingService:
             return self._handle_error("SEARCH", e)
     
     async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
-        """Get comprehensive statistics for email_marketings"""
+        """Get comprehensive statistics for backups"""
         try:
             collection = self._get_collection()
             if collection is None:
@@ -451,9 +451,9 @@ class EmailMarketingService:
         except Exception as e:
             return self._handle_error("STATS", e)
     
-    async def bulk_create_email_marketings(self, items: List[Dict[str, Any]], 
+    async def bulk_create_backups(self, items: List[Dict[str, Any]], 
                                          user_id: str = None) -> Dict[str, Any]:
-        """Bulk create multiple email_marketings"""
+        """Bulk create multiple backups"""
         try:
             if not items or not isinstance(items, list):
                 return {"success": False, "error": "Items must be a non-empty list"}
@@ -488,7 +488,7 @@ class EmailMarketingService:
             return self._handle_error("BULK_CREATE", e)
     
     async def health_check(self) -> Dict[str, Any]:
-        """Comprehensive health check for email_marketing service"""
+        """Comprehensive health check for backup service"""
         try:
             collection = self._get_collection()
             if collection is None:
@@ -539,12 +539,12 @@ class EmailMarketingService:
 # Service instance with lazy initialization
 _service_instance = None
 
-def get_email_marketing_service():
+def get_backup_service():
     """Get service instance with lazy initialization"""
     global _service_instance
     if _service_instance is None:
-        _service_instance = EmailMarketingService()
+        _service_instance = BackupService()
     return _service_instance
 
 # Backward compatibility
-email_marketing_service = get_email_marketing_service()
+backup_service = get_backup_service()

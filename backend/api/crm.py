@@ -1,5 +1,5 @@
 """
-Admin API
+Crm API
 Production-ready RESTful API with comprehensive CRUD operations and validation
 """
 
@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path, status
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field, validator
 from core.auth import get_current_user
-from services.admin_service import get_admin_service
+from services.crm_service import get_crm_service
 import json
 import logging
 
@@ -18,10 +18,10 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # Request/Response Models
-class AdminCreate(BaseModel):
-    name: str = Field(..., min_length=1, max_length=255, description="Name of the admin")
-    description: Optional[str] = Field(None, max_length=1000, description="Description of the admin")
-    status: Optional[str] = Field("active", description="Status of the admin")
+class CrmCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255, description="Name of the crm")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the crm")
+    status: Optional[str] = Field("active", description="Status of the crm")
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
     
     @validator('name')
@@ -30,10 +30,10 @@ class AdminCreate(BaseModel):
             raise ValueError("Name cannot be empty")
         return v.strip()
 
-class AdminUpdate(BaseModel):
-    name: Optional[str] = Field(None, min_length=1, max_length=255, description="Name of the admin")
-    description: Optional[str] = Field(None, max_length=1000, description="Description of the admin")
-    status: Optional[str] = Field(None, description="Status of the admin")
+class CrmUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=255, description="Name of the crm")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the crm")
+    status: Optional[str] = Field(None, description="Status of the crm")
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
     
     @validator('name')
@@ -42,7 +42,7 @@ class AdminUpdate(BaseModel):
             raise ValueError("Name cannot be empty")
         return v.strip() if v else v
 
-class AdminResponse(BaseModel):
+class CrmResponse(BaseModel):
     success: bool
     message: Optional[str] = None
     data: Optional[Dict[str, Any]] = None
@@ -51,9 +51,9 @@ class AdminResponse(BaseModel):
 # Health Check
 @router.get("/health", response_model=Dict[str, Any])
 async def health_check():
-    """Comprehensive health check for admin service"""
+    """Comprehensive health check for crm service"""
     try:
-        service = get_admin_service()
+        service = get_crm_service()
         result = await service.health_check()
         return result
     except Exception as e:
@@ -61,12 +61,12 @@ async def health_check():
         raise HTTPException(status_code=500, detail=str(e))
 
 # Create Operation
-@router.post("/", response_model=AdminResponse, status_code=status.HTTP_201_CREATED)
-async def create_admin(
-    item: AdminCreate,
+@router.post("/", response_model=CrmResponse, status_code=status.HTTP_201_CREATED)
+async def create_crm(
+    item: CrmCreate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Create new admin with comprehensive validation"""
+    """Create new crm with comprehensive validation"""
     try:
         # Convert Pydantic model to dict
         item_data = item.dict()
@@ -75,8 +75,8 @@ async def create_admin(
         user_id = current_user.get("id") or current_user.get("user_id")
         item_data["created_by"] = current_user.get("email", "unknown")
         
-        service = get_admin_service()
-        result = await service.create_admin(item_data, user_id=user_id)
+        service = get_crm_service()
+        result = await service.create_crm(item_data, user_id=user_id)
         
         if result.get("success"):
             return result
@@ -88,12 +88,12 @@ async def create_admin(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Create admin failed: {e}")
+        logger.error(f"Create crm failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Read Operations
-@router.get("/", response_model=AdminResponse)
-async def list_admins(
+@router.get("/", response_model=CrmResponse)
+async def list_crms(
     limit: int = Query(50, ge=1, le=100, description="Number of items to return"),
     offset: int = Query(0, ge=0, description="Number of items to skip"),
     search: Optional[str] = Query(None, description="Search query"),
@@ -102,7 +102,7 @@ async def list_admins(
     sort_order: str = Query("desc", regex="^(asc|desc)$", description="Sort order"),
     current_user: dict = Depends(get_current_user)
 ):
-    """List admins with comprehensive filtering and pagination"""
+    """List crms with comprehensive filtering and pagination"""
     try:
         user_id = current_user.get("id") or current_user.get("user_id")
         
@@ -113,8 +113,8 @@ async def list_admins(
         
         # Handle search
         if search:
-            service = get_admin_service()
-            result = await service.search_admins(
+            service = get_crm_service()
+            result = await service.search_crms(
                 search_query=search,
                 user_id=user_id,
                 limit=limit,
@@ -122,9 +122,9 @@ async def list_admins(
             )
         else:
             # Regular listing
-            service = get_admin_service()
+            service = get_crm_service()
             sort_order_int = -1 if sort_order == "desc" else 1
-            result = await service.list_admins(
+            result = await service.list_crms(
                 user_id=user_id,
                 limit=limit,
                 offset=offset,
@@ -143,20 +143,20 @@ async def list_admins(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"List admins failed: {e}")
+        logger.error(f"List crms failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/{item_id}", response_model=AdminResponse)
-async def get_admin(
-    item_id: str = Path(..., description="ID of the admin to retrieve"),
+@router.get("/{item_id}", response_model=CrmResponse)
+async def get_crm(
+    item_id: str = Path(..., description="ID of the crm to retrieve"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Get admin by ID with comprehensive error handling"""
+    """Get crm by ID with comprehensive error handling"""
     try:
         user_id = current_user.get("id") or current_user.get("user_id")
         
-        service = get_admin_service()
-        result = await service.get_admin(item_id, user_id=user_id)
+        service = get_crm_service()
+        result = await service.get_crm(item_id, user_id=user_id)
         
         if result.get("success"):
             return result
@@ -168,17 +168,17 @@ async def get_admin(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Get admin failed: {e}")
+        logger.error(f"Get crm failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Update Operation
-@router.put("/{item_id}", response_model=AdminResponse)
-async def update_admin(
-    item_id: str = Path(..., description="ID of the admin to update"),
-    item: AdminUpdate,
+@router.put("/{item_id}", response_model=CrmResponse)
+async def update_crm(
+    item_id: str = Path(..., description="ID of the crm to update"),
+    item: CrmUpdate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Update admin with comprehensive validation"""
+    """Update crm with comprehensive validation"""
     try:
         # Convert Pydantic model to dict, excluding None values
         item_data = item.dict(exclude_none=True)
@@ -193,8 +193,8 @@ async def update_admin(
         user_id = current_user.get("id") or current_user.get("user_id")
         item_data["updated_by"] = current_user.get("email", "unknown")
         
-        service = get_admin_service()
-        result = await service.update_admin(item_id, item_data, user_id=user_id)
+        service = get_crm_service()
+        result = await service.update_crm(item_id, item_data, user_id=user_id)
         
         if result.get("success"):
             return result
@@ -206,22 +206,22 @@ async def update_admin(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Update admin failed: {e}")
+        logger.error(f"Update crm failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Delete Operation
-@router.delete("/{item_id}", response_model=AdminResponse)
-async def delete_admin(
-    item_id: str = Path(..., description="ID of the admin to delete"),
+@router.delete("/{item_id}", response_model=CrmResponse)
+async def delete_crm(
+    item_id: str = Path(..., description="ID of the crm to delete"),
     permanent: bool = Query(False, description="Permanent delete (true) or soft delete (false)"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Delete admin with comprehensive validation"""
+    """Delete crm with comprehensive validation"""
     try:
         user_id = current_user.get("id") or current_user.get("user_id")
         
-        service = get_admin_service()
-        result = await service.delete_admin(
+        service = get_crm_service()
+        result = await service.delete_crm(
             item_id, 
             user_id=user_id, 
             soft_delete=not permanent
@@ -237,19 +237,19 @@ async def delete_admin(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Delete admin failed: {e}")
+        logger.error(f"Delete crm failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Statistics
-@router.get("/stats", response_model=AdminResponse)
-async def get_admin_stats(
+@router.get("/stats", response_model=CrmResponse)
+async def get_crm_stats(
     current_user: dict = Depends(get_current_user)
 ):
-    """Get comprehensive statistics for admins"""
+    """Get comprehensive statistics for crms"""
     try:
         user_id = current_user.get("id") or current_user.get("user_id")
         
-        service = get_admin_service()
+        service = get_crm_service()
         result = await service.get_stats(user_id=user_id)
         
         if result.get("success"):
@@ -262,16 +262,16 @@ async def get_admin_stats(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Get admin stats failed: {e}")
+        logger.error(f"Get crm stats failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Bulk Operations
-@router.post("/bulk", response_model=AdminResponse)
-async def bulk_create_admins(
-    items: List[AdminCreate],
+@router.post("/bulk", response_model=CrmResponse)
+async def bulk_create_crms(
+    items: List[CrmCreate],
     current_user: dict = Depends(get_current_user)
 ):
-    """Bulk create multiple admins"""
+    """Bulk create multiple crms"""
     try:
         if not items:
             raise HTTPException(
@@ -295,8 +295,8 @@ async def bulk_create_admins(
         for item_data in items_data:
             item_data["created_by"] = user_email
         
-        service = get_admin_service()
-        result = await service.bulk_create_admins(items_data, user_id=user_id)
+        service = get_crm_service()
+        result = await service.bulk_create_crms(items_data, user_id=user_id)
         
         if result.get("success"):
             return result
@@ -308,5 +308,5 @@ async def bulk_create_admins(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Bulk create admins failed: {e}")
+        logger.error(f"Bulk create crms failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))

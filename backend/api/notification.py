@@ -1,143 +1,312 @@
 """
-Notification API Router
-Generated automatically to pair with notification_service
+Notification API
+Production-ready RESTful API with comprehensive CRUD operations and validation
 """
 
-from fastapi import APIRouter, HTTPException, Depends, Body, Query
-from typing import List, Dict, Any, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path, status
+from typing import Dict, Any, List, Optional
+from pydantic import BaseModel, Field, validator
+from core.auth import get_current_user
+from services.notification_service import get_notification_service
+import json
 import logging
 
-from core.auth import get_current_user
-from services.notification_service import notification_service
-from typing import Dict, Any, List, Optional
-from fastapi import APIRouter, HTTPException, Depends, Query, Body
-from core.auth import get_current_active_user
-import uuid
-from datetime import datetime
-
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-@router.get("/health")
+# Request/Response Models
+class NotificationCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255, description="Name of the notification")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the notification")
+    status: Optional[str] = Field("active", description="Status of the notification")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
+    
+    @validator('name')
+    def validate_name(cls, v):
+        if not v or v.strip() == "":
+            raise ValueError("Name cannot be empty")
+        return v.strip()
+
+class NotificationUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=255, description="Name of the notification")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the notification")
+    status: Optional[str] = Field(None, description="Status of the notification")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
+    
+    @validator('name')
+    def validate_name(cls, v):
+        if v is not None and (not v or v.strip() == ""):
+            raise ValueError("Name cannot be empty")
+        return v.strip() if v else v
+
+class NotificationResponse(BaseModel):
+    success: bool
+    message: Optional[str] = None
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+# Health Check
+@router.get("/health", response_model=Dict[str, Any])
 async def health_check():
-    """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "service": "notification",
-        "timestamp": "2025-06-23T10:00:00Z"
-    }
-
-@router.post("/items", tags=["Item Management"])
-async def create_item(
-    item_data: dict = Body(...),
-    current_user: dict = Depends(get_current_user)
-):
-    """Create new item"""
+    """Comprehensive health check for notification service"""
     try:
-        result = await notification_service.create_item(
-            user_id=current_user["_id"],
-            item_data=item_data
-        )
-        
-        return {
-            "success": True,
-            "data": result,
-            "message": "Item created successfully"
-        }
-        
+        service = get_notification_service()
+        result = await service.health_check()
+        return result
     except Exception as e:
-        logger.error(f"Error creating item: {str(e)}")
+        logger.error(f"Health check failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/items", tags=["Item Management"])
-async def list_items(
-    page: int = Query(1, ge=1),
-    limit: int = Query(50, ge=1, le=100),
+# Create Operation
+@router.post("/", response_model=NotificationResponse, status_code=status.HTTP_201_CREATED)
+async def create_notification(
+    item: NotificationCreate,
     current_user: dict = Depends(get_current_user)
 ):
-    """List user's items"""
+    """Create new notification with comprehensive validation"""
     try:
-        result = await notification_service.list_items(
-            user_id=current_user["_id"],
-            page=page,
-            limit=limit
-        )
+        # Convert Pydantic model to dict
+        item_data = item.dict()
         
-        return {
-            "success": True,
-            "data": result,
-            "message": "Items retrieved successfully"
-        }
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        item_data["created_by"] = current_user.get("email", "unknown")
         
+        service = get_notification_service()
+        result = await service.create_notification(item_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Creation failed")
+            )
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error listing items: {str(e)}")
+        logger.error(f"Create notification failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/items/{item_id}", tags=["Item Management"])
-async def get_item(
-    item_id: str,
+# Read Operations
+@router.get("/", response_model=NotificationResponse)
+async def list_notifications(
+    limit: int = Query(50, ge=1, le=100, description="Number of items to return"),
+    offset: int = Query(0, ge=0, description="Number of items to skip"),
+    search: Optional[str] = Query(None, description="Search query"),
+    status: Optional[str] = Query(None, description="Filter by status"),
+    sort_by: str = Query("created_at", description="Sort field"),
+    sort_order: str = Query("desc", regex="^(asc|desc)$", description="Sort order"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Get specific item"""
+    """List notifications with comprehensive filtering and pagination"""
     try:
-        result = await notification_service.get_item(
-            user_id=current_user["_id"],
-            item_id=item_id
-        )
+        user_id = current_user.get("id") or current_user.get("user_id")
         
-        return {
-            "success": True,
-            "data": result,
-            "message": "Item retrieved successfully"
-        }
+        # Build filters
+        filters = {}
+        if status:
+            filters["status"] = status
         
+        # Handle search
+        if search:
+            service = get_notification_service()
+            result = await service.search_notifications(
+                search_query=search,
+                user_id=user_id,
+                limit=limit,
+                offset=offset
+            )
+        else:
+            # Regular listing
+            service = get_notification_service()
+            sort_order_int = -1 if sort_order == "desc" else 1
+            result = await service.list_notifications(
+                user_id=user_id,
+                limit=limit,
+                offset=offset,
+                filters=filters,
+                sort_by=sort_by,
+                sort_order=sort_order_int
+            )
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "List failed")
+            )
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error getting item: {str(e)}")
+        logger.error(f"List notifications failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.put("/items/{item_id}", tags=["Item Management"])
-async def update_item(
-    item_id: str,
-    item_data: dict = Body(...),
+@router.get("/{item_id}", response_model=NotificationResponse)
+async def get_notification(
+    item_id: str = Path(..., description="ID of the notification to retrieve"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Update existing item"""
+    """Get notification by ID with comprehensive error handling"""
     try:
-        result = await notification_service.update_item(
-            user_id=current_user["_id"],
-            item_id=item_id,
-            update_data=item_data
-        )
+        user_id = current_user.get("id") or current_user.get("user_id")
         
-        return {
-            "success": True,
-            "data": result,
-            "message": "Item updated successfully"
-        }
+        service = get_notification_service()
+        result = await service.get_notification(item_id, user_id=user_id)
         
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Not found")
+            )
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error updating item: {str(e)}")
+        logger.error(f"Get notification failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.delete("/items/{item_id}", tags=["Item Management"])
-async def delete_item(
-    item_id: str,
+# Update Operation
+@router.put("/{item_id}", response_model=NotificationResponse)
+async def update_notification(
+    item_id: str = Path(..., description="ID of the notification to update"),
+    item: NotificationUpdate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Delete item"""
+    """Update notification with comprehensive validation"""
     try:
-        result = await notification_service.delete_item(
-            user_id=current_user["_id"],
-            item_id=item_id
+        # Convert Pydantic model to dict, excluding None values
+        item_data = item.dict(exclude_none=True)
+        
+        if not item_data:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one field must be provided for update"
+            )
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        item_data["updated_by"] = current_user.get("email", "unknown")
+        
+        service = get_notification_service()
+        result = await service.update_notification(item_id, item_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Update failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Update notification failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Delete Operation
+@router.delete("/{item_id}", response_model=NotificationResponse)
+async def delete_notification(
+    item_id: str = Path(..., description="ID of the notification to delete"),
+    permanent: bool = Query(False, description="Permanent delete (true) or soft delete (false)"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete notification with comprehensive validation"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_notification_service()
+        result = await service.delete_notification(
+            item_id, 
+            user_id=user_id, 
+            soft_delete=not permanent
         )
         
-        return {
-            "success": True,
-            "data": result,
-            "message": "Item deleted successfully"
-        }
-        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Delete failed")
+            )
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error deleting item: {str(e)}")
+        logger.error(f"Delete notification failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Statistics
+@router.get("/stats", response_model=NotificationResponse)
+async def get_notification_stats(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get comprehensive statistics for notifications"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_notification_service()
+        result = await service.get_stats(user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Stats failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get notification stats failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Bulk Operations
+@router.post("/bulk", response_model=NotificationResponse)
+async def bulk_create_notifications(
+    items: List[NotificationCreate],
+    current_user: dict = Depends(get_current_user)
+):
+    """Bulk create multiple notifications"""
+    try:
+        if not items:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one item must be provided"
+            )
+        
+        if len(items) > 100:
+            raise HTTPException(
+                status_code=400, 
+                detail="Maximum 100 items can be created at once"
+            )
+        
+        # Convert Pydantic models to dicts
+        items_data = [item.dict() for item in items]
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        user_email = current_user.get("email", "unknown")
+        
+        for item_data in items_data:
+            item_data["created_by"] = user_email
+        
+        service = get_notification_service()
+        result = await service.bulk_create_notifications(items_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Bulk creation failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Bulk create notifications failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))

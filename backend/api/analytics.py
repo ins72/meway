@@ -1,187 +1,312 @@
 """
-Analytics API Routes
-Professional Mewayz Platform
+Analytics API
+Production-ready RESTful API with comprehensive CRUD operations and validation
 """
-from fastapi import APIRouter, HTTPException, Depends, status
-from pydantic import BaseModel
-from typing import Optional, Dict, Any
 
-from core.auth import get_current_active_user
-from services.analytics_service import get_analytics_service
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path, status
 from typing import Dict, Any, List, Optional
-from fastapi import APIRouter, HTTPException, Depends, Query, Body
-import uuid
-from datetime import datetime
+from pydantic import BaseModel, Field, validator
+from core.auth import get_current_user
+from services.analytics_service import get_analytics_service
+import json
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Initialize service instance
-analytics_service = get_analytics_service()
-
-class EventData(BaseModel):
-    event_type: str
-    properties: Optional[Dict[str, Any]] = {}
-    session_id: Optional[str] = None
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
-    referrer: Optional[str] = None
-
-@router.get("/overview")
-async def get_analytics_overview(
-    days: int = 7,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Get analytics overview with real database calculations"""
-    try:
-        overview = await analytics_service.get_user_analytics_overview(
-            current_user["_id"], days
-        )
-        
-        return {
-            "success": True,
-            "data": overview
-        }
-        
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to fetch analytics overview: {str(e)}"
-        )
-
-@router.post("/track")
-async def track_event(
-    event_data: EventData,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Track analytics event with real database operations"""
-    try:
-        # Add user context to event
-        event_dict = event_data.dict()
-        event_dict["user_id"] = current_user["_id"]
-        
-        event_id = await analytics_service.track_event(event_dict)
-        
-        return {
-            "success": True,
-            "message": "Event tracked successfully",
-            "event_id": event_id
-        }
+# Request/Response Models
+class AnalyticsCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255, description="Name of the analytics")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the analytics")
+    status: Optional[str] = Field("active", description="Status of the analytics")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
     
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to track event"
-        )
+    @validator('name')
+    def validate_name(cls, v):
+        if not v or v.strip() == "":
+            raise ValueError("Name cannot be empty")
+        return v.strip()
 
-@router.get("/user/{user_id}")
-async def get_user_analytics(
-    user_id: str,
-    days: int = 30,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Get analytics for specific user (admin only or own data)"""
+class AnalyticsUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=255, description="Name of the analytics")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the analytics")
+    status: Optional[str] = Field(None, description="Status of the analytics")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
+    
+    @validator('name')
+    def validate_name(cls, v):
+        if v is not None and (not v or v.strip() == ""):
+            raise ValueError("Name cannot be empty")
+        return v.strip() if v else v
+
+class AnalyticsResponse(BaseModel):
+    success: bool
+    message: Optional[str] = None
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+# Health Check
+@router.get("/health", response_model=Dict[str, Any])
+async def health_check():
+    """Comprehensive health check for analytics service"""
     try:
-        # Check if user is requesting their own data or is admin
-        if user_id != current_user["_id"] and not current_user.get("is_admin", False):
+        service = get_analytics_service()
+        result = await service.health_check()
+        return result
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Create Operation
+@router.post("/", response_model=AnalyticsResponse, status_code=status.HTTP_201_CREATED)
+async def create_analytics(
+    item: AnalyticsCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new analytics with comprehensive validation"""
+    try:
+        # Convert Pydantic model to dict
+        item_data = item.dict()
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        item_data["created_by"] = current_user.get("email", "unknown")
+        
+        service = get_analytics_service()
+        result = await service.create_analytics(item_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied"
+                status_code=400, 
+                detail=result.get("error", "Creation failed")
             )
-        
-        analytics = await analytics_service.get_user_analytics(user_id, days)
-        
-        return {
-            "success": True,
-            "data": analytics
-        }
-    
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to fetch user analytics"
-        )
+        logger.error(f"Create analytics failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/workspace/{workspace_id}")
-async def get_workspace_analytics(
-    workspace_id: str,
-    days: int = 30,
-    current_user: dict = Depends(get_current_active_user)
+# Read Operations
+@router.get("/", response_model=AnalyticsResponse)
+async def list_analyticss(
+    limit: int = Query(50, ge=1, le=100, description="Number of items to return"),
+    offset: int = Query(0, ge=0, description="Number of items to skip"),
+    search: Optional[str] = Query(None, description="Search query"),
+    status: Optional[str] = Query(None, description="Filter by status"),
+    sort_by: str = Query("created_at", description="Sort field"),
+    sort_order: str = Query("desc", regex="^(asc|desc)$", description="Sort order"),
+    current_user: dict = Depends(get_current_user)
 ):
-    """Get analytics for specific workspace"""
+    """List analyticss with comprehensive filtering and pagination"""
     try:
-        analytics = await analytics_service.get_workspace_analytics(workspace_id, days)
+        user_id = current_user.get("id") or current_user.get("user_id")
         
-        return {
-            "success": True,
-            "data": analytics
-        }
-    
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to fetch workspace analytics"
-        )
-
-@router.get("/platform/overview")
-async def get_platform_overview(current_user: dict = Depends(get_current_active_user)):
-    """Get platform-wide analytics (admin only)"""
-    try:
-        if not current_user.get("is_admin", False):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Admin access required"
+        # Build filters
+        filters = {}
+        if status:
+            filters["status"] = status
+        
+        # Handle search
+        if search:
+            service = get_analytics_service()
+            result = await service.search_analyticss(
+                search_query=search,
+                user_id=user_id,
+                limit=limit,
+                offset=offset
+            )
+        else:
+            # Regular listing
+            service = get_analytics_service()
+            sort_order_int = -1 if sort_order == "desc" else 1
+            result = await service.list_analyticss(
+                user_id=user_id,
+                limit=limit,
+                offset=offset,
+                filters=filters,
+                sort_by=sort_by,
+                sort_order=sort_order_int
             )
         
-        overview = await analytics_service.get_platform_overview()
-        
-        return {
-            "success": True,
-            "data": overview
-        }
-    
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "List failed")
+            )
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to fetch platform overview"
-        )
+        logger.error(f"List analyticss failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/features/usage")
-async def get_feature_usage_analytics(
-    user_id: Optional[str] = None,
-    current_user: dict = Depends(get_current_active_user)
+@router.get("/{item_id}", response_model=AnalyticsResponse)
+async def get_analytics(
+    item_id: str = Path(..., description="ID of the analytics to retrieve"),
+    current_user: dict = Depends(get_current_user)
 ):
-    """Get feature usage analytics"""
+    """Get analytics by ID with comprehensive error handling"""
     try:
-        # If user_id specified, check permissions
-        if user_id and user_id != current_user["_id"] and not current_user.get("is_admin", False):
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_analytics_service()
+        result = await service.get_analytics(item_id, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied"
+                status_code=404, 
+                detail=result.get("error", "Not found")
             )
-        
-        # Use current user if no user_id specified
-        target_user_id = user_id or current_user["_id"]
-        
-        analytics = await analytics_service.get_feature_usage_analytics(target_user_id)
-        
-        return {
-            "success": True,
-            "data": analytics
-        }
-    
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to fetch feature usage analytics"
+        logger.error(f"Get analytics failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Update Operation
+@router.put("/{item_id}", response_model=AnalyticsResponse)
+async def update_analytics(
+    item_id: str = Path(..., description="ID of the analytics to update"),
+    item: AnalyticsUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update analytics with comprehensive validation"""
+    try:
+        # Convert Pydantic model to dict, excluding None values
+        item_data = item.dict(exclude_none=True)
+        
+        if not item_data:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one field must be provided for update"
+            )
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        item_data["updated_by"] = current_user.get("email", "unknown")
+        
+        service = get_analytics_service()
+        result = await service.update_analytics(item_id, item_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Update failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Update analytics failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Delete Operation
+@router.delete("/{item_id}", response_model=AnalyticsResponse)
+async def delete_analytics(
+    item_id: str = Path(..., description="ID of the analytics to delete"),
+    permanent: bool = Query(False, description="Permanent delete (true) or soft delete (false)"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete analytics with comprehensive validation"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_analytics_service()
+        result = await service.delete_analytics(
+            item_id, 
+            user_id=user_id, 
+            soft_delete=not permanent
         )
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Delete failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Delete analytics failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Statistics
+@router.get("/stats", response_model=AnalyticsResponse)
+async def get_analytics_stats(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get comprehensive statistics for analyticss"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_analytics_service()
+        result = await service.get_stats(user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Stats failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get analytics stats failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Bulk Operations
+@router.post("/bulk", response_model=AnalyticsResponse)
+async def bulk_create_analyticss(
+    items: List[AnalyticsCreate],
+    current_user: dict = Depends(get_current_user)
+):
+    """Bulk create multiple analyticss"""
+    try:
+        if not items:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one item must be provided"
+            )
+        
+        if len(items) > 100:
+            raise HTTPException(
+                status_code=400, 
+                detail="Maximum 100 items can be created at once"
+            )
+        
+        # Convert Pydantic models to dicts
+        items_data = [item.dict() for item in items]
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        user_email = current_user.get("email", "unknown")
+        
+        for item_data in items_data:
+            item_data["created_by"] = user_email
+        
+        service = get_analytics_service()
+        result = await service.bulk_create_analyticss(items_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Bulk creation failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Bulk create analyticss failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

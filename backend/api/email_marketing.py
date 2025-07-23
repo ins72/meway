@@ -1,336 +1,312 @@
 """
-Email Marketing Management API
-Handles email campaigns, lists, automation, and analytics
+Email Marketing API
+Production-ready RESTful API with comprehensive CRUD operations and validation
 """
-from fastapi import APIRouter, Depends, HTTPException, status
-from typing import Optional, List
-from datetime import datetime, timedelta
-from pydantic import BaseModel, EmailStr
-import uuid
 
-from core.auth import get_current_user
-from services.email_marketing_service import EmailMarketingService
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path, status
 from typing import Dict, Any, List, Optional
-from fastapi import APIRouter, HTTPException, Depends, Query, Body
-from core.auth import get_current_active_user
+from pydantic import BaseModel, Field, validator
+from core.auth import get_current_user
+from services.email_marketing_service import get_email_marketing_service
+import json
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Pydantic Models
-class EmailCampaignCreate(BaseModel):
-    name: str
-    subject: str
-    content: str
-    template_id: Optional[str] = None
-    recipient_list_id: str
-    schedule_at: Optional[datetime] = None
-    campaign_type: Optional[str] = "regular"
-
-class EmailListCreate(BaseModel):
-    name: str
-    description: Optional[str] = None
-    tags: List[str] = []
-
-class ContactCreate(BaseModel):
-    email: EmailStr
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    tags: List[str] = []
-    custom_fields: dict = {}
-
-class AutomationCreate(BaseModel):
-    name: str
-    trigger_type: str  # "signup", "purchase", "date", "behavior"
-    conditions: dict = {}
-    actions: List[dict] = []
-
-class TemplateCreate(BaseModel):
-    name: str
-    subject_template: str
-    html_content: str
-    category: Optional[str] = "general"
-
-# Initialize service
-email_service = EmailMarketingService()
-
-@router.get("/dashboard")
-async def get_email_marketing_dashboard(current_user: dict = Depends(get_current_user)):
-    """Get email marketing dashboard with comprehensive metrics"""
+# Request/Response Models
+class EmailMarketingCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=255, description="Name of the email_marketing")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the email_marketing")
+    status: Optional[str] = Field("active", description="Status of the email_marketing")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
     
-    # Get workspace for user
-    workspace_id = current_user.get("workspace_id") or str(uuid.uuid4())
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    @validator('name')
+    def validate_name(cls, v):
+        if not v or v.strip() == "":
+            raise ValueError("Name cannot be empty")
+        return v.strip()
+
+class EmailMarketingUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=255, description="Name of the email_marketing")
+    description: Optional[str] = Field(None, max_length=1000, description="Description of the email_marketing")
+    status: Optional[str] = Field(None, description="Status of the email_marketing")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
     
-    # Get dashboard metrics from real service
-    total_campaigns = await email_service.get_campaigns_count(user_id)
-    total_subscribers = await email_service.get_subscribers_count(user_id)
-    total_sent = await email_service.get_sent_emails_count(user_id)
-    
-    return {
-        "success": True,
-        "data": {
-            "overview": {
-                "total_campaigns": total_campaigns,
-                "total_subscribers": total_subscribers,
-                "total_emails_sent": total_sent,
-                "average_open_rate": round(await email_service.get_performance_metrics(user_id), 1),
-                "average_click_rate": round(await email_service.get_performance_metrics(user_id), 1),
-                "growth_rate": round(await email_service.get_subscriber_growth(user_id), 1)
-            },
-            "recent_campaigns": [
-                {
-                    "id": str(uuid.uuid4()),
-                    "name": "Weekly Newsletter #47",
-                    "subject": "Your weekly dose of industry insights",
-                    "status": "sent",
-                    "sent_at": (datetime.now() - timedelta(days=2)).isoformat(),
-                    "recipients": 3456,
-                    "opens": 1234,
-                    "clicks": 189,
-                    "open_rate": 35.7,
-                    "click_rate": 5.5
-                },
-                {
-                    "id": str(uuid.uuid4()),
-                    "name": "Product Launch Announcement",
-                    "subject": "🚀 Introducing our latest feature",
-                    "status": "sent",
-                    "sent_at": (datetime.now() - timedelta(days=7)).isoformat(),
-                    "recipients": 4567,
-                    "opens": 1678,
-                    "clicks": 234,
-                    "open_rate": 36.8,
-                    "click_rate": 5.1
-                }
-            ],
-            "subscriber_growth": [
-                {"month": "Jan", "subscribers": 2100},
-                {"month": "Feb", "subscribers": 2340},
-                {"month": "Mar", "subscribers": 2567},
-                {"month": "Apr", "subscribers": 2890},
-                {"month": "May", "subscribers": 3234},
-                {"month": "Jun", "subscribers": 3567}
-            ],
-            "top_performing_campaigns": [
-                {"name": "Holiday Sale Campaign", "open_rate": 42.3, "click_rate": 7.8},
-                {"name": "Product Tutorial Series", "open_rate": 38.9, "click_rate": 6.2},
-                {"name": "Customer Success Stories", "open_rate": 35.4, "click_rate": 5.9}
-            ]
-        }
-    }
+    @validator('name')
+    def validate_name(cls, v):
+        if v is not None and (not v or v.strip() == ""):
+            raise ValueError("Name cannot be empty")
+        return v.strip() if v else v
 
-@router.get("/campaigns")
-async def get_campaigns(
-    status: Optional[str] = None,
+class EmailMarketingResponse(BaseModel):
+    success: bool
+    message: Optional[str] = None
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+# Health Check
+@router.get("/health", response_model=Dict[str, Any])
+async def health_check():
+    """Comprehensive health check for email_marketing service"""
+    try:
+        service = get_email_marketing_service()
+        result = await service.health_check()
+        return result
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Create Operation
+@router.post("/", response_model=EmailMarketingResponse, status_code=status.HTTP_201_CREATED)
+async def create_email_marketing(
+    item: EmailMarketingCreate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get user's email campaigns with filtering"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_campaigns(user_id, status)
+    """Create new email_marketing with comprehensive validation"""
+    try:
+        # Convert Pydantic model to dict
+        item_data = item.dict()
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        item_data["created_by"] = current_user.get("email", "unknown")
+        
+        service = get_email_marketing_service()
+        result = await service.create_email_marketing(item_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Creation failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Create email_marketing failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/campaigns")
-async def create_campaign(
-    campaign: EmailCampaignCreate,
+# Read Operations
+@router.get("/", response_model=EmailMarketingResponse)
+async def list_email_marketings(
+    limit: int = Query(50, ge=1, le=100, description="Number of items to return"),
+    offset: int = Query(0, ge=0, description="Number of items to skip"),
+    search: Optional[str] = Query(None, description="Search query"),
+    status: Optional[str] = Query(None, description="Filter by status"),
+    sort_by: str = Query("created_at", description="Sort field"),
+    sort_order: str = Query("desc", regex="^(asc|desc)$", description="Sort order"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Create a new email campaign"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.create_campaign(user_id, campaign.dict())
+    """List email_marketings with comprehensive filtering and pagination"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        # Build filters
+        filters = {}
+        if status:
+            filters["status"] = status
+        
+        # Handle search
+        if search:
+            service = get_email_marketing_service()
+            result = await service.search_email_marketings(
+                search_query=search,
+                user_id=user_id,
+                limit=limit,
+                offset=offset
+            )
+        else:
+            # Regular listing
+            service = get_email_marketing_service()
+            sort_order_int = -1 if sort_order == "desc" else 1
+            result = await service.list_email_marketings(
+                user_id=user_id,
+                limit=limit,
+                offset=offset,
+                filters=filters,
+                sort_by=sort_by,
+                sort_order=sort_order_int
+            )
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "List failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"List email_marketings failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/campaigns/{campaign_id}")
-async def get_campaign(
-    campaign_id: str,
+@router.get("/{item_id}", response_model=EmailMarketingResponse)
+async def get_email_marketing(
+    item_id: str = Path(..., description="ID of the email_marketing to retrieve"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Get specific campaign details"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_campaign(user_id, campaign_id)
+    """Get email_marketing by ID with comprehensive error handling"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_email_marketing_service()
+        result = await service.get_email_marketing(item_id, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Not found")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get email_marketing failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.put("/campaigns/{campaign_id}")
-async def update_campaign(
-    campaign_id: str,
-    updates: dict,
+# Update Operation
+@router.put("/{item_id}", response_model=EmailMarketingResponse)
+async def update_email_marketing(
+    item_id: str = Path(..., description="ID of the email_marketing to update"),
+    item: EmailMarketingUpdate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Update campaign details"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.update_campaign(user_id, campaign_id, updates)
+    """Update email_marketing with comprehensive validation"""
+    try:
+        # Convert Pydantic model to dict, excluding None values
+        item_data = item.dict(exclude_none=True)
+        
+        if not item_data:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one field must be provided for update"
+            )
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        item_data["updated_by"] = current_user.get("email", "unknown")
+        
+        service = get_email_marketing_service()
+        result = await service.update_email_marketing(item_id, item_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Update failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Update email_marketing failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/campaigns/{campaign_id}/send")
-async def send_campaign(
-    campaign_id: str,
+# Delete Operation
+@router.delete("/{item_id}", response_model=EmailMarketingResponse)
+async def delete_email_marketing(
+    item_id: str = Path(..., description="ID of the email_marketing to delete"),
+    permanent: bool = Query(False, description="Permanent delete (true) or soft delete (false)"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Send or schedule campaign"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.send_campaign(user_id, campaign_id)
+    """Delete email_marketing with comprehensive validation"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_email_marketing_service()
+        result = await service.delete_email_marketing(
+            item_id, 
+            user_id=user_id, 
+            soft_delete=not permanent
+        )
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail=result.get("error", "Delete failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Delete email_marketing failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/lists")
-async def get_email_lists(current_user: dict = Depends(get_current_user)):
-    """Get user's email lists"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_lists(user_id)
-
-@router.post("/lists")
-async def create_email_list(
-    email_list: EmailListCreate,
+# Statistics
+@router.get("/stats", response_model=EmailMarketingResponse)
+async def get_email_marketing_stats(
     current_user: dict = Depends(get_current_user)
 ):
-    """Create a new email list"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.create_list(user_id, email_list.dict())
+    """Get comprehensive statistics for email_marketings"""
+    try:
+        user_id = current_user.get("id") or current_user.get("user_id")
+        
+        service = get_email_marketing_service()
+        result = await service.get_stats(user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Stats failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get email_marketing stats failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/lists/{list_id}/contacts")
-async def get_list_contacts(
-    list_id: str,
+# Bulk Operations
+@router.post("/bulk", response_model=EmailMarketingResponse)
+async def bulk_create_email_marketings(
+    items: List[EmailMarketingCreate],
     current_user: dict = Depends(get_current_user)
 ):
-    """Get contacts in a specific list"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_list_contacts(user_id, list_id)
-
-@router.post("/lists/{list_id}/contacts")
-async def add_contacts_to_list(
-    list_id: str,
-    contacts: List[ContactCreate],
-    current_user: dict = Depends(get_current_user)
-):
-    """Add contacts to email list"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.add_contacts_to_list(user_id, list_id, [c.dict() for c in contacts])
-
-@router.get("/contacts")
-async def get_contacts(
-    search: Optional[str] = None,
-    tags: Optional[List[str]] = None,
-    current_user: dict = Depends(get_current_user)
-):
-    """Get user's email contacts"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_contacts(user_id, search, tags)
-
-@router.post("/contacts")
-async def create_contact(
-    contact: ContactCreate,
-    current_user: dict = Depends(get_current_user)
-):
-    """Create a new contact"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.create_contact(user_id, contact.dict())
-
-@router.get("/templates")
-async def get_email_templates(
-    category: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
-):
-    """Get email templates"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_templates(user_id, category)
-
-@router.post("/templates")
-async def create_template(
-    template: TemplateCreate,
-    current_user: dict = Depends(get_current_user)
-):
-    """Create email template"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.create_template(user_id, template.dict())
-
-@router.get("/automations")
-async def get_automations(current_user: dict = Depends(get_current_user)):
-    """Get email automations"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_automations(user_id)
-
-@router.post("/automations")
-async def create_automation(
-    automation: AutomationCreate,
-    current_user: dict = Depends(get_current_user)
-):
-    """Create email automation"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.create_automation(user_id, automation.dict())
-
-@router.get("/analytics")
-async def get_email_analytics(
-    period: Optional[str] = "30d",
-    current_user: dict = Depends(get_current_user)
-):
-    """Get comprehensive email marketing analytics"""
-    
-    # Generate realistic analytics data
-    days = 30 if period == "30d" else (7 if period == "7d" else 90)
-    
-    return {
-        "success": True,
-        "data": {
-            "performance_metrics": {
-                "total_sent": await email_service.get_metric(),
-                "total_delivered": await email_service.get_metric(),
-                "total_opens": await email_service.get_metric(),
-                "total_clicks": await email_service.get_metric(),
-                "total_bounces": await email_service.get_metric(),
-                "total_unsubscribes": await email_service.get_metric(),
-                "delivery_rate": round(await email_service.get_metric(), 1),
-                "open_rate": round(await email_service.get_metric(), 1),
-                "click_rate": round(await email_service.get_metric(), 1),
-                "bounce_rate": round(await email_service.get_metric(), 1),
-                "unsubscribe_rate": round(await email_service.get_metric(), 1)
-            },
-            "engagement_trends": [
-                {
-                    "date": (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d"),
-                    "opens": await email_service.get_metric(),
-                    "clicks": await email_service.get_metric(),
-                    "sent": await email_service.get_metric()
-                } for i in range(days, 0, -1)
-            ],
-            "top_performing_content": [
-                {"subject": "🔥 Limited Time Offer - 50% Off", "open_rate": 42.8, "click_rate": 8.1},
-                {"subject": "Your Weekly Industry Report", "open_rate": 38.9, "click_rate": 6.2},
-                {"subject": "New Feature Alert: You'll Love This", "open_rate": 35.4, "click_rate": 5.9},
-                {"subject": "Customer Success Story: 300% Growth", "open_rate": 33.7, "click_rate": 5.1}
-            ],
-            "audience_insights": {
-                "most_active_time": "10:00 AM - 12:00 PM",
-                "best_day": "Tuesday",
-                "device_breakdown": {
-                    "mobile": 62.3,
-                    "desktop": 31.2,
-                    "tablet": 6.5
-                },
-                "location_breakdown": {
-                    "US": 45.2,
-                    "UK": 18.7,
-                    "Canada": 12.3,
-                    "Australia": 8.9,
-                    "Other": 14.9
-                }
-            }
-        }
-    }
-
-@router.get("/reports/performance")
-async def get_performance_report(
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
-):
-    """Get detailed performance reports"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_performance_report(user_id, start_date, end_date)
-
-@router.get("/segments")
-async def get_segments(current_user: dict = Depends(get_current_user)):
-    """Get audience segments"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.get_segments(user_id)
-
-@router.post("/segments")
-async def create_segment(
-    segment_data: dict,
-    current_user: dict = Depends(get_current_user)
-):
-    """Create audience segment"""
-    user_id = current_user.get("_id") or current_user.get("id", "default-user")
-    return await email_service.create_segment(user_id, segment_data)
+    """Bulk create multiple email_marketings"""
+    try:
+        if not items:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one item must be provided"
+            )
+        
+        if len(items) > 100:
+            raise HTTPException(
+                status_code=400, 
+                detail="Maximum 100 items can be created at once"
+            )
+        
+        # Convert Pydantic models to dicts
+        items_data = [item.dict() for item in items]
+        
+        # Add user context
+        user_id = current_user.get("id") or current_user.get("user_id")
+        user_email = current_user.get("email", "unknown")
+        
+        for item_data in items_data:
+            item_data["created_by"] = user_email
+        
+        service = get_email_marketing_service()
+        result = await service.bulk_create_email_marketings(items_data, user_id=user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=result.get("error", "Bulk creation failed")
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Bulk create email_marketings failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
