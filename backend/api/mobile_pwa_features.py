@@ -46,7 +46,7 @@ class CacheResourceRequest(BaseModel):
     type: str = Field(..., regex="^(page|api|asset)$")
     content: str = Field(..., description="Resource content")
     content_type: str = Field("text/html")
-    strategy: str = Field(OfflineStrategy.CACHE_FIRST.value)
+    strategy: str = Field("cache_first")
     ttl_hours: int = Field(24, ge=1, le=168)
 
 class PWASettingsRequest(BaseModel):
