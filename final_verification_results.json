@@ -2,7 +2,7 @@
   "results": {
     "mock_data_scan": {
       "total_issues": 215,
-      "files_with_issues": 37,
+      "files_with_issues": 36,
       "critical_files": [
         "api_key_integrator.py",
         "eliminate_random_data.py",
@@ -22,7 +22,6 @@
         "services/data_population.py",
         "services/advanced_team_management_service.py",
         "services/social_email_service.py",
-        "services/google_oauth_service.py",
         "services/link_shortener_service.py",
         "services/ai_content_service.py",
         "services/comprehensive_marketing_website_service.py",
@@ -44,20 +43,8 @@
       ],
       "detailed_issues": {
         "api_key_integrator.py": {
-          "issues_count": 24,
+          "issues_count": 22,
           "issues": [
-            {
-              "pattern": "test_\\w+",
-              "match": "test_51RHeZMPTey8qEzxZZ1MyBvDG8Qh2VOoxUroGhxpNmcEMnvgfQCfwcsHihlFvqz35LPjAYyKZ4j5Njm07AKGuXDqw00nAsVfaXv",
-              "line": 37,
-              "content": "\"STRIPE_PUBLISHABLE_KEY\": \"pk_test_51RHeZMPTey8qEzxZZ1MyBvDG8Qh2VOoxUroGhxpNmcEMnvgfQCfwcsHihlFvqz35LPjAYyKZ4j5Njm07AKGuXDqw00nAsVfaXv\","
-            },
-            {
-              "pattern": "test_\\w+",
-              "match": "test_51RHeZMPTey8qEzxZn2t4XbP6CATdXVbcgbzvSjdVIsijehuscfcSOVQ016bUXsVaBV9MyoI8EThIBTgmXSjDUs6n00ipAjYRXZ",
-              "line": 38,
-              "content": "\"STRIPE_SECRET_KEY\": \"sk_test_51RHeZMPTey8qEzxZn2t4XbP6CATdXVbcgbzvSjdVIsijehuscfcSOVQ016bUXsVaBV9MyoI8EThIBTgmXSjDUs6n00ipAjYRXZ\""
-            },
             {
               "pattern": "test_\\w+",
               "match": "test_endpoints",
@@ -819,7 +806,7 @@
           ]
         },
         "services/social_email_service.py": {
-          "issues_count": 4,
+          "issues_count": 5,
           "issues": [
             {
               "pattern": "sample_\\w+",
@@ -837,24 +824,19 @@
               "pattern": "sample_\\w+",
               "match": "sample_from_db",
               "line": 547,
-              "content": "async def _get_sample_from_db(self, choices: list, k: int):"
+              "content": "async def _get_sample_from_db(self, items: list, count: int) -> list:"
             },
             {
               "pattern": "sample_\\w+",
-              "match": "sample_distribution",
-              "line": 551,
-              "content": "result = await db.analytics.find_one({\"type\": \"sample_distribution\"})"
-            }
-          ]
-        },
-        "services/google_oauth_service.py": {
-          "issues_count": 1,
-          "issues": [
+              "match": "sample_data",
+              "line": 559,
+              "content": "if db and hasattr(db, 'sample_data'):"
+            },
             {
-              "pattern": "placeholder\\w*",
-              "match": "placeholder",
-              "line": 77,
-              "content": "\"picture\": \"https://via.placeholder.com/150\","
+              "pattern": "sample_\\w+",
+              "match": "sample_data",
+              "line": 562,
+              "content": "db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)"
             }
           ]
         },
@@ -876,7 +858,7 @@
           ]
         },
         "services/ai_content_service.py": {
-          "issues_count": 3,
+          "issues_count": 5,
           "issues": [
             {
               "pattern": "sample_\\w+",
@@ -888,7 +870,19 @@
               "pattern": "sample_\\w+",
               "match": "sample_from_db",
               "line": 772,
-              "content": "async def _get_sample_from_db(self, items: list, count: int):"
+              "content": "async def _get_sample_from_db(self, items: list, count: int) -> list:"
+            },
+            {
+              "pattern": "sample_\\w+",
+              "match": "sample_data",
+              "line": 784,
+              "content": "if db and hasattr(db, 'sample_data'):"
+            },
+            {
+              "pattern": "sample_\\w+",
+              "match": "sample_data",
+              "line": 787,
+              "content": "db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)"
             },
             {
               "pattern": "test_\\w+",
@@ -1524,26 +1518,24 @@
       "entities_checked": 15,
       "crud_status": {
         "users": {
-          "completion": 75.0,
+          "completion": 100.0,
           "found": [
             "create_user",
+            "delete_user",
             "get_user",
             "update_user"
           ],
-          "missing": [
-            "delete_user"
-          ]
+          "missing": []
         },
         "workspaces": {
-          "completion": 75.0,
+          "completion": 100.0,
           "found": [
             "get_workspace",
             "create_workspace",
-            "update_workspace"
-          ],
-          "missing": [
+            "update_workspace",
             "delete_workspace"
-          ]
+          ],
+          "missing": []
         },
         "templates": {
           "completion": 100.0,
@@ -1609,15 +1601,14 @@
           "missing": []
         },
         "bookings": {
-          "completion": 75.0,
+          "completion": 100.0,
           "found": [
             "create_booking",
             "get_booking",
-            "update_booking"
-          ],
-          "missing": [
+            "update_booking",
             "cancel_booking"
-          ]
+          ],
+          "missing": []
         },
         "bio_sites": {
           "completion": 50.0,
@@ -1734,6 +1725,12 @@
           "PUT": 0,
           "DELETE": 0
         },
+        "mobile_pwa.py": {
+          "GET": 2,
+          "POST": 0,
+          "PUT": 0,
+          "DELETE": 0
+        },
         "business_intelligence.py": {
           "GET": 3,
           "POST": 1,
@@ -1793,6 +1790,12 @@
           "POST": 2,
           "PUT": 0,
           "DELETE": 1
+        },
+        "webhook.py": {
+          "GET": 2,
+          "POST": 0,
+          "PUT": 0,
+          "DELETE": 0
         },
         "support_system.py": {
           "GET": 14,
@@ -1902,6 +1905,12 @@
           "PUT": 1,
           "DELETE": 1
         },
+        "automation.py": {
+          "GET": 2,
+          "POST": 0,
+          "PUT": 0,
+          "DELETE": 0
+        },
         "admin.py": {
           "GET": 4,
           "POST": 0,
@@ -1911,6 +1920,12 @@
         "complete_subscription.py": {
           "GET": 9,
           "POST": 6,
+          "PUT": 0,
+          "DELETE": 0
+        },
+        "support.py": {
+          "GET": 2,
+          "POST": 0,
           "PUT": 0,
           "DELETE": 0
         },
@@ -2004,6 +2019,12 @@
           "PUT": 2,
           "DELETE": 2
         },
+        "survey.py": {
+          "GET": 2,
+          "POST": 0,
+          "PUT": 0,
+          "DELETE": 0
+        },
         "complete_financial.py": {
           "GET": 10,
           "POST": 5,
@@ -2082,6 +2103,12 @@
           "PUT": 1,
           "DELETE": 1
         },
+        "template_marketplace.py": {
+          "GET": 2,
+          "POST": 0,
+          "PUT": 0,
+          "DELETE": 0
+        },
         "complete_link_in_bio.py": {
           "GET": 9,
           "POST": 4,
@@ -2096,12 +2123,6 @@
         }
       },
       "missing_operations": {
-        "users": [
-          "delete_user"
-        ],
-        "workspaces": [
-          "delete_workspace"
-        ],
         "orders": [
           "cancel_order"
         ],
@@ -2113,9 +2134,6 @@
         "contacts": [
           "update_contact",
           "delete_contact"
-        ],
-        "bookings": [
-          "cancel_booking"
         ],
         "bio_sites": [
           "create_bio_site",
@@ -2144,108 +2162,96 @@
     },
     "service_api_pairing": {
       "service_files_count": 73,
-      "api_files_count": 67,
-      "paired_count": 53,
+      "api_files_count": 73,
+      "paired_count": 59,
       "services_without_api": [
-        "i18n",
         "social_email_integration",
-        "social_email",
-        "enterprise_security",
-        "crm",
-        "real_data_population",
-        "rate_limiting",
-        "survey",
-        "customer_experience_suite",
-        "template_marketplace",
-        "webhook",
-        "ai_token",
-        "content_creation_suite",
-        "notification",
-        "data_population",
         "monitoring",
-        "mobile_pwa",
-        "support",
-        "automation",
-        "team"
+        "customer_experience_suite",
+        "data_population",
+        "crm",
+        "social_email",
+        "rate_limiting",
+        "real_data_population",
+        "ai_token",
+        "i18n",
+        "team",
+        "notification",
+        "enterprise_security",
+        "content_creation_suite"
       ],
       "apis_without_service": [
-        "analytics",
-        "ai_content_generation",
-        "content_creation",
-        "integration_tests",
-        "analytics_system",
-        "workflow_automation",
-        "enhanced_features",
-        "notification_system",
+        "escrow_system",
         "missing_endpoints_fix",
-        "mobile_pwa_features",
-        "templates",
-        "team_management",
         "rate_limiting_system",
-        "escrow_system"
+        "analytics",
+        "content_creation",
+        "enhanced_features",
+        "team_management",
+        "mobile_pwa_features",
+        "ai_content_generation",
+        "templates",
+        "workflow_automation",
+        "integration_tests",
+        "notification_system",
+        "analytics_system"
       ],
       "import_issues": [
-        "API file compliance_system.py doesn't import its service",
-        "API file realtime_notifications.py doesn't import its service",
-        "API file monitoring_system.py doesn't import its service",
-        "API file integrations.py doesn't import its service",
-        "API file ai.py doesn't import its service",
-        "API file admin.py doesn't import its service",
-        "API file admin_configuration.py doesn't import its service",
-        "API file business_intelligence.py doesn't import its service",
         "API file support_system.py doesn't import its service",
-        "API file promotions_referrals.py doesn't import its service",
-        "API file ai_token_management.py doesn't import its service",
-        "API file marketing.py doesn't import its service",
-        "API file survey_system.py doesn't import its service",
-        "API file link_shortener.py doesn't import its service",
-        "API file dashboard.py doesn't import its service",
-        "API file bio_sites.py doesn't import its service",
-        "API file form_builder.py doesn't import its service",
-        "API file i18n_system.py doesn't import its service",
-        "API file google_oauth.py doesn't import its service",
-        "API file auth.py doesn't import its service",
-        "API file crm_management.py doesn't import its service",
         "API file webhook_system.py doesn't import its service",
-        "API file automation_system.py doesn't import its service",
+        "API file i18n_system.py doesn't import its service",
+        "API file promotions_referrals.py doesn't import its service",
+        "API file admin_configuration.py doesn't import its service",
+        "API file compliance_system.py doesn't import its service",
+        "API file ai_token_management.py doesn't import its service",
+        "API file integrations.py doesn't import its service",
         "API file blog.py doesn't import its service",
-        "API file media_library.py doesn't import its service"
+        "API file admin.py doesn't import its service",
+        "API file realtime_notifications.py doesn't import its service",
+        "API file bio_sites.py doesn't import its service",
+        "API file marketing.py doesn't import its service",
+        "API file link_shortener.py doesn't import its service",
+        "API file business_intelligence.py doesn't import its service",
+        "API file media_library.py doesn't import its service",
+        "API file automation_system.py doesn't import its service",
+        "API file form_builder.py doesn't import its service",
+        "API file auth.py doesn't import its service",
+        "API file google_oauth.py doesn't import its service",
+        "API file monitoring_system.py doesn't import its service",
+        "API file survey_system.py doesn't import its service",
+        "API file crm_management.py doesn't import its service",
+        "API file ai.py doesn't import its service",
+        "API file dashboard.py doesn't import its service"
       ],
       "pairing_issues": [
-        "Service i18n missing corresponding API file",
         "Service social_email_integration missing corresponding API file",
-        "Service social_email missing corresponding API file",
-        "Service enterprise_security missing corresponding API file",
-        "Service crm missing corresponding API file",
-        "Service real_data_population missing corresponding API file",
-        "Service rate_limiting missing corresponding API file",
-        "Service survey missing corresponding API file",
-        "Service customer_experience_suite missing corresponding API file",
-        "Service template_marketplace missing corresponding API file",
-        "Service webhook missing corresponding API file",
-        "Service ai_token missing corresponding API file",
-        "Service content_creation_suite missing corresponding API file",
-        "Service notification missing corresponding API file",
-        "Service data_population missing corresponding API file",
         "Service monitoring missing corresponding API file",
-        "Service mobile_pwa missing corresponding API file",
-        "Service support missing corresponding API file",
-        "Service automation missing corresponding API file",
+        "Service customer_experience_suite missing corresponding API file",
+        "Service data_population missing corresponding API file",
+        "Service crm missing corresponding API file",
+        "Service social_email missing corresponding API file",
+        "Service rate_limiting missing corresponding API file",
+        "Service real_data_population missing corresponding API file",
+        "Service ai_token missing corresponding API file",
+        "Service i18n missing corresponding API file",
         "Service team missing corresponding API file",
-        "API analytics missing corresponding service file",
-        "API ai_content_generation missing corresponding service file",
-        "API content_creation missing corresponding service file",
-        "API integration_tests missing corresponding service file",
-        "API analytics_system missing corresponding service file",
-        "API workflow_automation missing corresponding service file",
-        "API enhanced_features missing corresponding service file",
-        "API notification_system missing corresponding service file",
+        "Service notification missing corresponding API file",
+        "Service enterprise_security missing corresponding API file",
+        "Service content_creation_suite missing corresponding API file",
+        "API escrow_system missing corresponding service file",
         "API missing_endpoints_fix missing corresponding service file",
-        "API mobile_pwa_features missing corresponding service file",
-        "API templates missing corresponding service file",
-        "API team_management missing corresponding service file",
         "API rate_limiting_system missing corresponding service file",
-        "API escrow_system missing corresponding service file"
+        "API analytics missing corresponding service file",
+        "API content_creation missing corresponding service file",
+        "API enhanced_features missing corresponding service file",
+        "API team_management missing corresponding service file",
+        "API mobile_pwa_features missing corresponding service file",
+        "API ai_content_generation missing corresponding service file",
+        "API templates missing corresponding service file",
+        "API workflow_automation missing corresponding service file",
+        "API integration_tests missing corresponding service file",
+        "API notification_system missing corresponding service file",
+        "API analytics_system missing corresponding service file"
       ]
     },
     "missing_implementations": {},
@@ -2257,8 +2263,8 @@
       "crud_complete": false,
       "pairing_correct": false,
       "routers_registered": false,
-      "issues_found": 71,
-      "fixes_needed": 72
+      "issues_found": 62,
+      "fixes_needed": 63
     }
   },
   "fixes": [
@@ -2285,7 +2291,6 @@
         "services/data_population.py",
         "services/advanced_team_management_service.py",
         "services/social_email_service.py",
-        "services/google_oauth_service.py",
         "services/link_shortener_service.py",
         "services/ai_content_service.py",
         "services/comprehensive_marketing_website_service.py",
@@ -2310,14 +2315,11 @@
     {
       "category": "CRUD Completion",
       "priority": "HIGH",
-      "description": "Complete CRUD operations for 12 entities",
+      "description": "Complete CRUD operations for 9 entities",
       "entities": [
-        "users",
-        "workspaces",
         "orders",
         "courses",
         "contacts",
-        "bookings",
         "bio_sites",
         "campaigns",
         "teams",
@@ -2330,42 +2332,36 @@
     {
       "category": "Service-API Pairing",
       "priority": "MEDIUM",
-      "description": "Fix 34 service-API pairing issues",
+      "description": "Fix 28 service-API pairing issues",
       "issues": [
-        "Service i18n missing corresponding API file",
         "Service social_email_integration missing corresponding API file",
-        "Service social_email missing corresponding API file",
-        "Service enterprise_security missing corresponding API file",
-        "Service crm missing corresponding API file",
-        "Service real_data_population missing corresponding API file",
-        "Service rate_limiting missing corresponding API file",
-        "Service survey missing corresponding API file",
-        "Service customer_experience_suite missing corresponding API file",
-        "Service template_marketplace missing corresponding API file",
-        "Service webhook missing corresponding API file",
-        "Service ai_token missing corresponding API file",
-        "Service content_creation_suite missing corresponding API file",
-        "Service notification missing corresponding API file",
-        "Service data_population missing corresponding API file",
         "Service monitoring missing corresponding API file",
-        "Service mobile_pwa missing corresponding API file",
-        "Service support missing corresponding API file",
-        "Service automation missing corresponding API file",
+        "Service customer_experience_suite missing corresponding API file",
+        "Service data_population missing corresponding API file",
+        "Service crm missing corresponding API file",
+        "Service social_email missing corresponding API file",
+        "Service rate_limiting missing corresponding API file",
+        "Service real_data_population missing corresponding API file",
+        "Service ai_token missing corresponding API file",
+        "Service i18n missing corresponding API file",
         "Service team missing corresponding API file",
-        "API analytics missing corresponding service file",
-        "API ai_content_generation missing corresponding service file",
-        "API content_creation missing corresponding service file",
-        "API integration_tests missing corresponding service file",
-        "API analytics_system missing corresponding service file",
-        "API workflow_automation missing corresponding service file",
-        "API enhanced_features missing corresponding service file",
-        "API notification_system missing corresponding service file",
+        "Service notification missing corresponding API file",
+        "Service enterprise_security missing corresponding API file",
+        "Service content_creation_suite missing corresponding API file",
+        "API escrow_system missing corresponding service file",
         "API missing_endpoints_fix missing corresponding service file",
-        "API mobile_pwa_features missing corresponding service file",
-        "API templates missing corresponding service file",
-        "API team_management missing corresponding service file",
         "API rate_limiting_system missing corresponding service file",
-        "API escrow_system missing corresponding service file"
+        "API analytics missing corresponding service file",
+        "API content_creation missing corresponding service file",
+        "API enhanced_features missing corresponding service file",
+        "API team_management missing corresponding service file",
+        "API mobile_pwa_features missing corresponding service file",
+        "API ai_content_generation missing corresponding service file",
+        "API templates missing corresponding service file",
+        "API workflow_automation missing corresponding service file",
+        "API integration_tests missing corresponding service file",
+        "API notification_system missing corresponding service file",
+        "API analytics_system missing corresponding service file"
       ],
       "action": "Create missing service or API files"
     }
