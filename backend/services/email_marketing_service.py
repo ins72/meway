@@ -166,7 +166,7 @@ class EmailMarketingService:
         # Generate detailed campaign data
         recipients = await self._get_metric_from_db('general', 1000, 8000)
         opens = await self._get_real_metric_from_db('email_opens', int(recipients * 0.2), int(recipients * 0.5))
-        clicks = await self._get_real_clicks(user_id)))
+        clicks = await self._get_real_clicks(user_id)
         
         campaign = {
             "id": campaign_id,
