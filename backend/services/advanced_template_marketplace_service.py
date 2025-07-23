@@ -32,32 +32,27 @@ class AdvancedTemplateMarketplaceService:
     """Advanced template marketplace with full monetization"""
     
     def __init__(self):
-        self.db = None
-        self.templates_collection = None
-        self.purchases_collection = None
-        self.reviews_collection = None
-        self.creators_collection = None
-        self.analytics_collection = None
+        pass
     
-    def _get_db(self):
-        """Lazy database initialization"""
-        if self.db is None:
-            self.db = get_database()
-            if self.db is not None:
-                self.templates_collection = self.db["templates"]
-                self.purchases_collection = self.db["template_purchases"]
-                self.reviews_collection = self.db["template_reviews"]
-                self.creators_collection = self.db["template_creators"]
-                self.analytics_collection = self.db["template_analytics"]
-        return self.db
+    def _get_collections(self):
+        """Get database collections"""
+        db = get_database()
+        if not db:
+            raise RuntimeError("Database connection not available")
+        
+        return {
+            'templates': db["templates"],
+            'purchases': db["template_purchases"],
+            'reviews': db["template_reviews"],
+            'creators': db["template_creators"],
+            'analytics': db["template_analytics"]
+        }
         
     # Template Creation & Management
     async def create_template(self, creator_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create new template for marketplace"""
-        db = self._get_db()
-        if not db:
-            raise RuntimeError("Database not available")
-            
+        collections = self._get_collections()
+        
         template = {
             "id": str(uuid.uuid4()),
             "creator_id": creator_id,
@@ -86,7 +81,7 @@ class AdvancedTemplateMarketplaceService:
             }
         }
         
-        await self.templates_collection.insert_one(template)
+        await collections['templates'].insert_one(template)
         
         # Track analytics
         await self._track_template_event(template["id"], "created", creator_id)
@@ -95,6 +90,7 @@ class AdvancedTemplateMarketplaceService:
     
     async def browse_templates(self, filters: Dict[str, Any] = None, limit: int = 20, skip: int = 0) -> Dict[str, Any]:
         """Browse approved templates with advanced filtering"""
+        collections = self._get_collections()
         query = {"status": TemplateStatus.APPROVED.value}
         
         if filters:
@@ -122,10 +118,10 @@ class AdvancedTemplateMarketplaceService:
         sort_by = filters.get("sort_by", "popular") if filters else "popular"
         sort_criteria = sort_options.get(sort_by, sort_options["popular"])
         
-        cursor = self.templates_collection.find(query).sort(sort_criteria).skip(skip).limit(limit)
+        cursor = collections['templates'].find(query).sort(sort_criteria).skip(skip).limit(limit)
         templates = await cursor.to_list(length=limit)
         
-        total_count = await self.templates_collection.count_documents(query)
+        total_count = await collections['templates'].count_documents(query)
         
         return {
             "templates": templates,
@@ -137,7 +133,9 @@ class AdvancedTemplateMarketplaceService:
     
     async def purchase_template(self, user_id: str, template_id: str, payment_method: str) -> Dict[str, Any]:
         """Purchase template with real payment processing"""
-        template = await self.templates_collection.find_one({
+        collections = self._get_collections()
+        
+        template = await collections['templates'].find_one({
             "id": template_id,
             "status": TemplateStatus.APPROVED.value
         })
@@ -146,7 +144,7 @@ class AdvancedTemplateMarketplaceService:
             raise ValueError("Template not found or not available")
         
         # Check if already purchased
-        existing_purchase = await self.purchases_collection.find_one({
+        existing_purchase = await collections['purchases'].find_one({
             "user_id": user_id,
             "template_id": template_id
         })
@@ -169,10 +167,10 @@ class AdvancedTemplateMarketplaceService:
             "max_downloads": 10
         }
         
-        await self.purchases_collection.insert_one(purchase)
+        await collections['purchases'].insert_one(purchase)
         
         # Update template stats
-        await self.templates_collection.update_one(
+        await collections['templates'].update_one(
             {"id": template_id},
             {
                 "$inc": {
@@ -187,13 +185,15 @@ class AdvancedTemplateMarketplaceService:
     
     async def get_template_for_use(self, user_id: str, template_id: str) -> Dict[str, Any]:
         """Get template data for actual usage"""
-        template = await self.templates_collection.find_one({"id": template_id})
+        collections = self._get_collections()
+        
+        template = await collections['templates'].find_one({"id": template_id})
         if not template:
             raise ValueError("Template not found")
         
         # Check if template is free or if user has purchased it
         if template["price"] > 0:
-            purchase = await self.purchases_collection.find_one({
+            purchase = await collections['purchases'].find_one({
                 "user_id": user_id,
                 "template_id": template_id
             })
@@ -215,7 +215,8 @@ class AdvancedTemplateMarketplaceService:
     # Helper methods
     async def _track_template_event(self, template_id: str, event: str, user_id: str):
         """Track template analytics event"""
-        await self.analytics_collection.insert_one({
+        collections = self._get_collections()
+        await collections['analytics'].insert_one({
             "id": str(uuid.uuid4()),
             "template_id": template_id,
             "user_id": user_id,
@@ -224,5 +225,9 @@ class AdvancedTemplateMarketplaceService:
             "metadata": {}
         })
 
+def get_advanced_template_marketplace_service():
+    """Factory function to get service instance"""
+    return AdvancedTemplateMarketplaceService()
+
 # Service instance
-advanced_template_marketplace_service = AdvancedTemplateMarketplaceService()
+advanced_template_marketplace_service = get_advanced_template_marketplace_service()
