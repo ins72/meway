@@ -41,7 +41,12 @@ async def health_check():
 async def login(login_data: LoginRequest):
     """Login endpoint - Returns JWT token"""
     try:
-        users_collection = get_users_collection()
+        from core.database import get_database_async
+        db = await get_database_async()
+        if db is None:
+            raise HTTPException(status_code=500, detail="Database unavailable")
+        
+        users_collection = db.users
         
         # Find user by email
         user = await users_collection.find_one({"email": login_data.email})
@@ -88,7 +93,12 @@ async def login(login_data: LoginRequest):
 async def register(register_data: RegisterRequest):
     """Register endpoint - Creates new user"""
     try:
-        users_collection = get_users_collection()
+        from core.database import get_database_async
+        db = await get_database_async()
+        if db is None:
+            raise HTTPException(status_code=500, detail="Database unavailable")
+        
+        users_collection = db.users
         
         # Check if user already exists
         existing_user = await users_collection.find_one({"email": register_data.email})
