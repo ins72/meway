@@ -10,12 +10,25 @@ from core.database import get_database
 
 class ComplianceService:
     def __init__(self):
-        self.db = get_database()
-        self.collection = self.db["compliance"]
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()["compliance"]
+        return self.collection
 
     async def create_compliance(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new compliance"""
         try:
+            collection = self._get_collection()
             # Add metadata
             data.update({
                 "id": str(uuid.uuid4()),
@@ -25,7 +38,7 @@ class ComplianceService:
             })
             
             # Save to database
-            result = await self.collection.insert_one(data)
+            result = await collection.insert_one(data)
             
             return {
                 "success": True,
