@@ -3980,9 +3980,50 @@ class BackendTester:
         
         print("⚠️ Full escrow system endpoints (milestone payments, disputes) not found in API")
         
+    def test_existing_endpoints_from_history(self):
+        """Test endpoints that were mentioned as working in previous test results"""
+        print("\n🔍 TESTING EXISTING ENDPOINTS FROM PREVIOUS RESULTS")
+        print("=" * 60)
+        
+        # Test endpoints that were mentioned as working in test_result.md
+        print("\n📊 Testing Analytics & Dashboard Endpoints...")
+        self.test_endpoint("/unified-analytics/health", "GET", test_name="Unified Analytics - Health Check")
+        self.test_endpoint("/unified-analytics/dashboard", "GET", test_name="Unified Analytics - Dashboard")
+        self.test_endpoint("/unified-analytics/leaderboard/global", "GET", test_name="Unified Analytics - Global Leaderboard")
+        
+        print("\n👥 Testing Team Management Endpoints...")
+        self.test_endpoint("/team-management/health", "GET", test_name="Team Management - Health Check")
+        self.test_endpoint("/teams/dashboard", "GET", test_name="Teams - Dashboard")
+        self.test_endpoint("/teams/activity", "GET", test_name="Teams - Activity Log")
+        
+        print("\n🛍️ Testing Template Marketplace Endpoints...")
+        self.test_endpoint("/template-marketplace/health", "GET", test_name="Template Marketplace - Health Check")
+        self.test_endpoint("/template-marketplace/categories", "GET", test_name="Template Marketplace - Categories")
+        self.test_endpoint("/templates/marketplace", "GET", test_name="Templates - Marketplace Browse")
+        
+        print("\n📱 Testing Mobile PWA Endpoints...")
+        self.test_endpoint("/mobile-pwa/health", "GET", test_name="Mobile PWA - Health Check")
+        self.test_endpoint("/mobile-pwa/manifest", "GET", test_name="Mobile PWA - Manifest")
+        self.test_endpoint("/mobile-pwa/analytics/mobile", "GET", test_name="Mobile PWA - Analytics")
+        
+        print("\n🤖 Testing AI Automation Endpoints...")
+        self.test_endpoint("/ai/analytics", "GET", test_name="AI - Analytics Overview")
+        self.test_endpoint("/ai/content/generate", "POST", {"prompt": "Write a business blog post about productivity"}, "AI - Generate Content")
+        self.test_endpoint("/workflows/user", "GET", test_name="Workflows - User Workflows")
+        
+        print("\n💰 Testing Payment/Escrow Related Endpoints...")
+        self.test_endpoint("/ai-tokens/dashboard", "GET", test_name="AI Tokens - Dashboard")
+        self.test_endpoint("/ai-tokens/packages", "GET", test_name="AI Tokens - Packages")
+        
+        print("\n📱 Testing Social Media Endpoints...")
+        self.test_endpoint("/social-media-leads/analytics", "GET", test_name="Social Media - Analytics")
+        self.test_endpoint("/social-media-leads/twitter/search", "POST", {
+            "keywords": ["business", "entrepreneur"],
+            "max_results": 10
+        }, "Social Media - Twitter Search")
+        
+        print("\n🔍 Existing Endpoints Testing Complete!")
         return True
-    
-    def generate_final_report(self):
         """Generate comprehensive final report"""
         print("\n" + "="*80)
         print("📊 FINAL COMPREHENSIVE BACKEND VERIFICATION REPORT")
