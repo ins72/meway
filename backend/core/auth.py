@@ -130,6 +130,12 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
             user["is_active"] = True
         if "bypass_rbac" not in user:
             user["bypass_rbac"] = email == "tmonnens@outlook.com"
+        
+        # Ensure both 'id' and '_id' are available for compatibility
+        if "_id" in user and "id" not in user:
+            user["id"] = user["_id"]
+        elif "id" in user and "_id" not in user:
+            user["_id"] = user["id"]
             
         logger.info(f"User authentication successful: {email}")
         return user
@@ -141,8 +147,9 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         logger.error(f"Database error during authentication: {e}")
         # For development/testing, allow authentication to proceed with basic user object
         logger.warning("Creating basic user object for authentication bypass")
-        return {
+        fallback_user = {
             "_id": email,
+            "id": email,  # Add both id formats for compatibility
             "email": email,
             "is_active": True,
             "is_admin": email == "tmonnens@outlook.com",
@@ -151,6 +158,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
             "created_at": datetime.utcnow().isoformat(),
             "fallback_user": True
         }
+        return fallback_user
 
 async def get_current_active_user(current_user: dict = Depends(get_current_user)):
     """Get current active user"""
