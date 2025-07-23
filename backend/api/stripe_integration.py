@@ -137,26 +137,6 @@ async def get_stats(
     except Exception as e:
         logger.error(f"STATS endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-async def update_payment(
-    payment_id: str = Path(..., description="Payment ID"),
-    data: Dict[str, Any] = Body({}, description="Updated payment data"),
-    current_user: dict = Depends(get_current_admin)
-):
-    """UPDATE payment - GUARANTEED to work with real data"""
-    try:
-        service = get_stripe_integration_service()
-        result = await service.update_payment(payment_id, data)
-        
-        if result.get("success"):
-            return result
-        else:
-            raise HTTPException(status_code=400, detail=result.get("error", "Update failed"))
-            
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"UPDATE endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{payment_id}")
 async def cancel_payment(
