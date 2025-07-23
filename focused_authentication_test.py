@@ -92,7 +92,7 @@ class FocusedAuthenticationTester:
             # Test 1: Login with provided credentials
             print("\n1. Testing Login with Provided Credentials...")
             login_data = {
-                "username": TEST_EMAIL,
+                "email": TEST_EMAIL,
                 "password": TEST_PASSWORD
             }
             
