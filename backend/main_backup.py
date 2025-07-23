@@ -52,6 +52,7 @@ app.add_middleware(
 
 # Import and include all bulletproof routers
 try:
+    from api.rate_limiting_system import router as rate_limiting_system_router
     from api.financial import router as financial_router
     from api.complete_course_community import router as complete_course_community_router
     from api.complete_link_in_bio import router as complete_link_in_bio_router
@@ -65,8 +66,13 @@ try:
     from api.link import router as link_router
     from api.advanced_financial_analytics import router as advanced_financial_analytics_router
     from api.sync import router as sync_router
+    from api.ai_token_management import router as ai_token_management_router
     from api.ai_token import router as ai_token_router
+    from api.advanced_template_marketplace import router as advanced_template_marketplace_router
+    from api.complete_booking import router as complete_booking_router
+    from api.analytics_system import router as analytics_system_router
     from api.unified_analytics_gamification import router as unified_analytics_gamification_router
+    from api.monitoring_system import router as monitoring_system_router
     from api.marketing import router as marketing_router
     from api.real_ai_automation import router as real_ai_automation_router
     from api.metric import router as metric_router
@@ -77,27 +83,42 @@ try:
     from api.customer_experience import router as customer_experience_router
     from api.mobile_pwa_features import router as mobile_pwa_features_router
     from api.seo import router as seo_router
+    from api.survey_system import router as survey_system_router
+    from api.advanced_financial import router as advanced_financial_router
+    from api.customer_experience_suite import router as customer_experience_suite_router
+    from api.crm_management import router as crm_management_router
+    from api.advanced_ai import router as advanced_ai_router
     from api.campaign import router as campaign_router
     from api.enterprise_security_compliance import router as enterprise_security_compliance_router
+    from api.compliance_system import router as compliance_system_router
     from api.form import router as form_router
     from api.promotions_referrals import router as promotions_referrals_router
+    from api.i18n_system import router as i18n_system_router
     from api.course import router as course_router
+    from api.support_system import router as support_system_router
     from api.import_api import router as import_router
     from api.link_shortener import router as link_shortener_router
     from api.security import router as security_router
+    from api.social_media_suite import router as social_media_suite_router
     from api.team_management import router as team_management_router
     from api.profile import router as profile_router
     from api.workflow_automation import router as workflow_automation_router
     from api.subscription import router as subscription_router
+    from api.complete_referral_system import router as complete_referral_system_router
+    from api.real_data_population import router as real_data_population_router
     from api.backup import router as backup_router
     from api.log import router as log_router
     from api.escrow import router as escrow_router
     from api.crm import router as crm_router
     from api.templates import router as templates_router
+    from api.escrow_system import router as escrow_system_router
     from api.enhanced_features import router as enhanced_features_router
     from api.google_oauth import router as google_oauth_router
+    from api.backup_system import router as backup_system_router
     from api.template_marketplace import router as template_marketplace_router
+    from api.notification_system import router as notification_system_router
     from api.realtime_notifications import router as realtime_notifications_router
+    from api.advanced_ai_suite import router as advanced_ai_suite_router
     from api.integration_tests import router as integration_tests_router
     from api.i18n import router as i18n_router
     from api.complete_ecommerce import router as complete_ecommerce_router
@@ -109,10 +130,13 @@ try:
     from api.webhook import router as webhook_router
     from api.configuration import router as configuration_router
     from api.complete_financial import router as complete_financial_router
+    from api.complete_escrow import router as complete_escrow_router
     from api.complete_social_media_leads import router as complete_social_media_leads_router
     from api.complete_onboarding import router as complete_onboarding_router
+    from api.complete_website_builder import router as complete_website_builder_router
     from api.lead import router as lead_router
     from api.business_intelligence import router as business_intelligence_router
+    from api.webhook_system import router as webhook_system_router
     from api.content import router as content_router
     from api.blog import router as blog_router
     from api.survey import router as survey_router
@@ -128,17 +152,23 @@ try:
     from api.audit import router as audit_router
     from api.comprehensive_marketing_website import router as comprehensive_marketing_website_router
     from api.settings import router as settings_router
+    from api.complete_subscription import router as complete_subscription_router
     from api.data_population import router as data_population_router
     from api.real_email_automation import router as real_email_automation_router
     from api.social_email_integration import router as social_email_integration_router
+    from api.automation_system import router as automation_system_router
     from api.dashboard import router as dashboard_router
+    from api.team import router as team_router
+    from api.course_management import router as course_management_router
     from api.alert import router as alert_router
     from api.advanced_ai_analytics import router as advanced_ai_analytics_router
+    from api.content_creation_suite import router as content_creation_suite_router
     from api.rate_limiting import router as rate_limiting_router
     from api.complete_admin_dashboard import router as complete_admin_dashboard_router
     from api.report import router as report_router
     from api.automation import router as automation_router
     from api.ai_content_generation import router as ai_content_generation_router
+    from api.advanced_analytics import router as advanced_analytics_router
     from api.notification import router as notification_router
     from api.auth import router as auth_router
     from api.content_creation import router as content_creation_router
@@ -146,13 +176,16 @@ try:
     from api.user import router as user_router
     from api.social_email import router as social_email_router
     from api.website_builder import router as website_builder_router
+    from api.referral import router as referral_router
     from api.twitter import router as twitter_router
     from api.tiktok import router as tiktok_router
     from api.stripe_integration import router as stripe_integration_router
+    from api.social_media_management import router as social_media_management_router
     from api.referral_system import router as referral_system_router
     from api.api_testing import router as api_testing_router
 
     # Include all routers
+    app.include_router(rate_limiting_system_router, prefix="/api/rate-limiting-system", tags=["rate_limiting_system"])
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
     app.include_router(complete_course_community_router, prefix="/api/complete-course-community", tags=["complete_course_community"])
     app.include_router(complete_link_in_bio_router, prefix="/api/complete-link-in-bio", tags=["complete_link_in_bio"])
@@ -166,8 +199,13 @@ try:
     app.include_router(link_router, prefix="/api/link", tags=["link"])
     app.include_router(advanced_financial_analytics_router, prefix="/api/advanced-financial-analytics", tags=["advanced_financial_analytics"])
     app.include_router(sync_router, prefix="/api/sync", tags=["sync"])
+    app.include_router(ai_token_management_router, prefix="/api/ai-token-management", tags=["ai_token_management"])
     app.include_router(ai_token_router, prefix="/api/ai-token", tags=["ai_token"])
+    app.include_router(advanced_template_marketplace_router, prefix="/api/advanced-template-marketplace", tags=["advanced_template_marketplace"])
+    app.include_router(complete_booking_router, prefix="/api/complete-booking", tags=["complete_booking"])
+    app.include_router(analytics_system_router, prefix="/api/analytics-system", tags=["analytics_system"])
     app.include_router(unified_analytics_gamification_router, prefix="/api/unified-analytics-gamification", tags=["unified_analytics_gamification"])
+    app.include_router(monitoring_system_router, prefix="/api/monitoring-system", tags=["monitoring_system"])
     app.include_router(marketing_router, prefix="/api/marketing", tags=["marketing"])
     app.include_router(real_ai_automation_router, prefix="/api/real-ai-automation", tags=["real_ai_automation"])
     app.include_router(metric_router, prefix="/api/metric", tags=["metric"])
@@ -178,27 +216,42 @@ try:
     app.include_router(customer_experience_router, prefix="/api/customer-experience", tags=["customer_experience"])
     app.include_router(mobile_pwa_features_router, prefix="/api/mobile-pwa-features", tags=["mobile_pwa_features"])
     app.include_router(seo_router, prefix="/api/seo", tags=["seo"])
+    app.include_router(survey_system_router, prefix="/api/survey-system", tags=["survey_system"])
+    app.include_router(advanced_financial_router, prefix="/api/advanced-financial", tags=["advanced_financial"])
+    app.include_router(customer_experience_suite_router, prefix="/api/customer-experience-suite", tags=["customer_experience_suite"])
+    app.include_router(crm_management_router, prefix="/api/crm-management", tags=["crm_management"])
+    app.include_router(advanced_ai_router, prefix="/api/advanced-ai", tags=["advanced_ai"])
     app.include_router(campaign_router, prefix="/api/campaign", tags=["campaign"])
     app.include_router(enterprise_security_compliance_router, prefix="/api/enterprise-security-compliance", tags=["enterprise_security_compliance"])
+    app.include_router(compliance_system_router, prefix="/api/compliance-system", tags=["compliance_system"])
     app.include_router(form_router, prefix="/api/form", tags=["form"])
     app.include_router(promotions_referrals_router, prefix="/api/promotions-referrals", tags=["promotions_referrals"])
+    app.include_router(i18n_system_router, prefix="/api/i18n-system", tags=["i18n_system"])
     app.include_router(course_router, prefix="/api/course", tags=["course"])
+    app.include_router(support_system_router, prefix="/api/support-system", tags=["support_system"])
     app.include_router(import_router, prefix="/api/import", tags=["import"])
     app.include_router(link_shortener_router, prefix="/api/link-shortener", tags=["link_shortener"])
     app.include_router(security_router, prefix="/api/security", tags=["security"])
+    app.include_router(social_media_suite_router, prefix="/api/social-media-suite", tags=["social_media_suite"])
     app.include_router(team_management_router, prefix="/api/team-management", tags=["team_management"])
     app.include_router(profile_router, prefix="/api/profile", tags=["profile"])
     app.include_router(workflow_automation_router, prefix="/api/workflow-automation", tags=["workflow_automation"])
     app.include_router(subscription_router, prefix="/api/subscription", tags=["subscription"])
+    app.include_router(complete_referral_system_router, prefix="/api/complete-referral-system", tags=["complete_referral_system"])
+    app.include_router(real_data_population_router, prefix="/api/real-data-population", tags=["real_data_population"])
     app.include_router(backup_router, prefix="/api/backup", tags=["backup"])
     app.include_router(log_router, prefix="/api/log", tags=["log"])
     app.include_router(escrow_router, prefix="/api/escrow", tags=["escrow"])
     app.include_router(crm_router, prefix="/api/crm", tags=["crm"])
     app.include_router(templates_router, prefix="/api/templates", tags=["templates"])
+    app.include_router(escrow_system_router, prefix="/api/escrow-system", tags=["escrow_system"])
     app.include_router(enhanced_features_router, prefix="/api/enhanced-features", tags=["enhanced_features"])
     app.include_router(google_oauth_router, prefix="/api/google-oauth", tags=["google_oauth"])
+    app.include_router(backup_system_router, prefix="/api/backup-system", tags=["backup_system"])
     app.include_router(template_marketplace_router, prefix="/api/template-marketplace", tags=["template_marketplace"])
+    app.include_router(notification_system_router, prefix="/api/notification-system", tags=["notification_system"])
     app.include_router(realtime_notifications_router, prefix="/api/realtime-notifications", tags=["realtime_notifications"])
+    app.include_router(advanced_ai_suite_router, prefix="/api/advanced-ai-suite", tags=["advanced_ai_suite"])
     app.include_router(integration_tests_router, prefix="/api/integration-tests", tags=["integration_tests"])
     app.include_router(i18n_router, prefix="/api/i18n", tags=["i18n"])
     app.include_router(complete_ecommerce_router, prefix="/api/complete-ecommerce", tags=["complete_ecommerce"])
@@ -210,10 +263,13 @@ try:
     app.include_router(webhook_router, prefix="/api/webhook", tags=["webhook"])
     app.include_router(configuration_router, prefix="/api/configuration", tags=["configuration"])
     app.include_router(complete_financial_router, prefix="/api/complete-financial", tags=["complete_financial"])
+    app.include_router(complete_escrow_router, prefix="/api/complete-escrow", tags=["complete_escrow"])
     app.include_router(complete_social_media_leads_router, prefix="/api/complete-social-media-leads", tags=["complete_social_media_leads"])
     app.include_router(complete_onboarding_router, prefix="/api/complete-onboarding", tags=["complete_onboarding"])
+    app.include_router(complete_website_builder_router, prefix="/api/complete-website-builder", tags=["complete_website_builder"])
     app.include_router(lead_router, prefix="/api/lead", tags=["lead"])
     app.include_router(business_intelligence_router, prefix="/api/business-intelligence", tags=["business_intelligence"])
+    app.include_router(webhook_system_router, prefix="/api/webhook-system", tags=["webhook_system"])
     app.include_router(content_router, prefix="/api/content", tags=["content"])
     app.include_router(blog_router, prefix="/api/blog", tags=["blog"])
     app.include_router(survey_router, prefix="/api/survey", tags=["survey"])
@@ -229,17 +285,23 @@ try:
     app.include_router(audit_router, prefix="/api/audit", tags=["audit"])
     app.include_router(comprehensive_marketing_website_router, prefix="/api/comprehensive-marketing-website", tags=["comprehensive_marketing_website"])
     app.include_router(settings_router, prefix="/api/settings", tags=["settings"])
+    app.include_router(complete_subscription_router, prefix="/api/complete-subscription", tags=["complete_subscription"])
     app.include_router(data_population_router, prefix="/api/data-population", tags=["data_population"])
     app.include_router(real_email_automation_router, prefix="/api/real-email-automation", tags=["real_email_automation"])
     app.include_router(social_email_integration_router, prefix="/api/social-email-integration", tags=["social_email_integration"])
+    app.include_router(automation_system_router, prefix="/api/automation-system", tags=["automation_system"])
     app.include_router(dashboard_router, prefix="/api/dashboard", tags=["dashboard"])
+    app.include_router(team_router, prefix="/api/team", tags=["team"])
+    app.include_router(course_management_router, prefix="/api/course-management", tags=["course_management"])
     app.include_router(alert_router, prefix="/api/alert", tags=["alert"])
     app.include_router(advanced_ai_analytics_router, prefix="/api/advanced-ai-analytics", tags=["advanced_ai_analytics"])
+    app.include_router(content_creation_suite_router, prefix="/api/content-creation-suite", tags=["content_creation_suite"])
     app.include_router(rate_limiting_router, prefix="/api/rate-limiting", tags=["rate_limiting"])
     app.include_router(complete_admin_dashboard_router, prefix="/api/complete-admin-dashboard", tags=["complete_admin_dashboard"])
     app.include_router(report_router, prefix="/api/report", tags=["report"])
     app.include_router(automation_router, prefix="/api/automation", tags=["automation"])
     app.include_router(ai_content_generation_router, prefix="/api/ai-content-generation", tags=["ai_content_generation"])
+    app.include_router(advanced_analytics_router, prefix="/api/advanced-analytics", tags=["advanced_analytics"])
     app.include_router(notification_router, prefix="/api/notification", tags=["notification"])
     app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
     app.include_router(content_creation_router, prefix="/api/content-creation", tags=["content_creation"])
@@ -247,9 +309,11 @@ try:
     app.include_router(user_router, prefix="/api/user", tags=["user"])
     app.include_router(social_email_router, prefix="/api/social-email", tags=["social_email"])
     app.include_router(website_builder_router, prefix="/api/website-builder", tags=["website_builder"])
+    app.include_router(referral_router, prefix="/api/referral", tags=["referral"])
     app.include_router(twitter_router, prefix="/api/twitter", tags=["twitter"])
     app.include_router(tiktok_router, prefix="/api/tiktok", tags=["tiktok"])
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
+    app.include_router(social_media_management_router, prefix="/api/social-media-management", tags=["social_media_management"])
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
     app.include_router(api_testing_router, prefix="/api/test", tags=["api_testing"])
 
