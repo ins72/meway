@@ -17,6 +17,85 @@ class UserService:
         """Get database connection"""
         return get_database()
     
+    async def authenticate_user(self, email: str, password: str) -> Optional[Dict[str, Any]]:
+        """Authenticate user with email and password"""
+        try:
+            db = self._get_db()
+            if not db:
+                return None
+            
+            # Use 'users' collection (not 'user') based on the database structure
+            collection = db["users"]
+            user = await collection.find_one({"email": email})
+            
+            if not user:
+                return None
+            
+            # Verify password
+            if not verify_password(password, user.get("password", "")):
+                return None
+            
+            # Remove sensitive data
+            user.pop('_id', None)
+            user.pop('password', None)
+            
+            return user
+        except Exception as e:
+            print(f"Authentication error: {e}")
+            return None
+    
+    async def create_user(self, email: str, password: str, name: str) -> Dict[str, Any]:
+        """Create new user with hashed password"""
+        try:
+            db = self._get_db()
+            if not db:
+                raise ValueError("Database not available")
+            
+            # Use 'users' collection (not 'user') based on the database structure
+            collection = db["users"]
+            
+            # Check if user already exists
+            existing_user = await collection.find_one({"email": email})
+            if existing_user:
+                raise ValueError("User with this email already exists")
+            
+            # Hash password
+            hashed_password = get_password_hash(password)
+            
+            user_data = {
+                "_id": str(uuid.uuid4()),
+                "email": email,
+                "password": hashed_password,
+                "name": name,
+                "role": "user",
+                "status": True,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "email_verified_at": None,
+                "phone": None,
+                "avatar": None,
+                "timezone": "UTC",
+                "language": "en",
+                "last_login_at": None,
+                "login_attempts": 0,
+                "locked_until": None,
+                "two_factor_enabled": False,
+                "two_factor_secret": None,
+                "api_key": None,
+                "subscription_plan": "free",
+                "subscription_expires_at": None
+            }
+            
+            result = await collection.insert_one(user_data)
+            
+            # Remove sensitive data from response
+            user_data.pop('password', None)
+            user_data.pop('_id', None)
+            
+            return user_data
+        except Exception as e:
+            raise ValueError(str(e))
+
     async def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create new user"""
         try:
