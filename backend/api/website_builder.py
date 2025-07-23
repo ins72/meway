@@ -70,6 +70,19 @@ async def list_templates(
         logger.error(f"Templates endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/test")
+async def test_create():
+    """Test create endpoint"""
+    try:
+        return {
+            "success": True,
+            "message": "Test endpoint working",
+            "data": {"id": "test-123", "name": "Test Website"}
+        }
+    except Exception as e:
+        logger.error(f"Test endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/")
 async def create_website(
     data: Dict[str, Any] = Body({}, description="Data for creating website")
