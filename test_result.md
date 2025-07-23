@@ -14569,7 +14569,7 @@ backend:
     implemented: true
     working: false
     file: "/api/team/*"
-    stuck_count: 2
+    stuck_count: 3
     priority: "high"
     needs_retesting: false
     status_history:
@@ -14582,6 +14582,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ TEAM MANAGEMENT SYSTEM AUTHENTICATION ISSUES - JANUARY 2025: Health endpoint working perfectly (Status: healthy), but main endpoint failing with HTTP 403 'Not authenticated' error despite valid JWT token being provided. Authentication system generates tokens successfully but endpoints are not properly validating or accepting the JWT tokens. This indicates an authentication middleware or token validation issue rather than database problems."
+      - working: false
+        agent: "testing"
+        comment: "❌ TEAM MANAGEMENT SYSTEM CRITICAL AUTHENTICATION & MISSING ENDPOINTS - JANUARY 2025: Health endpoint working perfectly (89 chars), but main endpoint failing with HTTP 403 'Not authenticated' error despite valid JWT token. Additionally, /team/members and /team/activity endpoints return HTTP 404 'Not found' errors, indicating missing implementations. Task Success Rate: 25.0% (1/4 tests passed). System has proper service architecture but authentication middleware not validating JWT tokens and core endpoints not implemented."
 
   - task: "Form Builder System"
     implemented: false
