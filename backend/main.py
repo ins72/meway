@@ -177,6 +177,9 @@ try:
     from api.social_email import router as social_email_router
     from api.website_builder import router as website_builder_router
     from api.referral import router as referral_router
+    from api.twitter import router as twitter_router
+    from api.tiktok import router as tiktok_router
+    from api.stripe_integration import router as stripe_integration_router
 
     # Include all routers
     app.include_router(rate_limiting_system_router, prefix="/api/rate-limiting-system", tags=["rate_limiting_system"])
