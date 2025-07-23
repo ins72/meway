@@ -21,7 +21,7 @@ class UserService:
         """Authenticate user with email and password"""
         try:
             db = self._get_db()
-            if not db:
+            if db is None:
                 return None
             
             # Use 'users' collection (not 'user') based on the database structure
@@ -48,7 +48,7 @@ class UserService:
         """Create new user with hashed password"""
         try:
             db = self._get_db()
-            if not db:
+            if db is None:
                 raise ValueError("Database not available")
             
             # Use 'users' collection (not 'user') based on the database structure
