@@ -37,6 +37,108 @@ async def health_check():
         logger.error(f"Health check error: {e}")
         return {"success": False, "healthy": False, "error": str(e)}
 
+@router.post("/login")
+async def login(login_data: LoginRequest):
+    """Login endpoint - Returns JWT token"""
+    try:
+        users_collection = get_users_collection()
+        
+        # Find user by email
+        user = await users_collection.find_one({"email": login_data.email})
+        
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="Incorrect email or password"
+            )
+        
+        # Verify password
+        if not verify_password(login_data.password, user["hashed_password"]):
+            raise HTTPException(
+                status_code=401,
+                detail="Incorrect email or password"
+            )
+        
+        # Create access token
+        access_token_expires = timedelta(minutes=1440)  # 24 hours
+        access_token = create_access_token(
+            data={"sub": user["email"]},
+            expires_delta=access_token_expires
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "expires_in": 1440,
+            "user": {
+                "id": str(user["_id"]),
+                "email": user["email"],
+                "full_name": user.get("full_name", ""),
+                "is_active": user.get("is_active", True)
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Login error: {e}")
+        raise HTTPException(status_code=500, detail="Login failed")
+
+@router.post("/register")
+async def register(register_data: RegisterRequest):
+    """Register endpoint - Creates new user"""
+    try:
+        users_collection = get_users_collection()
+        
+        # Check if user already exists
+        existing_user = await users_collection.find_one({"email": register_data.email})
+        if existing_user:
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered"
+            )
+        
+        # Create new user
+        hashed_password = get_password_hash(register_data.password)
+        user_data = {
+            "_id": str(uuid.uuid4()),
+            "email": register_data.email,
+            "hashed_password": hashed_password,
+            "full_name": register_data.full_name or register_data.email.split("@")[0],
+            "is_active": True,
+            "is_admin": False,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        
+        result = await users_collection.insert_one(user_data)
+        
+        # Create access token
+        access_token_expires = timedelta(minutes=1440) 
+        access_token = create_access_token(
+            data={"sub": user_data["email"]},
+            expires_delta=access_token_expires
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "expires_in": 1440,
+            "user": {
+                "id": user_data["_id"],
+                "email": user_data["email"],
+                "full_name": user_data["full_name"],
+                "is_active": True
+            },
+            "message": "User registered successfully"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Registration error: {e}")
+        raise HTTPException(status_code=500, detail="Registration failed")
+
 @router.post("/")
 async def create_auth(
     data: Dict[str, Any] = Body({}, description="Data for creating auth"),
