@@ -518,7 +518,7 @@ class ComprehensiveBackendTester:
         # Test 1: Financial System
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/financial/dashboard", headers=headers) as response:
+            async with self.session.get(f"{self.api_url}/financial/", headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
