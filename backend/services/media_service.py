@@ -119,8 +119,7 @@ class MediaService:
         }
     
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def upload_file(user_id: str, file, file_content: bytes, description: str = "", tags: List[str] = None, folder: str = "") -> Dict[str, Any]:
         """Upload file to media library"""
         database = get_database()
         
