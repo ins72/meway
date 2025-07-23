@@ -600,7 +600,7 @@ class ComprehensiveBackendTester:
         # Test 1: OpenAPI Specification
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/openapi.json") as response:
+            async with self.session.get(f"{self.base_url}/openapi.json") as response:
                 if response.status == 200:
                     data = await response.json()
                     endpoint_count = len(data.get("paths", {}))
