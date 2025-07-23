@@ -1,0 +1,1000 @@
+{
+  "timestamp": "2025-07-23T14:19:45.910995",
+  "file_discovered_count": 1347,
+  "openapi_discovered_count": 198,
+  "working_endpoints": 1,
+  "failed_endpoints": 197,
+  "total_fixes_applied": 117,
+  "endpoint_details": [
+    {
+      "endpoint": "GET /api/ai/services",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/ai/conversations",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/ai/conversations",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/ai/analyze-content",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/ai-tokens/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/ai-tokens/packages",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/ai-tokens/workspace/{workspace_id}/balance",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/ai-tokens/purchase",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/ai-tokens/consume",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/ai-tokens/workspace/{workspace_id}/settings",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/ai-tokens/analytics/{workspace_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/analytics-system/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/analytics-system/overview",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/analytics-system/track",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/analytics-system/reports",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/analytics-system/reports/custom",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/analytics-system/business-intelligence",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/auth/verify",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/auth/logout",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/workflows/advanced",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/automation/workflows/create",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/workflows",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/workflows/{workflow_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/automation/workflows/{workflow_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/automation/workflows/{workflow_id}/execute",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/triggers/available",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/actions/available",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/analytics/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/templates",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/automation/templates/{template_id}/install",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/executions/history",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/performance/metrics",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/automation/rules/create",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/integrations/available",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/blog/posts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/blog/posts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/blog/posts/{post_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/blog/posts/{post_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "DELETE /api/blog/posts/{post_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/blog/posts/slug/{slug}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/blog/analytics",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/content/api/content/",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/content/api/content/",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/content/api/content/{content_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/content/api/content/{content_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "DELETE /api/content/api/content/{content_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/content/api/content/categories/list",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/content/api/content/search",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/content/api/content/analytics/performance",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm/contacts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/crm/contacts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm/contacts/{contact_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/crm/contacts/{contact_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/crm/deals",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm/deals",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/crm/activities",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/forms/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/forms/forms",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/forms/create",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/forms/forms/{form_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/forms/forms/{form_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "DELETE /api/forms/forms/{form_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/forms/submit",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/forms/forms/{form_id}/submissions",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/google-oauth/config",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/google-oauth/google/verify",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/google-oauth/google/link",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/google-oauth/google/unlink",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/google-oauth/google/profile",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integrations/available",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integrations/connected",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/integrations/connect",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integrations/webhooks",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/integrations/webhooks",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integrations/logs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "DELETE /api/integrations/{integration_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/marketing/campaigns",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/marketing/campaigns",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/marketing/contacts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/marketing/contacts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/marketing/lists",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/marketing/lists",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/marketing/analytics",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/promotions/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/promotions/discount-codes",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/promotions/discount-codes",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/promotions/discount-codes/{code}/validate",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/promotions/referral-programs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/promotions/referral-programs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/promotions/referral-codes",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/notifications/api/notifications/send",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/notifications/api/notifications/send-bulk",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/notifications/api/notifications/history",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/notifications/api/notifications/mark-read/{notification_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/notifications/api/notifications/mark-all-read",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/notifications/api/notifications/stats",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/notifications/api/notifications/connection-status",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/teams/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/teams/members",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/teams/invite",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/teams/accept-invitation",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/teams/members/{member_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "DELETE /api/teams/members/{member_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/teams/activity",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/user/api/user/profile",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/user/api/user/profile",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/user/api/user/preferences",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/user/api/user/preferences",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/user/api/user/avatar",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/user/api/user/activity",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/user/api/user/deactivate",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/user/api/user/password/change",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/user/api/user/notifications/settings",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/user/api/user/notifications/settings",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/workspaces",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integration/available",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integration/connected",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/integration/status",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/automation/status",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/team-management/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/team-management/members",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/team-management/activity",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/team-management/teams",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/instagram/search",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/instagram/profiles",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/pwa/manifest/generate",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/pwa/manifest/current",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/workflows/list",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/workflows/create",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/escrow/transactions/milestone",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/escrow/transactions/list",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/posts/schedule",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/posts/scheduled",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/device/register",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/device/offline/sync",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/disputes/initiate",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/disputes/list",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/template-marketplace/browse",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/template-marketplace/creator-earnings",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/send-email",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/campaigns",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/campaigns/{campaign_id}/statistics",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/automation-sequence",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/subscribers",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/email-logs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/bulk-email",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/analytics/overview",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/templates",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/templates",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/api/enterprise-security/threat-detection/setup",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/threat-detection/alerts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/audit/log",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/audit/logs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/api/enterprise-security/vulnerability-assessment",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/vulnerability-assessments",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/compliance/report",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/compliance/reports",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/security/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/threat-detection/setup",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/threat-detection/alerts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/audit/log",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/audit/logs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/vulnerability-assessment",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/vulnerability-assessments",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/compliance/report",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/compliance/reports",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/security/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/send-email",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/campaigns",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/campaigns/{campaign_id}/statistics",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/automation-sequence",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/subscribers",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/email-logs",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/bulk-email",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/analytics/overview",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/email-automation/templates",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/email-automation/templates",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm-management/dashboard",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm-management/contacts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/crm-management/contacts",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm-management/contacts/{contact_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "PUT /api/crm-management/contacts/{contact_id}",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/crm-management/deals",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /api/crm-management/deals",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "POST /api/crm-management/activities",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /",
+      "success": true,
+      "status_code": 200
+    },
+    {
+      "endpoint": "GET /health",
+      "success": false,
+      "status_code": 500
+    },
+    {
+      "endpoint": "GET /api/health",
+      "success": false,
+      "status_code": 502
+    },
+    {
+      "endpoint": "GET /healthz",
+      "success": false,
+      "status_code": 500
+    },
+    {
+      "endpoint": "GET /ready",
+      "success": false,
+      "status_code": 500
+    },
+    {
+      "endpoint": "GET /metrics",
+      "success": false,
+      "status_code": 500
+    }
+  ]
+}

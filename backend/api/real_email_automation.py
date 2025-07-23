@@ -8,6 +8,7 @@ import asyncio
 from core.auth import get_current_active_user as get_current_user
 from core.database import get_database
 from services.real_email_automation_service import RealEmailAutomationService
+from typing import Dict, Any, List, Optional
 
 """
 Real Email Automation API - ElasticMail Integration - NO MOCK DATA

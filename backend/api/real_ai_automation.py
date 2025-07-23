@@ -12,6 +12,9 @@ import asyncio
 from core.database import get_database
 from core.auth import get_current_user
 from services.real_ai_automation_service import RealAIAutomationService
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/ai-automation", tags=["AI Automation"])
 

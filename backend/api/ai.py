@@ -11,6 +11,8 @@ import uuid
 from core.auth import get_current_active_user
 from core.database import get_ai_conversations_collection
 from services.user_service import get_user_service
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
 
 router = APIRouter()
 

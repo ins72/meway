@@ -8,6 +8,8 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel
 from core.auth import get_current_active_user
 from services.complete_onboarding_service import Complete_OnboardingService
+import uuid
+from datetime import datetime
 
 router = APIRouter()
 

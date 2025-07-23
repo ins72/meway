@@ -12,6 +12,10 @@ from core.auth import get_current_admin
 from core.admin_config_manager import admin_config_manager, APIConfiguration
 from core.professional_logger import professional_logger, LogLevel, LogCategory
 from core.external_api_integrator import (
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
+import uuid
     social_media_integrator, 
     payment_processor_integrator, 
     email_service_integrator, 

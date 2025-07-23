@@ -12,6 +12,9 @@ from pydantic import BaseModel, Field, EmailStr
 
 from core.auth import get_current_user
 from services.complete_multi_workspace_service import complete_multi_workspace_service, WorkspaceRole
+from typing import Dict, Any, List, Optional
+from core.auth import get_current_active_user
+import uuid
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

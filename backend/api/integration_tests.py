@@ -7,6 +7,11 @@ from core.auth import get_current_user
 import os
 import httpx
 import json
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
+import uuid
+from datetime import datetime
 
 router = APIRouter(prefix="/api/integration-tests", tags=["API Integration Tests"])
 

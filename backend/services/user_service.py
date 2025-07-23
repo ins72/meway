@@ -299,6 +299,22 @@ class UserService:
         }
 
 # Create service instance function (dependency injection)
+
+    async def delete_user(self, id: str) -> Dict[str, Any]:
+        """Delete user"""
+        try:
+            db = await self.get_database()
+            result = await db["user"].delete_one({"id": id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "User deleted successfully"
+                }
+            else:
+                return {"success": False, "error": "User not found"}
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete user: {str(e)}"}
 def get_user_service() -> UserService:
     return UserService()
 

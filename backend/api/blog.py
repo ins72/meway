@@ -11,6 +11,8 @@ from typing import Optional, Dict, Any, List
 
 from core.auth import get_current_active_user as get_current_user
 from services.content_service import get_content_service
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

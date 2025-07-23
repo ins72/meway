@@ -14,6 +14,8 @@ from core.realtime_notification_system import (
     NotificationType, NotificationChannel
 )
 from core.professional_logger import professional_logger, LogLevel, LogCategory
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter(
     prefix="/api/notifications",

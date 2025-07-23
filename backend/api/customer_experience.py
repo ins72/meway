@@ -9,6 +9,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import Dict, List, Optional, Any
 from services.customer_experience_service import customer_experience_service
 from core.auth import get_current_user
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
+import uuid
+from datetime import datetime
 
 router = APIRouter(prefix="/api/customer-experience", tags=["Customer Experience"])
 

@@ -13,6 +13,9 @@ import uuid
 from core.database import get_database
 from core.auth import get_current_user
 from services.complete_ecommerce_service import (
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
     CompleteEcommerceService,
     ProductStatus,
     OrderStatus,

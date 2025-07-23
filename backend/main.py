@@ -86,6 +86,41 @@ async def lifespan(app: FastAPI):
         print(f"❌ Shutdown error: {str(e)}")
 
 # FastAPI app with comprehensive configuration
+from api.realtime_notifications import router as realtime_notifications_router
+from api.analytics import router as analytics_router
+from api.integration_tests import router as integration_tests_router
+from api.workflow_automation import router as workflow_automation_router
+from api.content_creation import router as content_creation_router
+from api.media import router as media_router
+from api.survey_system import router as survey_system_router
+from api.link_shortener import router as link_shortener_router
+from api.enhanced_features import router as enhanced_features_router
+from api.media_library import router as media_library_router
+from api.compliance_system import router as compliance_system_router
+from api.bio_sites import router as bio_sites_router
+from api.rate_limiting import router as rate_limiting_router
+from api.business_intelligence import router as business_intelligence_router
+from api.rate_limiting_system import router as rate_limiting_system_router
+from api.team_management import router as team_management_router
+from api.social_email_integration import router as social_email_integration_router
+from api.notification_system import router as notification_system_router
+from api.marketing import router as marketing_router
+from api.form_builder import router as form_builder_router
+from api.dashboard import router as dashboard_router
+from api.i18n_system import router as i18n_system_router
+from api.ai_token_management import router as ai_token_management_router
+from api.automation import router as automation_router
+from api.monitoring_system import router as monitoring_system_router
+from api.user import router as user_router
+from api.automation_system import router as automation_system_router
+from api.analytics_system import router as analytics_system_router
+from api.template_marketplace import router as template_marketplace_router
+from api.data_population import router as data_population_router
+from api.real_data_population import router as real_data_population_router
+from api.escrow_system import router as escrow_system_router
+from api.integrations import router as integrations_router
+from api.promotions_referrals import router as promotions_referrals_router
+from api.customer_experience import router as customer_experience_router
 app = FastAPI(
     title="Mewayz Professional Platform",
     description="""

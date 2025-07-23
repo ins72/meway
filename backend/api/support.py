@@ -12,6 +12,9 @@ from pydantic import BaseModel, Field
 
 from core.auth import get_current_user
 from services.support_service import SupportService
+from typing import Dict, Any, List, Optional
+from core.auth import get_current_active_user
+import uuid
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

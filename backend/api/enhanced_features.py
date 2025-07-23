@@ -12,6 +12,10 @@ from core.ai_analytics_engine import ai_analytics_engine, AnalyticsType
 from core.realtime_notification_system import notification_system, NotificationType, NotificationChannel
 from core.workflow_automation_engine import workflow_engine, TriggerType, ActionType
 from core.professional_logger import professional_logger, LogLevel, LogCategory
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
+import uuid
 
 router = APIRouter()
 

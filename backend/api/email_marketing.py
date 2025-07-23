@@ -10,6 +10,9 @@ import uuid
 
 from core.auth import get_current_user
 from services.email_marketing_service import EmailMarketingService
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter()
 

@@ -10,6 +10,9 @@ import uuid
 from core.auth import get_current_user, get_current_admin
 from core.database import get_database
 from services.real_data_population_service import real_data_population_service
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 # Marketing endpoints
 marketing_router = APIRouter(prefix="/api/marketing", tags=["Marketing"])

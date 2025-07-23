@@ -15,6 +15,9 @@ import os
 from core.auth import create_access_token, get_current_active_user
 from core.database import get_database
 from services.user_service import get_user_service
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter()
 

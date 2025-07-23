@@ -12,6 +12,10 @@ from datetime import datetime
 from core.auth import get_current_user
 from core.database import get_database
 from services.comprehensive_marketing_website_service import ComprehensiveMarketingWebsiteService
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
+import uuid
 
 router = APIRouter(prefix="/api/marketing-website", tags=["Marketing Website"])
 

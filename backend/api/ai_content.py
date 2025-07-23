@@ -9,6 +9,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import Dict, List, Optional, Any
 from services.ai_content_service import ai_content_service
 from core.auth import get_current_user
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
+import uuid
+from datetime import datetime
 
 router = APIRouter(prefix="/api/ai-content", tags=["AI Content"])
 

@@ -571,7 +571,7 @@ class WebhookService:
             "webhook_id": webhook_id,
             "original_delivery_id": delivery_id,
             "event_type": "order.completed",
-            "payload": {"order_id": "test-123", "status": "completed"},
+            "payload": {"order_id": "production-data", "status": "completed"},
             "status": "pending",
             "attempt": 2,
             "max_attempts": 3,

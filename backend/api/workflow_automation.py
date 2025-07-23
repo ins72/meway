@@ -10,6 +10,8 @@ from pydantic import BaseModel
 import uuid
 
 from core.auth import get_current_user
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 try:
     from core.workflow_automation_engine import (
         workflow_engine, TriggerType, ActionType, WorkflowStatus

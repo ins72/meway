@@ -19,6 +19,7 @@ from datetime import datetime
 from core.auth import get_current_user
 from core.database import get_database
 from services.enterprise_security_compliance_service import EnterpriseSecurityComplianceService
+from typing import Dict, Any, List, Optional
 
 router = APIRouter(prefix="/api/enterprise-security", tags=["Enterprise Security"])
 

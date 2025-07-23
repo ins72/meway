@@ -10,6 +10,9 @@ from core.auth import get_current_active_user
 from services.user_service import get_user_service
 from services.analytics_service import get_analytics_service
 from services.workspace_service import get_workspace_service
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+import uuid
 
 router = APIRouter()
 

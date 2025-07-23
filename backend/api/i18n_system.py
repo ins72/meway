@@ -12,6 +12,9 @@ from datetime import datetime
 from core.auth import get_current_user
 from core.database import get_database
 from services.i18n_service import I18nService
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter()
 

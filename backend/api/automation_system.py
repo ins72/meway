@@ -11,6 +11,9 @@ import json
 
 from core.auth import get_current_user
 from services.automation_service import AutomationService
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter()
 

@@ -10,6 +10,9 @@ import uuid
 
 from core.auth import get_current_user
 from services.ai_content_service import AIContentService
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
+from core.auth import get_current_active_user
 
 router = APIRouter()
 
