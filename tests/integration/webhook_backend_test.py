@@ -17,7 +17,7 @@ sys.path.append('/app/backend')
 class WebhookSystemTester:
     def __init__(self):
         # Get backend URL from environment
-        self.base_url = "https://35b0c12d-8622-4a0d-9b9c-d891d48a2c32.preview.emergentagent.com"
+        self.base_url = "https://227a6971-09fc-47c6-b443-58c2c19d4c11.preview.emergentagent.com"
         self.api_base = f"{self.base_url}/api"
         self.headers = {"Content-Type": "application/json"}
         self.auth_token = None
