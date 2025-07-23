@@ -38,7 +38,7 @@ class PushNotificationRequest(BaseModel):
     image: Optional[str] = None
     url: str = Field("/", description="URL to open when clicked")
     type: str = Field("general", description="Notification type")
-    priority: str = Field("normal", regex="^(low|normal|high)$")
+    priority: str = Field("normal", pattern="^(low|normal|high)$")
     data: Optional[Dict[str, Any]] = None
 
 class CacheResourceRequest(BaseModel):
