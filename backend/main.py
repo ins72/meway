@@ -530,6 +530,16 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Mobile PWA router: {str(e)}")
 
+
+# Include Templates CRUD router
+try:
+    from api.templates import router as templates_router
+    app.include_router(templates_router, prefix="/api/templates", tags=["Templates"])
+    included_count += 1
+    print("  ✅ Included Templates CRUD router at /api/templates")
+except Exception as e:
+    print(f"  ❌ Failed to include Templates router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
