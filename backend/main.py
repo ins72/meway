@@ -251,6 +251,7 @@ try:
     app.include_router(tiktok_router, prefix="/api/tiktok", tags=["tiktok"])
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
+    app.include_router(production_monitoring_router, prefix="/api", tags=["production"])
 
     
     logger.info(f"✅ Successfully included 131 bulletproof routers")
