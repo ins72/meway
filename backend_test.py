@@ -379,9 +379,11 @@ class MewayzBackendTester:
         print("-" * 50)
         
         missing_systems = [
-            ('/escrow/dashboard', 'Escrow System'),
-            ('/referrals/dashboard', 'Referral System'),
-            ('/onboarding/progress', 'Complete Onboarding System')
+            ('/escrow/', 'Escrow System'),
+            ('/referral-system/', 'Referral System'),
+            ('/complete-onboarding/', 'Complete Onboarding System'),
+            ('/complete-course-community/', 'Course Community System'),
+            ('/multi-vendor-marketplace/', 'Multi-Vendor Marketplace')
         ]
         
         for endpoint, name in missing_systems:
@@ -396,6 +398,21 @@ class MewayzBackendTester:
                     self.log_test(f"Missing System - {name}", False, error=f"HTTP {response.status_code}")
             except Exception as e:
                 self.log_test(f"Missing System - {name}", False, error=str(e))
+        
+        # Test health endpoints for missing systems
+        for endpoint, name in missing_systems:
+            health_endpoint = endpoint.rstrip('/') + '/health'
+            try:
+                response = self.make_request('GET', health_endpoint)
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test(f"Missing System Health - {name}", True, f"Status: {data.get('status', 'healthy')}")
+                elif response.status_code == 404:
+                    self.log_test(f"Missing System Health - {name}", False, error="Health endpoint not found (404)")
+                else:
+                    self.log_test(f"Missing System Health - {name}", False, error=f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_test(f"Missing System Health - {name}", False, error=str(e))
 
     def run_comprehensive_test(self):
         """Run all tests"""
