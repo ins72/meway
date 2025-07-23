@@ -449,3 +449,6 @@ async def template_marketplace_health():
         "supported_operations": ["CREATE", "READ", "UPDATE", "DELETE", "PURCHASE"],
         "timestamp": datetime.utcnow().isoformat()
     }
+
+# Create a simple service instance
+advanced_template_marketplace_service = AdvancedTemplateMarketplaceService()
