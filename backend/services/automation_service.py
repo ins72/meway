@@ -637,7 +637,8 @@ class AutomationService:
             db = await self.get_database()
             result = await db.ab_test_results.aggregate([
                 {"$group": {"_id": None, "conversion_rate": {"$avg": {"$cond": ["$conversion", 1, 0]}}}}
-            ["conversion_rate"] if result else 0.5
+            ]).to_list(length=1)
+            return result[0]["conversion_rate"] if result else 0.5
         except:
             return 0.5
     
