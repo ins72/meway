@@ -61,7 +61,7 @@ async def browse_templates(
     tags: Optional[str] = Query(None, description="Comma-separated tags"),
     rating_min: Optional[float] = Query(None, ge=1, le=5),
     search: Optional[str] = Query(None),
-    sort_by: str = Query("popular", regex="^(popular|newest|rating|price_low|price_high)$"),
+    sort_by: str = Query("popular", pattern="^(popular|newest|rating|price_low|price_high)$"),
     page: int = Query(1, ge=1),
     per_page: int = Query(20, ge=1, le=100)
 ):
