@@ -665,3 +665,12 @@ data_population_service = DataPopulationService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+# Singleton instance
+_service_instance = None
+
+def get_data_population_service():
+    """Get singleton instance of DataPopulationService"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = DataPopulationService()
+    return _service_instance
