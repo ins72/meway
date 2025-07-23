@@ -320,8 +320,8 @@ async def mobile_pwa_health():
             "Service Worker Support",
             "Progressive Enhancement"
         ],
-        "notification_types": [nt.value for nt in NotificationType],
-        "offline_strategies": [os.value for os in OfflineStrategy],
+        "notification_types": ["general", "marketing", "update", "reminder", "system"],
+        "offline_strategies": ["cache_first", "network_first", "cache_only", "network_only"],
         "supported_platforms": ["web", "android", "ios", "desktop"],
         "timestamp": datetime.utcnow().isoformat()
     }
