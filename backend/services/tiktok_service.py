@@ -8,6 +8,7 @@ import uuid
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
+from core.objectid_serializer import safe_document_return, safe_documents_return, serialize_objectid
 
 logger = logging.getLogger(__name__)
 
