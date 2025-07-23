@@ -244,6 +244,7 @@ class MediaService:
         result = await files_collection.update_one(
             {"_id": file_id, "workspace_id": str(workspace["_id"])},
             {"$set": metadata}
+        )
         if result.matched_count == 0:
             raise Exception("File not found")
         
