@@ -6,6 +6,7 @@ Complete template creation, selling, monetization, and usage endpoints
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 import logging
+import uuid
 
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field
