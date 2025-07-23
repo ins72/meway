@@ -103,7 +103,7 @@ class UnifiedAnalyticsGamificationService:
     async def create_unified_analytics_gamification(self, data: dict) -> dict:
         """CREATE operation - GUARANTEED to work with real data"""
         try:
-            collection = self._get_collection()
+            collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
@@ -133,7 +133,7 @@ class UnifiedAnalyticsGamificationService:
             if not item_id:
                 return {"success": False, "error": "ID required"}
             
-            collection = self._get_collection()
+            collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
@@ -155,7 +155,7 @@ class UnifiedAnalyticsGamificationService:
     async def list_unified_analytics_gamifications(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
         """LIST operation - GUARANTEED to work with real data"""
         try:
-            collection = self._get_collection()
+            collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
@@ -192,7 +192,7 @@ class UnifiedAnalyticsGamificationService:
             if not item_id:
                 return {"success": False, "error": "ID required"}
             
-            collection = self._get_collection()
+            collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
@@ -230,7 +230,7 @@ class UnifiedAnalyticsGamificationService:
             if not item_id:
                 return {"success": False, "error": "ID required"}
             
-            collection = self._get_collection()
+            collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
@@ -253,7 +253,7 @@ class UnifiedAnalyticsGamificationService:
     async def get_stats(self, user_id: str = None) -> dict:
         """STATS operation - GUARANTEED to work with real data"""
         try:
-            collection = self._get_collection()
+            collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
