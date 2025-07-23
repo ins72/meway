@@ -117,7 +117,7 @@ async def get_stats(
         raise
     except Exception as e:
         logger.error(f"STATS endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))")
+        raise HTTPException(status_code=500, detail=str(e))
 async def update_post(
     post_id: str = Path(..., description="Post ID"),
     data: Dict[str, Any] = Body({}, description="Updated post data"),

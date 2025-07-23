@@ -115,7 +115,7 @@ async def get_stats(
         raise
     except Exception as e:
         logger.error(f"STATS endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))")
+        raise HTTPException(status_code=500, detail=str(e))
 async def update_program(
     program_id: str = Path(..., description="Program ID"),
     data: Dict[str, Any] = Body({}, description="Updated program data"),
