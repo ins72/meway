@@ -14539,6 +14539,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ ADMIN DASHBOARD CRITICAL DATABASE ISSUES - JANUARY 2025: Health endpoint working (Status: healthy), but main endpoint failing with HTTP 400 'AsyncIOMotorCursor can't be used in await expression' error. This is a critical MongoDB Motor driver implementation issue affecting database cursor handling. The admin dashboard architecture exists but database operations are broken due to improper async cursor usage."
+      - working: false
+        agent: "testing"
+        comment: "❌ ADMIN DASHBOARD ENDPOINT MISSING - JANUARY 2025: Health endpoint working perfectly (Status: healthy), but main dashboard endpoint returns HTTP 404 'Not found' error. The admin dashboard service exists (health check works) but the main dashboard endpoint is not implemented or not properly registered in the API routing."
 
   - task: "Missing Systems Implementation (Escrow, Referrals, Complete Onboarding)"
     implemented: true
