@@ -150,7 +150,7 @@ async def get_stats(
 ):
     """STATS endpoint - GUARANTEED to work with real data"""
     try:
-        service = get_import_service()
+        service = get_import_api_service()
         result = await service.get_stats(user_id=current_user.get("id"))
         
         if result.get("success"):
