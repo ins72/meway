@@ -315,6 +315,7 @@ try:
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
     app.include_router(social_media_management_router, prefix="/api/social-media-management", tags=["social_media_management"])
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
+    app.include_router(api_testing_router, prefix="/api/test", tags=["api_testing"])
 
     
     logger.info(f"✅ Successfully included 130 bulletproof routers")
