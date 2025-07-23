@@ -325,3 +325,89 @@ async def mobile_pwa_health():
         "supported_platforms": ["web", "android", "ios", "desktop"],
         "timestamp": datetime.utcnow().isoformat()
     }
+@router.post("/analytics/track", tags=["PWA Analytics"])
+async def track_app_usage(
+    usage_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Track comprehensive app usage analytics"""
+    try:
+        result = await mobile_pwa_service.track_app_usage(
+            user_id=current_user["_id"],
+            usage_data=usage_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "App usage tracked successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error tracking app usage: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/offline/sync", tags=["PWA Offline"])
+async def sync_offline_data(
+    offline_data: List[dict] = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Sync data created while offline"""
+    try:
+        result = await mobile_pwa_service.sync_offline_data(
+            user_id=current_user["_id"],
+            offline_data=offline_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Offline data synced successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error syncing offline data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/manifest/generate", tags=["PWA Manifest"])
+async def generate_custom_manifest(
+    workspace_id: str = Body(...),
+    customization: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate custom PWA manifest for workspace branding"""
+    try:
+        result = await mobile_pwa_service.generate_app_manifest(
+            workspace_id=workspace_id,
+            customization=customization
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "PWA manifest generated successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error generating manifest: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/performance/metrics", tags=["PWA Performance"])
+async def get_performance_metrics(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get PWA performance metrics and analytics"""
+    try:
+        metrics = await mobile_pwa_service.get_performance_metrics(
+            user_id=current_user["_id"]
+        )
+        
+        return {
+            "success": True,
+            "data": metrics,
+            "message": "Performance metrics retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting performance metrics: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
