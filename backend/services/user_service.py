@@ -331,8 +331,6 @@ def get_user_service() -> UserService:
 
 # Global service instance
 user_service = UserService()
-
-    async def delete_user(self, user_id: str) -> Dict[str, Any]:
         """Delete user by ID"""
         try:
             result = await self.db["user"].delete_one({"id": user_id})
