@@ -21,15 +21,19 @@ router = APIRouter()
 
 # Request/Response Models
 class TemplateCreateRequest(BaseModel):
-    title: str = Field(..., min_length=5, max_length=100)
+    title: Optional[str] = Field(None, min_length=5, max_length=100)
+    name: Optional[str] = Field(None, min_length=5, max_length=100)  # Alternative field name
     description: str = Field(..., min_length=20, max_length=1000)
     category: str = Field(..., description="Template category")
     subcategory: Optional[str] = Field(None, max_length=50)
     price: float = Field(0.0, ge=0, description="Template price")
     tags: List[str] = Field([], max_items=10)
-    template_data: Dict[str, Any] = Field(..., description="Template structure/data")
+    template_data: Optional[Dict[str, Any]] = Field(None, description="Template structure/data")
     preview_url: Optional[str] = None
+    preview_images: Optional[List[str]] = None  # Additional field for compatibility
     metadata: Optional[Dict[str, Any]] = None
+    features: Optional[List[str]] = None  # Additional field for compatibility
+    compatibility: Optional[List[str]] = None  # Additional field for compatibility
 
 @router.post("/templates", tags=["Template Creation"])
 async def create_template(
