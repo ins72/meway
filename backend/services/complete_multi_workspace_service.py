@@ -165,7 +165,7 @@ class CompleteMultiWorkspaceService:
                 query["user_id"] = user_id
             
             # Execute query - REAL DATA OPERATION
-            cursor = await collection.find(query).skip(offset).limit(limit)
+            cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
             # Sanitize results
