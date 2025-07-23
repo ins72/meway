@@ -2912,7 +2912,355 @@ class BackendTester:
         
         return True
 
+    def run_review_request_comprehensive_test(self):
+        """Run comprehensive testing of the 6 key areas from the review request"""
+        print("🎯 COMPREHENSIVE BACKEND TESTING FOR MEWAYZ V2 PLATFORM - REVIEW REQUEST")
+        print("Testing the 6 key areas mentioned in the review request:")
+        print("1. 👥 User Invitation System - workspace invitation creation, acceptance, role-based permissions")
+        print("2. 📱 Enhanced Social Media Management - Instagram database search, social media post scheduling, data export")
+        print("3. 🛍️ Template Marketplace - template creation, purchase system, creator earnings dashboard")
+        print("4. 📱 Mobile PWA Features - PWA manifest generation, offline sync, device registration")
+        print("5. 🤖 AI Automation - smart workflow creation, AI insights generation, content optimization")
+        print("6. 💰 Escrow System - milestone payment plans, dispute resolution, fee calculations")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print("=" * 80)
+        
+        # Test health check first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running properly.")
+            return False
+        
+        # Test authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed - cannot proceed with testing.")
+            return False
+        
+        # Test the 6 key areas from review request
+        self.test_user_invitation_system()
+        self.test_enhanced_social_media_management()
+        self.test_template_marketplace_comprehensive()
+        self.test_mobile_pwa_features_comprehensive()
+        self.test_ai_automation_comprehensive()
+        self.test_escrow_system_comprehensive()
+        
+        # Print summary
+        self.print_summary()
+        
+        return True
+    
+    def test_user_invitation_system(self):
+        """Test User Invitation System - workspace invitation creation, acceptance, role-based permissions"""
+        print("\n👥 TESTING USER INVITATION SYSTEM")
+        print("=" * 60)
+        print("Testing workspace invitation creation, acceptance, and role-based permissions")
+        
+        # Test workspace invitation creation
+        print("\n📧 Testing Workspace Invitation Creation...")
+        invitation_data = {
+            "email": "newuser@mewayz.com",
+            "role": "editor",
+            "workspace_id": "workspace_123",
+            "message": "Welcome to our Mewayz workspace!"
+        }
+        self.test_endpoint("/workspaces/invitations", "POST", invitation_data, "User Invitations - Create Invitation")
+        
+        # Test invitation listing
+        self.test_endpoint("/workspaces/invitations", "GET", test_name="User Invitations - List Invitations")
+        self.test_endpoint("/workspaces/invitations/pending", "GET", test_name="User Invitations - Pending Invitations")
+        
+        # Test role-based permissions
+        print("\n🔐 Testing Role-Based Permissions...")
+        self.test_endpoint("/workspaces/roles", "GET", test_name="User Invitations - Available Roles")
+        self.test_endpoint("/workspaces/permissions", "GET", test_name="User Invitations - Role Permissions")
+        
+        # Test invitation acceptance workflow
+        print("\n✅ Testing Invitation Acceptance...")
+        accept_data = {
+            "invitation_token": "sample_token_123",
+            "accept": True
+        }
+        self.test_endpoint("/workspaces/invitations/accept", "POST", accept_data, "User Invitations - Accept Invitation")
+        
+        # Test workspace member management
+        self.test_endpoint("/workspaces/members", "GET", test_name="User Invitations - Workspace Members")
+        
+        return True
+    
+    def test_enhanced_social_media_management(self):
+        """Test Enhanced Social Media Management - Instagram database search, social media post scheduling, data export"""
+        print("\n📱 TESTING ENHANCED SOCIAL MEDIA MANAGEMENT")
+        print("=" * 60)
+        print("Testing Instagram database search, social media post scheduling, and data export features")
+        
+        # Test Instagram database search
+        print("\n🔍 Testing Instagram Database Search...")
+        instagram_search_data = {
+            "hashtags": ["business", "entrepreneur", "startup"],
+            "location": "United States",
+            "follower_range": {"min": 1000, "max": 100000},
+            "engagement_rate_min": 2.0
+        }
+        self.test_endpoint("/social-media/instagram/search", "POST", instagram_search_data, "Social Media - Instagram Database Search")
+        self.test_endpoint("/social-media/instagram/analytics", "GET", test_name="Social Media - Instagram Analytics")
+        
+        # Test social media post scheduling
+        print("\n📅 Testing Social Media Post Scheduling...")
+        post_data = {
+            "content": "Check out our latest business automation tools! #Mewayz #Business #Automation",
+            "platforms": ["instagram", "twitter", "facebook"],
+            "scheduled_time": "2025-01-25T14:00:00Z",
+            "media_urls": ["https://example.com/image1.jpg"],
+            "tags": ["business", "automation"]
+        }
+        self.test_endpoint("/social-media/posts/schedule", "POST", post_data, "Social Media - Schedule Post")
+        self.test_endpoint("/social-media/posts/scheduled", "GET", test_name="Social Media - Get Scheduled Posts")
+        
+        # Test data export features
+        print("\n📊 Testing Data Export Features...")
+        export_data = {
+            "data_type": "social_media_analytics",
+            "date_range": {"start": "2025-01-01", "end": "2025-01-31"},
+            "format": "csv",
+            "include_metrics": ["engagement", "reach", "impressions"]
+        }
+        self.test_endpoint("/social-media/export", "POST", export_data, "Social Media - Export Data")
+        
+        # Test social media analytics
+        self.test_endpoint("/social-media/analytics/overview", "GET", test_name="Social Media - Analytics Overview")
+        self.test_endpoint("/social-media/analytics/engagement", "GET", test_name="Social Media - Engagement Analytics")
+        
+        return True
+    
+    def test_template_marketplace_comprehensive(self):
+        """Test Template Marketplace - template creation, purchase system, creator earnings dashboard"""
+        print("\n🛍️ TESTING TEMPLATE MARKETPLACE COMPREHENSIVE")
+        print("=" * 60)
+        print("Testing template creation, purchase system, and creator earnings dashboard")
+        
+        # Test template creation
+        print("\n🎨 Testing Template Creation...")
+        template_data = {
+            "name": "Modern Business Landing Page",
+            "description": "Professional landing page template for modern businesses",
+            "category": "landing_pages",
+            "price": 49.99,
+            "tags": ["business", "modern", "responsive"],
+            "preview_url": "https://example.com/preview.jpg",
+            "template_files": {
+                "html": "<html>...</html>",
+                "css": "body { margin: 0; }",
+                "js": "console.log('Template loaded');"
+            }
+        }
+        self.test_endpoint("/templates/create", "POST", template_data, "Template Marketplace - Create Template")
+        self.test_endpoint("/templates", "GET", test_name="Template Marketplace - List Templates")
+        
+        # Test template categories and browsing
+        self.test_endpoint("/templates/categories", "GET", test_name="Template Marketplace - Categories")
+        self.test_endpoint("/templates/featured", "GET", test_name="Template Marketplace - Featured Templates")
+        self.test_endpoint("/templates/popular", "GET", test_name="Template Marketplace - Popular Templates")
+        
+        # Test purchase system
+        print("\n💳 Testing Purchase System...")
+        purchase_data = {
+            "template_id": "template_123",
+            "payment_method": "stripe",
+            "license_type": "standard"
+        }
+        self.test_endpoint("/templates/purchase", "POST", purchase_data, "Template Marketplace - Purchase Template")
+        self.test_endpoint("/templates/purchases", "GET", test_name="Template Marketplace - My Purchases")
+        
+        # Test creator earnings dashboard
+        print("\n💰 Testing Creator Earnings Dashboard...")
+        self.test_endpoint("/templates/creator/earnings", "GET", test_name="Template Marketplace - Creator Earnings")
+        self.test_endpoint("/templates/creator/analytics", "GET", test_name="Template Marketplace - Creator Analytics")
+        self.test_endpoint("/templates/creator/dashboard", "GET", test_name="Template Marketplace - Creator Dashboard")
+        
+        return True
+    
+    def test_mobile_pwa_features_comprehensive(self):
+        """Test Mobile PWA Features - PWA manifest generation, offline sync, device registration"""
+        print("\n📱 TESTING MOBILE PWA FEATURES COMPREHENSIVE")
+        print("=" * 60)
+        print("Testing PWA manifest generation, offline sync, and device registration")
+        
+        # Test PWA manifest generation
+        print("\n📋 Testing PWA Manifest Generation...")
+        self.test_endpoint("/pwa/manifest", "GET", test_name="Mobile PWA - Get Manifest")
+        
+        manifest_data = {
+            "name": "Mewayz Business Platform",
+            "short_name": "Mewayz",
+            "description": "Complete business automation platform",
+            "theme_color": "#3B82F6",
+            "background_color": "#FFFFFF",
+            "icons": [
+                {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"}
+            ]
+        }
+        self.test_endpoint("/pwa/manifest", "PUT", manifest_data, "Mobile PWA - Update Manifest")
+        
+        # Test device registration
+        print("\n📱 Testing Device Registration...")
+        device_data = {
+            "device_id": "device_123456",
+            "device_type": "mobile",
+            "platform": "android",
+            "push_token": "fcm_token_example",
+            "app_version": "1.0.0"
+        }
+        self.test_endpoint("/pwa/devices/register", "POST", device_data, "Mobile PWA - Register Device")
+        self.test_endpoint("/pwa/devices", "GET", test_name="Mobile PWA - List Devices")
+        
+        # Test offline sync
+        print("\n🔄 Testing Offline Sync...")
+        sync_data = {
+            "sync_type": "user_data",
+            "last_sync": "2025-01-20T10:00:00Z",
+            "data_types": ["profile", "workspaces", "recent_activity"]
+        }
+        self.test_endpoint("/pwa/sync/queue", "POST", sync_data, "Mobile PWA - Queue Sync")
+        self.test_endpoint("/pwa/sync/status", "GET", test_name="Mobile PWA - Sync Status")
+        self.test_endpoint("/pwa/sync/process", "POST", {}, "Mobile PWA - Process Sync")
+        
+        # Test push notifications
+        print("\n🔔 Testing Push Notifications...")
+        notification_data = {
+            "title": "Welcome to Mewayz!",
+            "body": "Your business automation platform is ready",
+            "icon": "/icon-192.png",
+            "badge": "/badge.png",
+            "data": {"action": "open_dashboard"}
+        }
+        self.test_endpoint("/pwa/notifications/send", "POST", notification_data, "Mobile PWA - Send Notification")
+        
+        # Test offline caching
+        cache_data = {
+            "url": "/dashboard",
+            "cache_strategy": "cache_first",
+            "expiry": "24h"
+        }
+        self.test_endpoint("/pwa/cache", "POST", cache_data, "Mobile PWA - Cache Resource")
+        
+        return True
+    
+    def test_ai_automation_comprehensive(self):
+        """Test AI Automation - smart workflow creation, AI insights generation, content optimization"""
+        print("\n🤖 TESTING AI AUTOMATION COMPREHENSIVE")
+        print("=" * 60)
+        print("Testing smart workflow creation, AI insights generation, and content optimization")
+        
+        # Test smart workflow creation
+        print("\n⚙️ Testing Smart Workflow Creation...")
+        workflow_data = {
+            "name": "Lead Nurturing Automation",
+            "description": "Automated lead nurturing with AI-powered content",
+            "triggers": [
+                {"type": "form_submission", "form_id": "contact_form"}
+            ],
+            "actions": [
+                {"type": "send_email", "template": "welcome_email"},
+                {"type": "add_to_crm", "list": "prospects"},
+                {"type": "schedule_followup", "delay": "3_days"}
+            ],
+            "ai_optimization": True
+        }
+        self.test_endpoint("/ai/workflows/create", "POST", workflow_data, "AI Automation - Create Smart Workflow")
+        self.test_endpoint("/ai/workflows", "GET", test_name="AI Automation - List Workflows")
+        self.test_endpoint("/ai/workflows/templates", "GET", test_name="AI Automation - Workflow Templates")
+        
+        # Test AI insights generation
+        print("\n🧠 Testing AI Insights Generation...")
+        insights_data = {
+            "data_source": "user_analytics",
+            "time_period": "last_30_days",
+            "insight_types": ["performance", "trends", "recommendations"]
+        }
+        self.test_endpoint("/ai/insights/generate", "POST", insights_data, "AI Automation - Generate Insights")
+        self.test_endpoint("/ai/insights", "GET", test_name="AI Automation - Get Insights")
+        self.test_endpoint("/ai/insights/recommendations", "GET", test_name="AI Automation - AI Recommendations")
+        
+        # Test content optimization
+        print("\n✍️ Testing Content Optimization...")
+        content_data = {
+            "content": "Welcome to our business platform. We help you grow your business.",
+            "content_type": "email_subject",
+            "target_audience": "small_business_owners",
+            "optimization_goals": ["engagement", "conversion"]
+        }
+        self.test_endpoint("/ai/content/optimize", "POST", content_data, "AI Automation - Optimize Content")
+        
+        # Test AI analytics
+        self.test_endpoint("/ai/analytics/usage", "GET", test_name="AI Automation - Usage Analytics")
+        self.test_endpoint("/ai/analytics/performance", "GET", test_name="AI Automation - Performance Analytics")
+        
+        return True
+    
+    def test_escrow_system_comprehensive(self):
+        """Test Escrow System - milestone payment plans, dispute resolution, fee calculations"""
+        print("\n💰 TESTING ESCROW SYSTEM COMPREHENSIVE")
+        print("=" * 60)
+        print("Testing milestone payment plans, dispute resolution, and fee calculations")
+        
+        # Test milestone payment plans
+        print("\n📋 Testing Milestone Payment Plans...")
+        milestone_data = {
+            "project_name": "Website Development Project",
+            "total_amount": 5000.00,
+            "currency": "USD",
+            "milestones": [
+                {"name": "Design Phase", "amount": 1500.00, "due_date": "2025-02-15"},
+                {"name": "Development Phase", "amount": 2500.00, "due_date": "2025-03-15"},
+                {"name": "Testing & Launch", "amount": 1000.00, "due_date": "2025-04-01"}
+            ],
+            "client_email": "client@example.com",
+            "freelancer_email": "freelancer@example.com"
+        }
+        self.test_endpoint("/escrow/projects/create", "POST", milestone_data, "Escrow System - Create Milestone Plan")
+        self.test_endpoint("/escrow/projects", "GET", test_name="Escrow System - List Projects")
+        
+        # Test payment processing
+        print("\n💳 Testing Payment Processing...")
+        payment_data = {
+            "project_id": "project_123",
+            "milestone_id": "milestone_1",
+            "payment_method": "stripe",
+            "amount": 1500.00
+        }
+        self.test_endpoint("/escrow/payments/deposit", "POST", payment_data, "Escrow System - Deposit Payment")
+        self.test_endpoint("/escrow/payments/release", "POST", {"project_id": "project_123", "milestone_id": "milestone_1"}, "Escrow System - Release Payment")
+        
+        # Test dispute resolution
+        print("\n⚖️ Testing Dispute Resolution...")
+        dispute_data = {
+            "project_id": "project_123",
+            "dispute_type": "milestone_completion",
+            "description": "Client disputes milestone completion quality",
+            "evidence": ["screenshot1.jpg", "communication_log.txt"],
+            "requested_resolution": "partial_refund"
+        }
+        self.test_endpoint("/escrow/disputes/create", "POST", dispute_data, "Escrow System - Create Dispute")
+        self.test_endpoint("/escrow/disputes", "GET", test_name="Escrow System - List Disputes")
+        
+        # Test fee calculations
+        print("\n🧮 Testing Fee Calculations...")
+        fee_data = {
+            "amount": 5000.00,
+            "service_type": "milestone_escrow",
+            "payment_method": "stripe"
+        }
+        self.test_endpoint("/escrow/fees/calculate", "POST", fee_data, "Escrow System - Calculate Fees")
+        self.test_endpoint("/escrow/fees/structure", "GET", test_name="Escrow System - Fee Structure")
+        
+        # Test escrow analytics
+        self.test_endpoint("/escrow/analytics/overview", "GET", test_name="Escrow System - Analytics Overview")
+        self.test_endpoint("/escrow/analytics/transactions", "GET", test_name="Escrow System - Transaction Analytics")
+        
+        return True
+
 if __name__ == "__main__":
     tester = BackendTester()
-    success = tester.run_final_comprehensive_audit()
+    success = tester.run_review_request_comprehensive_test()
     sys.exit(0 if success else 1)
