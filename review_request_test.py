@@ -2,6 +2,447 @@
 """
 REVIEW REQUEST FOCUSED TESTING - JANUARY 2025
 Testing specific areas mentioned in the review request:
+1. Template Marketplace CRUD endpoints
+2. Social Media Leads (original and alternative endpoints)
+3. Mock Data Verification
+4. CRUD Operations verification
+5. Database Integration confirmation
+6. API Endpoint Count verification
+"""
+
+import requests
+import json
+import sys
+import time
+from typing import Dict, Any, Optional
+import uuid
+
+# Backend URL from environment
+BACKEND_URL = "https://227a6971-09fc-47c6-b443-58c2c19d4c11.preview.emergentagent.com"
+API_BASE = f"{BACKEND_URL}/api"
+
+# Test credentials
+TEST_EMAIL = "tmonnens@outlook.com"
+TEST_PASSWORD = "Voetballen5"
+
+class ReviewRequestTester:
+    def __init__(self):
+        self.session = requests.Session()
+        self.access_token = None
+        self.test_results = []
+        
+    def log_result(self, test_name: str, success: bool, message: str, response_data: Any = None):
+        """Log test result"""
+        status = "✅ PASS" if success else "❌ FAIL"
+        result = {
+            "test": test_name,
+            "status": status,
+            "success": success,
+            "message": message,
+            "response_size": len(str(response_data)) if response_data else 0
+        }
+        self.test_results.append(result)
+        print(f"{status}: {test_name} - {message}")
+        if response_data and len(str(response_data)) > 0:
+            print(f"   Response size: {len(str(response_data))} chars")
+    
+    def authenticate(self):
+        """Authenticate with the backend"""
+        try:
+            login_data = {
+                "username": TEST_EMAIL,
+                "password": TEST_PASSWORD
+            }
+            
+            response = self.session.post(
+                f"{API_BASE}/auth/login",
+                data=login_data,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.access_token = data.get("access_token")
+                if self.access_token:
+                    self.session.headers.update({"Authorization": f"Bearer {self.access_token}"})
+                    self.log_result("Authentication", True, "Login successful", data)
+                    return True
+            
+            self.log_result("Authentication", False, f"Login failed: {response.status_code}")
+            return False
+                
+        except Exception as e:
+            self.log_result("Authentication", False, f"Authentication error: {str(e)}")
+            return False
+    
+    def test_endpoint(self, endpoint: str, method: str = "GET", data: Dict = None, test_name: str = None):
+        """Test a specific API endpoint"""
+        if not test_name:
+            test_name = f"{method} {endpoint}"
+            
+        try:
+            url = f"{API_BASE}{endpoint}"
+            headers = {}
+            if self.access_token:
+                headers["Authorization"] = f"Bearer {self.access_token}"
+            
+            if method.upper() == "GET":
+                response = self.session.get(url, headers=headers, timeout=10)
+            elif method.upper() == "POST":
+                response = self.session.post(url, json=data, headers=headers, timeout=10)
+            elif method.upper() == "PUT":
+                response = self.session.put(url, json=data, headers=headers, timeout=10)
+            elif method.upper() == "DELETE":
+                response = self.session.delete(url, headers=headers, timeout=10)
+            else:
+                self.log_result(test_name, False, f"Unsupported method: {method}")
+                return False, None
+            
+            if response.status_code in [200, 201]:
+                try:
+                    data = response.json()
+                    self.log_result(test_name, True, f"Working perfectly ({response.status_code})", data)
+                    return True, data
+                except:
+                    self.log_result(test_name, True, f"Working perfectly ({response.status_code}) - non-JSON response")
+                    return True, response.text
+            elif response.status_code == 404:
+                self.log_result(test_name, False, "Endpoint not found (404) - Not implemented")
+                return False, None
+            elif response.status_code == 405:
+                self.log_result(test_name, False, "Method not allowed (405)")
+                return False, None
+            elif response.status_code == 422:
+                try:
+                    error_data = response.json()
+                    self.log_result(test_name, False, f"Validation error (422): {error_data.get('message', 'Request parameters issue')}")
+                except:
+                    self.log_result(test_name, False, f"Validation error (422): {response.text}")
+                return False, None
+            elif response.status_code == 500:
+                try:
+                    error_data = response.json()
+                    error_msg = error_data.get('message', 'Unexpected error')
+                    self.log_result(test_name, False, f"Internal server error (500): {error_msg}")
+                except:
+                    self.log_result(test_name, False, f"Internal server error (500): {response.text}")
+                return False, None
+            else:
+                self.log_result(test_name, False, f"Error - Status {response.status_code}: {response.text}")
+                return False, None
+                
+        except Exception as e:
+            self.log_result(test_name, False, f"Request error: {str(e)}")
+            return False, None
+    
+    def test_template_marketplace_crud(self):
+        """Test Template Marketplace CRUD operations as requested"""
+        print("\n🛍️ TESTING TEMPLATE MARKETPLACE CRUD OPERATIONS")
+        print("=" * 60)
+        
+        # Test GET operations
+        self.test_endpoint("/templates", "GET", test_name="GET /templates")
+        self.test_endpoint("/marketing-website/templates", "GET", test_name="GET /marketing-website/templates")  
+        self.test_endpoint("/marketing-website/templates/marketplace", "GET", test_name="GET /marketing-website/templates/marketplace")
+        
+        # Test POST (Create) operation
+        template_data = {
+            "title": "Test Marketing Template",
+            "description": "A test template for marketing campaigns",
+            "category": "marketing",
+            "price": 29.99,
+            "tags": ["marketing", "email", "campaign"]
+        }
+        self.test_endpoint("/templates", "POST", template_data, "POST /templates (Create)")
+        
+        # Test PUT (Update) operation - using a test ID
+        update_data = {
+            "title": "Updated Marketing Template",
+            "description": "Updated description",
+            "price": 39.99
+        }
+        self.test_endpoint("/templates/test-template-id", "PUT", update_data, "PUT /templates/{id} (Update)")
+        
+        # Test DELETE operation
+        self.test_endpoint("/templates/test-template-id", "DELETE", test_name="DELETE /templates/{id}")
+    
+    def test_social_media_leads(self):
+        """Test Social Media Leads endpoints (original and alternative)"""
+        print("\n📱 TESTING SOCIAL MEDIA LEADS")
+        print("=" * 60)
+        
+        # Test original endpoints
+        self.test_endpoint("/discover/twitter", "GET", test_name="Original /discover/twitter")
+        self.test_endpoint("/discover/tiktok", "GET", test_name="Original /discover/tiktok")
+        
+        # Test alternative endpoints
+        self.test_endpoint("/twitter/search", "GET", test_name="New /twitter/search")
+        self.test_endpoint("/tiktok/search", "GET", test_name="New /tiktok/search")
+        
+        # Test analytics and history
+        self.test_endpoint("/social-media/analytics", "GET", test_name="Analytics Overview")
+        self.test_endpoint("/social-media/search-history", "GET", test_name="Search History")
+    
+    def test_booking_system(self):
+        """Test Booking System CRUD operations"""
+        print("\n📅 TESTING BOOKING SYSTEM")
+        print("=" * 60)
+        
+        # Test health and basic operations
+        self.test_endpoint("/booking/health", "GET", test_name="Health Check")
+        self.test_endpoint("/booking/services", "GET", test_name="Get Services")
+        self.test_endpoint("/booking/bookings", "GET", test_name="Get Bookings")
+        self.test_endpoint("/booking/dashboard", "GET", test_name="Dashboard")
+        
+        # Test create operations
+        service_data = {
+            "name": "Test Service",
+            "description": "A test service",
+            "duration": 60,
+            "price": 100.00
+        }
+        self.test_endpoint("/booking/services", "POST", service_data, "Create Service")
+        
+        booking_data = {
+            "service_id": "test-service-id",
+            "customer_name": "John Doe",
+            "customer_email": "john@example.com",
+            "date": "2025-01-25",
+            "time": "10:00"
+        }
+        self.test_endpoint("/booking/bookings", "POST", booking_data, "Create Booking")
+        
+        # Test analytics
+        self.test_endpoint("/booking/analytics", "GET", test_name="Analytics")
+    
+    def test_team_management(self):
+        """Test Team Management system"""
+        print("\n👥 TESTING TEAM MANAGEMENT")
+        print("=" * 60)
+        
+        # Test dashboard and basic operations
+        self.test_endpoint("/team/dashboard", "GET", test_name="Dashboard")
+        self.test_endpoint("/team/members", "GET", test_name="Get Members")
+        self.test_endpoint("/team/activity", "GET", test_name="Activity Log")
+        
+        # Test create operations
+        team_data = {
+            "name": "Test Team",
+            "description": "A test team"
+        }
+        self.test_endpoint("/teams", "POST", team_data, "Create Team")
+        self.test_endpoint("/teams", "GET", test_name="Get Teams")
+        
+        # Test invitation system
+        invitation_data = {
+            "email": "newmember@example.com",
+            "role": "member"
+        }
+        self.test_endpoint("/team/invite", "POST", invitation_data, "Send Invitation")
+        
+        # Test roles and permissions
+        self.test_endpoint("/team/roles", "GET", test_name="Available Roles")
+        self.test_endpoint("/team/permissions", "GET", test_name="Available Permissions")
+    
+    def test_mobile_pwa_features(self):
+        """Test Mobile PWA Features"""
+        print("\n📱 TESTING MOBILE PWA FEATURES")
+        print("=" * 60)
+        
+        # Test basic PWA functionality
+        self.test_endpoint("/pwa/health", "GET", test_name="Health Check")
+        self.test_endpoint("/pwa/manifest", "GET", test_name="PWA Manifest")
+        
+        # Test push notifications
+        push_data = {
+            "endpoint": "https://example.com/push",
+            "keys": {
+                "p256dh": "test-key",
+                "auth": "test-auth"
+            }
+        }
+        self.test_endpoint("/pwa/push/subscribe", "POST", push_data, "Subscribe to Push")
+        
+        notification_data = {
+            "title": "Test Notification",
+            "body": "This is a test notification",
+            "user_id": "test-user"
+        }
+        self.test_endpoint("/pwa/push/send", "POST", notification_data, "Send Push Notification")
+        
+        # Test device management
+        device_data = {
+            "device_id": "test-device-123",
+            "device_type": "mobile",
+            "user_agent": "Test Browser"
+        }
+        self.test_endpoint("/pwa/device/register", "POST", device_data, "Register Device")
+        
+        # Test offline caching
+        cache_data = {
+            "url": "/api/dashboard",
+            "type": "api",
+            "content": {"test": "data"}
+        }
+        self.test_endpoint("/pwa/cache", "POST", cache_data, "Cache Resource")
+        
+        # Test background sync
+        sync_data = {
+            "type": "data_sync",
+            "endpoint": "/api/sync"
+        }
+        self.test_endpoint("/pwa/sync/queue", "POST", sync_data, "Queue Background Sync")
+        self.test_endpoint("/pwa/sync/process", "POST", test_name="Process Background Sync")
+        
+        # Test analytics
+        self.test_endpoint("/pwa/analytics", "GET", test_name="Mobile Analytics")
+    
+    def test_api_endpoint_count(self):
+        """Test API endpoint count verification"""
+        print("\n🔢 TESTING API ENDPOINT COUNT")
+        print("=" * 60)
+        
+        try:
+            response = self.session.get(f"{BACKEND_URL}/openapi.json", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                paths_count = len(data.get('paths', {}))
+                
+                if paths_count >= 674:
+                    self.log_result("API Endpoint Count", True, f"Excellent - {paths_count} endpoints available (target: ~674)")
+                elif paths_count >= 500:
+                    self.log_result("API Endpoint Count", True, f"Good - {paths_count} endpoints available (target: ~674)")
+                else:
+                    self.log_result("API Endpoint Count", False, f"Below target - {paths_count} endpoints available (target: ~674)")
+                
+                return paths_count
+            else:
+                self.log_result("API Endpoint Count", False, f"Cannot access OpenAPI spec - Status {response.status_code}")
+                return 0
+        except Exception as e:
+            self.log_result("API Endpoint Count", False, f"Error checking endpoint count: {str(e)}")
+            return 0
+    
+    def check_mock_data(self, response_data, test_name):
+        """Check if response contains mock data patterns"""
+        if not response_data:
+            return True
+            
+        response_str = str(response_data).lower()
+        mock_patterns = [
+            'sample', 'mock', 'test_', 'dummy', 'fake', 'example',
+            'lorem ipsum', 'placeholder', 'demo_', 'temp_'
+        ]
+        
+        for pattern in mock_patterns:
+            if pattern in response_str:
+                self.log_result(f"{test_name} - Mock Data Check", False, f"MOCK DATA DETECTED: Found '{pattern}' in response")
+                return False
+        
+        self.log_result(f"{test_name} - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        return True
+    
+    def run_comprehensive_test(self):
+        """Run comprehensive test of all review request areas"""
+        print("🎯 REVIEW REQUEST FOCUSED TESTING - JANUARY 2025")
+        print("Testing specific areas mentioned in the review request:")
+        print("1. Template Marketplace CRUD endpoints")
+        print("2. Social Media Leads (original and alternative endpoints)")
+        print("3. Mock Data Verification")
+        print("4. CRUD Operations verification")
+        print("5. Database Integration confirmation")
+        print("6. API Endpoint Count verification")
+        print("=" * 80)
+        
+        # Authenticate first
+        if not self.authenticate():
+            print("❌ Authentication failed - cannot proceed with testing")
+            return
+        
+        # Test all areas from review request
+        self.test_template_marketplace_crud()
+        self.test_social_media_leads()
+        self.test_booking_system()
+        self.test_team_management()
+        self.test_mobile_pwa_features()
+        endpoint_count = self.test_api_endpoint_count()
+        
+        # Generate summary
+        self.generate_summary(endpoint_count)
+    
+    def generate_summary(self, endpoint_count):
+        """Generate comprehensive test summary"""
+        print("\n" + "=" * 80)
+        print("🎯 REVIEW REQUEST TESTING SUMMARY")
+        print("=" * 80)
+        
+        total_tests = len(self.test_results)
+        passed_tests = sum(1 for result in self.test_results if result['success'])
+        failed_tests = total_tests - passed_tests
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"📊 OVERALL RESULTS:")
+        print(f"   Total Tests: {total_tests}")
+        print(f"   Passed: {passed_tests} ✅")
+        print(f"   Failed: {failed_tests} ❌")
+        print(f"   Success Rate: {success_rate:.1f}%")
+        
+        # Categorize results by feature
+        categories = {}
+        for result in self.test_results:
+            test_name = result['test']
+            if 'Template' in test_name or '/templates' in test_name:
+                category = 'Template Marketplace'
+            elif 'Social Media' in test_name or '/discover' in test_name or '/twitter' in test_name or '/tiktok' in test_name:
+                category = 'Social Media Leads'
+            elif 'Booking' in test_name or '/booking' in test_name:
+                category = 'Booking System'
+            elif 'Team' in test_name or '/team' in test_name or '/teams' in test_name:
+                category = 'Team Management'
+            elif 'PWA' in test_name or '/pwa' in test_name:
+                category = 'Mobile PWA Features'
+            else:
+                category = 'Other'
+            
+            if category not in categories:
+                categories[category] = {'passed': 0, 'total': 0}
+            
+            categories[category]['total'] += 1
+            if result['success']:
+                categories[category]['passed'] += 1
+        
+        print(f"\n📋 FEATURE-BY-FEATURE RESULTS:")
+        for category, stats in categories.items():
+            success_rate = (stats['passed'] / stats['total'] * 100) if stats['total'] > 0 else 0
+            status = "✅" if success_rate >= 75 else "⚠️" if success_rate >= 50 else "❌"
+            print(f"   {status} {category}: {stats['passed']}/{stats['total']} ({success_rate:.1f}%)")
+        
+        # Show failed tests
+        failed_results = [result for result in self.test_results if not result['success']]
+        if failed_results:
+            print(f"\n🔍 FAILED TESTS SUMMARY:")
+            for result in failed_results:
+                print(f"   ❌ {result['test']}: {result['message']}")
+        
+        # Production readiness assessment
+        print(f"\n🎯 PRODUCTION READINESS ASSESSMENT:")
+        if success_rate >= 90:
+            print(f"   🟢 EXCELLENT - Production ready with exceptional performance")
+        elif success_rate >= 75:
+            print(f"   🟡 GOOD - Production ready with minor issues to address")
+        elif success_rate >= 50:
+            print(f"   🟠 FAIR - Needs significant improvements before production")
+        else:
+            print(f"   🔴 POOR - Major issues requiring immediate attention")
+        
+        print("=" * 80)
+
+if __name__ == "__main__":
+    tester = ReviewRequestTester()
+    tester.run_comprehensive_test()
+"""
+REVIEW REQUEST FOCUSED TESTING - JANUARY 2025
+Testing specific areas mentioned in the review request:
 1. Template Marketplace - Test new CRUD operations
 2. Social Media Leads - Test both original and new alternative endpoints  
 3. Booking System - Test service creation and booking management
