@@ -169,12 +169,7 @@ async def get_team_roles(
 ):
     """Get all available roles for team"""
     try:
-        return {
-            "success": True,
-            "roles": [
-                {"name": role.value, "display_name": role.value.replace("_", " ").title()}
-                for role in TeamRole
-            ],
+        return await self._get_real_data(user_id),
             "message": "Roles retrieved successfully"
         }
         

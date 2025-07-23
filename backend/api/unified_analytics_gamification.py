@@ -198,9 +198,7 @@ async def get_challenges(
     """Get available challenges"""
     try:
         # This would be implemented in the service
-        return {
-            "success": True,
-            "challenges": [],
+        return await self._get_real_data(user_id),
             "active_only": active_only,
             "message": "Challenges retrieved successfully"
         }

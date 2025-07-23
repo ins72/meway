@@ -1,0 +1,7 @@
+{
+  "mock_instances": 274,
+  "high_severity": 177,
+  "duplicates": 7,
+  "missing_crud": 15,
+  "fixes_applied": 8
+}

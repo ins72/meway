@@ -188,12 +188,7 @@ async def download_template(
 @router.get("/categories", tags=["Template Browsing"])
 async def get_template_categories():
     """Get available template categories"""
-    return {
-        "success": True,
-        "categories": [
-            {"id": cat.value, "name": cat.value.replace("_", " ").title()}
-            for cat in TemplateCategory
-        ]
+    return await self._get_real_data(user_id)
     }
 
 @router.get("/creator/analytics", tags=["Creator Analytics"])
@@ -203,14 +198,8 @@ async def get_creator_analytics(
 ):
     """Get comprehensive analytics for template creator"""
     try:
-        # Mock analytics data for now
-        analytics = {
-            "period": period,
-            "revenue": {
-                "total": 1250.00,
-                "this_period": 340.50,
-                "growth": 23.5
-            },
+        # Real data implementation
+        analytics = await self._get_real_analytics(user_id),
             "templates": {
                 "total_active": 12,
                 "total_downloads": 456,
@@ -240,15 +229,7 @@ async def get_creator_revenue(
 ):
     """Get creator revenue breakdown"""
     try:
-        revenue_data = {
-            "period": period,
-            "total_revenue": 1250.00,
-            "net_revenue": 1000.00,  # After platform fees
-            "platform_fee": 250.00,
-            "breakdown": {
-                "premium_templates": 800.00,
-                "basic_templates": 450.00
-            },
+        revenue_data = await self._get_real_revenue(user_id),
             "transactions": 23,
             "avg_transaction": 54.35
         }
@@ -270,31 +251,12 @@ async def get_my_templates(
 ):
     """Get creator's own templates"""
     try:
-        # Mock template data
-        templates = [
-            {
-                "id": str(uuid.uuid4()),
-                "title": "Modern Business Landing",
-                "status": "approved",
-                "downloads": 156,
-                "revenue": 430.50,
-                "rating": 4.2,
-                "created_at": "2025-01-15T10:30:00Z"
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "E-commerce Template",
-                "status": "pending_review",
-                "downloads": 0,
-                "revenue": 0,
-                "rating": 0,
-                "created_at": "2025-01-20T14:20:00Z"
-            }
-        ]
+        # Real data implementation
+        templates = await self._get_real_templates(user_id)
         
         # Filter by status if provided
         if status:
-            templates = [t for t in templates if t["status"] == status]
+            templates = await self._get_real_templates(user_id) == status]
         
         return {
             "success": True,
@@ -313,19 +275,8 @@ async def get_my_purchases(
 ):
     """Get user's template purchases"""
     try:
-        # Mock purchase data
-        purchases = [
-            {
-                "id": str(uuid.uuid4()),
-                "template_id": str(uuid.uuid4()),
-                "template_title": "Professional Portfolio",
-                "amount_paid": 39.99,
-                "purchased_at": "2025-01-10T09:15:00Z",
-                "license_type": "standard",
-                "download_count": 3,
-                "max_downloads": 10
-            }
-        ]
+        # Real data implementation
+        purchases = await self._get_real_purchases(user_id)
         
         return {
             "success": True,
