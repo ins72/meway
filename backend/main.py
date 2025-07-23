@@ -150,7 +150,6 @@ try:
     from api.tiktok import router as tiktok_router
     from api.stripe_integration import router as stripe_integration_router
     from api.referral_system import router as referral_system_router
-    from api.api_testing import router as api_testing_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
@@ -251,7 +250,6 @@ try:
     app.include_router(tiktok_router, prefix="/api/tiktok", tags=["tiktok"])
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
-    app.include_router(api_testing_router, prefix="/api/test", tags=["api_testing"])
 
     
     logger.info(f"✅ Successfully included 131 bulletproof routers")

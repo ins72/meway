@@ -60,8 +60,7 @@ class StripeIntegrationService:
             
             await collection.count_documents({})
             
-            return {
-                "success": True,
+            return {"success": True,
                 "healthy": True,
                 "service": self.service_name,
                 "stripe_connected": True,
@@ -88,8 +87,8 @@ class StripeIntegrationService:
                 "customer_email": data.get("customer_email", ""),
                 "user_id": data.get("user_id", ""),
                 "status": "requires_payment_method",
-                "stripe_payment_intent_id": f"pi_{uuid.uuid4().hex[:24]}",
-                "client_secret": f"pi_{uuid.uuid4().hex[:24]}_secret_{uuid.uuid4().hex[:10]}",
+                "stripe_payment_intent_id": f"pi_{str(uuid.uuid4())[:12]}",
+                "client_secret": f"pi_{str(uuid.uuid4())[:12]}_secret_{str(uuid.uuid4())[:12]}",
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat()
             }
@@ -98,8 +97,7 @@ class StripeIntegrationService:
             result = await collection.insert_one(payment_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Payment intent created successfully",
                     "data": serialize_objectid(payment_data),
                     "id": payment_data["id"],
@@ -132,8 +130,7 @@ class StripeIntegrationService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -156,8 +153,7 @@ class StripeIntegrationService:
                 doc = safe_document_return(doc)
             
             if doc:
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -189,8 +185,7 @@ class StripeIntegrationService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Payment updated successfully",
                     "id": payment_id
                 }
@@ -217,8 +212,7 @@ class StripeIntegrationService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Payment canceled successfully",
                     "id": payment_id
                 }
@@ -247,8 +241,7 @@ class StripeIntegrationService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "confirm_payment",
@@ -270,8 +263,7 @@ class StripeIntegrationService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Confirm payment intent completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -285,8 +277,7 @@ class StripeIntegrationService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "confirm_payment",
@@ -295,8 +286,7 @@ class StripeIntegrationService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Confirm payment intent executed successfully",
                     "method": "confirm_payment",
                     "timestamp": datetime.utcnow().isoformat()
@@ -340,8 +330,7 @@ class StripeIntegrationService:
             status_cursor = collection.aggregate(pipeline)
             status_breakdown = {doc["_id"]: doc["count"] async for doc in status_cursor}
             
-            return {
-                "success": True,
+            return {"success": True,
                 "stats": {
                     "total_items": total_count,
                     "recent_items": recent_count,
@@ -363,7 +352,7 @@ class StripeIntegrationService:
             # Simulate Stripe payment methods
             payment_methods = [
                 {
-                    "id": f"pm_{uuid.uuid4().hex[:24]}",
+                    "id": f"pm_{str(uuid.uuid4())[:12]}",
                     "type": "card",
                     "card": {
                         "brand": "visa",
@@ -374,7 +363,7 @@ class StripeIntegrationService:
                     "created": datetime.utcnow().isoformat()
                 },
                 {
-                    "id": f"pm_{uuid.uuid4().hex[:24]}",
+                    "id": f"pm_{str(uuid.uuid4())[:12]}",
                     "type": "card", 
                     "card": {
                         "brand": "mastercard",
@@ -386,8 +375,7 @@ class StripeIntegrationService:
                 }
             ]
             
-            return {
-                "success": True,
+            return {"success": True,
                 "payment_methods": payment_methods,
                 "count": len(payment_methods)
             }
@@ -441,8 +429,7 @@ class StripeIntegrationService:
                         
                         await collection.insert_one(customer_record)
                     
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "customer": {
                             "id": stripe_customer.get('id'),
                             "email": stripe_customer.get('email'),
@@ -465,7 +452,7 @@ class StripeIntegrationService:
             
             customer_record = {
                 "id": str(uuid.uuid4()),
-                "stripe_customer_id": f"cus_{uuid.uuid4().hex[:24]}",
+                "stripe_customer_id": f"cus_{str(uuid.uuid4())[:12]}",
                 "email": customer_data.get('email', ''),
                 "name": customer_data.get('name', ''),
                 "description": customer_data.get('description', 'Simulated customer'),
@@ -477,8 +464,7 @@ class StripeIntegrationService:
             
             if result.inserted_id:
                 customer_record["_id"] = result.inserted_id
-                return {
-                    "success": True,
+                return {"success": True,
                     "customer": safe_document_return(customer_record),
                     "source": "database_simulation"
                 }
@@ -513,8 +499,7 @@ class StripeIntegrationService:
             result = await collection.insert_one(item_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "stripeintegration created successfully",
                     "data": serialize_objectid(item_data),
                     "id": item_data["id"]
@@ -545,8 +530,7 @@ class StripeIntegrationService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -568,8 +552,7 @@ class StripeIntegrationService:
                 doc = safe_document_return(doc)
             
             if doc:
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -598,8 +581,7 @@ class StripeIntegrationService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "stripeintegration updated successfully",
                     "id": item_id
                 }
@@ -619,8 +601,7 @@ class StripeIntegrationService:
             result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "stripeintegration deleted successfully",
                     "id": item_id
                 }

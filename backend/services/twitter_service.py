@@ -94,8 +94,7 @@ class TwitterService:
             
             await collection.count_documents({})
             
-            return {
-                "success": True,
+            return {"success": True,
                 "healthy": True,
                 "service": self.service_name,
                 "api_connected": True,
@@ -137,8 +136,7 @@ class TwitterService:
             result = await collection.insert_one(tweet_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Tweet posted successfully",
                     "data": serialize_objectid(tweet_data),
                     "id": tweet_data["id"]
@@ -165,8 +163,7 @@ class TwitterService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "get_timeline",
@@ -188,8 +185,7 @@ class TwitterService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Get user timeline completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -203,8 +199,7 @@ class TwitterService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "get_timeline",
@@ -213,8 +208,7 @@ class TwitterService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Get user timeline executed successfully",
                     "method": "get_timeline",
                     "timestamp": datetime.utcnow().isoformat()
@@ -258,8 +252,7 @@ class TwitterService:
             status_cursor = collection.aggregate(pipeline)
             status_breakdown = {doc["_id"]: doc["count"] async for doc in status_cursor}
             
-            return {
-                "success": True,
+            return {"success": True,
                 "stats": {
                     "total_items": total_count,
                     "recent_items": recent_count,
@@ -288,8 +281,7 @@ class TwitterService:
             if tweet:
                 # Convert ObjectId to string for JSON serialization
                 tweet = safe_document_return(tweet)
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": tweet
                 }
             else:
@@ -324,8 +316,7 @@ class TwitterService:
                 if updated_tweet:
                     updated_tweet = safe_document_return(updated_tweet)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": updated_tweet,
                     "message": "Tweet updated successfully"
                 }
@@ -347,8 +338,7 @@ class TwitterService:
             result = await collection.delete_one({"id": tweet_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Tweet deleted successfully"
                 }
             else:
@@ -380,8 +370,7 @@ class TwitterService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": tweets,
                 "total": total,
                 "limit": limit,
@@ -451,8 +440,7 @@ class TwitterService:
                 
                 await collection.insert_one(search_record)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "query": query,
                     "tweets": processed_tweets,
                     "count": len(processed_tweets),
@@ -474,7 +462,7 @@ class TwitterService:
         try:
             # Simulate Twitter profile data
             profile_data = {
-                "id": f"profile_{uuid.uuid4().hex[:10]}",
+                "id": f"profile_{str(uuid.uuid4())[:12]}",
                 "username": username or "sample_user",
                 "display_name": f"Profile for {username or 'sample_user'}",
                 "followers_count": 1250,
@@ -486,8 +474,7 @@ class TwitterService:
                 "profile_image": "/assets/profile/default.jpg"
             }
             
-            return {
-                "success": True,
+            return {"success": True,
                 "profile": profile_data
             }
             
@@ -519,8 +506,7 @@ class TwitterService:
             result = await collection.insert_one(item_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "twitter created successfully",
                     "data": serialize_objectid(item_data),
                     "id": item_data["id"]
@@ -551,8 +537,7 @@ class TwitterService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -574,8 +559,7 @@ class TwitterService:
                 doc = safe_document_return(doc)
             
             if doc:
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -604,8 +588,7 @@ class TwitterService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "twitter updated successfully",
                     "id": item_id
                 }
@@ -625,8 +608,7 @@ class TwitterService:
             result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "twitter deleted successfully",
                     "id": item_id
                 }

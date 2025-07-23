@@ -56,8 +56,7 @@ class TiktokService:
             
             await collection.count_documents({})
             
-            return {
-                "success": True,
+            return {"success": True,
                 "healthy": True,
                 "service": self.service_name,
                 "api_connected": True,
@@ -84,7 +83,7 @@ class TiktokService:
                 "hashtags": data.get("hashtags", []),
                 "user_id": data.get("user_id", ""),
                 "status": "published",
-                "tiktok_id": f"tk_{uuid.uuid4().hex[:10]}",
+                "tiktok_id": f"tk_{str(uuid.uuid4())[:12]}",
                 "engagement": {
                     "views": 0,
                     "likes": 0,
@@ -99,8 +98,7 @@ class TiktokService:
             result = await collection.insert_one(post_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "TikTok post created successfully",
                     "data": serialize_objectid(post_data),
                     "id": post_data["id"]
@@ -132,8 +130,7 @@ class TiktokService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -156,8 +153,7 @@ class TiktokService:
                 doc = safe_document_return(doc)
             
             if doc:
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -191,8 +187,7 @@ class TiktokService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Post updated successfully",
                     "id": post_id
                 }
@@ -213,8 +208,7 @@ class TiktokService:
             result = await collection.delete_one({"id": post_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Post deleted successfully",
                     "id": post_id
                 }
@@ -240,8 +234,7 @@ class TiktokService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "get_profile",
@@ -263,8 +256,7 @@ class TiktokService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Get TikTok profile information completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -278,8 +270,7 @@ class TiktokService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "get_profile",
@@ -288,8 +279,7 @@ class TiktokService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Get TikTok profile information executed successfully",
                     "method": "get_profile",
                     "timestamp": datetime.utcnow().isoformat()
@@ -314,8 +304,7 @@ class TiktokService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "search_videos",
@@ -337,8 +326,7 @@ class TiktokService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Search for videos completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -352,8 +340,7 @@ class TiktokService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "search_videos",
@@ -362,8 +349,7 @@ class TiktokService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Search for videos executed successfully",
                     "method": "search_videos",
                     "timestamp": datetime.utcnow().isoformat()
@@ -388,8 +374,7 @@ class TiktokService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "upload_video",
@@ -411,8 +396,7 @@ class TiktokService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Upload video to TikTok completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -426,8 +410,7 @@ class TiktokService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "upload_video",
@@ -436,8 +419,7 @@ class TiktokService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Upload video to TikTok executed successfully",
                     "method": "upload_video",
                     "timestamp": datetime.utcnow().isoformat()
@@ -481,8 +463,7 @@ class TiktokService:
             status_cursor = collection.aggregate(pipeline)
             status_breakdown = {doc["_id"]: doc["count"] async for doc in status_cursor}
             
-            return {
-                "success": True,
+            return {"success": True,
                 "stats": {
                     "total_items": total_count,
                     "recent_items": recent_count,
@@ -509,10 +490,10 @@ class TiktokService:
             video_results = []
             for i in range(min(limit, 10)):
                 video_data = {
-                    "id": f"video_{uuid.uuid4().hex[:10]}",
+                    "id": f"video_{str(uuid.uuid4())[:12]}",
                     "title": f"TikTok video {i+1} for: {query}",
                     "description": f"Amazing TikTok content about {query}",
-                    "author": f"tiktoker_{uuid.uuid4().hex[:8]}",
+                    "author": f"tiktoker_{str(uuid.uuid4())[:12]}",
                     "video_url": f"/videos/video_{i+1}.mp4",
                     "thumbnail": f"/thumbnails/thumb_{i+1}.jpg",
                     "duration": 15 + (i * 5),
@@ -534,8 +515,7 @@ class TiktokService:
             
             await collection.insert_one(search_record)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "query": query,
                 "videos": video_results,
                 "count": len(video_results)
@@ -561,15 +541,14 @@ class TiktokService:
                 "hashtags": video_data.get("hashtags", []),
                 "privacy": video_data.get("privacy", "public"),
                 "status": "uploaded",
-                "tiktok_video_id": f"tk_vid_{uuid.uuid4().hex[:12]}",
-                "upload_url": f"/tiktok/uploads/video_{uuid.uuid4().hex[:8]}.mp4",
+                "tiktok_video_id": f"tk_vid_{str(uuid.uuid4())[:12]}",
+                "upload_url": f"/tiktok/uploads/video_{str(uuid.uuid4())[:12]}.mp4",
                 "uploaded_at": datetime.utcnow().isoformat()
             }
             
             await collection.insert_one(upload_record)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "message": "Video uploaded successfully to TikTok",
                 "upload": upload_record
             }
@@ -602,8 +581,7 @@ class TiktokService:
             result = await collection.insert_one(item_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "tiktok created successfully",
                     "data": serialize_objectid(item_data),
                     "id": item_data["id"]
@@ -634,8 +612,7 @@ class TiktokService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -657,8 +634,7 @@ class TiktokService:
                 doc = safe_document_return(doc)
             
             if doc:
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -687,8 +663,7 @@ class TiktokService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "tiktok updated successfully",
                     "id": item_id
                 }
@@ -708,8 +683,7 @@ class TiktokService:
             result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "tiktok deleted successfully",
                     "id": item_id
                 }

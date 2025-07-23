@@ -53,8 +53,7 @@ class ReferralSystemService:
             
             await collection.count_documents({})
             
-            return {
-                "success": True,
+            return {"success": True,
                 "healthy": True,
                 "service": self.service_name,
                 "features": ["tracking", "rewards", "analytics"],
@@ -81,7 +80,7 @@ class ReferralSystemService:
                 "reward_value": data.get("reward_value", 10.0),
                 "minimum_payout": data.get("minimum_payout", 50.0),
                 "user_id": data.get("user_id", ""),
-                "referral_code": data.get("referral_code", f"REF_{uuid.uuid4().hex[:8].upper()}"),
+                "referral_code": data.get("referral_code", f"REF_{str(uuid.uuid4())[:12].upper()}"),
                 "status": "active",
                 "analytics": {
                     "total_referrals": 0,
@@ -100,8 +99,7 @@ class ReferralSystemService:
                 # Add the inserted_id to program_data for proper serialization
                 program_data["_id"] = result.inserted_id
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Referral program created successfully",
                     "data": safe_document_return(program_data),
                     "id": program_data["id"]
@@ -136,8 +134,7 @@ class ReferralSystemService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -162,8 +159,7 @@ class ReferralSystemService:
             if doc:
                 # Convert ObjectId to string for JSON serialization
                 doc = safe_document_return(doc)
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -198,8 +194,7 @@ class ReferralSystemService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Program updated successfully",
                     "id": program_id
                 }
@@ -220,8 +215,7 @@ class ReferralSystemService:
             result = await collection.delete_one({"id": program_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Program deleted successfully",
                     "id": program_id
                 }
@@ -247,8 +241,7 @@ class ReferralSystemService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "get_analytics",
@@ -270,8 +263,7 @@ class ReferralSystemService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Get referral analytics completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -285,8 +277,7 @@ class ReferralSystemService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "get_analytics",
@@ -295,8 +286,7 @@ class ReferralSystemService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Get referral analytics executed successfully",
                     "method": "get_analytics",
                     "timestamp": datetime.utcnow().isoformat()
@@ -321,8 +311,7 @@ class ReferralSystemService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "process_referral",
@@ -344,8 +333,7 @@ class ReferralSystemService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Process new referral completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -359,8 +347,7 @@ class ReferralSystemService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "process_referral",
@@ -369,8 +356,7 @@ class ReferralSystemService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Process new referral executed successfully",
                     "method": "process_referral",
                     "timestamp": datetime.utcnow().isoformat()
@@ -395,8 +381,7 @@ class ReferralSystemService:
                 data = await cursor.to_list(length=None)
                 total = await collection.count_documents({})
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": data,
                     "total": total,
                     "method": "calculate_rewards",
@@ -418,8 +403,7 @@ class ReferralSystemService:
                 result = await collection.insert_one(item_data)
                 
                 if result.inserted_id:
-                    return {
-                        "success": True,
+                    return {"success": True,
                         "message": "Calculate referral rewards completed successfully",
                         "data": serialize_objectid(item_data),
                         "id": item_data["id"]
@@ -433,8 +417,7 @@ class ReferralSystemService:
                 cursor = collection.find(query)
                 results = await cursor.to_list(length=50)
                 
-                return {
-                    "success": True,
+                return {"success": True,
                     "results": results,
                     "count": len(results),
                     "method": "calculate_rewards",
@@ -443,8 +426,7 @@ class ReferralSystemService:
             
             else:
                 # Generic operation
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "Calculate referral rewards executed successfully",
                     "method": "calculate_rewards",
                     "timestamp": datetime.utcnow().isoformat()
@@ -488,8 +470,7 @@ class ReferralSystemService:
             status_cursor = collection.aggregate(pipeline)
             status_breakdown = {doc["_id"]: doc["count"] async for doc in status_cursor}
             
-            return {
-                "success": True,
+            return {"success": True,
                 "stats": {
                     "total_items": total_count,
                     "recent_items": recent_count,
@@ -528,8 +509,7 @@ class ReferralSystemService:
             result = await collection.insert_one(item_data)
             
             if result.inserted_id:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "referralsystem created successfully",
                     "data": serialize_objectid(item_data),
                     "id": item_data["id"]
@@ -560,8 +540,7 @@ class ReferralSystemService:
             # Get total count
             total = await collection.count_documents(query)
             
-            return {
-                "success": True,
+            return {"success": True,
                 "data": docs,
                 "total": total,
                 "limit": limit,
@@ -583,8 +562,7 @@ class ReferralSystemService:
                 doc = safe_document_return(doc)
             
             if doc:
-                return {
-                    "success": True,
+                return {"success": True,
                     "data": doc
                 }
             else:
@@ -613,8 +591,7 @@ class ReferralSystemService:
             )
             
             if result.modified_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "referralsystem updated successfully",
                     "id": item_id
                 }
@@ -634,8 +611,7 @@ class ReferralSystemService:
             result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count > 0:
-                return {
-                    "success": True,
+                return {"success": True,
                     "message": "referralsystem deleted successfully",
                     "id": item_id
                 }
