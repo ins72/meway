@@ -468,7 +468,6 @@ class StripeIntegrationService:
             
             # Get recent activity (last 30 days)
             from datetime import datetime, timedelta
-from core.objectid_serializer import safe_document_return, safe_documents_return, serialize_objectid
             thirty_days_ago = (datetime.utcnow() - timedelta(days=30)).isoformat()
             recent_query = query.copy()
             recent_query["created_at"] = {"$gte": thirty_days_ago}
