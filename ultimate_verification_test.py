@@ -6,7 +6,7 @@ MISSION: DEMONSTRATE COMPLETE PLATFORM TRANSFORMATION ACHIEVED
 Testing the specific areas mentioned in the review request for 95%+ success rate
 
 Authentication: tmonnens@outlook.com / Voetballen5
-Backend URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
+Backend URL: https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com
 
 CRITICAL AREAS TO VERIFY:
 1. ✅ Twitter/X API Integration - Complete service + API implementation
@@ -29,7 +29,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 
 # Configuration
-BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
+BACKEND_URL = "https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 TEST_EMAIL = "tmonnens@outlook.com"
 TEST_PASSWORD = "Voetballen5"

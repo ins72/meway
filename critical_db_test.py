@@ -6,7 +6,7 @@ FOCUSED ON: Database connectivity issues found in health endpoints
 CRITICAL FINDING: Database objects do not implement truth value testing error
 This indicates the database connectivity fixes are not yet complete.
 
-BACKEND URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
+BACKEND URL: https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com
 """
 
 import requests
@@ -17,7 +17,7 @@ from typing import Dict, Any, Optional, List, Tuple
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
+BACKEND_URL = "https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 class DatabaseConnectivityTester:

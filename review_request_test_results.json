@@ -74,7 +74,7 @@
       "details": [
         "\u2705 OpenAPI Specification - 542 endpoints available",
         "\u2705 System Health - Working perfectly",
-        "\u274c Database Connectivity - Exception: 200, message='Attempt to decode JSON with unexpected mimetype: text/html; charset=utf-8', url='https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com/'"
+        "\u274c Database Connectivity - Exception: 200, message='Attempt to decode JSON with unexpected mimetype: text/html; charset=utf-8', url='https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com/'"
       ]
     }
   },

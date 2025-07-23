@@ -23,7 +23,7 @@ from typing import Dict, List, Any, Optional
 class ComprehensiveBackendTester:
     def __init__(self):
         # Use the production URL from frontend/.env
-        self.base_url = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
+        self.base_url = "https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com"
         self.api_url = f"{self.base_url}/api"
         
         # Admin credentials from review request
@@ -73,7 +73,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 
 # Configuration
-BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
+BACKEND_URL = "https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com"
 TEST_EMAIL = "tmonnens@outlook.com"
 TEST_PASSWORD = "Voetballen5"
 
