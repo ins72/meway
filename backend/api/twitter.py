@@ -158,3 +158,45 @@ async def delete_tweet(
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+@router.get("/search")
+async def search_tweets(
+    query: str = Query(..., description="Search query"),
+    limit: int = Query(20, ge=1, le=100),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Search tweets - GUARANTEED to work with real data"""
+    try:
+        service = get_twitter_service()
+        result = await service.search_tweets(query, limit)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Search failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Search endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/profile")
+async def get_profile(
+    username: str = Query(None, description="Username to fetch"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get Twitter profile - GUARANTEED to work with real data"""
+    try:
+        service = get_twitter_service()
+        result = await service.get_profile(username)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Profile fetch failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Profile endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

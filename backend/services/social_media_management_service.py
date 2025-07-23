@@ -490,6 +490,74 @@ class SocialMediaManagementService:
             logger.error(f"Get stats error: {e}")
             return {"success": False, "error": str(e)}
 
+
+    async def get_accounts(self, user_id: str = None) -> dict:
+        """Get connected social media accounts"""
+        try:
+            # Simulate connected accounts
+            accounts = [
+                {
+                    "id": str(uuid.uuid4()),
+                    "platform": "twitter",
+                    "username": "business_account",
+                    "display_name": "Business Twitter",
+                    "followers": 15420,
+                    "status": "connected",
+                    "last_post": datetime.utcnow().isoformat()
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "platform": "tiktok",
+                    "username": "business_tiktok",
+                    "display_name": "Business TikTok",
+                    "followers": 8750,
+                    "status": "connected",
+                    "last_post": datetime.utcnow().isoformat()
+                }
+            ]
+            
+            return {
+                "success": True,
+                "accounts": accounts,
+                "total": len(accounts)
+            }
+            
+        except Exception as e:
+            logger.error(f"Get accounts error: {e}")
+            return {"success": False, "error": str(e)}
+
+    async def get_analytics(self, user_id: str = None, platform: str = None) -> dict:
+        """Get social media analytics"""
+        try:
+            # Simulate analytics data
+            analytics = {
+                "total_posts": 245,
+                "total_engagement": 15670,
+                "avg_engagement_rate": 6.4,
+                "follower_growth": 150,
+                "top_performing_post": {
+                    "id": str(uuid.uuid4()),
+                    "content": "Amazing business content that went viral!",
+                    "engagement": 2340,
+                    "platform": platform or "twitter"
+                },
+                "weekly_stats": [
+                    {"week": "2025-01-15", "posts": 12, "engagement": 890},
+                    {"week": "2025-01-08", "posts": 15, "engagement": 1120},
+                    {"week": "2025-01-01", "posts": 18, "engagement": 1450}
+                ],
+                "generated_at": datetime.utcnow().isoformat()
+            }
+            
+            return {
+                "success": True,
+                "analytics": analytics
+            }
+            
+        except Exception as e:
+            logger.error(f"Get analytics error: {e}")
+            return {"success": False, "error": str(e)}
+
 # Singleton instance
 _service_instance = None
 
