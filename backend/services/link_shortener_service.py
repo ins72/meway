@@ -18,6 +18,31 @@ class LinkShortenerService:
         self.service_name = "link_shortener"
         self.collection_name = "linkshortener"
         
+    def _get_collection(self):
+        """Get collection for database operations"""
+        try:
+            from core.database import get_database
+            db = get_database()
+            if db is None:
+                logger.error("Database not available")
+                return None
+            return db["link_shortener"]
+        except Exception as e:
+            logger.error(f"Error getting collection: {e}")
+            return None
+
+    async def _get_collection_async(self):
+        """Get collection for async database operations"""
+        try:
+            from core.database import get_database_async
+            db = await get_database_async()
+            if db is None:
+                logger.error("Database not available")
+                return None
+            return db["link_shortener"]
+        except Exception as e:
+            logger.error(f"Error getting async collection: {e}")
+            return None
     def _get_db(self):
         """Get database connection - GUARANTEED to work"""
         try:

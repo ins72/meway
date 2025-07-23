@@ -16,7 +16,37 @@ from core.database import get_database
 from core.logging import admin_logger
 
 class DataPopulationService:
-    """Service class for DataPopulationService operations"""
+
+    def __init__(self):
+        """Initialize service"""
+        self.collection_name = "data_population"
+        self.service_name = "datapopulation"
+
+    def _get_collection(self):
+        """Get collection for database operations"""
+        try:
+            from core.database import get_database
+            db = get_database()
+            if db is None:
+                logger.error("Database not available")
+                return None
+            return db["data_population"]
+        except Exception as e:
+            logger.error(f"Error getting collection: {e}")
+            return None
+
+    async def _get_collection_async(self):
+        """Get collection for async database operations"""
+        try:
+            from core.database import get_database_async
+            db = await get_database_async()
+            if db is None:
+                logger.error("Database not available")
+                return None
+            return db["data_population"]
+        except Exception as e:
+            logger.error(f"Error getting async collection: {e}")
+            return None    """Service class for DataPopulationService operations"""
     """Service to populate database with real external data"""
     
     def __init__(self, external_api_manager, cache_manager):

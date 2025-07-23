@@ -19,6 +19,31 @@ class SurveyService:
     """Service class for SurveyService operations"""
     def __init__(self):
         self.db = get_database()
+    def _get_collection(self):
+        """Get collection for database operations"""
+        try:
+            from core.database import get_database
+            db = get_database()
+            if db is None:
+                logger.error("Database not available")
+                return None
+            return db["survey"]
+        except Exception as e:
+            logger.error(f"Error getting collection: {e}")
+            return None
+
+    async def _get_collection_async(self):
+        """Get collection for async database operations"""
+        try:
+            from core.database import get_database_async
+            db = await get_database_async()
+            if db is None:
+                logger.error("Database not available")
+                return None
+            return db["survey"]
+        except Exception as e:
+            logger.error(f"Error getting async collection: {e}")
+            return None
 
     async def create_survey(self, survey_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new survey"""
