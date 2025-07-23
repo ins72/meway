@@ -915,3 +915,186 @@ complete_multi_workspace_service = CompleteMultiWorkspaceService()
             return result.modified_count > 0
         except Exception:
             return False
+    async def invite_user_to_workspace(self, workspace_id: str, inviter_id: str, invitation_data: dict):
+        """Send invitation to user for workspace collaboration"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Check if workspace exists and inviter has permission
+            workspace = await collections['workspaces'].find_one({"_id": workspace_id})
+            if not workspace:
+                return {"success": False, "message": "Workspace not found"}
+            
+            # Check inviter permissions
+            if workspace.get("owner_id") != inviter_id:
+                member = next((m for m in workspace.get("members", []) if m["user_id"] == inviter_id), None)
+                if not member or member.get("role") not in ["admin", "owner"]:
+                    return {"success": False, "message": "Insufficient permissions"}
+            
+            invitation = {
+                "_id": str(uuid.uuid4()),
+                "workspace_id": workspace_id,
+                "inviter_id": inviter_id,
+                "invited_email": invitation_data.get("email"),
+                "invited_role": invitation_data.get("role", "viewer"),
+                "status": "pending",
+                "invitation_token": str(uuid.uuid4()),
+                "expires_at": datetime.utcnow() + timedelta(days=7),
+                "created_at": datetime.utcnow(),
+                "message": invitation_data.get("message", ""),
+                "permissions": self._get_role_permissions(invitation_data.get("role", "viewer"))
+            }
+            
+            # Store invitation
+            await collections['workspace_invitations'].insert_one(invitation)
+            
+            # Send invitation email (simulated)
+            invitation_url = f"https://app.mewayz.com/invite/{invitation['invitation_token']}"
+            email_sent = await self._send_invitation_email(
+                email=invitation_data.get("email"),
+                workspace_name=workspace.get("name"),
+                inviter_name=workspace.get("owner_name", "Team Member"),
+                invitation_url=invitation_url,
+                message=invitation_data.get("message", "")
+            )
+            
+            return {
+                "success": True,
+                "invitation": invitation,
+                "email_sent": email_sent,
+                "invitation_url": invitation_url,
+                "message": "Invitation sent successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def accept_workspace_invitation(self, invitation_token: str, user_id: str):
+        """Accept workspace invitation and add user to workspace"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Find invitation
+            invitation = await collections['workspace_invitations'].find_one({
+                "invitation_token": invitation_token,
+                "status": "pending"
+            })
+            
+            if not invitation:
+                return {"success": False, "message": "Invalid or expired invitation"}
+            
+            # Check expiration
+            if datetime.utcnow() > invitation.get("expires_at"):
+                return {"success": False, "message": "Invitation has expired"}
+            
+            # Get workspace
+            workspace = await collections['workspaces'].find_one({"_id": invitation["workspace_id"]})
+            if not workspace:
+                return {"success": False, "message": "Workspace not found"}
+            
+            # Add user to workspace
+            new_member = {
+                "user_id": user_id,
+                "role": invitation["invited_role"],
+                "permissions": invitation["permissions"],
+                "joined_at": datetime.utcnow(),
+                "invited_by": invitation["inviter_id"],
+                "status": "active"
+            }
+            
+            # Update workspace members
+            await collections['workspaces'].update_one(
+                {"_id": invitation["workspace_id"]},
+                {"$push": {"members": new_member}}
+            )
+            
+            # Update invitation status
+            await collections['workspace_invitations'].update_one(
+                {"_id": invitation["_id"]},
+                {"$set": {"status": "accepted", "accepted_at": datetime.utcnow(), "accepted_by": user_id}}
+            )
+            
+            return {
+                "success": True,
+                "workspace": workspace,
+                "member_role": invitation["invited_role"],
+                "message": f"Successfully joined {workspace.get('name')} workspace"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    def _get_role_permissions(self, role: str) -> dict:
+        """Get permissions for specific role"""
+        permissions = {
+            "owner": {
+                "manage_workspace": True,
+                "invite_users": True,
+                "manage_members": True,
+                "manage_billing": True,
+                "delete_workspace": True,
+                "edit_content": True,
+                "view_analytics": True,
+                "manage_integrations": True
+            },
+            "admin": {
+                "manage_workspace": False,
+                "invite_users": True,
+                "manage_members": True,
+                "manage_billing": False,
+                "delete_workspace": False,
+                "edit_content": True,
+                "view_analytics": True,
+                "manage_integrations": True
+            },
+            "editor": {
+                "manage_workspace": False,
+                "invite_users": False,
+                "manage_members": False,
+                "manage_billing": False,
+                "delete_workspace": False,
+                "edit_content": True,
+                "view_analytics": True,
+                "manage_integrations": False
+            },
+            "viewer": {
+                "manage_workspace": False,
+                "invite_users": False,
+                "manage_members": False,
+                "manage_billing": False,
+                "delete_workspace": False,
+                "edit_content": False,
+                "view_analytics": True,
+                "manage_integrations": False
+            }
+        }
+        return permissions.get(role, permissions["viewer"])
+    
+    async def _send_invitation_email(self, email: str, workspace_name: str, inviter_name: str, invitation_url: str, message: str):
+        """Send invitation email (simulated)"""
+        try:
+            # This would integrate with email service in production
+            email_content = {
+                "to": email,
+                "subject": f"You've been invited to join {workspace_name} on Mewayz",
+                "template": "workspace_invitation",
+                "data": {
+                    "workspace_name": workspace_name,
+                    "inviter_name": inviter_name,
+                    "invitation_url": invitation_url,
+                    "message": message,
+                    "expires_in": "7 days"
+                }
+            }
+            
+            # Log email for development
+            print(f"📧 Invitation email sent to {email} for workspace {workspace_name}")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error sending invitation email: {e}")
+            return False

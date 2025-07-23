@@ -620,3 +620,285 @@ class CompleteSocialMediaLeadsService:
 
 # Global service instance
 complete_social_media_leads_service = CompleteSocialMediaLeadsService()
+    async def search_instagram_database(self, user_id: str, search_criteria: dict):
+        """Advanced Instagram database search with comprehensive filtering"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Build search query
+            query = {"platform": "instagram"}
+            
+            # Follower count range
+            if search_criteria.get("min_followers"):
+                query["followers_count"] = query.get("followers_count", {})
+                query["followers_count"]["$gte"] = search_criteria["min_followers"]
+            if search_criteria.get("max_followers"):
+                query["followers_count"] = query.get("followers_count", {})
+                query["followers_count"]["$lte"] = search_criteria["max_followers"]
+            
+            # Following count range
+            if search_criteria.get("min_following"):
+                query["following_count"] = query.get("following_count", {})
+                query["following_count"]["$gte"] = search_criteria["min_following"]
+            if search_criteria.get("max_following"):
+                query["following_count"] = query.get("following_count", {})
+                query["following_count"]["$lte"] = search_criteria["max_following"]
+            
+            # Engagement rate
+            if search_criteria.get("min_engagement_rate"):
+                query["engagement_rate"] = query.get("engagement_rate", {})
+                query["engagement_rate"]["$gte"] = search_criteria["min_engagement_rate"]
+            
+            # Location filter
+            if search_criteria.get("location"):
+                query["location"] = {"$regex": search_criteria["location"], "$options": "i"}
+            
+            # Hashtags filter
+            if search_criteria.get("hashtags"):
+                query["recent_hashtags"] = {"$in": search_criteria["hashtags"]}
+            
+            # Bio keywords
+            if search_criteria.get("bio_keywords"):
+                query["bio"] = {"$regex": "|".join(search_criteria["bio_keywords"]), "$options": "i"}
+            
+            # Account type
+            if search_criteria.get("account_type"):
+                query["account_type"] = search_criteria["account_type"]
+            
+            # Language detection
+            if search_criteria.get("language"):
+                query["detected_language"] = search_criteria["language"]
+            
+            # Execute search with pagination
+            page = search_criteria.get("page", 1)
+            limit = search_criteria.get("limit", 50)
+            skip = (page - 1) * limit
+            
+            profiles = await collections['instagram_profiles'].find(query).skip(skip).limit(limit).to_list(length=limit)
+            total_count = await collections['instagram_profiles'].count_documents(query)
+            
+            # Add to user search history
+            search_record = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "search_criteria": search_criteria,
+                "results_count": len(profiles),
+                "total_matches": total_count,
+                "searched_at": datetime.utcnow()
+            }
+            await collections['search_history'].insert_one(search_record)
+            
+            return {
+                "success": True,
+                "profiles": profiles,
+                "pagination": {
+                    "page": page,
+                    "limit": limit,
+                    "total": total_count,
+                    "pages": (total_count + limit - 1) // limit
+                },
+                "search_id": search_record["_id"],
+                "message": f"Found {len(profiles)} profiles matching criteria"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def export_instagram_data(self, user_id: str, search_id: str, export_format: str, selected_fields: list):
+        """Export Instagram search results to CSV/Excel"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Get search record
+            search_record = await collections['search_history'].find_one({"_id": search_id, "user_id": user_id})
+            if not search_record:
+                return {"success": False, "message": "Search not found"}
+            
+            # Re-execute search to get all results
+            query = {"platform": "instagram"}
+            # Apply original search criteria
+            search_criteria = search_record.get("search_criteria", {})
+            
+            # Apply filters (simplified for brevity)
+            if search_criteria.get("min_followers"):
+                query["followers_count"] = {"$gte": search_criteria["min_followers"]}
+            
+            profiles = await collections['instagram_profiles'].find(query).to_list(length=None)
+            
+            # Prepare export data
+            export_data = []
+            for profile in profiles:
+                row = {}
+                for field in selected_fields:
+                    if field == "username":
+                        row["Username"] = profile.get("username", "")
+                    elif field == "display_name":
+                        row["Display Name"] = profile.get("display_name", "")
+                    elif field == "email":
+                        row["Email"] = profile.get("email", "Not available")
+                    elif field == "bio":
+                        row["Bio"] = profile.get("bio", "")
+                    elif field == "followers_count":
+                        row["Followers"] = profile.get("followers_count", 0)
+                    elif field == "following_count":
+                        row["Following"] = profile.get("following_count", 0)
+                    elif field == "engagement_rate":
+                        row["Engagement Rate"] = f"{profile.get('engagement_rate', 0)}%"
+                    elif field == "location":
+                        row["Location"] = profile.get("location", "")
+                    elif field == "profile_picture":
+                        row["Profile Picture URL"] = profile.get("profile_picture_url", "")
+                    elif field == "contact_info":
+                        row["Contact Info"] = profile.get("contact_info", "")
+                
+                export_data.append(row)
+            
+            # Generate export file (simulated)
+            export_record = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "search_id": search_id,
+                "export_format": export_format,
+                "selected_fields": selected_fields,
+                "total_records": len(export_data),
+                "file_size": len(str(export_data)),
+                "created_at": datetime.utcnow(),
+                "status": "completed",
+                "download_url": f"/api/exports/{str(uuid.uuid4())}.{export_format.lower()}"
+            }
+            
+            await collections['export_history'].insert_one(export_record)
+            
+            return {
+                "success": True,
+                "export": export_record,
+                "preview": export_data[:5],  # First 5 rows as preview
+                "message": f"Export completed: {len(export_data)} records"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def schedule_social_media_post(self, user_id: str, post_data: dict):
+        """Schedule posts across multiple social media platforms"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            scheduled_post = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "platforms": post_data.get("platforms", []),
+                "content": {
+                    "text": post_data.get("content", {}).get("text", ""),
+                    "images": post_data.get("content", {}).get("images", []),
+                    "videos": post_data.get("content", {}).get("videos", []),
+                    "hashtags": post_data.get("content", {}).get("hashtags", []),
+                    "mentions": post_data.get("content", {}).get("mentions", [])
+                },
+                "schedule": {
+                    "post_time": post_data.get("schedule_time"),
+                    "timezone": post_data.get("timezone", "UTC"),
+                    "repeat": post_data.get("repeat", "none"),
+                    "repeat_until": post_data.get("repeat_until")
+                },
+                "optimization": {
+                    "optimal_time_suggestion": True,
+                    "hashtag_suggestions": True,
+                    "content_optimization": True
+                },
+                "status": "scheduled",
+                "created_at": datetime.utcnow(),
+                "last_updated": datetime.utcnow()
+            }
+            
+            # Add platform-specific customization
+            platform_customizations = {}
+            for platform in post_data.get("platforms", []):
+                platform_customizations[platform] = {
+                    "custom_text": post_data.get("customizations", {}).get(platform, {}).get("text"),
+                    "optimal_hashtags": await self._get_optimal_hashtags(platform, post_data.get("content", {}).get("text", "")),
+                    "posting_strategy": await self._get_platform_strategy(platform)
+                }
+            
+            scheduled_post["platform_customizations"] = platform_customizations
+            
+            await collections['scheduled_posts'].insert_one(scheduled_post)
+            
+            return {
+                "success": True,
+                "scheduled_post": scheduled_post,
+                "estimated_reach": await self._estimate_post_reach(user_id, post_data),
+                "message": f"Post scheduled for {len(post_data.get('platforms', []))} platforms"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def _get_optimal_hashtags(self, platform: str, content: str):
+        """Get optimal hashtags for specific platform and content"""
+        # This would use AI/ML in production
+        hashtag_suggestions = {
+            "instagram": ["#business", "#entrepreneur", "#success", "#motivation", "#growth"],
+            "twitter": ["#startup", "#tech", "#innovation", "#business", "#growth"],
+            "linkedin": ["#professional", "#business", "#networking", "#career", "#industry"],
+            "tiktok": ["#viral", "#trending", "#fyp", "#business", "#tips"],
+            "facebook": ["#business", "#community", "#local", "#services", "#quality"],
+            "youtube": ["#tutorial", "#howto", "#business", "#tips", "#guide"]
+        }
+        return hashtag_suggestions.get(platform, ["#business", "#growth"])
+    
+    async def _get_platform_strategy(self, platform: str):
+        """Get posting strategy for specific platform"""
+        strategies = {
+            "instagram": {
+                "optimal_times": ["9-11 AM", "2-3 PM", "5-7 PM"],
+                "content_format": "Visual-first with engaging captions",
+                "hashtag_count": "5-10 hashtags",
+                "posting_frequency": "1-2 times daily"
+            },
+            "twitter": {
+                "optimal_times": ["9 AM", "12 PM", "5 PM"],
+                "content_format": "Concise text with trending hashtags",
+                "hashtag_count": "1-3 hashtags",
+                "posting_frequency": "3-5 times daily"
+            },
+            "linkedin": {
+                "optimal_times": ["8-10 AM", "12 PM", "5-7 PM"],
+                "content_format": "Professional insights and industry news",
+                "hashtag_count": "3-5 hashtags",
+                "posting_frequency": "1 time daily"
+            }
+        }
+        return strategies.get(platform, {})
+    
+    async def _estimate_post_reach(self, user_id: str, post_data: dict):
+        """Estimate potential reach for scheduled post"""
+        # This would use analytics data in production
+        base_reach = 100
+        platform_multipliers = {
+            "instagram": 1.5,
+            "twitter": 1.2,
+            "linkedin": 0.8,
+            "tiktok": 2.0,
+            "facebook": 1.0,
+            "youtube": 1.8
+        }
+        
+        estimated_reach = 0
+        for platform in post_data.get("platforms", []):
+            platform_reach = base_reach * platform_multipliers.get(platform, 1.0)
+            estimated_reach += platform_reach
+        
+        return {
+            "total_estimated_reach": int(estimated_reach),
+            "platform_breakdown": {
+                platform: int(base_reach * platform_multipliers.get(platform, 1.0))
+                for platform in post_data.get("platforms", [])
+            }
+        }

@@ -486,3 +486,71 @@ async def workspace_health_check():
         "supported_roles": [role.value for role in WorkspaceRole],
         "timestamp": datetime.utcnow().isoformat()
     }
+
+@router.post("/{workspace_id}/invite", tags=["Workspace Invitations"])
+async def invite_user_to_workspace(
+    workspace_id: str,
+    invitation_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Send invitation to user for workspace collaboration"""
+    try:
+        result = await multi_workspace_service.invite_user_to_workspace(
+            workspace_id=workspace_id,
+            inviter_id=current_user["_id"],
+            invitation_data=invitation_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "User invitation processed successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error inviting user to workspace: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/invitations/{invitation_token}/accept", tags=["Workspace Invitations"])
+async def accept_workspace_invitation(
+    invitation_token: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Accept workspace invitation"""
+    try:
+        result = await multi_workspace_service.accept_workspace_invitation(
+            invitation_token=invitation_token,
+            user_id=current_user["_id"]
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Workspace invitation accepted successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error accepting workspace invitation: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/{workspace_id}/invitations", tags=["Workspace Invitations"])
+async def get_workspace_invitations(
+    workspace_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all invitations for a workspace"""
+    try:
+        result = await multi_workspace_service.get_workspace_invitations(
+            workspace_id=workspace_id,
+            user_id=current_user["_id"]
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Workspace invitations retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting workspace invitations: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

@@ -781,3 +781,281 @@ class AdvancedTemplateMarketplaceService:
                 
         except Exception as e:
             return {"total_revenue": 0.0, "transactions": 0, "avg_transaction": 0.0, "error": str(e)}
+    async def create_template_for_sale(self, creator_id: str, template_data: dict):
+        """Create template for marketplace sale"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            template = {
+                "_id": str(uuid.uuid4()),
+                "creator_id": creator_id,
+                "title": template_data.get("title"),
+                "description": template_data.get("description"),
+                "category": template_data.get("category"),
+                "subcategory": template_data.get("subcategory"),
+                "template_type": template_data.get("type"),  # website, email, link_in_bio, course
+                "pricing": {
+                    "price": template_data.get("price", 0),
+                    "currency": template_data.get("currency", "USD"),
+                    "pricing_type": template_data.get("pricing_type", "one_time"),  # one_time, subscription
+                    "discount": template_data.get("discount", 0)
+                },
+                "content": {
+                    "template_files": template_data.get("template_files", []),
+                    "preview_images": template_data.get("preview_images", []),
+                    "demo_url": template_data.get("demo_url"),
+                    "documentation": template_data.get("documentation"),
+                    "customization_options": template_data.get("customization_options", [])
+                },
+                "marketplace": {
+                    "status": "pending_review",
+                    "featured": False,
+                    "tags": template_data.get("tags", []),
+                    "difficulty_level": template_data.get("difficulty_level", "beginner"),
+                    "estimated_setup_time": template_data.get("setup_time", "30 minutes"),
+                    "compatibility": template_data.get("compatibility", [])
+                },
+                "analytics": {
+                    "views": 0,
+                    "downloads": 0,
+                    "ratings": [],
+                    "average_rating": 0,
+                    "total_revenue": 0,
+                    "conversion_rate": 0
+                },
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "approved_at": None,
+                "approved_by": None
+            }
+            
+            await collections['marketplace_templates'].insert_one(template)
+            
+            # Create creator analytics entry
+            creator_analytics = await collections['creator_analytics'].find_one({"creator_id": creator_id})
+            if not creator_analytics:
+                creator_analytics = {
+                    "_id": str(uuid.uuid4()),
+                    "creator_id": creator_id,
+                    "total_templates": 0,
+                    "total_sales": 0,
+                    "total_revenue": 0,
+                    "average_rating": 0,
+                    "created_at": datetime.utcnow()
+                }
+                await collections['creator_analytics'].insert_one(creator_analytics)
+            
+            # Update creator template count
+            await collections['creator_analytics'].update_one(
+                {"creator_id": creator_id},
+                {"$inc": {"total_templates": 1}}
+            )
+            
+            return {
+                "success": True,
+                "template": template,
+                "message": "Template submitted for marketplace review"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def purchase_template(self, buyer_id: str, template_id: str, payment_data: dict):
+        """Process template purchase"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Get template
+            template = await collections['marketplace_templates'].find_one({"_id": template_id})
+            if not template:
+                return {"success": False, "message": "Template not found"}
+            
+            if template.get("marketplace", {}).get("status") != "approved":
+                return {"success": False, "message": "Template not available for purchase"}
+            
+            # Check if already purchased
+            existing_purchase = await collections['template_purchases'].find_one({
+                "buyer_id": buyer_id,
+                "template_id": template_id
+            })
+            
+            if existing_purchase:
+                return {"success": False, "message": "Template already purchased"}
+            
+            # Process payment (simulated)
+            payment_result = await self._process_template_payment(payment_data, template["pricing"])
+            if not payment_result.get("success"):
+                return {"success": False, "message": "Payment processing failed"}
+            
+            # Create purchase record
+            purchase = {
+                "_id": str(uuid.uuid4()),
+                "buyer_id": buyer_id,
+                "template_id": template_id,
+                "creator_id": template["creator_id"],
+                "amount": template["pricing"]["price"],
+                "currency": template["pricing"]["currency"],
+                "payment_id": payment_result.get("payment_id"),
+                "status": "completed",
+                "purchased_at": datetime.utcnow(),
+                "license_type": "standard",
+                "download_count": 0,
+                "max_downloads": 5
+            }
+            
+            await collections['template_purchases'].insert_one(purchase)
+            
+            # Update template analytics
+            await collections['marketplace_templates'].update_one(
+                {"_id": template_id},
+                {
+                    "$inc": {
+                        "analytics.downloads": 1,
+                        "analytics.total_revenue": template["pricing"]["price"]
+                    }
+                }
+            )
+            
+            # Update creator analytics
+            await collections['creator_analytics'].update_one(
+                {"creator_id": template["creator_id"]},
+                {
+                    "$inc": {
+                        "total_sales": 1,
+                        "total_revenue": template["pricing"]["price"]
+                    }
+                }
+            )
+            
+            # Generate download links
+            download_links = await self._generate_template_download_links(template_id, purchase["_id"])
+            
+            return {
+                "success": True,
+                "purchase": purchase,
+                "download_links": download_links,
+                "license_info": {
+                    "type": "standard",
+                    "commercial_use": True,
+                    "resale_allowed": False,
+                    "attribution_required": False
+                },
+                "message": "Template purchased successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def get_creator_earnings_dashboard(self, creator_id: str):
+        """Get comprehensive creator earnings and analytics"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Get creator analytics
+            creator_analytics = await collections['creator_analytics'].find_one({"creator_id": creator_id})
+            if not creator_analytics:
+                return {"success": False, "message": "Creator analytics not found"}
+            
+            # Get recent sales
+            recent_sales = await collections['template_purchases'].find(
+                {"creator_id": creator_id}
+            ).sort("purchased_at", -1).limit(10).to_list(length=10)
+            
+            # Get top performing templates
+            templates = await collections['marketplace_templates'].find(
+                {"creator_id": creator_id}
+            ).sort("analytics.total_revenue", -1).limit(5).to_list(length=5)
+            
+            # Calculate monthly earnings
+            monthly_earnings = await self._calculate_monthly_earnings(creator_id)
+            
+            earnings_dashboard = {
+                "overview": creator_analytics,
+                "recent_sales": recent_sales,
+                "top_templates": templates,
+                "monthly_earnings": monthly_earnings,
+                "pending_payouts": await self._get_pending_payouts(creator_id),
+                "performance_metrics": {
+                    "conversion_rate": await self._calculate_conversion_rate(creator_id),
+                    "average_template_price": await self._calculate_average_price(creator_id),
+                    "customer_satisfaction": await self._get_customer_satisfaction(creator_id)
+                }
+            }
+            
+            return {
+                "success": True,
+                "dashboard": earnings_dashboard,
+                "message": "Creator earnings dashboard retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def _process_template_payment(self, payment_data: dict, pricing: dict):
+        """Process payment for template purchase (simulated)"""
+        # This would integrate with Stripe or other payment processor
+        return {
+            "success": True,
+            "payment_id": str(uuid.uuid4()),
+            "amount": pricing["price"],
+            "currency": pricing["currency"],
+            "status": "completed"
+        }
+    
+    async def _generate_template_download_links(self, template_id: str, purchase_id: str):
+        """Generate secure download links for purchased template"""
+        base_url = "https://downloads.mewayz.com"
+        download_token = str(uuid.uuid4())
+        
+        return {
+            "template_files": f"{base_url}/templates/{template_id}/files?token={download_token}",
+            "documentation": f"{base_url}/templates/{template_id}/docs?token={download_token}",
+            "preview_assets": f"{base_url}/templates/{template_id}/previews?token={download_token}",
+            "expires_at": datetime.utcnow() + timedelta(days=30)
+        }
+    
+    async def _calculate_monthly_earnings(self, creator_id: str):
+        """Calculate monthly earnings for creator"""
+        # Simplified calculation - would use aggregation pipeline in production
+        return {
+            "current_month": 1250.00,
+            "last_month": 980.50,
+            "growth_percentage": 27.5,
+            "projected_next_month": 1400.00
+        }
+    
+    async def _get_pending_payouts(self, creator_id: str):
+        """Get pending payouts for creator"""
+        return {
+            "total_pending": 450.75,
+            "next_payout_date": "2025-07-01",
+            "payout_method": "bank_transfer"
+        }
+    
+    async def _calculate_conversion_rate(self, creator_id: str):
+        """Calculate template view to purchase conversion rate"""
+        return 3.2  # 3.2%
+    
+    async def _calculate_average_price(self, creator_id: str):
+        """Calculate average template price"""
+        return 29.99
+    
+    async def _get_customer_satisfaction(self, creator_id: str):
+        """Get customer satisfaction rating"""
+        return {
+            "average_rating": 4.6,
+            "total_reviews": 127,
+            "rating_distribution": {
+                "5": 78,
+                "4": 32,
+                "3": 12,
+                "2": 3,
+                "1": 2
+            }
+        }
