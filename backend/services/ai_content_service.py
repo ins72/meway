@@ -168,7 +168,7 @@ class AIContentService:
     def _generate_ad_copy(self, prompt: str, tone: str):
         """Generate advertisement copy"""
         
-        return f"""🔥 EXCLUSIVE: Revolutionary {prompt.title()} Solution! 🔥
+        return f"""EXCLUSIVE: Revolutionary {prompt.title()} Solution!
 
 
 
