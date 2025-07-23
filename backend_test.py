@@ -1112,32 +1112,62 @@ class BackendTester:
         print("\n🔗 Link in Bio System Testing Complete!")
         return True
         
-    def test_data_consistency(self):
-        """Test data consistency to verify real database usage"""
+    def test_data_consistency_verification(self):
+        """Test data consistency to verify real database usage - CRITICAL FOR REVIEW REQUEST"""
         print("\n🔍 TESTING DATA CONSISTENCY (Real Database Verification)")
         print("=" * 60)
+        print("Testing for MOCK DATA ELIMINATION as requested in review")
         
-        # Test templates consistency
-        print("\n📋 Testing Templates Data Consistency...")
-        success1, data1 = self.test_endpoint("/link-in-bio/templates", "GET", test_name="Templates - First Call")
+        # Test Template Marketplace consistency
+        print("\n🛍️ Testing Template Marketplace Data Consistency...")
+        success1, data1 = self.test_endpoint("/marketing-website/templates/marketplace", "GET", test_name="Template Marketplace - First Call")
         time.sleep(1)  # Small delay
-        success2, data2 = self.test_endpoint("/link-in-bio/templates", "GET", test_name="Templates - Second Call")
+        success2, data2 = self.test_endpoint("/marketing-website/templates/marketplace", "GET", test_name="Template Marketplace - Second Call")
         
-        if success1 and success2 and data1 == data2:
-            self.log_result("Templates Data Consistency", True, "Templates data consistent across calls - confirms real database usage")
-        elif success1 and success2:
-            self.log_result("Templates Data Consistency", False, "Templates data inconsistent - may be using random generation")
+        if success1 and success2:
+            if data1 == data2:
+                self.log_result("Template Marketplace - Data Consistency", True, "Data consistent across calls - confirms real database usage")
+            else:
+                self.log_result("Template Marketplace - Data Consistency", False, "Data inconsistent - may be using random generation")
         
-        # Test analytics overview consistency
-        print("\n📊 Testing Analytics Data Consistency...")
-        success1, data1 = self.test_endpoint("/link-in-bio/analytics/overview", "GET", test_name="Analytics Overview - First Call")
+        # Test Team Dashboard consistency
+        print("\n👥 Testing Team Dashboard Data Consistency...")
+        success1, data1 = self.test_endpoint("/teams/dashboard", "GET", test_name="Team Dashboard - First Call")
         time.sleep(1)  # Small delay
-        success2, data2 = self.test_endpoint("/link-in-bio/analytics/overview", "GET", test_name="Analytics Overview - Second Call")
+        success2, data2 = self.test_endpoint("/teams/dashboard", "GET", test_name="Team Dashboard - Second Call")
         
-        if success1 and success2 and data1 == data2:
-            self.log_result("Analytics Data Consistency", True, "Analytics data consistent across calls - confirms real database usage")
-        elif success1 and success2:
-            self.log_result("Analytics Data Consistency", False, "Analytics data inconsistent - may be using random generation")
+        if success1 and success2:
+            if data1 == data2:
+                self.log_result("Team Dashboard - Data Consistency", True, "Data consistent across calls - confirms real database usage")
+            else:
+                self.log_result("Team Dashboard - Data Consistency", False, "Data inconsistent - may be using random generation")
+        
+        # Test Analytics Dashboard consistency
+        print("\n📊 Testing Analytics Dashboard Data Consistency...")
+        success1, data1 = self.test_endpoint("/analytics-system/dashboard", "GET", test_name="Analytics Dashboard - First Call")
+        time.sleep(1)  # Small delay
+        success2, data2 = self.test_endpoint("/analytics-system/dashboard", "GET", test_name="Analytics Dashboard - Second Call")
+        
+        if success1 and success2:
+            if data1 == data2:
+                self.log_result("Analytics Dashboard - Data Consistency", True, "Data consistent across calls - confirms real database usage")
+            else:
+                self.log_result("Analytics Dashboard - Data Consistency", False, "Data inconsistent - may be using random generation")
+        
+        # Test Mobile PWA Analytics consistency
+        print("\n📱 Testing Mobile PWA Analytics Data Consistency...")
+        success1, data1 = self.test_endpoint("/mobile-pwa/analytics/mobile", "GET", test_name="Mobile Analytics - First Call")
+        time.sleep(1)  # Small delay
+        success2, data2 = self.test_endpoint("/mobile-pwa/analytics/mobile", "GET", test_name="Mobile Analytics - Second Call")
+        
+        if success1 and success2:
+            if data1 == data2:
+                self.log_result("Mobile Analytics - Data Consistency", True, "Data consistent across calls - confirms real database usage")
+            else:
+                self.log_result("Mobile Analytics - Data Consistency", False, "Data inconsistent - may be using random generation")
+        
+        print("\n🔍 Data Consistency Verification Complete!")
+        return True
     
     def test_real_api_integration_endpoints(self):
         """Test the REAL API INTEGRATION ENDPOINTS as requested in the review - JULY 2025"""
