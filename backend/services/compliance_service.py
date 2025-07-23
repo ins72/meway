@@ -108,10 +108,11 @@ class ComplianceService:
     async def update_compliance(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
         """Update compliance by ID"""
         try:
+            collection = self._get_collection()
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.collection.update_one(
+            result = await collection.update_one(
                 {"id": item_id},
                 {"$set": update_data}
             )
@@ -123,7 +124,7 @@ class ComplianceService:
                 }
             
             # Get updated document
-            updated_doc = await self.collection.find_one({"id": item_id})
+            updated_doc = await collection.find_one({"id": item_id})
             if updated_doc:
                 updated_doc.pop('_id', None)
             
