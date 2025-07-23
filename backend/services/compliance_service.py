@@ -55,7 +55,8 @@ class ComplianceService:
     async def get_compliance(self, item_id: str) -> Dict[str, Any]:
         """Get compliance by ID"""
         try:
-            doc = await self.collection.find_one({"id": item_id})
+            collection = self._get_collection()
+            doc = await collection.find_one({"id": item_id})
             
             if not doc:
                 return {
