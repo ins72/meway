@@ -298,6 +298,27 @@ try:
     app.include_router(workspace_router, tags=["Workspaces"])  
     app.include_router(integration_router, tags=["External Integrations"])
     app.include_router(automation_router, tags=["Automation"])
+except ImportError as e:
+    print(f"⚠️  Could not import missing_endpoints_fix: {e}")
+
+# Include critical missing endpoints identified in testing
+try:
+    from api.missing_critical_endpoints import (
+        team_management_router, instagram_router, pwa_router, workflows_router,
+        escrow_router, posts_router, device_router, disputes_router, template_marketplace_router
+    )
+    app.include_router(team_management_router, prefix="/api/team-management", tags=["Team Management"])
+    app.include_router(instagram_router, prefix="/api/instagram", tags=["Instagram Database"])
+    app.include_router(pwa_router, prefix="/api/pwa", tags=["PWA Features"])
+    app.include_router(workflows_router, prefix="/api/workflows", tags=["AI Workflows"])
+    app.include_router(escrow_router, prefix="/api/escrow", tags=["Escrow System"])
+    app.include_router(posts_router, prefix="/api/posts", tags=["Social Media Posts"])
+    app.include_router(device_router, prefix="/api/device", tags=["Device Management"])
+    app.include_router(disputes_router, prefix="/api/disputes", tags=["Dispute Resolution"])
+    app.include_router(template_marketplace_router, prefix="/api/template-marketplace", tags=["Template Marketplace"])
+    print("✅ Included all critical missing endpoints")
+except ImportError as e:
+    print(f"⚠️  Could not import critical endpoints: {e}")
     app.include_router(support_router, tags=["Support"])
     app.include_router(monitoring_router, tags=["Monitoring"])
     included_count += 6
