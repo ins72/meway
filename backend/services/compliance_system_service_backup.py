@@ -225,3 +225,13 @@ compliance_system_service = ComplianceSystemService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+# Singleton instance
+_service_instance = None
+
+def get_compliance_system_service_backup_service():
+    """Get singleton instance of ComplianceSystemService"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = ComplianceSystemService()
+    return _service_instance

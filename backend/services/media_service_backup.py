@@ -676,3 +676,13 @@ class MediaService:
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+# Singleton instance
+_service_instance = None
+
+def get_media_service_backup_service():
+    """Get singleton instance of MediaService"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = MediaService()
+    return _service_instance
