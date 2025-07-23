@@ -6,6 +6,7 @@ NO MOCK DATA - Only legitimate data sources
 
 import asyncio
 import logging
+logger = logging.getLogger(__name__)
 from typing import Dict, List, Optional, Any
 import uuid
 from typing import Dict, Any, Optional, List
@@ -15,6 +16,7 @@ from core.database import get_database
 from core.logging import admin_logger
 
 class DataPopulationService:
+    """Service class for DataPopulationService operations"""
     """Service to populate database with real external data"""
     
     def __init__(self, external_api_manager, cache_manager):

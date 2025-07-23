@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class CrmManagementService:
+    """Service class for CrmManagementService operations"""
     def __init__(self):
         self.service_name = "crm_management"
         self.collection_name = "crmmanagement"
@@ -25,7 +26,6 @@ class CrmManagementService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class CrmManagementService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

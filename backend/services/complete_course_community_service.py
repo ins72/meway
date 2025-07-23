@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class CompleteCourseCommunityService:
+    """Service class for CompleteCourseCommunityService operations"""
     def __init__(self):
         self.service_name = "complete_course_community"
         self.collection_name = "completecoursecommunity"
@@ -25,7 +26,6 @@ class CompleteCourseCommunityService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class CompleteCourseCommunityService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

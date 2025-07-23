@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class UserService:
+    """Service class for UserService operations"""
     def __init__(self):
         self.service_name = "user"
         self.collection_name = "user"
@@ -25,7 +26,6 @@ class UserService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class UserService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

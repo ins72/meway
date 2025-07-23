@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class CompleteLinkInBioService:
+    """Service class for CompleteLinkInBioService operations"""
     def __init__(self):
         self.service_name = "complete_link_in_bio"
         self.collection_name = "completelinkinbio"
@@ -25,7 +26,6 @@ class CompleteLinkInBioService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class CompleteLinkInBioService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

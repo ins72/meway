@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class EnterpriseSecurityComplianceService:
+    """Service class for EnterpriseSecurityComplianceService operations"""
     def __init__(self):
         self.service_name = "enterprise_security_compliance"
         self.collection_name = "enterprisesecuritycompliance"
@@ -25,7 +26,6 @@ class EnterpriseSecurityComplianceService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class EnterpriseSecurityComplianceService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

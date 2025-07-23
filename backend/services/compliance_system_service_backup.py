@@ -5,12 +5,14 @@ Provides business logic for Compliance System
 
 import os
 import logging
+logger = logging.getLogger(__name__)
 import uuid
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from core.database import get_database
 
 class ComplianceSystemService:
+    """Service class for ComplianceSystemService operations"""
     """Service class for Compliance System"""
     
 

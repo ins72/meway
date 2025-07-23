@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class LinkShortenerService:
+    """Service class for LinkShortenerService operations"""
     def __init__(self):
         self.service_name = "link_shortener"
         self.collection_name = "linkshortener"
@@ -25,7 +26,6 @@ class LinkShortenerService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class LinkShortenerService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

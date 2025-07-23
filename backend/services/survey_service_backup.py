@@ -5,6 +5,7 @@ Business logic for survey and feedback system
 
 import uuid
 import logging
+logger = logging.getLogger(__name__)
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from typing import Optional, List, Dict, Any
@@ -15,6 +16,7 @@ import io
 from core.database import get_database
 
 class SurveyService:
+    """Service class for SurveyService operations"""
     def __init__(self):
         self.db = get_database()
 
@@ -45,6 +47,7 @@ class SurveyService:
             }
 
 class SurveyService:
+    """Service class for SurveyService operations"""
     @staticmethod
     async def get_workspace_surveys(user_id: str) -> Dict[str, Any]:
         """Get all surveys for a user's workspace"""

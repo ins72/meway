@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class AiTokenManagementService:
+    """Service class for AiTokenManagementService operations"""
     def __init__(self):
         self.service_name = "ai_token_management"
         self.collection_name = "aitokenmanagement"
@@ -25,7 +26,6 @@ class AiTokenManagementService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class AiTokenManagementService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {

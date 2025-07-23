@@ -5,6 +5,7 @@ Business logic for media library and file management
 
 import uuid
 import logging
+logger = logging.getLogger(__name__)
 from typing import Dict, List, Optional, Any
 import os
 import base64
@@ -15,6 +16,7 @@ import mimetypes
 from core.database import get_database
 
 class MediaService:
+    """Service class for MediaService operations"""
     @staticmethod
     async def get_media_library(user_id: str) -> Dict[str, Any]:
         """Get media library with files and folders"""

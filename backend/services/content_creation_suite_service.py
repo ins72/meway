@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class ContentCreationSuiteService:
+    """Service class for ContentCreationSuiteService operations"""
     def __init__(self):
         self.service_name = "content_creation_suite"
         self.collection_name = "contentcreationsuite"
@@ -25,7 +26,6 @@ class ContentCreationSuiteService:
             logger.error(f"Database error: {e}")
             return None
     
-    def _get_collection(self):
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
@@ -261,7 +261,6 @@ class ContentCreationSuiteService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
             await collection.count_documents({})
             
             return {
