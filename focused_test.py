@@ -141,10 +141,10 @@ class FocusedTester:
         # Key endpoints to test for general health
         health_endpoints = [
             ("/health", "System Health"),
-            ("/api/auth/me", "User Profile"),
-            ("/api/dashboard/overview", "Dashboard Overview"),
-            ("/api/analytics/overview", "Analytics Overview"),
-            ("/api/ai-services/list", "AI Services")
+            ("/api/analytics-system/dashboard", "Analytics Dashboard"),
+            ("/api/analytics-system/overview", "Analytics Overview"),
+            ("/api/crm/dashboard", "CRM Dashboard"),
+            ("/api/teams/dashboard", "Teams Dashboard")
         ]
         
         success_count = 0
