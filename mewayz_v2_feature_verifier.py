@@ -210,7 +210,7 @@ class MewayzV2FeatureVerifier:
             
             if details['status'] == "✅ IMPLEMENTED":
                 implemented_features += 1
-                overall_success += int(details['success_rate'].rstrip('%'))
+                overall_success += float(details['success_rate'].rstrip('%'))
         
         # Calculate overall metrics
         implementation_coverage = (implemented_features / total_features) * 100
