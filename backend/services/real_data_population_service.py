@@ -596,8 +596,6 @@ class RealDataPopulationService:
 
 # Global service instance
 real_data_population_service = RealDataPopulationService()
-
-    async def create_item(self, user_id: str, item_data: dict):
         """Create new item"""
         try:
             collections = self._get_collections()
