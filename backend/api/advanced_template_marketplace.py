@@ -188,8 +188,16 @@ async def download_template(
 @router.get("/categories", tags=["Template Browsing"])
 async def get_template_categories():
     """Get available template categories"""
-    return await self._get_real_data(user_id)
-    }
+    try:
+        categories = await advanced_template_marketplace_service.get_categories()
+        return {
+            "success": True,
+            "categories": categories,
+            "message": "Categories retrieved successfully"
+        }
+    except Exception as e:
+        logger.error(f"Error getting categories: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/creator/analytics", tags=["Creator Analytics"])
