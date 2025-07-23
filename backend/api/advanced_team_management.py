@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field, EmailStr
 
 from core.auth import get_current_user
-from services.advanced_team_management_service import advanced_team_management_service, TeamRole, InvitationStatus
+from services.advanced_team_management_service import advanced_team_management_service, TeamRole
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
