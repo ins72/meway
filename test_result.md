@@ -14410,13 +14410,16 @@ backend:
     implemented: true
     working: false
     file: "/api/team/*"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
         comment: "❌ TEAM MANAGEMENT SYSTEM CRITICAL ISSUES (2/7 working): Dashboard working (284 chars), activity log working (101 chars), but members endpoint has datetime calculation error ('datetime.datetime' and 'str' operand type error), invite endpoint requires workspace_id parameter, accept-invitation expects query parameter instead of body, update/delete operations fail with 'Team member not found' errors. System needs immediate fixes to member management logic and validation schemas."
+      - working: false
+        agent: "testing"
+        comment: "❌ TEAM MANAGEMENT SYSTEM CRITICAL DATABASE ISSUES - JANUARY 2025: Health endpoint working (Status: healthy), but main endpoint failing with HTTP 400 'AsyncIOMotorCursor can't be used in await expression' error. This is a critical MongoDB Motor driver implementation issue affecting database cursor handling. The system architecture exists but database operations are broken due to improper async cursor usage."
 
   - task: "Form Builder System"
     implemented: true
