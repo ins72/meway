@@ -613,3 +613,171 @@ class AdvancedTemplateMarketplaceService:
             return await cursor.to_list(length=limit)
         except Exception as e:
             return []
+
+    async def get_templates(self, filters: Optional[Dict] = None, limit: int = 20, skip: int = 0):
+        """Get templates with filtering - REAL database implementation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"templates": [], "total": 0, "message": "Database not available"}
+            
+            query = {}
+            
+            # Apply filters
+            if filters:
+                if filters.get("category"):
+                    query["category"] = filters["category"]
+                if filters.get("status"):
+                    query["status"] = filters["status"]
+                if filters.get("creator_id"):
+                    query["creator_id"] = filters["creator_id"]
+                if filters.get("price_range"):
+                    min_price, max_price = filters["price_range"]
+                    query["price"] = {"$gte": min_price, "$lte": max_price}
+                if filters.get("tags"):
+                    query["tags"] = {"$in": filters["tags"]}
+                if filters.get("search"):
+                    query["$text"] = {"$search": filters["search"]}
+            
+            # Get total count
+            total = await collections["templates"].count_documents(query)
+            
+            # Get templates with pagination
+            cursor = collections["templates"].find(query).skip(skip).limit(limit)
+            templates = await cursor.to_list(length=limit)
+            
+            # Convert ObjectId to string for JSON serialization
+            for template in templates:
+                template["id"] = str(template["_id"])
+                template.pop("_id", None)
+            
+            return {
+                "templates": templates,
+                "total": total,
+                "page": (skip // limit) + 1,
+                "per_page": limit,
+                "total_pages": (total + limit - 1) // limit
+            }
+            
+        except Exception as e:
+            return {"templates": [], "total": 0, "error": str(e)}
+    
+    async def get_template_by_id(self, template_id: str):
+        """Get specific template by ID - REAL database implementation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return None
+            
+            template = await collections["templates"].find_one({"_id": template_id})
+            
+            if template:
+                template["id"] = str(template["_id"])
+                template.pop("_id", None)
+            
+            return template
+            
+        except Exception as e:
+            return None
+    
+    async def update_template(self, template_id: str, updates: Dict[str, Any]):
+        """Update template - REAL database implementation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return None
+            
+            # Add update metadata
+            updates["updated_at"] = datetime.utcnow()
+            updates["version"] = updates.get("version", 1) + 1
+            
+            result = await collections["templates"].update_one(
+                {"_id": template_id},
+                {"$set": updates}
+            )
+            
+            if result.modified_count > 0:
+                # Return updated template
+                return await self.get_template_by_id(template_id)
+            
+            return None
+            
+        except Exception as e:
+            return None
+    
+    async def delete_template(self, template_id: str):
+        """Delete template - REAL database implementation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return False
+            
+            # Soft delete - mark as deleted instead of removing
+            result = await collections["templates"].update_one(
+                {"_id": template_id},
+                {
+                    "$set": {
+                        "status": "deleted",
+                        "deleted_at": datetime.utcnow()
+                    }
+                }
+            )
+            
+            return result.modified_count > 0
+            
+        except Exception as e:
+            return False
+    
+    async def get_creator_revenue(self, creator_id: str, period: str = "month"):
+        """Get creator revenue data - REAL database implementation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"total_revenue": 0, "transactions": 0, "avg_transaction": 0}
+            
+            # Calculate date range
+            now = datetime.utcnow()
+            if period == "week":
+                start_date = now - timedelta(weeks=1)
+            elif period == "month":
+                start_date = now - timedelta(days=30)
+            elif period == "quarter":
+                start_date = now - timedelta(days=90)
+            elif period == "year":
+                start_date = now - timedelta(days=365)
+            else:
+                start_date = now - timedelta(days=30)
+            
+            # Aggregate revenue data
+            pipeline = [
+                {
+                    "$match": {
+                        "creator_id": creator_id,
+                        "purchase_date": {"$gte": start_date},
+                        "status": "completed"
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": None,
+                        "total_revenue": {"$sum": "$amount"},
+                        "transaction_count": {"$sum": 1},
+                        "avg_amount": {"$avg": "$amount"}
+                    }
+                }
+            ]
+            
+            result = await collections["purchases"].aggregate(pipeline).to_list(length=1)
+            
+            if result:
+                data = result[0]
+                return {
+                    "total_revenue": float(data.get("total_revenue", 0)),
+                    "transactions": int(data.get("transaction_count", 0)),
+                    "avg_transaction": float(data.get("avg_amount", 0))
+                }
+            else:
+                return {"total_revenue": 0.0, "transactions": 0, "avg_transaction": 0.0}
+                
+        except Exception as e:
+            return {"total_revenue": 0.0, "transactions": 0, "avg_transaction": 0.0, "error": str(e)}
