@@ -669,7 +669,8 @@ class EmailMarketingService:
                 # Get real social media impressions
                 result = await db.social_analytics.aggregate([
                     {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
-                ["total"] if result else min_val
+                ]).to_list(length=1)
+                return result[0]["total"] if result else min_val
                 
             elif metric_type == 'count':
                 # Get real counts from relevant collections
