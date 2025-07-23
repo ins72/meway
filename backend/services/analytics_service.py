@@ -140,3 +140,13 @@ class AnalyticsService:
                 "success": False,
                 "error": f"Failed to delete analytic: {str(e)}"
             }
+
+# Service instance
+_analytics_service = None
+
+def get_analytics_service():
+    """Get analytics service instance"""
+    global _analytics_service
+    if _analytics_service is None:
+        _analytics_service = AnalyticsService()
+    return _analytics_service
