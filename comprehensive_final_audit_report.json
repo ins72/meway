@@ -1,0 +1,4334 @@
+{
+  "timestamp": "2025-07-23T11:25:05.891590",
+  "missing_crud_operations": [
+    {
+      "service": "auth_service",
+      "file_path": "/app/backend/services/auth_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "media_service",
+      "file_path": "/app/backend/services/media_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "ai_token_service",
+      "file_path": "/app/backend/services/ai_token_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "customer_experience_suite_service",
+      "file_path": "/app/backend/services/customer_experience_suite_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "template_marketplace_service",
+      "file_path": "/app/backend/services/template_marketplace_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "admin_service",
+      "file_path": "/app/backend/services/admin_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "complete_course_community_service",
+      "file_path": "/app/backend/services/complete_course_community_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "complete_link_in_bio_service",
+      "file_path": "/app/backend/services/complete_link_in_bio_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "multi_vendor_marketplace_service",
+      "file_path": "/app/backend/services/multi_vendor_marketplace_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "complete_ecommerce_service",
+      "file_path": "/app/backend/services/complete_ecommerce_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "form_builder_service",
+      "file_path": "/app/backend/services/form_builder_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "automation_service",
+      "file_path": "/app/backend/services/automation_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "monitoring_system_service",
+      "file_path": "/app/backend/services/monitoring_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "promotions_referrals_service",
+      "file_path": "/app/backend/services/promotions_referrals_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "survey_system_service",
+      "file_path": "/app/backend/services/survey_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "business_intelligence_service",
+      "file_path": "/app/backend/services/business_intelligence_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "webhook_service",
+      "file_path": "/app/backend/services/webhook_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "realtime_notifications_service",
+      "file_path": "/app/backend/services/realtime_notifications_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "crm_management_service",
+      "file_path": "/app/backend/services/crm_management_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "complete_onboarding_service",
+      "file_path": "/app/backend/services/complete_onboarding_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "support_system_service",
+      "file_path": "/app/backend/services/support_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "data_population",
+      "file_path": "/app/backend/services/data_population.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "ai_token_management_service",
+      "file_path": "/app/backend/services/ai_token_management_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "complete_escrow_service",
+      "file_path": "/app/backend/services/complete_escrow_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "complete_admin_dashboard_service",
+      "file_path": "/app/backend/services/complete_admin_dashboard_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "team_service",
+      "file_path": "/app/backend/services/team_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "monitoring_service",
+      "file_path": "/app/backend/services/monitoring_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "mobile_pwa_service",
+      "file_path": "/app/backend/services/mobile_pwa_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "social_email_integration_service",
+      "file_path": "/app/backend/services/social_email_integration_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "advanced_team_management_service",
+      "file_path": "/app/backend/services/advanced_team_management_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "integrations_service",
+      "file_path": "/app/backend/services/integrations_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "complete_booking_service",
+      "file_path": "/app/backend/services/complete_booking_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "admin_configuration_service",
+      "file_path": "/app/backend/services/admin_configuration_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "notification_service",
+      "file_path": "/app/backend/services/notification_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "enterprise_security_service",
+      "file_path": "/app/backend/services/enterprise_security_service.py",
+      "missing_operations": [
+        "read",
+        "get",
+        "update",
+        "delete"
+      ],
+      "found_operations": [
+        "create",
+        "list"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "social_email_service",
+      "file_path": "/app/backend/services/social_email_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "integration_service",
+      "file_path": "/app/backend/services/integration_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "google_oauth_service",
+      "file_path": "/app/backend/services/google_oauth_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "unified_analytics_gamification_service",
+      "file_path": "/app/backend/services/unified_analytics_gamification_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "webhook_system_service",
+      "file_path": "/app/backend/services/webhook_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "link_shortener_service",
+      "file_path": "/app/backend/services/link_shortener_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "real_ai_automation_service",
+      "file_path": "/app/backend/services/real_ai_automation_service.py",
+      "missing_operations": [
+        "get",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "read"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "i18n_service",
+      "file_path": "/app/backend/services/i18n_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "ai_content_service",
+      "file_path": "/app/backend/services/ai_content_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "delete"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "complete_subscription_service",
+      "file_path": "/app/backend/services/complete_subscription_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "content_service",
+      "file_path": "/app/backend/services/content_service.py",
+      "missing_operations": [
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "read",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 83.33333333333334
+    },
+    {
+      "service": "marketing_service",
+      "file_path": "/app/backend/services/marketing_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "real_email_automation_service",
+      "file_path": "/app/backend/services/real_email_automation_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "complete_referral_system_service",
+      "file_path": "/app/backend/services/complete_referral_system_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "crm_service",
+      "file_path": "/app/backend/services/crm_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "content_creation_suite_service",
+      "file_path": "/app/backend/services/content_creation_suite_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "__init__",
+      "file_path": "/app/backend/services/__init__.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "get",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [],
+      "completeness_percentage": 0.0
+    },
+    {
+      "service": "comprehensive_marketing_website_service",
+      "file_path": "/app/backend/services/comprehensive_marketing_website_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "ai_service",
+      "file_path": "/app/backend/services/ai_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "i18n_system_service",
+      "file_path": "/app/backend/services/i18n_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "support_service",
+      "file_path": "/app/backend/services/support_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "advanced_template_marketplace_service",
+      "file_path": "/app/backend/services/advanced_template_marketplace_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "bio_sites_service",
+      "file_path": "/app/backend/services/bio_sites_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "media_library_service",
+      "file_path": "/app/backend/services/media_library_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "user_service",
+      "file_path": "/app/backend/services/user_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "enterprise_security_compliance_service",
+      "file_path": "/app/backend/services/enterprise_security_compliance_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "blog_service",
+      "file_path": "/app/backend/services/blog_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "email_marketing_service",
+      "file_path": "/app/backend/services/email_marketing_service.py",
+      "missing_operations": [
+        "read",
+        "delete"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "list"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "rate_limiting_service",
+      "file_path": "/app/backend/services/rate_limiting_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "real_data_population_service",
+      "file_path": "/app/backend/services/real_data_population_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "survey_service",
+      "file_path": "/app/backend/services/survey_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "customer_experience_service",
+      "file_path": "/app/backend/services/customer_experience_service.py",
+      "missing_operations": [
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get"
+      ],
+      "completeness_percentage": 33.33333333333333
+    },
+    {
+      "service": "complete_financial_service",
+      "file_path": "/app/backend/services/complete_financial_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "automation_system_service",
+      "file_path": "/app/backend/services/automation_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "dashboard_service",
+      "file_path": "/app/backend/services/dashboard_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
+    },
+    {
+      "service": "complete_social_media_leads_service",
+      "file_path": "/app/backend/services/complete_social_media_leads_service.py",
+      "missing_operations": [
+        "create",
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "compliance_system_service",
+      "file_path": "/app/backend/services/compliance_system_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    },
+    {
+      "service": "complete_website_builder_service",
+      "file_path": "/app/backend/services/complete_website_builder_service.py",
+      "missing_operations": [
+        "read",
+        "delete",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "completeness_percentage": 50.0
+    },
+    {
+      "service": "complete_multi_workspace_service",
+      "file_path": "/app/backend/services/complete_multi_workspace_service.py",
+      "missing_operations": [
+        "read",
+        "list"
+      ],
+      "found_operations": [
+        "create",
+        "get",
+        "update",
+        "delete"
+      ],
+      "completeness_percentage": 66.66666666666666
+    }
+  ],
+  "mock_hardcoded_data": [
+    {
+      "file_path": "/app/backend/api_key_integrator.py",
+      "relative_path": "api_key_integrator.py",
+      "instances": [
+        {
+          "line_number": 120,
+          "line_content": "test_api_content = '''\"\"\"",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_api_content"
+        },
+        {
+          "line_number": 133,
+          "line_content": "async def test_elasticmail(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_elasticmail"
+        },
+        {
+          "line_number": 155,
+          "line_content": "async def test_twitter(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter"
+        },
+        {
+          "line_number": 164,
+          "line_content": "async def test_tiktok(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_tiktok"
+        },
+        {
+          "line_number": 173,
+          "line_content": "async def test_openai(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_openai"
+        },
+        {
+          "line_number": 196,
+          "line_content": "async def test_google_oauth(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_google_oauth"
+        },
+        {
+          "line_number": 205,
+          "line_content": "async def test_stripe(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_stripe"
+        },
+        {
+          "line_number": 228,
+          "line_content": "async def test_all_apis(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_all_apis"
+        },
+        {
+          "line_number": 234,
+          "line_content": "(\"elasticmail\", test_elasticmail),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_elasticmail"
+        },
+        {
+          "line_number": 235,
+          "line_content": "(\"twitter\", test_twitter),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter"
+        },
+        {
+          "line_number": 236,
+          "line_content": "(\"tiktok\", test_tiktok),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_tiktok"
+        },
+        {
+          "line_number": 237,
+          "line_content": "(\"openai\", test_openai),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_openai"
+        },
+        {
+          "line_number": 238,
+          "line_content": "(\"google\", test_google_oauth),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_google_oauth"
+        },
+        {
+          "line_number": 239,
+          "line_content": "(\"stripe\", test_stripe)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_stripe"
+        },
+        {
+          "line_number": 242,
+          "line_content": "for api_name, test_func in apis_to_test:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_func"
+        },
+        {
+          "line_number": 244,
+          "line_content": "result = await test_func(current_user)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_func"
+        },
+        {
+          "line_number": 259,
+          "line_content": "test_file_path = self.backend_dir / \"api\" / \"integration_tests.py\"",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_file_path"
+        },
+        {
+          "line_number": 260,
+          "line_content": "with open(test_file_path, 'w') as f:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_file_path"
+        },
+        {
+          "line_number": 261,
+          "line_content": "f.write(test_api_content)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_api_content"
+        },
+        {
+          "line_number": 264,
+          "line_content": "print(f\"   File: {test_file_path}\")",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_file_path"
+        },
+        {
+          "line_number": 278,
+          "line_content": "self.create_api_test_endpoints()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_endpoints"
+        }
+      ],
+      "count": 21
+    },
+    {
+      "file_path": "/app/backend/eliminate_random_data.py",
+      "relative_path": "eliminate_random_data.py",
+      "instances": [
+        {
+          "line_number": 18,
+          "line_content": "r'placeholder',",
+          "pattern_matched": "placeholder",
+          "match_text": "placeholder"
+        },
+        {
+          "line_number": 21,
+          "line_content": "r'lorem ipsum',",
+          "pattern_matched": "lorem ipsum",
+          "match_text": "lorem ipsum"
+        },
+        {
+          "line_number": 21,
+          "line_content": "r'lorem ipsum',",
+          "pattern_matched": "Lorem Ipsum",
+          "match_text": "lorem ipsum"
+        },
+        {
+          "line_number": 24,
+          "line_content": "r'# Mock|# Fake|# Dummy|# Placeholder'",
+          "pattern_matched": "placeholder",
+          "match_text": "Placeholder"
+        },
+        {
+          "line_number": 54,
+          "line_content": "'mock_simple_return': '''",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_simple_return"
+        },
+        {
+          "line_number": 73,
+          "line_content": "'mock_metrics': '''",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_metrics"
+        },
+        {
+          "line_number": 98,
+          "line_content": "'mock_file_ops': '''",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_file_ops"
+        },
+        {
+          "line_number": 155,
+          "line_content": "if \"mock delivery\" in content:",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock delivery\""
+        },
+        {
+          "line_number": 196,
+          "line_content": "code = ''.join(random.choice(characters) for _ in range(length))",
+          "pattern_matched": "random\\.\\w+",
+          "match_text": "random.choice"
+        },
+        {
+          "line_number": 196,
+          "line_content": "code = ''.join(random.choice(characters) for _ in range(length))",
+          "pattern_matched": "choice\\(",
+          "match_text": "choice("
+        },
+        {
+          "line_number": 221,
+          "line_content": "if \"mock implementation\" in content:",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock implementation\""
+        }
+      ],
+      "count": 11
+    },
+    {
+      "file_path": "/app/backend/comprehensive_real_data_audit.py",
+      "relative_path": "comprehensive_real_data_audit.py",
+      "instances": [
+        {
+          "line_number": 13,
+          "line_content": "def find_all_mock_data():",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_data"
+        },
+        {
+          "line_number": 15,
+          "line_content": "mock_patterns = [",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_patterns"
+        },
+        {
+          "line_number": 22,
+          "line_content": "r'placeholder',",
+          "pattern_matched": "placeholder",
+          "match_text": "placeholder"
+        },
+        {
+          "line_number": 52,
+          "line_content": "for pattern in mock_patterns:",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_patterns"
+        },
+        {
+          "line_number": 232,
+          "line_content": "def fix_mock_data_in_file(file_path, mock_instances):",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_data_in_file"
+        },
+        {
+          "line_number": 232,
+          "line_content": "def fix_mock_data_in_file(file_path, mock_instances):",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 294,
+          "line_content": "mock_instances = find_all_mock_data()",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 294,
+          "line_content": "mock_instances = find_all_mock_data()",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_data"
+        },
+        {
+          "line_number": 297,
+          "line_content": "print(f\"   \u2022 Total mock instances found: {len(mock_instances)}\")",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 300,
+          "line_content": "high_severity = [m for m in mock_instances if m['severity'] == 'HIGH']",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 301,
+          "line_content": "medium_severity = [m for m in mock_instances if m['severity'] == 'MEDIUM']",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 308,
+          "line_content": "for instance in mock_instances:",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 348,
+          "line_content": "fixes = fix_mock_data_in_file(file_path, mock_instances)",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_data_in_file"
+        },
+        {
+          "line_number": 348,
+          "line_content": "fixes = fix_mock_data_in_file(file_path, mock_instances)",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 354,
+          "line_content": "print(f\"   \u2022 Mock instances found: {len(mock_instances)}\")",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 367,
+          "line_content": "'mock_instances': len(mock_instances),",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        },
+        {
+          "line_number": 367,
+          "line_content": "'mock_instances': len(mock_instances),",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_instances"
+        }
+      ],
+      "count": 17
+    },
+    {
+      "file_path": "/app/backend/api/admin_configuration.py",
+      "relative_path": "api/admin_configuration.py",
+      "instances": [
+        {
+          "line_number": 197,
+          "line_content": "async def test_integration(",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_integration"
+        },
+        {
+          "line_number": 204,
+          "line_content": "result = await admin_config_manager.test_api_connection(",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_api_connection"
+        },
+        {
+          "line_number": 215,
+          "line_content": "\"test_result\": result.get(\"success\", False)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_result"
+        }
+      ],
+      "count": 3
+    },
+    {
+      "file_path": "/app/backend/api/integration_tests.py",
+      "relative_path": "api/integration_tests.py",
+      "instances": [
+        {
+          "line_number": 14,
+          "line_content": "async def test_elasticmail(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_elasticmail"
+        },
+        {
+          "line_number": 36,
+          "line_content": "async def test_twitter(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter"
+        },
+        {
+          "line_number": 45,
+          "line_content": "async def test_tiktok(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_tiktok"
+        },
+        {
+          "line_number": 54,
+          "line_content": "async def test_openai(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_openai"
+        },
+        {
+          "line_number": 77,
+          "line_content": "async def test_google_oauth(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_google_oauth"
+        },
+        {
+          "line_number": 86,
+          "line_content": "async def test_stripe(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_stripe"
+        },
+        {
+          "line_number": 109,
+          "line_content": "async def test_all_apis(current_user: dict = Depends(get_current_user)):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_all_apis"
+        },
+        {
+          "line_number": 115,
+          "line_content": "(\"elasticmail\", test_elasticmail),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_elasticmail"
+        },
+        {
+          "line_number": 116,
+          "line_content": "(\"twitter\", test_twitter),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter"
+        },
+        {
+          "line_number": 117,
+          "line_content": "(\"tiktok\", test_tiktok),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_tiktok"
+        },
+        {
+          "line_number": 118,
+          "line_content": "(\"openai\", test_openai),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_openai"
+        },
+        {
+          "line_number": 119,
+          "line_content": "(\"google\", test_google_oauth),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_google_oauth"
+        },
+        {
+          "line_number": 120,
+          "line_content": "(\"stripe\", test_stripe)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_stripe"
+        },
+        {
+          "line_number": 123,
+          "line_content": "for api_name, test_func in apis_to_test:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_func"
+        },
+        {
+          "line_number": 125,
+          "line_content": "result = await test_func(current_user)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_func"
+        }
+      ],
+      "count": 15
+    },
+    {
+      "file_path": "/app/backend/api/comprehensive_marketing_website.py",
+      "relative_path": "api/comprehensive_marketing_website.py",
+      "instances": [
+        {
+          "line_number": 25,
+          "line_content": "test_type: str = \"content\"",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_type"
+        },
+        {
+          "line_number": 32,
+          "line_content": "minimum_sample_size: int = 1000",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_size"
+        },
+        {
+          "line_number": 78,
+          "line_content": "test_data: ABTestCreate,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 84,
+          "line_content": "result = await service.create_ab_test(test_data.dict())",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        }
+      ],
+      "count": 4
+    },
+    {
+      "file_path": "/app/backend/api/link_shortener.py",
+      "relative_path": "api/link_shortener.py",
+      "instances": [
+        {
+          "line_number": 45,
+          "line_content": "default_domain: str = \"mwz.to\"",
+          "pattern_matched": "default_\\w+.*=.*\\\".*\\\"",
+          "match_text": "default_domain: str = \"mwz.to\""
+        },
+        {
+          "line_number": 66,
+          "line_content": "return ''.join(secrets.choice(chars) for _ in range(length))",
+          "pattern_matched": "choice\\(",
+          "match_text": "choice("
+        }
+      ],
+      "count": 2
+    },
+    {
+      "file_path": "/app/backend/api/form_builder.py",
+      "relative_path": "api/form_builder.py",
+      "instances": [
+        {
+          "line_number": 25,
+          "line_content": "placeholder: Optional[str] = \"\"",
+          "pattern_matched": "placeholder",
+          "match_text": "placeholder"
+        },
+        {
+          "line_number": 193,
+          "line_content": "latest_submission = await form_submissions_collection.find_one(",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_submission"
+        },
+        {
+          "line_number": 197,
+          "line_content": "form[\"latest_submission\"] = latest_submission.get(\"submitted_at\") if latest_submission else None",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_submission"
+        },
+        {
+          "line_number": 197,
+          "line_content": "form[\"latest_submission\"] = latest_submission.get(\"submitted_at\") if latest_submission else None",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_submission"
+        },
+        {
+          "line_number": 197,
+          "line_content": "form[\"latest_submission\"] = latest_submission.get(\"submitted_at\") if latest_submission else None",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_submission"
+        }
+      ],
+      "count": 5
+    },
+    {
+      "file_path": "/app/backend/api/notification_system.py",
+      "relative_path": "api/notification_system.py",
+      "instances": [
+        {
+          "line_number": 148,
+          "line_content": "default_channels: str = Form(\"[]\"),  # JSON array",
+          "pattern_matched": "default_\\w+.*=.*\\\".*\\\"",
+          "match_text": "default_channels: str = Form(\"[]\""
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/api/webhook_system.py",
+      "relative_path": "api/webhook_system.py",
+      "instances": [
+        {
+          "line_number": 160,
+          "line_content": "async def test_webhook(",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_webhook"
+        },
+        {
+          "line_number": 162,
+          "line_content": "test_event: str = Form(\"user.created\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        },
+        {
+          "line_number": 171,
+          "line_content": "result = await WebhookService.test_webhook(",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_webhook"
+        },
+        {
+          "line_number": 174,
+          "line_content": "test_event=test_event,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        },
+        {
+          "line_number": 174,
+          "line_content": "test_event=test_event,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        }
+      ],
+      "count": 5
+    },
+    {
+      "file_path": "/app/backend/api/ai_content_generation.py",
+      "relative_path": "api/ai_content_generation.py",
+      "instances": [
+        {
+          "line_number": 276,
+          "line_content": "\"prompt_template\": \"Write landing page copy for {product_service}. Include headline, subheadline, benefits section, features, testimonials placeholder, and strong CTA. Target: {audience}\",",
+          "pattern_matched": "placeholder",
+          "match_text": "placeholder"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/api/promotions_referrals.py",
+      "relative_path": "api/promotions_referrals.py",
+      "instances": [
+        {
+          "line_number": 82,
+          "line_content": "return ''.join(secrets.choice(chars) for _ in range(length))",
+          "pattern_matched": "choice\\(",
+          "match_text": "choice("
+        },
+        {
+          "line_number": 91,
+          "line_content": "random_part = ''.join(secrets.choice(string.digits) for _ in range(length - 3))",
+          "pattern_matched": "choice\\(",
+          "match_text": "choice("
+        }
+      ],
+      "count": 2
+    },
+    {
+      "file_path": "/app/backend/services/template_marketplace_service.py",
+      "relative_path": "services/template_marketplace_service.py",
+      "instances": [
+        {
+          "line_number": 632,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 639,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 649,
+          "line_content": "return items[:count]  # Return first N items as \"sample\"",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample\""
+        }
+      ],
+      "count": 3
+    },
+    {
+      "file_path": "/app/backend/services/automation_service.py",
+      "relative_path": "services/automation_service.py",
+      "instances": [
+        {
+          "line_number": 638,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 645,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 655,
+          "line_content": "return items[:count]  # Return first N items as \"sample\"",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample\""
+        }
+      ],
+      "count": 3
+    },
+    {
+      "file_path": "/app/backend/services/promotions_referrals_service.py",
+      "relative_path": "services/promotions_referrals_service.py",
+      "instances": [
+        {
+          "line_number": 196,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 203,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 213,
+          "line_content": "return items[:count]  # Return first N items as \"sample\"",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample\""
+        }
+      ],
+      "count": 3
+    },
+    {
+      "file_path": "/app/backend/services/webhook_service.py",
+      "relative_path": "services/webhook_service.py",
+      "instances": [
+        {
+          "line_number": 161,
+          "line_content": "sample_webhooks = [",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_webhooks"
+        },
+        {
+          "line_number": 188,
+          "line_content": "\"webhook_endpoints\": sample_webhooks,",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_webhooks"
+        },
+        {
+          "line_number": 340,
+          "line_content": "\"test_endpoint\": f\"/api/webhooks/{webhook_doc['_id']}/test\",",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_endpoint"
+        },
+        {
+          "line_number": 446,
+          "line_content": "async def test_webhook(",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_webhook"
+        },
+        {
+          "line_number": 449,
+          "line_content": "test_event: str,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        },
+        {
+          "line_number": 462,
+          "line_content": "test_payload = custom_payload",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 464,
+          "line_content": "test_payload = WebhookService._generate_test_payload(test_event)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 464,
+          "line_content": "test_payload = WebhookService._generate_test_payload(test_event)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 464,
+          "line_content": "test_payload = WebhookService._generate_test_payload(test_event)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        },
+        {
+          "line_number": 470,
+          "line_content": "\"event_type\": test_event,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        },
+        {
+          "line_number": 471,
+          "line_content": "\"payload\": test_payload,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 486,
+          "line_content": "test_payload,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 493,
+          "line_content": "\"event_type\": test_event,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_event"
+        },
+        {
+          "line_number": 494,
+          "line_content": "\"payload\": test_payload,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 878,
+          "line_content": "def _generate_test_payload(event_type: str) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payload"
+        },
+        {
+          "line_number": 880,
+          "line_content": "test_payloads = {",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payloads"
+        },
+        {
+          "line_number": 907,
+          "line_content": "return test_payloads.get(event_type, {",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_payloads"
+        },
+        {
+          "line_number": 909,
+          "line_content": "\"test_data\": True,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        }
+      ],
+      "count": 18
+    },
+    {
+      "file_path": "/app/backend/services/data_population.py",
+      "relative_path": "services/data_population.py",
+      "instances": [
+        {
+          "line_number": 77,
+          "line_content": "posts_data = await self.external_api_manager.get_twitter_user_posts(\"sample_user_id\")",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_user_id"
+        },
+        {
+          "line_number": 77,
+          "line_content": "posts_data = await self.external_api_manager.get_twitter_user_posts(\"sample_user_id\")",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample_user_id\""
+        },
+        {
+          "line_number": 84,
+          "line_content": "\"user_id\": f\"sample_{username}\",",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample_{username}\""
+        }
+      ],
+      "count": 3
+    },
+    {
+      "file_path": "/app/backend/services/advanced_team_management_service.py",
+      "relative_path": "services/advanced_team_management_service.py",
+      "instances": [
+        {
+          "line_number": 94,
+          "line_content": "\"team_id\": \"sample_team_id\",",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_team_id"
+        },
+        {
+          "line_number": 94,
+          "line_content": "\"team_id\": \"sample_team_id\",",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample_team_id\""
+        }
+      ],
+      "count": 2
+    },
+    {
+      "file_path": "/app/backend/services/notification_service.py",
+      "relative_path": "services/notification_service.py",
+      "instances": [
+        {
+          "line_number": 97,
+          "line_content": "default_enabled = channel_id in [\"email\", \"push\"]",
+          "pattern_matched": "default_\\w+.*=.*\\\".*\\\"",
+          "match_text": "default_enabled = channel_id in [\"email\", \"push\""
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/services/social_email_service.py",
+      "relative_path": "services/social_email_service.py",
+      "instances": [
+        {
+          "line_number": 219,
+          "line_content": "\"tags\": await self._get_sample_from_db([\"#business\", \"#marketing\", \"#startup\", \"#growth\", \"#success\"], k=await self._get_metric_from_db('count', 1, 3))",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 398,
+          "line_content": "\"tags\": await self._get_sample_from_db([\"customer\", \"lead\", \"newsletter\", \"vip\", \"trial\"], k=await self._get_metric_from_db('count', 1, 3)),",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 547,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int) -> list:",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 559,
+          "line_content": "if db and hasattr(db, 'sample_data'):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        },
+        {
+          "line_number": 562,
+          "line_content": "db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        }
+      ],
+      "count": 5
+    },
+    {
+      "file_path": "/app/backend/services/link_shortener_service.py",
+      "relative_path": "services/link_shortener_service.py",
+      "instances": [
+        {
+          "line_number": 147,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 154,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 164,
+          "line_content": "return items[:count]  # Return first N items as \"sample\"",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample\""
+        }
+      ],
+      "count": 3
+    },
+    {
+      "file_path": "/app/backend/services/ai_content_service.py",
+      "relative_path": "services/ai_content_service.py",
+      "instances": [
+        {
+          "line_number": 173,
+          "line_content": "selected_hashtags = await self._get_sample_from_db(hashtags, k=await self._get_enhanced_metric_from_db(\"count\", 3, 6))",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 765,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 772,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int) -> list:",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 784,
+          "line_content": "if db and hasattr(db, 'sample_data'):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        },
+        {
+          "line_number": 787,
+          "line_content": "db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        }
+      ],
+      "count": 5
+    },
+    {
+      "file_path": "/app/backend/services/complete_referral_system_service.py",
+      "relative_path": "services/complete_referral_system_service.py",
+      "instances": [
+        {
+          "line_number": 681,
+          "line_content": "code = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(8))",
+          "pattern_matched": "choice\\(",
+          "match_text": "choice("
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/services/comprehensive_marketing_website_service.py",
+      "relative_path": "services/comprehensive_marketing_website_service.py",
+      "instances": [
+        {
+          "line_number": 115,
+          "line_content": "async def create_ab_test(self, test_data: Dict) -> Dict:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 118,
+          "line_content": "test_id = str(uuid.uuid4())",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_id"
+        },
+        {
+          "line_number": 121,
+          "line_content": "\"_id\": test_id,",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_id"
+        },
+        {
+          "line_number": 122,
+          "line_content": "\"name\": test_data.get(\"name\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 123,
+          "line_content": "\"page_id\": test_data.get(\"page_id\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 124,
+          "line_content": "\"test_type\": test_data.get(\"test_type\", \"content\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_type"
+        },
+        {
+          "line_number": 124,
+          "line_content": "\"test_type\": test_data.get(\"test_type\", \"content\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 124,
+          "line_content": "\"test_type\": test_data.get(\"test_type\", \"content\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_type"
+        },
+        {
+          "line_number": 125,
+          "line_content": "\"hypothesis\": test_data.get(\"hypothesis\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 130,
+          "line_content": "\"content\": test_data.get(\"control_content\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 137,
+          "line_content": "\"name\": test_data.get(\"variant_name\", \"Variant A\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 138,
+          "line_content": "\"content\": test_data.get(\"variant_content\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 144,
+          "line_content": "\"success_metric\": test_data.get(\"success_metric\", \"conversion_rate\"),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 145,
+          "line_content": "\"confidence_level\": test_data.get(\"confidence_level\", 95),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 146,
+          "line_content": "\"minimum_sample_size\": test_data.get(\"minimum_sample_size\", 1000),",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_size"
+        },
+        {
+          "line_number": 146,
+          "line_content": "\"minimum_sample_size\": test_data.get(\"minimum_sample_size\", 1000),",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_size"
+        },
+        {
+          "line_number": 146,
+          "line_content": "\"minimum_sample_size\": test_data.get(\"minimum_sample_size\", 1000),",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_data"
+        },
+        {
+          "line_number": 156,
+          "line_content": "self.log(f\"\u2705 A/B test created: {test_id}\")",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_id"
+        },
+        {
+          "line_number": 308,
+          "line_content": "async def get_sample_real_data(self):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_real_data"
+        }
+      ],
+      "count": 19
+    },
+    {
+      "file_path": "/app/backend/services/support_service.py",
+      "relative_path": "services/support_service.py",
+      "instances": [
+        {
+          "line_number": 57,
+          "line_content": "\"tags\": await self._get_sample_from_db([\"urgent\", \"vip\", \"escalated\", \"follow_up\", \"billing_dispute\"], await self._get_metric_from_db('count', 0, 2))",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 340,
+          "line_content": "\"tags\": await self._get_sample_from_db([\"tutorial\", \"api\", \"setup\", \"troubleshooting\", \"best-practices\"], await self._get_metric_from_db('count', 1, 3)),",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 775,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 782,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 792,
+          "line_content": "return items[:count]  # Return first N items as \"sample\"",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample\""
+        }
+      ],
+      "count": 5
+    },
+    {
+      "file_path": "/app/backend/services/email_marketing_service.py",
+      "relative_path": "services/email_marketing_service.py",
+      "instances": [
+        {
+          "line_number": 243,
+          "line_content": "\"tags\": await self._get_sample_from_db([\"newsletter\", \"customers\", \"prospects\", \"vip\", \"trial\"], k=await self._get_metric_from_db('count', 1, 3))",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 333,
+          "line_content": "\"tags\": await self._get_sample_from_db([\"customer\", \"prospect\", \"vip\", \"trial\", \"newsletter\"], k=await self._get_metric_from_db('count', 1, 3)),",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 837,
+          "line_content": "async def _get_sample_from_db(self, choices: list, k: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 841,
+          "line_content": "return await real_data_population_service.get_sample_from_db(choices, k)",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        }
+      ],
+      "count": 4
+    },
+    {
+      "file_path": "/app/backend/services/real_data_population_service.py",
+      "relative_path": "services/real_data_population_service.py",
+      "instances": [
+        {
+          "line_number": 569,
+          "line_content": "async def get_sample_from_db(self, choices: List[str], k: int) -> List[str]:",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/services/survey_service.py",
+      "relative_path": "services/survey_service.py",
+      "instances": [
+        {
+          "line_number": 371,
+          "line_content": "\"latest_response\": responses[-1][\"submitted_at\"].isoformat() if responses else None",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_response"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/services/customer_experience_service.py",
+      "relative_path": "services/customer_experience_service.py",
+      "instances": [
+        {
+          "line_number": 162,
+          "line_content": "\"topics\": await self._get_sample_from_db([\"account_setup\", \"billing\", \"technical_issue\", \"feature_request\", \"general_inquiry\"], await self._get_metric_from_db('count', 1, 3))",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 746,
+          "line_content": "result = await db.ab_test_results.aggregate([",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 753,
+          "line_content": "async def _get_sample_from_db(self, items: list, count: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_from_db"
+        },
+        {
+          "line_number": 763,
+          "line_content": "return items[:count]  # Return first N items as \"sample\"",
+          "pattern_matched": "\\\"sample.*\\\"",
+          "match_text": "\"sample\""
+        }
+      ],
+      "count": 4
+    },
+    {
+      "file_path": "/app/backend/services/complete_social_media_leads_service.py",
+      "relative_path": "services/complete_social_media_leads_service.py",
+      "instances": [
+        {
+          "line_number": 442,
+          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"  # For testing endpoints that don't require OAuth",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_token_"
+        },
+        {
+          "line_number": 442,
+          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"  # For testing endpoints that don't require OAuth",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock_token_{self.tiktok_client_key[:8]}\""
+        },
+        {
+          "line_number": 447,
+          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_token_"
+        },
+        {
+          "line_number": 447,
+          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock_token_{self.tiktok_client_key[:8]}\""
+        }
+      ],
+      "count": 4
+    },
+    {
+      "file_path": "/app/backend/core/workflow_automation_engine.py",
+      "relative_path": "core/workflow_automation_engine.py",
+      "instances": [
+        {
+          "line_number": 876,
+          "line_content": "placeholder = f\"{{{key}}}\"",
+          "pattern_matched": "placeholder",
+          "match_text": "placeholder"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "file_path": "/app/backend/core/payment_processors.py",
+      "relative_path": "core/payment_processors.py",
+      "instances": [
+        {
+          "line_number": 22,
+          "line_content": "self.default_processor = \"stripe\"",
+          "pattern_matched": "default_\\w+.*=.*\\\".*\\\"",
+          "match_text": "default_processor = \"stripe\""
+        },
+        {
+          "line_number": 67,
+          "line_content": "self.default_processor = config.get(\"default_processor\", \"stripe\")",
+          "pattern_matched": "default_\\w+.*=.*\\\".*\\\"",
+          "match_text": "default_processor = config.get(\"default_processor\", \"stripe\""
+        }
+      ],
+      "count": 2
+    },
+    {
+      "file_path": "/app/backend/core/performance_optimizer.py",
+      "relative_path": "core/performance_optimizer.py",
+      "instances": [
+        {
+          "line_number": 42,
+          "line_content": "await self._test_connection()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_connection"
+        },
+        {
+          "line_number": 58,
+          "line_content": "async def _test_connection(self):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_connection"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "file_path": "/app/backend/core/external_api_integrator.py",
+      "relative_path": "core/external_api_integrator.py",
+      "instances": [
+        {
+          "line_number": 126,
+          "line_content": "# For now, return placeholder structure",
+          "pattern_matched": "placeholder",
+          "match_text": "placeholder"
+        },
+        {
+          "line_number": 255,
+          "line_content": "return {\"success\": True, \"processor\": \"paypal\", \"payment_id\": \"mock_paypal_id\"}",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_paypal_id"
+        },
+        {
+          "line_number": 255,
+          "line_content": "return {\"success\": True, \"processor\": \"paypal\", \"payment_id\": \"mock_paypal_id\"}",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock_paypal_id\""
+        },
+        {
+          "line_number": 260,
+          "line_content": "return {\"success\": True, \"processor\": \"square\", \"payment_id\": \"mock_square_id\"}",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_square_id"
+        },
+        {
+          "line_number": 260,
+          "line_content": "return {\"success\": True, \"processor\": \"square\", \"payment_id\": \"mock_square_id\"}",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock_square_id\""
+        },
+        {
+          "line_number": 265,
+          "line_content": "return {\"success\": True, \"processor\": \"razorpay\", \"payment_id\": \"mock_razorpay_id\"}",
+          "pattern_matched": "mock_\\w+",
+          "match_text": "mock_razorpay_id"
+        },
+        {
+          "line_number": 265,
+          "line_content": "return {\"success\": True, \"processor\": \"razorpay\", \"payment_id\": \"mock_razorpay_id\"}",
+          "pattern_matched": "\\\"mock.*\\\"",
+          "match_text": "\"mock_razorpay_id\""
+        }
+      ],
+      "count": 7
+    },
+    {
+      "file_path": "/app/backend/core/admin_config_manager.py",
+      "relative_path": "core/admin_config_manager.py",
+      "instances": [
+        {
+          "line_number": 252,
+          "line_content": "async def test_api_connection(self, service: str, admin_id: str) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_api_connection"
+        },
+        {
+          "line_number": 258,
+          "line_content": "return await self._test_twitter_connection(config)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter_connection"
+        },
+        {
+          "line_number": 260,
+          "line_content": "return await self._test_instagram_connection(config)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_instagram_connection"
+        },
+        {
+          "line_number": 262,
+          "line_content": "return await self._test_stripe_connection(config)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_stripe_connection"
+        },
+        {
+          "line_number": 264,
+          "line_content": "return await self._test_sendgrid_connection(config)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_sendgrid_connection"
+        },
+        {
+          "line_number": 266,
+          "line_content": "return await self._test_backblaze_connection(config)",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_backblaze_connection"
+        },
+        {
+          "line_number": 272,
+          "line_content": "admin_id, f\"{service}_test_failed\",",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_failed"
+        },
+        {
+          "line_number": 277,
+          "line_content": "async def _test_twitter_connection(self, config: Dict[str, Any]) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter_connection"
+        },
+        {
+          "line_number": 282,
+          "line_content": "async def _test_instagram_connection(self, config: Dict[str, Any]) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_instagram_connection"
+        },
+        {
+          "line_number": 286,
+          "line_content": "async def _test_stripe_connection(self, config: Dict[str, Any]) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_stripe_connection"
+        },
+        {
+          "line_number": 290,
+          "line_content": "async def _test_sendgrid_connection(self, config: Dict[str, Any]) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_sendgrid_connection"
+        },
+        {
+          "line_number": 294,
+          "line_content": "async def _test_backblaze_connection(self, config: Dict[str, Any]) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_backblaze_connection"
+        }
+      ],
+      "count": 12
+    },
+    {
+      "file_path": "/app/backend/core/external_apis.py",
+      "relative_path": "core/external_apis.py",
+      "instances": [
+        {
+          "line_number": 28,
+          "line_content": "await self._test_api_connections()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_api_connections"
+        },
+        {
+          "line_number": 95,
+          "line_content": "async def _test_api_connections(self):",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_api_connections"
+        },
+        {
+          "line_number": 97,
+          "line_content": "test_results = {}",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 101,
+          "line_content": "test_results[\"twitter\"] = await self._test_twitter_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 101,
+          "line_content": "test_results[\"twitter\"] = await self._test_twitter_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter_api"
+        },
+        {
+          "line_number": 105,
+          "line_content": "test_results[\"instagram\"] = await self._test_tiktok_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 105,
+          "line_content": "test_results[\"instagram\"] = await self._test_tiktok_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_tiktok_api"
+        },
+        {
+          "line_number": 109,
+          "line_content": "test_results[\"facebook\"] = await self._test_facebook_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 109,
+          "line_content": "test_results[\"facebook\"] = await self._test_facebook_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_facebook_api"
+        },
+        {
+          "line_number": 113,
+          "line_content": "test_results[\"linkedin\"] = await self._test_linkedin_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 113,
+          "line_content": "test_results[\"linkedin\"] = await self._test_linkedin_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_linkedin_api"
+        },
+        {
+          "line_number": 117,
+          "line_content": "test_results[\"openai\"] = await self._test_openai_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 117,
+          "line_content": "test_results[\"openai\"] = await self._test_openai_api()",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_openai_api"
+        },
+        {
+          "line_number": 119,
+          "line_content": "self.service_status = test_results",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 122,
+          "line_content": "\"results\": test_results",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_results"
+        },
+        {
+          "line_number": 125,
+          "line_content": "async def _test_twitter_api(self) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_twitter_api"
+        },
+        {
+          "line_number": 161,
+          "line_content": "async def _test_tiktok_api(self) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_tiktok_api"
+        },
+        {
+          "line_number": 192,
+          "line_content": "async def _test_facebook_api(self) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_facebook_api"
+        },
+        {
+          "line_number": 223,
+          "line_content": "async def _test_linkedin_api(self) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_linkedin_api"
+        },
+        {
+          "line_number": 259,
+          "line_content": "async def _test_openai_api(self) -> Dict[str, Any]:",
+          "pattern_matched": "test_\\w+",
+          "match_text": "test_openai_api"
+        }
+      ],
+      "count": 20
+    },
+    {
+      "file_path": "/app/backend/core/advanced_data_service.py",
+      "relative_path": "core/advanced_data_service.py",
+      "instances": [
+        {
+          "line_number": 72,
+          "line_content": "await self._ensure_financial_sample_data(user_id, metric_type, min_val, max_val)",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        },
+        {
+          "line_number": 121,
+          "line_content": "await self._ensure_social_sample_data(user_id, metric_type, min_val, max_val)",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        },
+        {
+          "line_number": 134,
+          "line_content": "async def _ensure_financial_sample_data(self, user_id: str, metric_type: str, min_val: float, max_val: float):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        },
+        {
+          "line_number": 144,
+          "line_content": "sample_transactions = [",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_transactions"
+        },
+        {
+          "line_number": 174,
+          "line_content": "await db.financial_transactions.insert_many(sample_transactions)",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_transactions"
+        },
+        {
+          "line_number": 179,
+          "line_content": "details={\"transactions_created\": len(sample_transactions)}",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_transactions"
+        },
+        {
+          "line_number": 189,
+          "line_content": "async def _ensure_social_sample_data(self, user_id: str, metric_type: str, min_val: int, max_val: int):",
+          "pattern_matched": "sample_\\w+",
+          "match_text": "sample_data"
+        }
+      ],
+      "count": 7
+    }
+  ],
+  "duplicate_files": [
+    {
+      "normalized_name": "auth",
+      "files": [
+        {
+          "path": "/app/backend/api/auth.py",
+          "relative_path": "api/auth.py",
+          "size": 3798,
+          "lines": 123,
+          "functions": 4,
+          "classes": 2,
+          "async_functions": 4
+        },
+        {
+          "path": "/app/backend/services/auth_service.py",
+          "relative_path": "services/auth_service.py",
+          "size": 3583,
+          "lines": 119,
+          "functions": 7,
+          "classes": 1,
+          "async_functions": 5
+        },
+        {
+          "path": "/app/backend/core/auth.py",
+          "relative_path": "core/auth.py",
+          "size": 2793,
+          "lines": 77,
+          "functions": 6,
+          "classes": 0,
+          "async_functions": 3
+        }
+      ],
+      "similarity_score": 0.6296057021018443
+    },
+    {
+      "normalized_name": "google_oauth",
+      "files": [
+        {
+          "path": "/app/backend/api/google_oauth.py",
+          "relative_path": "api/google_oauth.py",
+          "size": 13969,
+          "lines": 401,
+          "functions": 5,
+          "classes": 2,
+          "async_functions": 5
+        },
+        {
+          "path": "/app/backend/services/google_oauth_service.py",
+          "relative_path": "services/google_oauth_service.py",
+          "size": 3034,
+          "lines": 97,
+          "functions": 5,
+          "classes": 1,
+          "async_functions": 5
+        }
+      ],
+      "similarity_score": 0.5918180959656125
+    },
+    {
+      "normalized_name": "admin_configuration",
+      "files": [
+        {
+          "path": "/app/backend/api/admin_configuration.py",
+          "relative_path": "api/admin_configuration.py",
+          "size": 27383,
+          "lines": 704,
+          "functions": 10,
+          "classes": 1,
+          "async_functions": 10
+        },
+        {
+          "path": "/app/backend/services/admin_configuration_service.py",
+          "relative_path": "services/admin_configuration_service.py",
+          "size": 2609,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.4032033457221302
+    },
+    {
+      "normalized_name": "ecommerce",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_ecommerce.py",
+          "relative_path": "api/complete_ecommerce.py",
+          "size": 22640,
+          "lines": 683,
+          "functions": 17,
+          "classes": 4,
+          "async_functions": 17
+        },
+        {
+          "path": "/app/backend/services/complete_ecommerce_service.py",
+          "relative_path": "services/complete_ecommerce_service.py",
+          "size": 60984,
+          "lines": 1450,
+          "functions": 35,
+          "classes": 5,
+          "async_functions": 33
+        }
+      ],
+      "similarity_score": 0.5286290400647767
+    },
+    {
+      "normalized_name": "enterprise_security_compliance",
+      "files": [
+        {
+          "path": "/app/backend/api/enterprise_security_compliance.py",
+          "relative_path": "api/enterprise_security_compliance.py",
+          "size": 9564,
+          "lines": 292,
+          "functions": 11,
+          "classes": 5,
+          "async_functions": 11
+        },
+        {
+          "path": "/app/backend/services/enterprise_security_compliance_service.py",
+          "relative_path": "services/enterprise_security_compliance_service.py",
+          "size": 18325,
+          "lines": 408,
+          "functions": 23,
+          "classes": 1,
+          "async_functions": 17
+        }
+      ],
+      "similarity_score": 0.5125831853353476
+    },
+    {
+      "normalized_name": "ai_token_management",
+      "files": [
+        {
+          "path": "/app/backend/api/ai_token_management.py",
+          "relative_path": "api/ai_token_management.py",
+          "size": 33155,
+          "lines": 843,
+          "functions": 14,
+          "classes": 3,
+          "async_functions": 9
+        },
+        {
+          "path": "/app/backend/services/ai_token_management_service.py",
+          "relative_path": "services/ai_token_management_service.py",
+          "size": 2607,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.402558875034817
+    },
+    {
+      "normalized_name": "admin_dashboard",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_admin_dashboard.py",
+          "relative_path": "api/complete_admin_dashboard.py",
+          "size": 21973,
+          "lines": 629,
+          "functions": 12,
+          "classes": 5,
+          "async_functions": 12
+        },
+        {
+          "path": "/app/backend/services/complete_admin_dashboard_service.py",
+          "relative_path": "services/complete_admin_dashboard_service.py",
+          "size": 41471,
+          "lines": 1026,
+          "functions": 26,
+          "classes": 1,
+          "async_functions": 19
+        }
+      ],
+      "similarity_score": 0.48720359340074576
+    },
+    {
+      "normalized_name": "unified_analytics_gamification",
+      "files": [
+        {
+          "path": "/app/backend/api/unified_analytics_gamification.py",
+          "relative_path": "api/unified_analytics_gamification.py",
+          "size": 10432,
+          "lines": 304,
+          "functions": 11,
+          "classes": 1,
+          "async_functions": 11
+        },
+        {
+          "path": "/app/backend/services/unified_analytics_gamification_service.py",
+          "relative_path": "services/unified_analytics_gamification_service.py",
+          "size": 9783,
+          "lines": 256,
+          "functions": 12,
+          "classes": 1,
+          "async_functions": 8
+        }
+      ],
+      "similarity_score": 0.884766446756881
+    },
+    {
+      "normalized_name": "mobile_pwa",
+      "files": [
+        {
+          "path": "/app/backend/api/mobile_pwa.py",
+          "relative_path": "api/mobile_pwa.py",
+          "size": 1382,
+          "lines": 53,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/mobile_pwa_service.py",
+          "relative_path": "services/mobile_pwa_service.py",
+          "size": 45486,
+          "lines": 1035,
+          "functions": 32,
+          "classes": 1,
+          "async_functions": 29
+        }
+      ],
+      "similarity_score": 0.04261124433825827
+    },
+    {
+      "normalized_name": "business_intelligence",
+      "files": [
+        {
+          "path": "/app/backend/api/business_intelligence.py",
+          "relative_path": "api/business_intelligence.py",
+          "size": 35354,
+          "lines": 824,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 4
+        },
+        {
+          "path": "/app/backend/services/business_intelligence_service.py",
+          "relative_path": "services/business_intelligence_service.py",
+          "size": 4568,
+          "lines": 117,
+          "functions": 4,
+          "classes": 1,
+          "async_functions": 4
+        }
+      ],
+      "similarity_score": 0.46852526147857254
+    },
+    {
+      "normalized_name": "email_marketing",
+      "files": [
+        {
+          "path": "/app/backend/api/email_marketing.py",
+          "relative_path": "api/email_marketing.py",
+          "size": 12854,
+          "lines": 333,
+          "functions": 20,
+          "classes": 5,
+          "async_functions": 20
+        },
+        {
+          "path": "/app/backend/services/email_marketing_service.py",
+          "relative_path": "services/email_marketing_service.py",
+          "size": 37660,
+          "lines": 864,
+          "functions": 39,
+          "classes": 1,
+          "async_functions": 38
+        }
+      ],
+      "similarity_score": 0.39317400324517326
+    },
+    {
+      "normalized_name": "user",
+      "files": [
+        {
+          "path": "/app/backend/api/user.py",
+          "relative_path": "api/user.py",
+          "size": 3227,
+          "lines": 94,
+          "functions": 10,
+          "classes": 0,
+          "async_functions": 10
+        },
+        {
+          "path": "/app/backend/services/user_service.py",
+          "relative_path": "services/user_service.py",
+          "size": 10666,
+          "lines": 306,
+          "functions": 12,
+          "classes": 1,
+          "async_functions": 8
+        }
+      ],
+      "similarity_score": 0.448614607040391
+    },
+    {
+      "normalized_name": "template_marketplace",
+      "files": [
+        {
+          "path": "/app/backend/api/advanced_template_marketplace.py",
+          "relative_path": "api/advanced_template_marketplace.py",
+          "size": 16673,
+          "lines": 462,
+          "functions": 15,
+          "classes": 2,
+          "async_functions": 15
+        },
+        {
+          "path": "/app/backend/api/template_marketplace.py",
+          "relative_path": "api/template_marketplace.py",
+          "size": 1542,
+          "lines": 53,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/template_marketplace_service.py",
+          "relative_path": "services/template_marketplace_service.py",
+          "size": 28765,
+          "lines": 674,
+          "functions": 23,
+          "classes": 1,
+          "async_functions": 22
+        },
+        {
+          "path": "/app/backend/services/advanced_template_marketplace_service.py",
+          "relative_path": "services/advanced_template_marketplace_service.py",
+          "size": 41563,
+          "lines": 1062,
+          "functions": 40,
+          "classes": 3,
+          "async_functions": 38
+        }
+      ],
+      "similarity_score": 0.3053097125891574
+    },
+    {
+      "normalized_name": "automation_system",
+      "files": [
+        {
+          "path": "/app/backend/api/automation_system.py",
+          "relative_path": "api/automation_system.py",
+          "size": 15315,
+          "lines": 316,
+          "functions": 15,
+          "classes": 2,
+          "async_functions": 15
+        },
+        {
+          "path": "/app/backend/services/automation_system_service.py",
+          "relative_path": "services/automation_system_service.py",
+          "size": 2593,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.46099302826301675
+    },
+    {
+      "normalized_name": "real_ai_automation",
+      "files": [
+        {
+          "path": "/app/backend/api/real_ai_automation.py",
+          "relative_path": "api/real_ai_automation.py",
+          "size": 14513,
+          "lines": 409,
+          "functions": 9,
+          "classes": 0,
+          "async_functions": 9
+        },
+        {
+          "path": "/app/backend/services/real_ai_automation_service.py",
+          "relative_path": "services/real_ai_automation_service.py",
+          "size": 13362,
+          "lines": 340,
+          "functions": 9,
+          "classes": 1,
+          "async_functions": 4
+        }
+      ],
+      "similarity_score": 0.6392864163059235
+    },
+    {
+      "normalized_name": "dashboard",
+      "files": [
+        {
+          "path": "/app/backend/api/dashboard.py",
+          "relative_path": "api/dashboard.py",
+          "size": 4341,
+          "lines": 107,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/dashboard_service.py",
+          "relative_path": "services/dashboard_service.py",
+          "size": 3864,
+          "lines": 103,
+          "functions": 1,
+          "classes": 1,
+          "async_functions": 1
+        }
+      ],
+      "similarity_score": 0.5705468613760989
+    },
+    {
+      "normalized_name": "integrations",
+      "files": [
+        {
+          "path": "/app/backend/api/integrations.py",
+          "relative_path": "api/integrations.py",
+          "size": 16601,
+          "lines": 442,
+          "functions": 11,
+          "classes": 2,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/integrations_service.py",
+          "relative_path": "services/integrations_service.py",
+          "size": 9183,
+          "lines": 240,
+          "functions": 6,
+          "classes": 1,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.5997486552325559
+    },
+    {
+      "normalized_name": "webhook",
+      "files": [
+        {
+          "path": "/app/backend/api/webhook.py",
+          "relative_path": "api/webhook.py",
+          "size": 1336,
+          "lines": 53,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/webhook_service.py",
+          "relative_path": "services/webhook_service.py",
+          "size": 40354,
+          "lines": 1003,
+          "functions": 23,
+          "classes": 1,
+          "async_functions": 22
+        }
+      ],
+      "similarity_score": 0.05276281824894917
+    },
+    {
+      "normalized_name": "support_system",
+      "files": [
+        {
+          "path": "/app/backend/api/support_system.py",
+          "relative_path": "api/support_system.py",
+          "size": 18633,
+          "lines": 442,
+          "functions": 19,
+          "classes": 3,
+          "async_functions": 19
+        },
+        {
+          "path": "/app/backend/services/support_system_service.py",
+          "relative_path": "services/support_system_service.py",
+          "size": 2569,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.33621171005862005
+    },
+    {
+      "normalized_name": "multi_vendor_marketplace",
+      "files": [
+        {
+          "path": "/app/backend/api/multi_vendor_marketplace.py",
+          "relative_path": "api/multi_vendor_marketplace.py",
+          "size": 4743,
+          "lines": 145,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/multi_vendor_marketplace_service.py",
+          "relative_path": "services/multi_vendor_marketplace_service.py",
+          "size": 10642,
+          "lines": 264,
+          "functions": 8,
+          "classes": 1,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.6454144364687495
+    },
+    {
+      "normalized_name": "integration",
+      "files": [
+        {
+          "path": "/app/backend/api/integration.py",
+          "relative_path": "api/integration.py",
+          "size": 2633,
+          "lines": 75,
+          "functions": 8,
+          "classes": 0,
+          "async_functions": 8
+        },
+        {
+          "path": "/app/backend/services/integration_service.py",
+          "relative_path": "services/integration_service.py",
+          "size": 2513,
+          "lines": 90,
+          "functions": 3,
+          "classes": 1,
+          "async_functions": 3
+        }
+      ],
+      "similarity_score": 0.50755158880871
+    },
+    {
+      "normalized_name": "comprehensive_marketing_website",
+      "files": [
+        {
+          "path": "/app/backend/api/comprehensive_marketing_website.py",
+          "relative_path": "api/comprehensive_marketing_website.py",
+          "size": 5770,
+          "lines": 181,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/comprehensive_marketing_website_service.py",
+          "relative_path": "services/comprehensive_marketing_website_service.py",
+          "size": 12779,
+          "lines": 316,
+          "functions": 18,
+          "classes": 1,
+          "async_functions": 11
+        }
+      ],
+      "similarity_score": 0.5099118727413665
+    },
+    {
+      "normalized_name": "escrow",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_escrow.py",
+          "relative_path": "api/complete_escrow.py",
+          "size": 22872,
+          "lines": 638,
+          "functions": 15,
+          "classes": 5,
+          "async_functions": 15
+        },
+        {
+          "path": "/app/backend/services/complete_escrow_service.py",
+          "relative_path": "services/complete_escrow_service.py",
+          "size": 69435,
+          "lines": 1566,
+          "functions": 33,
+          "classes": 1,
+          "async_functions": 28
+        }
+      ],
+      "similarity_score": 0.38541374925691196
+    },
+    {
+      "normalized_name": "crm_management",
+      "files": [
+        {
+          "path": "/app/backend/api/crm_management.py",
+          "relative_path": "api/crm_management.py",
+          "size": 27039,
+          "lines": 757,
+          "functions": 14,
+          "classes": 5,
+          "async_functions": 8
+        },
+        {
+          "path": "/app/backend/services/crm_management_service.py",
+          "relative_path": "services/crm_management_service.py",
+          "size": 2569,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.3714592494045613
+    },
+    {
+      "normalized_name": "monitoring_system",
+      "files": [
+        {
+          "path": "/app/backend/api/monitoring_system.py",
+          "relative_path": "api/monitoring_system.py",
+          "size": 7920,
+          "lines": 199,
+          "functions": 7,
+          "classes": 0,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/monitoring_system_service.py",
+          "relative_path": "services/monitoring_system_service.py",
+          "size": 2593,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.5223355050867614
+    },
+    {
+      "normalized_name": "blog",
+      "files": [
+        {
+          "path": "/app/backend/api/blog.py",
+          "relative_path": "api/blog.py",
+          "size": 7723,
+          "lines": 262,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/blog_service.py",
+          "relative_path": "services/blog_service.py",
+          "size": 3065,
+          "lines": 99,
+          "functions": 5,
+          "classes": 1,
+          "async_functions": 4
+        }
+      ],
+      "similarity_score": 0.5120886767577083
+    },
+    {
+      "normalized_name": "multi_workspace",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_multi_workspace.py",
+          "relative_path": "api/complete_multi_workspace.py",
+          "size": 20191,
+          "lines": 557,
+          "functions": 18,
+          "classes": 5,
+          "async_functions": 18
+        },
+        {
+          "path": "/app/backend/services/complete_multi_workspace_service.py",
+          "relative_path": "services/complete_multi_workspace_service.py",
+          "size": 43629,
+          "lines": 1101,
+          "functions": 34,
+          "classes": 4,
+          "async_functions": 30
+        }
+      ],
+      "similarity_score": 0.5796208001642726
+    },
+    {
+      "normalized_name": "compliance_system",
+      "files": [
+        {
+          "path": "/app/backend/api/compliance_system.py",
+          "relative_path": "api/compliance_system.py",
+          "size": 15467,
+          "lines": 360,
+          "functions": 10,
+          "classes": 0,
+          "async_functions": 10
+        },
+        {
+          "path": "/app/backend/services/compliance_system_service.py",
+          "relative_path": "services/compliance_system_service.py",
+          "size": 2593,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.3407516720185629
+    },
+    {
+      "normalized_name": "media",
+      "files": [
+        {
+          "path": "/app/backend/api/media.py",
+          "relative_path": "api/media.py",
+          "size": 2879,
+          "lines": 90,
+          "functions": 9,
+          "classes": 0,
+          "async_functions": 9
+        },
+        {
+          "path": "/app/backend/services/media_service.py",
+          "relative_path": "services/media_service.py",
+          "size": 20779,
+          "lines": 584,
+          "functions": 13,
+          "classes": 1,
+          "async_functions": 11
+        }
+      ],
+      "similarity_score": 0.36063048933198394
+    },
+    {
+      "normalized_name": "i18n_system",
+      "files": [
+        {
+          "path": "/app/backend/api/i18n_system.py",
+          "relative_path": "api/i18n_system.py",
+          "size": 6651,
+          "lines": 184,
+          "functions": 12,
+          "classes": 0,
+          "async_functions": 12
+        },
+        {
+          "path": "/app/backend/services/i18n_system_service.py",
+          "relative_path": "services/i18n_system_service.py",
+          "size": 2545,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.38558781615056253
+    },
+    {
+      "normalized_name": "link_shortener",
+      "files": [
+        {
+          "path": "/app/backend/api/link_shortener.py",
+          "relative_path": "api/link_shortener.py",
+          "size": 27116,
+          "lines": 755,
+          "functions": 16,
+          "classes": 3,
+          "async_functions": 11
+        },
+        {
+          "path": "/app/backend/services/link_shortener_service.py",
+          "relative_path": "services/link_shortener_service.py",
+          "size": 7231,
+          "lines": 189,
+          "functions": 10,
+          "classes": 1,
+          "async_functions": 10
+        }
+      ],
+      "similarity_score": 0.4768848986983536
+    },
+    {
+      "normalized_name": "onboarding",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_onboarding.py",
+          "relative_path": "api/complete_onboarding.py",
+          "size": 16286,
+          "lines": 520,
+          "functions": 15,
+          "classes": 9,
+          "async_functions": 15
+        },
+        {
+          "path": "/app/backend/services/complete_onboarding_service.py",
+          "relative_path": "services/complete_onboarding_service.py",
+          "size": 31045,
+          "lines": 747,
+          "functions": 22,
+          "classes": 4,
+          "async_functions": 19
+        }
+      ],
+      "similarity_score": 0.627289489456863
+    },
+    {
+      "normalized_name": "automation",
+      "files": [
+        {
+          "path": "/app/backend/api/automation.py",
+          "relative_path": "api/automation.py",
+          "size": 1384,
+          "lines": 53,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/automation_service.py",
+          "relative_path": "services/automation_service.py",
+          "size": 36289,
+          "lines": 680,
+          "functions": 22,
+          "classes": 1,
+          "async_functions": 21
+        }
+      ],
+      "similarity_score": 0.06044532828700937
+    },
+    {
+      "normalized_name": "admin",
+      "files": [
+        {
+          "path": "/app/backend/api/admin.py",
+          "relative_path": "api/admin.py",
+          "size": 10946,
+          "lines": 281,
+          "functions": 5,
+          "classes": 0,
+          "async_functions": 4
+        },
+        {
+          "path": "/app/backend/services/admin_service.py",
+          "relative_path": "services/admin_service.py",
+          "size": 2499,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.3823492120877604
+    },
+    {
+      "normalized_name": "subscription",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_subscription.py",
+          "relative_path": "api/complete_subscription.py",
+          "size": 19339,
+          "lines": 492,
+          "functions": 16,
+          "classes": 3,
+          "async_functions": 16
+        },
+        {
+          "path": "/app/backend/services/complete_subscription_service.py",
+          "relative_path": "services/complete_subscription_service.py",
+          "size": 29884,
+          "lines": 732,
+          "functions": 21,
+          "classes": 4,
+          "async_functions": 19
+        }
+      ],
+      "similarity_score": 0.734655352711064
+    },
+    {
+      "normalized_name": "support",
+      "files": [
+        {
+          "path": "/app/backend/api/support.py",
+          "relative_path": "api/support.py",
+          "size": 1336,
+          "lines": 53,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/support_service.py",
+          "relative_path": "services/support_service.py",
+          "size": 40718,
+          "lines": 817,
+          "functions": 26,
+          "classes": 1,
+          "async_functions": 24
+        }
+      ],
+      "similarity_score": 0.051587786616851504
+    },
+    {
+      "normalized_name": "ai_content",
+      "files": [
+        {
+          "path": "/app/backend/api/ai_content.py",
+          "relative_path": "api/ai_content.py",
+          "size": 2481,
+          "lines": 74,
+          "functions": 7,
+          "classes": 0,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/ai_content_service.py",
+          "relative_path": "services/ai_content_service.py",
+          "size": 74398,
+          "lines": 1649,
+          "functions": 44,
+          "classes": 1,
+          "async_functions": 38
+        }
+      ],
+      "similarity_score": 0.08430495765493229
+    },
+    {
+      "normalized_name": "content",
+      "files": [
+        {
+          "path": "/app/backend/api/content.py",
+          "relative_path": "api/content.py",
+          "size": 2547,
+          "lines": 80,
+          "functions": 8,
+          "classes": 0,
+          "async_functions": 8
+        },
+        {
+          "path": "/app/backend/services/content_service.py",
+          "relative_path": "services/content_service.py",
+          "size": 24833,
+          "lines": 621,
+          "functions": 26,
+          "classes": 1,
+          "async_functions": 19
+        }
+      ],
+      "similarity_score": 0.19202691020486065
+    },
+    {
+      "normalized_name": "__init__",
+      "files": [
+        {
+          "path": "/app/backend/api/__init__.py",
+          "relative_path": "api/__init__.py",
+          "size": 34,
+          "lines": 3,
+          "functions": 0,
+          "classes": 0,
+          "async_functions": 0
+        },
+        {
+          "path": "/app/backend/services/__init__.py",
+          "relative_path": "services/__init__.py",
+          "size": 39,
+          "lines": 3,
+          "functions": 0,
+          "classes": 0,
+          "async_functions": 0
+        },
+        {
+          "path": "/app/backend/core/__init__.py",
+          "relative_path": "core/__init__.py",
+          "size": 35,
+          "lines": 3,
+          "functions": 0,
+          "classes": 0,
+          "async_functions": 0
+        }
+      ],
+      "similarity_score": 0.3827106227106227
+    },
+    {
+      "normalized_name": "form_builder",
+      "files": [
+        {
+          "path": "/app/backend/api/form_builder.py",
+          "relative_path": "api/form_builder.py",
+          "size": 27183,
+          "lines": 758,
+          "functions": 15,
+          "classes": 4,
+          "async_functions": 10
+        },
+        {
+          "path": "/app/backend/services/form_builder_service.py",
+          "relative_path": "services/form_builder_service.py",
+          "size": 2997,
+          "lines": 94,
+          "functions": 4,
+          "classes": 1,
+          "async_functions": 4
+        }
+      ],
+      "similarity_score": 0.23018599044859345
+    },
+    {
+      "normalized_name": "realtime_notifications",
+      "files": [
+        {
+          "path": "/app/backend/api/realtime_notifications.py",
+          "relative_path": "api/realtime_notifications.py",
+          "size": 25142,
+          "lines": 665,
+          "functions": 8,
+          "classes": 2,
+          "async_functions": 8
+        },
+        {
+          "path": "/app/backend/services/realtime_notifications_service.py",
+          "relative_path": "services/realtime_notifications_service.py",
+          "size": 2633,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.5715089419914434
+    },
+    {
+      "normalized_name": "referral_system",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_referral_system.py",
+          "relative_path": "api/complete_referral_system.py",
+          "size": 12473,
+          "lines": 335,
+          "functions": 7,
+          "classes": 4,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/complete_referral_system_service.py",
+          "relative_path": "services/complete_referral_system_service.py",
+          "size": 43717,
+          "lines": 988,
+          "functions": 23,
+          "classes": 1,
+          "async_functions": 22
+        }
+      ],
+      "similarity_score": 0.29938216401329554
+    },
+    {
+      "normalized_name": "marketing",
+      "files": [
+        {
+          "path": "/app/backend/api/marketing.py",
+          "relative_path": "api/marketing.py",
+          "size": 18475,
+          "lines": 513,
+          "functions": 11,
+          "classes": 3,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/marketing_service.py",
+          "relative_path": "services/marketing_service.py",
+          "size": 2316,
+          "lines": 84,
+          "functions": 3,
+          "classes": 1,
+          "async_functions": 3
+        }
+      ],
+      "similarity_score": 0.2647466634766685
+    },
+    {
+      "normalized_name": "ai",
+      "files": [
+        {
+          "path": "/app/backend/api/ai.py",
+          "relative_path": "api/ai.py",
+          "size": 15837,
+          "lines": 377,
+          "functions": 9,
+          "classes": 2,
+          "async_functions": 5
+        },
+        {
+          "path": "/app/backend/services/ai_service.py",
+          "relative_path": "services/ai_service.py",
+          "size": 2516,
+          "lines": 78,
+          "functions": 3,
+          "classes": 1,
+          "async_functions": 3
+        }
+      ],
+      "similarity_score": 0.3598196715243439
+    },
+    {
+      "normalized_name": "webhook_system",
+      "files": [
+        {
+          "path": "/app/backend/api/webhook_system.py",
+          "relative_path": "api/webhook_system.py",
+          "size": 11674,
+          "lines": 324,
+          "functions": 15,
+          "classes": 0,
+          "async_functions": 15
+        },
+        {
+          "path": "/app/backend/services/webhook_system_service.py",
+          "relative_path": "services/webhook_system_service.py",
+          "size": 2569,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.2698148042394516
+    },
+    {
+      "normalized_name": "bio_sites",
+      "files": [
+        {
+          "path": "/app/backend/api/bio_sites.py",
+          "relative_path": "api/bio_sites.py",
+          "size": 14687,
+          "lines": 435,
+          "functions": 7,
+          "classes": 3,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/bio_sites_service.py",
+          "relative_path": "services/bio_sites_service.py",
+          "size": 1785,
+          "lines": 60,
+          "functions": 2,
+          "classes": 1,
+          "async_functions": 2
+        }
+      ],
+      "similarity_score": 0.23284579830716107
+    },
+    {
+      "normalized_name": "website_builder",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_website_builder.py",
+          "relative_path": "api/complete_website_builder.py",
+          "size": 22289,
+          "lines": 641,
+          "functions": 22,
+          "classes": 6,
+          "async_functions": 22
+        },
+        {
+          "path": "/app/backend/services/complete_website_builder_service.py",
+          "relative_path": "services/complete_website_builder_service.py",
+          "size": 33839,
+          "lines": 820,
+          "functions": 23,
+          "classes": 1,
+          "async_functions": 21
+        }
+      ],
+      "similarity_score": 0.7036238068652784
+    },
+    {
+      "normalized_name": "survey",
+      "files": [
+        {
+          "path": "/app/backend/api/survey.py",
+          "relative_path": "api/survey.py",
+          "size": 1320,
+          "lines": 53,
+          "functions": 2,
+          "classes": 0,
+          "async_functions": 2
+        },
+        {
+          "path": "/app/backend/services/survey_service.py",
+          "relative_path": "services/survey_service.py",
+          "size": 19746,
+          "lines": 525,
+          "functions": 10,
+          "classes": 1,
+          "async_functions": 10
+        }
+      ],
+      "similarity_score": 0.11356027260493987
+    },
+    {
+      "normalized_name": "financial",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_financial.py",
+          "relative_path": "api/complete_financial.py",
+          "size": 20265,
+          "lines": 569,
+          "functions": 19,
+          "classes": 5,
+          "async_functions": 19
+        },
+        {
+          "path": "/app/backend/services/complete_financial_service.py",
+          "relative_path": "services/complete_financial_service.py",
+          "size": 50204,
+          "lines": 1203,
+          "functions": 32,
+          "classes": 1,
+          "async_functions": 30
+        }
+      ],
+      "similarity_score": 0.4607441269711018
+    },
+    {
+      "normalized_name": "customer_experience",
+      "files": [
+        {
+          "path": "/app/backend/api/customer_experience.py",
+          "relative_path": "api/customer_experience.py",
+          "size": 3086,
+          "lines": 81,
+          "functions": 8,
+          "classes": 0,
+          "async_functions": 8
+        },
+        {
+          "path": "/app/backend/services/customer_experience_service.py",
+          "relative_path": "services/customer_experience_service.py",
+          "size": 44918,
+          "lines": 787,
+          "functions": 27,
+          "classes": 1,
+          "async_functions": 26
+        }
+      ],
+      "similarity_score": 0.15512281286298524
+    },
+    {
+      "normalized_name": "course_community",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_course_community.py",
+          "relative_path": "api/complete_course_community.py",
+          "size": 24378,
+          "lines": 679,
+          "functions": 14,
+          "classes": 6,
+          "async_functions": 14
+        },
+        {
+          "path": "/app/backend/services/complete_course_community_service.py",
+          "relative_path": "services/complete_course_community_service.py",
+          "size": 38410,
+          "lines": 919,
+          "functions": 19,
+          "classes": 1,
+          "async_functions": 18
+        }
+      ],
+      "similarity_score": 0.6109623182435048
+    },
+    {
+      "normalized_name": "team_management",
+      "files": [
+        {
+          "path": "/app/backend/api/team_management.py",
+          "relative_path": "api/team_management.py",
+          "size": 28421,
+          "lines": 806,
+          "functions": 18,
+          "classes": 3,
+          "async_functions": 11
+        },
+        {
+          "path": "/app/backend/api/advanced_team_management.py",
+          "relative_path": "api/advanced_team_management.py",
+          "size": 6439,
+          "lines": 198,
+          "functions": 7,
+          "classes": 3,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/advanced_team_management_service.py",
+          "relative_path": "services/advanced_team_management_service.py",
+          "size": 14411,
+          "lines": 366,
+          "functions": 15,
+          "classes": 2,
+          "async_functions": 11
+        }
+      ],
+      "similarity_score": 0.5810739263778123
+    },
+    {
+      "normalized_name": "promotions_referrals",
+      "files": [
+        {
+          "path": "/app/backend/api/promotions_referrals.py",
+          "relative_path": "api/promotions_referrals.py",
+          "size": 27725,
+          "lines": 722,
+          "functions": 15,
+          "classes": 3,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/promotions_referrals_service.py",
+          "relative_path": "services/promotions_referrals_service.py",
+          "size": 9360,
+          "lines": 238,
+          "functions": 11,
+          "classes": 1,
+          "async_functions": 11
+        }
+      ],
+      "similarity_score": 0.4740543269936374
+    },
+    {
+      "normalized_name": "booking",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_booking.py",
+          "relative_path": "api/complete_booking.py",
+          "size": 17437,
+          "lines": 469,
+          "functions": 14,
+          "classes": 6,
+          "async_functions": 14
+        },
+        {
+          "path": "/app/backend/services/complete_booking_service.py",
+          "relative_path": "services/complete_booking_service.py",
+          "size": 33345,
+          "lines": 801,
+          "functions": 19,
+          "classes": 4,
+          "async_functions": 17
+        }
+      ],
+      "similarity_score": 0.6670966523250239
+    },
+    {
+      "normalized_name": "social_media_leads",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_social_media_leads.py",
+          "relative_path": "api/complete_social_media_leads.py",
+          "size": 25126,
+          "lines": 674,
+          "functions": 17,
+          "classes": 4,
+          "async_functions": 17
+        },
+        {
+          "path": "/app/backend/services/complete_social_media_leads_service.py",
+          "relative_path": "services/complete_social_media_leads_service.py",
+          "size": 50668,
+          "lines": 1132,
+          "functions": 24,
+          "classes": 1,
+          "async_functions": 20
+        }
+      ],
+      "similarity_score": 0.579926907725973
+    },
+    {
+      "normalized_name": "media_library",
+      "files": [
+        {
+          "path": "/app/backend/api/media_library.py",
+          "relative_path": "api/media_library.py",
+          "size": 9009,
+          "lines": 272,
+          "functions": 11,
+          "classes": 0,
+          "async_functions": 11
+        },
+        {
+          "path": "/app/backend/services/media_library_service.py",
+          "relative_path": "services/media_library_service.py",
+          "size": 6915,
+          "lines": 195,
+          "functions": 8,
+          "classes": 1,
+          "async_functions": 8
+        }
+      ],
+      "similarity_score": 0.5878045973634209
+    },
+    {
+      "normalized_name": "survey_system",
+      "files": [
+        {
+          "path": "/app/backend/api/survey_system.py",
+          "relative_path": "api/survey_system.py",
+          "size": 6714,
+          "lines": 187,
+          "functions": 10,
+          "classes": 0,
+          "async_functions": 10
+        },
+        {
+          "path": "/app/backend/services/survey_system_service.py",
+          "relative_path": "services/survey_system_service.py",
+          "size": 2561,
+          "lines": 85,
+          "functions": 7,
+          "classes": 2,
+          "async_functions": 6
+        }
+      ],
+      "similarity_score": 0.4271974436049503
+    },
+    {
+      "normalized_name": "link_in_bio",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_link_in_bio.py",
+          "relative_path": "api/complete_link_in_bio.py",
+          "size": 20013,
+          "lines": 621,
+          "functions": 17,
+          "classes": 5,
+          "async_functions": 17
+        },
+        {
+          "path": "/app/backend/services/complete_link_in_bio_service.py",
+          "relative_path": "services/complete_link_in_bio_service.py",
+          "size": 37822,
+          "lines": 905,
+          "functions": 22,
+          "classes": 4,
+          "async_functions": 21
+        }
+      ],
+      "similarity_score": 0.7195150817935767
+    },
+    {
+      "normalized_name": "real_email_automation",
+      "files": [
+        {
+          "path": "/app/backend/api/real_email_automation.py",
+          "relative_path": "api/real_email_automation.py",
+          "size": 16937,
+          "lines": 498,
+          "functions": 12,
+          "classes": 0,
+          "async_functions": 12
+        },
+        {
+          "path": "/app/backend/services/real_email_automation_service.py",
+          "relative_path": "services/real_email_automation_service.py",
+          "size": 14143,
+          "lines": 301,
+          "functions": 7,
+          "classes": 1,
+          "async_functions": 5
+        }
+      ],
+      "similarity_score": 0.4878906782588818
+    }
+  ],
+  "missing_pairs": {
+    "services_without_apis": [
+      {
+        "service_name": "social_email_integration",
+        "service_file": "/app/backend/services/social_email_integration_service.py",
+        "relative_path": "services/social_email_integration_service.py"
+      },
+      {
+        "service_name": "rate_limiting",
+        "service_file": "/app/backend/services/rate_limiting_service.py",
+        "relative_path": "services/rate_limiting_service.py"
+      },
+      {
+        "service_name": "notification",
+        "service_file": "/app/backend/services/realtime_notifications_service.py",
+        "relative_path": "services/realtime_notifications_service.py"
+      },
+      {
+        "service_name": "real_data_population",
+        "service_file": "/app/backend/services/real_data_population_service.py",
+        "relative_path": "services/real_data_population_service.py"
+      },
+      {
+        "service_name": "data_population",
+        "service_file": "/app/backend/services/data_population.py",
+        "relative_path": "services/data_population.py"
+      },
+      {
+        "service_name": "monitoring",
+        "service_file": "/app/backend/services/monitoring_system_service.py",
+        "relative_path": "services/monitoring_system_service.py"
+      },
+      {
+        "service_name": "i18n",
+        "service_file": "/app/backend/services/i18n_service.py",
+        "relative_path": "services/i18n_service.py"
+      },
+      {
+        "service_name": "social_email",
+        "service_file": "/app/backend/services/social_email_integration_service.py",
+        "relative_path": "services/social_email_integration_service.py"
+      },
+      {
+        "service_name": "crm",
+        "service_file": "/app/backend/services/crm_management_service.py",
+        "relative_path": "services/crm_management_service.py"
+      },
+      {
+        "service_name": "content_creation_suite",
+        "service_file": "/app/backend/services/content_creation_suite_service.py",
+        "relative_path": "services/content_creation_suite_service.py"
+      },
+      {
+        "service_name": "enterprise_security",
+        "service_file": "/app/backend/services/enterprise_security_service.py",
+        "relative_path": "services/enterprise_security_service.py"
+      },
+      {
+        "service_name": "customer_experience_suite",
+        "service_file": "/app/backend/services/customer_experience_suite_service.py",
+        "relative_path": "services/customer_experience_suite_service.py"
+      },
+      {
+        "service_name": "team",
+        "service_file": "/app/backend/services/team_service.py",
+        "relative_path": "services/team_service.py"
+      },
+      {
+        "service_name": "ai_token",
+        "service_file": "/app/backend/services/ai_token_service.py",
+        "relative_path": "services/ai_token_service.py"
+      }
+    ],
+    "apis_without_services": [
+      {
+        "api_name": "mobile_pwa_features",
+        "api_file": "/app/backend/api/mobile_pwa_features.py",
+        "relative_path": "api/mobile_pwa_features.py"
+      },
+      {
+        "api_name": "workflow_automation",
+        "api_file": "/app/backend/api/workflow_automation.py",
+        "relative_path": "api/workflow_automation.py"
+      },
+      {
+        "api_name": "content_creation",
+        "api_file": "/app/backend/api/content_creation.py",
+        "relative_path": "api/content_creation.py"
+      },
+      {
+        "api_name": "rate_limiting_system",
+        "api_file": "/app/backend/api/rate_limiting_system.py",
+        "relative_path": "api/rate_limiting_system.py"
+      },
+      {
+        "api_name": "analytics",
+        "api_file": "/app/backend/api/unified_analytics_gamification.py",
+        "relative_path": "api/unified_analytics_gamification.py"
+      },
+      {
+        "api_name": "notification_system",
+        "api_file": "/app/backend/api/notification_system.py",
+        "relative_path": "api/notification_system.py"
+      },
+      {
+        "api_name": "ai_content_generation",
+        "api_file": "/app/backend/api/ai_content_generation.py",
+        "relative_path": "api/ai_content_generation.py"
+      },
+      {
+        "api_name": "integration_tests",
+        "api_file": "/app/backend/api/integration_tests.py",
+        "relative_path": "api/integration_tests.py"
+      },
+      {
+        "api_name": "analytics_system",
+        "api_file": "/app/backend/api/analytics_system.py",
+        "relative_path": "api/analytics_system.py"
+      },
+      {
+        "api_name": "templates",
+        "api_file": "/app/backend/api/templates.py",
+        "relative_path": "api/templates.py"
+      },
+      {
+        "api_name": "escrow_system",
+        "api_file": "/app/backend/api/escrow_system.py",
+        "relative_path": "api/escrow_system.py"
+      },
+      {
+        "api_name": "enhanced_features",
+        "api_file": "/app/backend/api/enhanced_features.py",
+        "relative_path": "api/enhanced_features.py"
+      },
+      {
+        "api_name": "missing_critical_endpoints",
+        "api_file": "/app/backend/api/missing_critical_endpoints.py",
+        "relative_path": "api/missing_critical_endpoints.py"
+      },
+      {
+        "api_name": "missing_endpoints_fix",
+        "api_file": "/app/backend/api/missing_endpoints_fix.py",
+        "relative_path": "api/missing_endpoints_fix.py"
+      },
+      {
+        "api_name": "team_management",
+        "api_file": "/app/backend/api/team_management.py",
+        "relative_path": "api/team_management.py"
+      }
+    ]
+  },
+  "statistics": {
+    "total_api_files": 75,
+    "total_service_files": 74,
+    "crud_completeness": 0,
+    "mock_data_instances": 223,
+    "duplicate_file_sets": 59
+  }
+}
