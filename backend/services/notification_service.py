@@ -74,8 +74,6 @@ class NotificationService:
             result = await self.db["notification"].update_one(
                 {"id": notification_id},
                 {"$set": update_data}
-            )
-            
             if result.matched_count == 0:
                 return {
                     "success": False,
@@ -128,7 +126,6 @@ class NotificationService:
                 "categories": ["system", "business"]
             }
         }
-    }
     
     @staticmethod
     async def get_notification_channels(user_id: str) -> Dict[str, Any]:
@@ -191,11 +188,7 @@ class NotificationService:
         }
     
     @staticmethod
-    async def configure_channel(
-        user_id: str,
-        channel_id: str,
-        enabled: bool,
-        settings: Dict[str, Any]
+    
     ) -> Dict[str, Any]:
         """Configure notification channel settings"""
         if channel_id not in NotificationService.AVAILABLE_CHANNELS:
@@ -229,8 +222,6 @@ class NotificationService:
                 }
             },
             upsert=True
-        )
-        
         return {
             "channel_id": channel_id,
             "enabled": enabled,
@@ -239,16 +230,7 @@ class NotificationService:
         }
     
     @staticmethod
-    async def send_notification(
-        sender_id: str,
-        title: str,
-        message: str,
-        channels: List[str],
-        recipients: List[str],
-        category: str = "general",
-        priority: str = "normal",
-        scheduled_at: Optional[datetime] = None,
-        background_tasks: BackgroundTasks = None
+    
     ) -> Dict[str, Any]:
         """Send custom notification"""
         database = get_database()
@@ -297,7 +279,6 @@ class NotificationService:
                     notification_doc["_id"],
                     channels,
                     recipients
-                )
             else:
                 
                 # Real notification delivery via database
@@ -316,8 +297,6 @@ class NotificationService:
                     notification_doc["_id"],
                     channels,
                     recipients
-                )
-        
         return {
             "notification_id": notification_doc["_id"],
             "title": notification_doc["title"],
@@ -362,14 +341,8 @@ class NotificationService:
                     "delivery_attempts": 1
                 }
             }
-        )
-    
     @staticmethod
-    async def get_notification_history(
-        user_id: str,
-        limit: int = 50,
-        category: str = "all",
-        status: str = "all"
+    
     ) -> Dict[str, Any]:
         """Get notification history"""
         database = get_database()
@@ -454,10 +427,7 @@ class NotificationService:
         }
     
     @staticmethod
-    async def retry_notification(
-        notification_id: str,
-        user_id: str,
-        background_tasks: BackgroundTasks = None
+    
     ) -> Dict[str, Any]:
         """Retry failed notification"""
         database = get_database()
@@ -488,8 +458,6 @@ class NotificationService:
                     "last_retry_at": datetime.utcnow()
                 }
             }
-        )
-        
         # Schedule retry
         if background_tasks:
             background_tasks.add_task(
@@ -497,8 +465,6 @@ class NotificationService:
                 notification_id,
                 channels,
                 recipients
-            )
-        
         return {
             "notification_id": notification_id,
             "status": "retrying",
@@ -604,14 +570,7 @@ class NotificationService:
         }
     
     @staticmethod
-    async def create_notification_template(
-        user_id: str,
-        name: str,
-        title: str,
-        message: str,
-        category: str,
-        default_channels: List[str],
-        variables: List[str]
+    
     ) -> Dict[str, Any]:
         """Create notification template"""
         database = get_database()
@@ -672,12 +631,7 @@ class NotificationService:
         }
     
     @staticmethod
-    async def send_template_notification(
-        template_id: str,
-        sender_id: str,
-        recipients: List[str],
-        variables: Dict[str, str],
-        background_tasks: BackgroundTasks = None
+    
     ) -> Dict[str, Any]:
         """Send notification using template"""
         database = get_database()
@@ -709,14 +663,10 @@ class NotificationService:
             recipients=recipients,
             category=template["category"],
             background_tasks=background_tasks
-        )
-        
         # Update template usage count
         await templates_collection.update_one(
             {"_id": template_id},
             {"$inc": {"usage_count": 1}}
-        )
-        
         return notification
     
     @staticmethod
@@ -762,14 +712,7 @@ class NotificationService:
         }
     
     @staticmethod
-    async def update_user_preferences(
-        user_id: str,
-        email_enabled: bool,
-        sms_enabled: bool,
-        push_enabled: bool,
-        categories: List[str],
-        quiet_hours_start: str,
-        quiet_hours_end: str
+    
     ) -> Dict[str, Any]:
         """Update user notification preferences"""
         database = get_database()
@@ -803,8 +746,6 @@ class NotificationService:
                 }
             },
             upsert=True
-        )
-        
         return {
             "workspace_id": str(workspace["_id"]),
             "preferences": preferences_data,

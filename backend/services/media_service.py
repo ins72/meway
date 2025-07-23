@@ -14,12 +14,7 @@ from core.database import get_database
 
 class MediaService:
     @staticmethod
-    async def get_media_library(
-        user_id: str,
-        folder: str = "",
-        file_type: str = "all",
-        search: str = "",
-        limit: int = 50
+    
     ) -> Dict[str, Any]:
         """Get media library with files and folders"""
         database = get_database()
@@ -125,13 +120,7 @@ class MediaService:
         }
     
     @staticmethod
-    async def upload_file(
-        user_id: str,
-        file,
-        file_content: bytes,
-        folder: str = "",
-        description: str = "",
-        tags: List[str] = None
+    
     ) -> Dict[str, Any]:
         """Upload file to media library"""
         database = get_database()
@@ -239,10 +228,7 @@ class MediaService:
         }
     
     @staticmethod
-    async def update_file_metadata(
-        file_id: str,
-        user_id: str,
-        updates: Dict[str, Any]
+    
     ) -> Dict[str, Any]:
         """Update file metadata"""
         database = get_database()
@@ -261,8 +247,6 @@ class MediaService:
         result = await files_collection.update_one(
             {"_id": file_id, "workspace_id": str(workspace["_id"])},
             {"$set": updates}
-        )
-        
         if result.matched_count == 0:
             raise Exception("File not found")
         
@@ -291,10 +275,7 @@ class MediaService:
         return result.deleted_count > 0
     
     @staticmethod
-    async def create_folder(
-        user_id: str,
-        name: str,
-        parent_folder: str = ""
+    
     ) -> Dict[str, Any]:
         """Create new folder"""
         database = get_database()
@@ -435,12 +416,7 @@ class MediaService:
         }
     
     @staticmethod
-    async def search_media(
-        user_id: str,
-        query: str,
-        file_type: str = "all",
-        folder: str = "",
-        limit: int = 20
+    
     ) -> Dict[str, Any]:
         """Search media files"""
         database = get_database()
@@ -520,10 +496,7 @@ class MediaService:
         }
     
     @staticmethod
-    async def bulk_move_files(
-        file_ids: List[str],
-        target_folder: str,
-        user_id: str
+    
     ) -> Dict[str, Any]:
         """Move multiple files to folder"""
         database = get_database()
@@ -543,8 +516,6 @@ class MediaService:
                 "workspace_id": str(workspace["_id"])
             },
             {"$set": {"folder": target_folder, "updated_at": datetime.utcnow()}}
-        )
-        
         return {
             "moved_count": result.modified_count,
             "requested_count": len(file_ids)
@@ -607,7 +578,6 @@ class MediaService:
         
         return f"{size_bytes:.1f} {size_names[i]}"
 # Global service instance
-media_service = MediaService()
 
     async def get_item(self, user_id: str, item_id: str):
         """Get specific item"""
@@ -630,8 +600,6 @@ media_service = MediaService()
             result = await self.db["media"].update_one(
                 {"id": media_id},
                 {"$set": update_data}
-            )
-            
             if result.matched_count == 0:
                 return {
                     "success": False,

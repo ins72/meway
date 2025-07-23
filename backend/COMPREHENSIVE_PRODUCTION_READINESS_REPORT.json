@@ -1,0 +1,770 @@
+{
+  "timestamp": "2025-07-23T13:32:00.784063",
+  "syntax_errors_fixed": [
+    {
+      "file": "ai_content_service.py",
+      "backup_created": "/app/backend/services/ai_content_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "email_marketing_service.py",
+      "backup_created": "/app/backend/services/email_marketing_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "automation_service.py",
+      "backup_created": "/app/backend/services/automation_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "customer_experience_service.py",
+      "backup_created": "/app/backend/services/customer_experience_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "i18n_service.py",
+      "backup_created": "/app/backend/services/i18n_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "media_service.py",
+      "backup_created": "/app/backend/services/media_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "monitoring_service.py",
+      "backup_created": "/app/backend/services/monitoring_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "notification_service.py",
+      "backup_created": "/app/backend/services/notification_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "rate_limiting_service.py",
+      "backup_created": "/app/backend/services/rate_limiting_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "social_email_integration_service.py",
+      "backup_created": "/app/backend/services/social_email_integration_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    },
+    {
+      "file": "support_service.py",
+      "backup_created": "/app/backend/services/support_service.py.backup",
+      "fixes_applied": "syntax_cleanup"
+    }
+  ],
+  "crud_operations_added": [
+    {
+      "service": "user_service",
+      "operations_added": [
+        "DELETE"
+      ]
+    }
+  ],
+  "mock_data_fixed": [
+    {
+      "file": "services/webhook_service.py",
+      "fixes_applied": "mock_data_cleanup"
+    },
+    {
+      "file": "services/social_email_service.py",
+      "fixes_applied": "mock_data_cleanup"
+    },
+    {
+      "file": "services/ai_content_service.py",
+      "fixes_applied": "mock_data_cleanup"
+    }
+  ],
+  "duplicate_files_handled": [],
+  "service_api_pairs_created": [],
+  "endpoint_tests": [
+    {
+      "endpoint": "POST /api/blog/posts",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:58.939113\"}"
+    },
+    {
+      "endpoint": "GET /api/blog/posts",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:58.957464\"}"
+    },
+    {
+      "endpoint": "GET /api/blog/posts/{post_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:58.976437\"}"
+    },
+    {
+      "endpoint": "PUT /api/blog/posts/{post_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:58.991934\"}"
+    },
+    {
+      "endpoint": "DELETE /api/blog/posts/{post_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.010714\"}"
+    },
+    {
+      "endpoint": "GET /api/blog/posts/slug/{slug}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.033490\"}"
+    },
+    {
+      "endpoint": "GET /api/blog/analytics",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.053642\"}"
+    },
+    {
+      "endpoint": "GET /api/content/api/content/",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.074795\"}"
+    },
+    {
+      "endpoint": "POST /api/content/api/content/",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.097275\"}"
+    },
+    {
+      "endpoint": "GET /api/content/api/content/{content_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.115050\"}"
+    },
+    {
+      "endpoint": "PUT /api/content/api/content/{content_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.133823\"}"
+    },
+    {
+      "endpoint": "DELETE /api/content/api/content/{content_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.154019\"}"
+    },
+    {
+      "endpoint": "GET /api/content/api/content/categories/list",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.172796\"}"
+    },
+    {
+      "endpoint": "POST /api/content/api/content/search",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.191064\"}"
+    },
+    {
+      "endpoint": "GET /api/content/api/content/analytics/performance",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.209276\"}"
+    },
+    {
+      "endpoint": "POST /api/notifications/api/notifications/send",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.232671\"}"
+    },
+    {
+      "endpoint": "POST /api/notifications/api/notifications/send-bulk",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.253540\"}"
+    },
+    {
+      "endpoint": "GET /api/notifications/api/notifications/history",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.270738\"}"
+    },
+    {
+      "endpoint": "PUT /api/notifications/api/notifications/mark-read/{notification_id}",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.293810\"}"
+    },
+    {
+      "endpoint": "PUT /api/notifications/api/notifications/mark-all-read",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.312696\"}"
+    },
+    {
+      "endpoint": "GET /api/notifications/api/notifications/stats",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.329138\"}"
+    },
+    {
+      "endpoint": "GET /api/notifications/api/notifications/connection-status",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.345366\"}"
+    },
+    {
+      "endpoint": "GET /api/marketing/campaigns",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.361051\"}"
+    },
+    {
+      "endpoint": "GET /api/marketing/contacts",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.376730\"}"
+    },
+    {
+      "endpoint": "GET /api/marketing/analytics",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.395432\"}"
+    },
+    {
+      "endpoint": "GET /api/workspaces",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.414818\"}"
+    },
+    {
+      "endpoint": "GET /api/integration/available",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.433004\"}"
+    },
+    {
+      "endpoint": "GET /api/integration/connected",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.450019\"}"
+    },
+    {
+      "endpoint": "GET /api/integration/status",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.468667\"}"
+    },
+    {
+      "endpoint": "GET /api/automation/status",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.487646\"}"
+    },
+    {
+      "endpoint": "GET /api/team-management/dashboard",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.503905\"}"
+    },
+    {
+      "endpoint": "GET /api/team-management/members",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.519740\"}"
+    },
+    {
+      "endpoint": "GET /api/team-management/activity",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.537187\"}"
+    },
+    {
+      "endpoint": "POST /api/team-management/teams",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.555012\"}"
+    },
+    {
+      "endpoint": "POST /api/instagram/search",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.573605\"}"
+    },
+    {
+      "endpoint": "GET /api/instagram/profiles",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.592372\"}"
+    },
+    {
+      "endpoint": "POST /api/pwa/manifest/generate",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.608548\"}"
+    },
+    {
+      "endpoint": "GET /api/pwa/manifest/current",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.625744\"}"
+    },
+    {
+      "endpoint": "GET /api/workflows/list",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.645168\"}"
+    },
+    {
+      "endpoint": "POST /api/workflows/create",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.662041\"}"
+    },
+    {
+      "endpoint": "POST /api/escrow/transactions/milestone",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.679683\"}"
+    },
+    {
+      "endpoint": "GET /api/escrow/transactions/list",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.700101\"}"
+    },
+    {
+      "endpoint": "POST /api/posts/schedule",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.719149\"}"
+    },
+    {
+      "endpoint": "GET /api/posts/scheduled",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.736239\"}"
+    },
+    {
+      "endpoint": "POST /api/device/register",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.752818\"}"
+    },
+    {
+      "endpoint": "POST /api/device/offline/sync",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.768939\"}"
+    },
+    {
+      "endpoint": "POST /api/disputes/initiate",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.785124\"}"
+    },
+    {
+      "endpoint": "GET /api/disputes/list",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.802231\"}"
+    },
+    {
+      "endpoint": "GET /api/template-marketplace/browse",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.820190\"}"
+    },
+    {
+      "endpoint": "GET /api/template-marketplace/creator-earnings",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.835865\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/send-email",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.853812\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/campaigns",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.872471\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/campaigns/{campaign_id}/statistics",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.889263\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/automation-sequence",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.909396\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/subscribers",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.927013\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/email-logs",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.947325\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/bulk-email",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.965652\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/analytics/overview",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:32:59.986414\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/api/email-automation/templates",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.005681\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/api/email-automation/templates",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.023560\"}"
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.043016\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.061056\"}"
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/api/enterprise-security/threat-detection/setup",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.078735\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/threat-detection/alerts",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.096148\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/audit/log",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.114617\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/audit/logs",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.132690\"}"
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/api/enterprise-security/vulnerability-assessment",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.155547\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/vulnerability-assessments",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.173029\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/compliance/report",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:00.191387\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/compliance/reports",
+      "success": false,
+      "status_code": 0,
+      "error": "HTTPSConnectionPool(host='d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com', port=443): Max retries exceeded with url: /api/enterprise-security/api/enterprise-security/compliance/reports"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/api/enterprise-security/security/dashboard",
+      "success": false,
+      "status_code": 0,
+      "error": "HTTPSConnectionPool(host='d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com', port=443): Max retries exceeded with url: /api/enterprise-security/api/enterprise-security/security/dashboard"
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 0,
+      "error": "HTTPSConnectionPool(host='d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com', port=443): Max retries exceeded with url: /api/enterprise-security/compliance/frameworks (Caused by ConnectTi"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/compliance/frameworks",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:30.329073\"}"
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/threat-detection/setup",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:37.538924\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/threat-detection/alerts",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:37.585365\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/audit/log",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:37.607721\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/audit/logs",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:37.632625\"}"
+    },
+    {
+      "endpoint": "POST /api/enterprise-security/vulnerability-assessment",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:37.661668\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/vulnerability-assessments",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.701313\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/compliance/report",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.726321\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/compliance/reports",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.744415\"}"
+    },
+    {
+      "endpoint": "GET /api/enterprise-security/security/dashboard",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.761352\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/send-email",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.778809\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/campaigns",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.797597\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/campaigns/{campaign_id}/statistics",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.817020\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/automation-sequence",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.838147\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/subscribers",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.854111\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/email-logs",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.876145\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/bulk-email",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.895176\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/analytics/overview",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.911638\"}"
+    },
+    {
+      "endpoint": "POST /api/email-automation/templates",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.930937\"}"
+    },
+    {
+      "endpoint": "GET /api/email-automation/templates",
+      "success": false,
+      "status_code": 403,
+      "response_size": 107,
+      "error": "{\"success\":false,\"error\":\"HTTP 403\",\"message\":\"Not authenticated\",\"timestamp\":\"2025-07-23T13:33:38.949899\"}"
+    },
+    {
+      "endpoint": "GET /",
+      "success": true,
+      "status_code": 200,
+      "response_size": 1140,
+      "error": null
+    },
+    {
+      "endpoint": "GET /health",
+      "success": true,
+      "status_code": 200,
+      "response_size": 508,
+      "error": null
+    },
+    {
+      "endpoint": "GET /api/health",
+      "success": true,
+      "status_code": 200,
+      "response_size": 103,
+      "error": null
+    },
+    {
+      "endpoint": "GET /healthz",
+      "success": true,
+      "status_code": 200,
+      "response_size": 15,
+      "error": null
+    },
+    {
+      "endpoint": "GET /ready",
+      "success": true,
+      "status_code": 200,
+      "response_size": 41,
+      "error": null
+    },
+    {
+      "endpoint": "GET /metrics",
+      "success": true,
+      "status_code": 200,
+      "response_size": 1571,
+      "error": null
+    }
+  ],
+  "total_fixes_applied": 15
+}

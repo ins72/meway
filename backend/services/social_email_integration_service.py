@@ -76,8 +76,6 @@ class SocialEmailIntegrationService:
             result = await self.db["social_email_integration"].update_one(
                 {"id": social_email_integration_id},
                 {"$set": update_data}
-            )
-            
             if result.matched_count == 0:
                 return {
                     "success": False,
@@ -164,8 +162,6 @@ class SocialEmailIntegrationService:
             result = await self.collection.update_one(
                 {"integration_id": integration_id},
                 {"$set": update_data}
-            )
-            
             if result.modified_count > 0:
                 return {"status": "updated", "integration_id": integration_id}
             return {"error": "Integration not found or no changes made"}
@@ -179,8 +175,6 @@ class SocialEmailIntegrationService:
             result = await self.collection.update_one(
                 {"integration_id": integration_id},
                 {"$set": {"is_active": False, "deleted_at": datetime.utcnow()}}
-            )
-            
             if result.modified_count > 0:
                 return {"status": "deleted", "integration_id": integration_id}
             return {"error": "Integration not found"}
@@ -309,7 +303,6 @@ class SocialEmailIntegrationService:
             return []
 
 # Global service instance
-social_email_integration_service = SocialEmailIntegrationService()
 
     async def get_item(self, user_id: str, item_id: str):
         """Get specific item"""

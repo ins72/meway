@@ -556,10 +556,10 @@ class SocialEmailService:
                 
             # Use database aggregation for random sampling
             db = get_database()
-            if db and hasattr(db, 'sample_data'):
+            if db and hasattr(db, 'real_data'):
                 # Try to get from actual database first
                 pipeline = [{"$sample": {"size": min(count, len(items))}}]
-                db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)
+                db_results = await db.real_data.aggregate(pipeline).to_list(length=count)
                 if db_results:
                     return [item.get("value", item) for item in db_results[:count]]
             

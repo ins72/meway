@@ -304,3 +304,25 @@ def get_user_service() -> UserService:
 
 # Global service instance
 user_service = UserService()
+
+    async def delete_user(self, user_id: str) -> Dict[str, Any]:
+        """Delete user with real data persistence"""
+        try:
+            result = await self.db["user"].delete_one({"id": user_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"User not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"User deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete user: {str(e)}"
+            }

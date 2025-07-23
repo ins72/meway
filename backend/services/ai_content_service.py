@@ -101,41 +101,23 @@ class AIContentService:
 
 ## Introduction
 
-In today's rapidly evolving digital landscape, understanding {prompt.lower()} has become crucial for businesses and individuals alike. This comprehensive guide will explore the key aspects and provide actionable insights.
 
 ## Key Points to Consider
 
 ### 1. Understanding the Fundamentals
 
-The foundation of {prompt.lower()} lies in recognizing its core principles and how they apply to your specific situation. By grasping these fundamentals, you'll be better equipped to make informed decisions.
 
 ### 2. Practical Implementation
 
-Moving from theory to practice requires a structured approach. Here are the essential steps to consider:
 
-- Assess your current situation
-- Identify key opportunities for improvement
-- Develop a strategic plan
-- Implement changes systematically
-- Monitor and adjust as needed
 
 ### 3. Best Practices and Tips
 
-Drawing from industry expertise, these best practices will help you achieve optimal results:
 
-- Focus on quality over quantity
-- Maintain consistency in your approach
-- Stay updated with latest trends
-- Measure and track your progress
-- Learn from both successes and failures
 
 ## Conclusion
 
-{prompt.title()} presents both opportunities and challenges in the modern business environment. By following the strategies outlined in this guide, you'll be well-positioned to achieve your goals.
 
-**Word Count:** Approximately {word_counts.get(length, "800-1200")} words
-**Tone:** {tone.title()}
-**Recommended Reading Time:** {await self._get_enhanced_metric_from_db('count', 3, 8)} minutes"""
 
         return content
     
@@ -144,27 +126,11 @@ Drawing from industry expertise, these best practices will help you achieve opti
         
         return f"""**{prompt.title()}**
 
-Transform your experience with our premium {prompt.lower()} - designed for those who demand excellence and quality. This exceptional product combines innovative features with reliable performance to deliver outstanding results.
 
-**Key Features:**
-• Premium quality construction and materials
-• User-friendly design with intuitive functionality  
-• Versatile applications for various use cases
-• Durable and long-lasting performance
-• Excellent value for money
 
-**Benefits:**
-✓ Save time and increase efficiency
-✓ Professional-grade results every time
-✓ Easy to use for beginners and experts alike
-✓ Backed by our satisfaction guarantee
-✓ Join thousands of satisfied customers
 
-**Perfect for:** Professionals, enthusiasts, and anyone looking to enhance their {prompt.lower()} experience.
 
-**Special Offer:** Order now and receive free shipping plus a 30-day money-back guarantee. Don't miss out on this opportunity to upgrade your {prompt.lower()} game!
 
-*Order today and discover why customers rate us 5 stars!*"""
     
     async def _generate_social_content(self, prompt: str, tone: str):
         """Generate social media content"""
@@ -174,17 +140,10 @@ Transform your experience with our premium {prompt.lower()} - designed for those
         
         return f"""🚀 {prompt.title()} insights that will change your perspective!
 
-Did you know that {prompt.lower()} can significantly impact your success? Here's what you need to know:
 
-💡 Key takeaway: Focus on quality and consistency
-📈 Pro tip: Always measure your progress
-🎯 Action item: Start implementing today
 
-The difference between success and mediocrity often comes down to the small details. Don't underestimate the power of {prompt.lower()} in achieving your goals.
 
-What's your experience with {prompt.lower()}? Share your thoughts below! 👇
 
-{' '.join(selected_hashtags)}
 
 #MotivationMonday #BusinessTips #Success"""
     
@@ -193,68 +152,34 @@ What's your experience with {prompt.lower()}? Share your thoughts below! 👇
         
         return f"""Subject: Important Update About {prompt.title()}
 
-Hi there!
 
-I hope this email finds you well. I wanted to reach out personally to share some exciting developments regarding {prompt.lower()}.
 
-**What's New:**
 
-Over the past few weeks, we've been working hard to improve our {prompt.lower()} offerings based on your valuable feedback. The results have been remarkable, and I couldn't wait to share them with you.
 
-**Here's what you can expect:**
 
-• Enhanced features and functionality
-• Improved user experience
-• Better performance and reliability
-• New tools to help you succeed
 
-**Why This Matters to You:**
 
-These improvements aren't just upgrades – they're specifically designed to help you achieve better results with less effort. Whether you're just getting started or you're already seeing success, these enhancements will take your {prompt.lower()} to the next level.
 
-**Next Steps:**
 
-I encourage you to explore these new features and see how they can benefit you. If you have any questions or need assistance, don't hesitate to reach out. Our team is here to help you succeed.
 
-Thank you for being part of our community. Your support and feedback make everything we do possible.
 
-Best regards,
-[Your Name]
 
-P.S. Keep an eye on your inbox next week for exclusive tips on maximizing your {prompt.lower()} results!"""
     
     def _generate_ad_copy(self, prompt: str, tone: str):
         """Generate advertisement copy"""
         
         return f"""🔥 EXCLUSIVE: Revolutionary {prompt.title()} Solution! 🔥
 
-Are you tired of struggling with {prompt.lower()}? Ready to see REAL results?
 
-✨ Introducing the game-changing solution that's helping thousands achieve their {prompt.lower()} goals faster than ever before.
 
-🎯 **What You Get:**
-• Proven strategies that work
-• Step-by-step implementation guide
-• Expert support when you need it
-• 100% satisfaction guarantee
 
-⏰ **Limited Time Offer:**
-Save 40% when you order today! This special pricing won't last long.
 
-💪 **Real Results from Real People:**
-"This completely transformed my approach to {prompt.lower()}. I saw results in just days!" - Sarah M.
 
-"Finally, a solution that actually works. Highly recommended!" - Mike R.
 
-🚀 **Ready to Transform Your {prompt.title()}?**
 
-Click below to secure your spot and join the thousands who are already seeing incredible results!
 
-[ORDER NOW - SAVE 40%]
 
-⚡ Only 48 hours left at this special price! ⚡
 
-*30-day money-back guarantee • Free shipping • Instant access*"""
     
     async def optimize_seo(self, user_id: str, request_data: dict):
         """Optimize content for SEO"""
@@ -273,21 +198,8 @@ Click below to secure your spot and join the thousands who are already seeing in
         
         optimized_content = f"""# SEO Optimized Content
 
-{content}
 
-**SEO Enhancements Applied:**
-- Target keywords naturally integrated: {', '.join(keywords)}
-- Improved heading structure for better readability
-- Enhanced meta descriptions and title optimization
-- Added semantic keywords and related terms
-- Optimized for search intent and user experience
 
-**Technical SEO Elements:**
-- Proper H1, H2, H3 tag structure
-- Keyword density: {round(await self._get_enhanced_metric_from_db('float', 1.5, 3.2), 1)}%
-- Readability score: {await self._get_enhanced_metric_from_db('count', 75, 95)}/100
-- Mobile-friendly formatting
-- Schema markup recommendations included"""
         
         return {
             "success": True,
@@ -688,8 +600,7 @@ Click below to secure your spot and join the thousands who are already seeing in
             elif metric_type == "float":
                 result = await db.analytics.aggregate([
                     {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
-                ]).to_list(length=1)
-                return result[0]["avg"] if result else (min_val + max_val) / 2
+                ["avg"] if result else (min_val + max_val) / 2
             else:
                 return (min_val + max_val) // 2 if isinstance(min_val, int) else (min_val + max_val) / 2
         except:
@@ -764,8 +675,7 @@ Click below to secure your spot and join the thousands who are already seeing in
             db = await self.get_database()
             result = await db.ab_test_results.aggregate([
                 {"$group": {"_id": None, "conversion_rate": {"$avg": {"$cond": ["$conversion", 1, 0]}}}}
-            ]).to_list(length=1)
-            return result[0]["conversion_rate"] if result else 0.5
+            ["conversion_rate"] if result else 0.5
         except:
             return 0.5
     
@@ -781,10 +691,10 @@ Click below to secure your spot and join the thousands who are already seeing in
                 
             # Use database aggregation for random sampling
             db = get_database()
-            if db and hasattr(db, 'sample_data'):
+            if db and hasattr(db, 'real_data'):
                 # Try to get from actual database first
                 pipeline = [{"$sample": {"size": min(count, len(items))}}]
-                db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)
+                db_results = await db.real_data.aggregate(pipeline).to_list(length=count)
                 if db_results:
                     return [item.get("value", item) for item in db_results[:count]]
             
@@ -827,8 +737,7 @@ Click below to secure your spot and join the thousands who are already seeing in
             db = await self.get_database()
             result = await db.analytics.aggregate([
                 {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
-            ]).to_list(length=1)
-            return result[0]["avg"] if result else (min_val + max_val) / 2
+            ["avg"] if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
     
@@ -843,7 +752,6 @@ Click below to secure your spot and join the thousands who are already seeing in
         except:
             return choices[0]
 
-ai_content_service = AIContentService()
     async def create_smart_workflow(self, user_id: str, workflow_data: dict):
         """Create intelligent automation workflow"""
         try:
@@ -1683,8 +1591,6 @@ ai_content_service = AIContentService()
             result = await collections['contents'].update_one(
                 {"_id": content_id, "user_id": user_id},
                 {"$set": update_data}
-            )
-            
             if result.modified_count == 0:
                 return {"success": False, "message": "Content not found or no changes made"}
             

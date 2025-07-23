@@ -327,11 +327,7 @@ class RateLimitingService:
         }
     
     @staticmethod
-    async def check_rate_limit(
-        user_id: str,
-        endpoint: str,
-        action: str = "api_call",
-        ip_address: str = "unknown"
+    
     ) -> Dict[str, Any]:
         """Check if request is within rate limits"""
         database = get_database()
@@ -397,13 +393,7 @@ class RateLimitingService:
         }
     
     @staticmethod
-    async def record_api_usage(
-        user_id: str,
-        endpoint: str,
-        method: str,
-        response_time: float,
-        status_code: int,
-        ip_address: str = "unknown"
+    
     ) -> Dict[str, Any]:
         """Record API usage for analytics"""
         database = get_database()
@@ -806,7 +796,6 @@ class RateLimitingService:
             return ["You're on our highest tier!"]
 
 # Global service instance
-rate_limiting_service = RateLimitingService()
 
     async def create_item(self, user_id: str, item_data: dict):
         """Create new item"""
@@ -872,8 +861,6 @@ rate_limiting_service = RateLimitingService()
             result = await collections['items'].update_one(
                 {"_id": item_id, "user_id": user_id},
                 {"$set": update_data}
-            )
-            
             if result.modified_count == 0:
                 return {"success": False, "message": "Item not found or no changes made"}
             

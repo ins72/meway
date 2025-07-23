@@ -414,12 +414,7 @@ class I18nService:
         }
     
     @staticmethod
-    async def detect_user_language(
-        user_agent: str = "",
-        accept_language: str = "",
-        ip_address: str = "",
-        timezone: str = "",
-        user_preference: Optional[str] = None
+    
     ) -> Dict[str, Any]:
         """Detect user's preferred language"""
         detected_languages = []
@@ -527,8 +522,6 @@ class I18nService:
                 "language": language,
                 "language_updated_at": datetime.utcnow()
             }}
-        )
-        
         if result.matched_count == 0:
             raise Exception("User not found")
         
@@ -552,11 +545,7 @@ class I18nService:
         return "en"  # Default fallback
     
     @staticmethod
-    async def translate_text(
-        text: str,
-        source_language: str = "auto",
-        target_language: str = "en",
-        context: str = "general"
+    
     ) -> Dict[str, Any]:
         """Translate text (mock implementation)"""
         
@@ -710,12 +699,7 @@ class I18nService:
         }
     
     @staticmethod
-    async def set_workspace_language(
-        user_id: str,
-        language: str,
-        timezone: str = "UTC",
-        currency: str = "USD",
-        date_format: str = "YYYY-MM-DD"
+    
     ) -> Dict[str, Any]:
         """Set workspace localization settings"""
         database = get_database()
@@ -733,8 +717,6 @@ class I18nService:
                     "updated_at": datetime.utcnow()
                 }
             }}
-        )
-        
         if result.matched_count == 0:
             raise Exception("Workspace not found")
         
@@ -775,7 +757,6 @@ class I18nService:
             "language_info": I18nService.SUPPORTED_LANGUAGES.get(
                 localization["language"], 
                 I18nService.SUPPORTED_LANGUAGES["en"]
-            )
         }
     
     @staticmethod
@@ -790,7 +771,6 @@ class I18nService:
         return currency_symbols.get(currency_code, currency_code)
 
 # Global service instance
-i18n_service = I18nService()
 
     async def create_item(self, user_id: str, item_data: dict):
         """Create new item"""
@@ -856,8 +836,6 @@ i18n_service = I18nService()
             result = await collections['items'].update_one(
                 {"_id": item_id, "user_id": user_id},
                 {"$set": update_data}
-            )
-            
             if result.modified_count == 0:
                 return {"success": False, "message": "Item not found or no changes made"}
             

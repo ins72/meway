@@ -444,14 +444,12 @@ class MonitoringService:
             db = await self.get_database()
             result = await db.performance_logs.aggregate([
                 {"$group": {"_id": None, "avg": {"$avg": "$response_time"}}}
-            ]).to_list(length=1)
-            return result[0]["avg"] / 100.0 if result else (min_val + max_val) / 2
+            ["avg"] / 100.0 if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
 
 
 # Global service instance
-monitoring_service = MonitoringService()
 
     async def create_item(self, user_id: str, item_data: dict):
         """Create new item"""
@@ -517,8 +515,6 @@ monitoring_service = MonitoringService()
             result = await collections['items'].update_one(
                 {"_id": item_id, "user_id": user_id},
                 {"$set": update_data}
-            )
-            
             if result.modified_count == 0:
                 return {"success": False, "message": "Item not found or no changes made"}
             

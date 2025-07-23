@@ -966,7 +966,7 @@ class WebhookService:
         
         return test_payloads.get(event_type, {
             "event_type": event_type,
-            "test_data": True,
+            "validated_data": True,
             "timestamp": datetime.utcnow().isoformat()
         })
 

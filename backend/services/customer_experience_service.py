@@ -637,8 +637,7 @@ class CustomerExperienceService:
                 # Get real social media impressions
                 result = await db.social_analytics.aggregate([
                     {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
-                ]).to_list(length=1)
-                return result[0]["total"] if result else min_val
+                ["total"] if result else min_val
                 
             elif metric_type == 'count':
                 # Get real counts from relevant collections
@@ -662,8 +661,7 @@ class CustomerExperienceService:
             db = await self.get_database()
             result = await db.analytics.aggregate([
                 {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
-            ]).to_list(length=1)
-            return result[0]["avg"] if result else (min_val + max_val) / 2
+            ["avg"] if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
     
@@ -745,8 +743,7 @@ class CustomerExperienceService:
             db = await self.get_database()
             result = await db.ab_test_results.aggregate([
                 {"$group": {"_id": None, "conversion_rate": {"$avg": {"$cond": ["$conversion", 1, 0]}}}}
-            ]).to_list(length=1)
-            return result[0]["conversion_rate"] if result else 0.5
+            ["conversion_rate"] if result else 0.5
         except:
             return 0.5
     
@@ -783,7 +780,6 @@ class CustomerExperienceService:
             return items
 
 # Create service instance
-customer_experience_service = CustomerExperienceService()
 
     async def get_item(self, user_id: str, item_id: str):
         """Get specific item"""
@@ -822,8 +818,6 @@ customer_experience_service = CustomerExperienceService()
             result = await collections['items'].update_one(
                 {"_id": item_id, "user_id": user_id},
                 {"$set": update_data}
-            )
-            
             if result.modified_count == 0:
                 return {"success": False, "message": "Item not found or no changes made"}
             
