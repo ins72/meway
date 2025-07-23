@@ -37,7 +37,7 @@ class AdvancedTemplateMarketplaceService:
     def _get_collections(self):
         """Get database collections"""
         db = get_database()
-        if not db:
+        if db is None:
             raise RuntimeError("Database connection not available")
         
         return {
