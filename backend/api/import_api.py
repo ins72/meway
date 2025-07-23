@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
 from typing import Dict, Any, List, Optional
 from core.auth import get_current_user, get_current_admin
 from services.import_service import get_import_service
+from services.import_api_service import get_import_api_service
 import logging
 
 logger = logging.getLogger(__name__)
