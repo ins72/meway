@@ -510,7 +510,9 @@ class MediaService:
                 "_id": {"$in": file_ids},
                 "workspace_id": str(workspace["_id"])
             },
-            {"$set": {"folder": target_folder, "updated_at": datetime.utcnow()}}
+            {"$set": {"folder": folder_id, "updated_at": datetime.utcnow()}}
+        )
+        
         return {
             "moved_count": result.modified_count,
             "requested_count": len(file_ids)
