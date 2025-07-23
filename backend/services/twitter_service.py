@@ -19,9 +19,45 @@ class TwitterService:
     def __init__(self):
         self.collection_name = "twitter_posts"
         self.service_name = "twitter"
-        self.api_key = "57zInvI1CUTkc3i4aGN87kn1k"
-        self.api_secret = "GJkQNYE7VoZjv8dovZXgvGGoaopJIYzdzzNBXgPVGqkRfTXWtk"
+        self.api_key = os.environ.get('TWITTER_API_KEY', '57zInvI1CUTkc3i4aGN87kn1k')
+        self.api_secret = os.environ.get('TWITTER_API_SECRET', 'GJkQNYE7VoZjv8dovZXgvGGoaopJIYzdzzNBXgPVGqkRfTXWtk')
         self.base_url = "https://api.twitter.com/2"
+        self.bearer_token = None
+        self.api_available = bool(self.api_key and self.api_secret)
+        
+        # Initialize bearer token for API access
+        if self.api_available:
+            self._get_bearer_token()
+    
+    def _get_bearer_token(self):
+        """Get Bearer token for Twitter API v2"""
+        try:
+            import base64
+            # Create credentials for OAuth 2.0
+            credentials = f"{self.api_key}:{self.api_secret}"
+            encoded_credentials = base64.b64encode(credentials.encode()).decode()
+            
+            headers = {
+                'Authorization': f'Basic {encoded_credentials}',
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            }
+            
+            data = {'grant_type': 'client_credentials'}
+            
+            response = requests.post(
+                'https://api.twitter.com/oauth2/token',
+                headers=headers,
+                data=data
+            )
+            
+            if response.status_code == 200:
+                self.bearer_token = response.json().get('access_token')
+                logger.info("Twitter Bearer token obtained successfully")
+            else:
+                logger.error(f"Failed to get Twitter Bearer token: {response.text}")
+                
+        except Exception as e:
+            logger.error(f"Error getting Twitter Bearer token: {e}")
 
     def _get_collection(self):
         """Get collection for database operations"""
