@@ -77,7 +77,7 @@ class BackgroundSyncRequest(BaseModel):
     type: str = Field(..., description="Type of sync operation")
     data: Dict[str, Any] = Field(..., description="Data to sync")
     endpoint: str = Field(..., description="API endpoint for sync")
-    method: str = Field("POST", regex="^(GET|POST|PUT|DELETE|PATCH)$")
+    method: str = Field("POST", pattern="^(GET|POST|PUT|DELETE|PATCH)$")
     priority: str = Field("normal", pattern="^(low|normal|high)$")
     max_attempts: int = Field(3, ge=1, le=10)
 
