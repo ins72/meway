@@ -13,6 +13,7 @@ from core.auth import get_current_active_user as get_current_user
 from services.content_service import get_content_service
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 # Initialize service instance
 content_service = get_content_service()
