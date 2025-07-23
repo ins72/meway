@@ -410,7 +410,6 @@ async def get_integration_status(current_admin: dict = Depends(get_current_admin
     """Get detailed status of all integrations"""
     try:
         from core.admin_config_manager import admin_config_manager
-from bson import ObjectId
         
         status = await admin_config_manager.get_integration_status()
         
