@@ -21,7 +21,7 @@ class AdvancedComprehensivePlatformFixer:
         self.api_path = self.backend_path / "api"
         self.services_path = self.backend_path / "services"
         
-        self.backend_url = "https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com"
+        self.backend_url = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
         self.test_email = "tmonnens@outlook.com"
         self.test_password = "Voetballen5"
         self.auth_token = None

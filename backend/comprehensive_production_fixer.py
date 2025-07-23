@@ -260,7 +260,7 @@ class ComprehensiveProductionFixer:
         import requests
         
         try:
-            backend_url = "https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com"
+            backend_url = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
             response = requests.get(f"{backend_url}/openapi.json", timeout=10)
             
             if response.status_code == 200:
@@ -293,7 +293,7 @@ class ComprehensiveProductionFixer:
         import requests
         
         try:
-            backend_url = "https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com"
+            backend_url = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
             
             login_data = {
                 "username": "tmonnens@outlook.com",
@@ -324,7 +324,7 @@ class ComprehensiveProductionFixer:
         """Test a single endpoint"""
         import requests
         
-        backend_url = "https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com"
+        backend_url = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
         path = endpoint_info["path"]
         method = endpoint_info["method"]
         

@@ -11,7 +11,7 @@ from datetime import datetime
 
 class AuthenticatedEndpointTest:
     def __init__(self):
-        self.base_url = "https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com"
+        self.base_url = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
         self.session = requests.Session()
         self.auth_token = None
         

@@ -11,7 +11,7 @@ import time
 from typing import Dict, Any, Optional
 
 # Backend URL from environment
-BACKEND_URL = "https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com"
+BACKEND_URL = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
@@ -314,7 +314,7 @@ class LinkInBioTester:
                 click_data = {
                     "visitor_ip": "203.0.113.1",
                     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-                    "referrer": f"https://d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com/bio/comprehensive_test"
+                    "referrer": f"https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/bio/comprehensive_test"
                 }
                 self.test_endpoint(f"/link-in-bio/links/{created_link_id}/click", "POST", click_data, "Link in Bio - TRACK Link Click")
             
