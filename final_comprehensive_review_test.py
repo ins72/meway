@@ -222,14 +222,13 @@ class MewayzV2ReviewTester:
         
         # Test CREATE operation
         referral_data = {
-            "referral_code": f"REVIEW_TEST_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
-            "referred_email": "test.referral@example.com",
+            "program_name": f"Review Test Program {datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
             "commission_rate": 0.15,
             "status": "active"
         }
         
         success, response, size = await self.make_request(
-            "POST", "/api/referral/referrals", 
+            "POST", "/api/referral-system/", 
             data=referral_data
         )
         
@@ -244,7 +243,7 @@ class MewayzV2ReviewTester:
             
             # Test READ operation
             success, read_response, read_size = await self.make_request(
-                "GET", "/api/referral/referrals"
+                "GET", "/api/referral-system/"
             )
             
             if success:
