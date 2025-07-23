@@ -148,6 +148,28 @@ async def register(register_data: RegisterRequest):
     except Exception as e:
         logger.error(f"Registration error: {e}")
         raise HTTPException(status_code=500, detail="Registration failed")
+@router.get("/me")
+async def get_current_user_profile(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get current user profile"""
+    try:
+        return {
+            "success": True,
+            "user": {
+                "id": str(current_user.get("_id", "")),
+                "email": current_user.get("email", ""),
+                "full_name": current_user.get("full_name", ""),
+                "is_active": current_user.get("is_active", True),
+                "is_admin": current_user.get("is_admin", False),
+                "role": current_user.get("role", "user"),
+                "created_at": current_user.get("created_at", ""),
+                "updated_at": current_user.get("updated_at", "")
+            }
+        }
+    except Exception as e:
+        logger.error(f"Get user profile error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/")
 async def create_auth(

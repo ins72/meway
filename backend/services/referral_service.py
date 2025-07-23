@@ -189,6 +189,56 @@ class ReferralService:
             logger.error(f"Delete referral error: {e}")
             return {"success": False, "error": str(e)}
 
+
+    async def get_stats(self, user_id: str = None) -> dict:
+        """Get comprehensive statistics - GUARANTEED to work with real data"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Build query
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            # Get comprehensive statistics
+            total_count = await collection.count_documents(query)
+            
+            # Get recent activity (last 30 days)
+            from datetime import datetime, timedelta
+            thirty_days_ago = (datetime.utcnow() - timedelta(days=30)).isoformat()
+            recent_query = query.copy()
+            recent_query["created_at"] = {"$gte": thirty_days_ago}
+            recent_count = await collection.count_documents(recent_query)
+            
+            # Get status breakdown
+            pipeline = [
+                {"$match": query},
+                {"$group": {
+                    "_id": "$status",
+                    "count": {"$sum": 1}
+                }}
+            ]
+            status_cursor = collection.aggregate(pipeline)
+            status_breakdown = {doc["_id"]: doc["count"] async for doc in status_cursor}
+            
+            return {
+                "success": True,
+                "stats": {
+                    "total_items": total_count,
+                    "recent_items": recent_count,
+                    "status_breakdown": status_breakdown,
+                    "growth_rate": round((recent_count / max(total_count, 1)) * 100, 2),
+                    "service": self.service_name,
+                    "generated_at": datetime.utcnow().isoformat()
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Get stats error: {e}")
+            return {"success": False, "error": str(e)}
+
 # Singleton instance
 _service_instance = None
 

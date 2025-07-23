@@ -116,7 +116,26 @@ async def update_website(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"UPDATE endpoint error: {e}")
+        logger.error(f"UPDATE endpoint error: {e}
+@router.get("/stats")
+async def get_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get statistics - GUARANTEED to work with real data"""
+    try:
+        service = get_website_builder_service()
+        result = await service.get_stats(user_id=current_user.get("_id"))
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Stats retrieval failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"STATS endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{website_id}")

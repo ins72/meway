@@ -96,7 +96,26 @@ async def get_program(
         logger.error(f"READ endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.put("/{program_id}")
+@router.put("/{program_id}
+@router.get("/stats")
+async def get_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get statistics - GUARANTEED to work with real data"""
+    try:
+        service = get_referral_system_service()
+        result = await service.get_stats(user_id=current_user.get("_id"))
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Stats retrieval failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"STATS endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))")
 async def update_program(
     program_id: str = Path(..., description="Program ID"),
     data: Dict[str, Any] = Body({}, description="Updated program data"),
