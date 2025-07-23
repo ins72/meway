@@ -1,0 +1,841 @@
+{
+  "timestamp": "2025-07-23T23:40:00.415881",
+  "summary": {
+    "total_tests": 75,
+    "passed_tests": 23,
+    "failed_tests": 52,
+    "success_rate": 30.666666666666664,
+    "critical_systems_working": 6,
+    "critical_systems_total": 7,
+    "critical_success_rate": 85.71428571428571
+  },
+  "systems": {
+    "Health": {
+      "passed": 2,
+      "failed": 0,
+      "total": 2
+    },
+    "Authentication": {
+      "passed": 1,
+      "failed": 0,
+      "total": 1
+    },
+    "Booking System": {
+      "passed": 3,
+      "failed": 1,
+      "total": 4
+    },
+    "Escrow System": {
+      "passed": 3,
+      "failed": 3,
+      "total": 6
+    },
+    "Website Builder": {
+      "passed": 2,
+      "failed": 3,
+      "total": 5
+    },
+    "Template Marketplace": {
+      "passed": 3,
+      "failed": 3,
+      "total": 6
+    },
+    "Link in Bio System": {
+      "passed": 3,
+      "failed": 1,
+      "total": 4
+    },
+    "Course & Community": {
+      "passed": 3,
+      "failed": 1,
+      "total": 4
+    },
+    "Multi-Vendor Marketplace": {
+      "passed": 3,
+      "failed": 1,
+      "total": 4
+    },
+    "AI": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    },
+    "Analytics": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    },
+    "Automation": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Advanced": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Available": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    },
+    "Blog": {
+      "passed": 0,
+      "failed": 2,
+      "total": 2
+    },
+    "Create": {
+      "passed": 0,
+      "failed": 2,
+      "total": 2
+    },
+    "CRM": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    },
+    "Forms": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "List": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    },
+    "Connected": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Integration": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Team": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    },
+    "Instagram": {
+      "passed": 0,
+      "failed": 2,
+      "total": 2
+    },
+    "Schedule": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Get": {
+      "passed": 0,
+      "failed": 2,
+      "total": 2
+    },
+    "Generate": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Register": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Sync": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Initiate": {
+      "passed": 0,
+      "failed": 1,
+      "total": 1
+    },
+    "Email": {
+      "passed": 0,
+      "failed": 3,
+      "total": 3
+    }
+  },
+  "detailed_results": [
+    {
+      "system": "Health",
+      "endpoint": "/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Root endpoint working",
+      "timestamp": "2025-07-23T23:39:58.418127"
+    },
+    {
+      "system": "Health",
+      "endpoint": "/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health endpoint working",
+      "timestamp": "2025-07-23T23:39:58.455006"
+    },
+    {
+      "system": "Authentication",
+      "endpoint": "/api/auth/login",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Login successful",
+      "timestamp": "2025-07-23T23:39:58.738090"
+    },
+    {
+      "system": "Booking System",
+      "endpoint": "/api/booking/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:58.763137"
+    },
+    {
+      "system": "Booking System",
+      "endpoint": "/api/booking/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "List bookings",
+      "timestamp": "2025-07-23T23:39:58.786488"
+    },
+    {
+      "system": "Booking System",
+      "endpoint": "/api/booking/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Create booking",
+      "timestamp": "2025-07-23T23:39:58.827395"
+    },
+    {
+      "system": "Booking System",
+      "endpoint": "/api/booking/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get booking stats",
+      "timestamp": "2025-07-23T23:39:58.850974"
+    },
+    {
+      "system": "Escrow System",
+      "endpoint": "/api/escrow/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:58.870059"
+    },
+    {
+      "system": "Escrow System",
+      "endpoint": "/api/escrow/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "List escrow transactions",
+      "timestamp": "2025-07-23T23:39:58.891910"
+    },
+    {
+      "system": "Escrow System",
+      "endpoint": "/api/escrow/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Create escrow transaction",
+      "timestamp": "2025-07-23T23:39:58.926617"
+    },
+    {
+      "system": "Escrow System",
+      "endpoint": "/api/escrow/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get escrow stats",
+      "timestamp": "2025-07-23T23:39:58.951419"
+    },
+    {
+      "system": "Escrow System",
+      "endpoint": "/api/escrow/transactions/milestone",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Create milestone transaction",
+      "timestamp": "2025-07-23T23:39:58.979841"
+    },
+    {
+      "system": "Escrow System",
+      "endpoint": "/api/escrow/transactions/list",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "List escrow transactions",
+      "timestamp": "2025-07-23T23:39:58.998754"
+    },
+    {
+      "system": "Website Builder",
+      "endpoint": "/api/website-builder/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:59.019454"
+    },
+    {
+      "system": "Website Builder",
+      "endpoint": "/api/website-builder/",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "details": "List websites",
+      "timestamp": "2025-07-23T23:39:59.068547"
+    },
+    {
+      "system": "Website Builder",
+      "endpoint": "/api/website-builder/templates",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "details": "List templates",
+      "timestamp": "2025-07-23T23:39:59.100482"
+    },
+    {
+      "system": "Website Builder",
+      "endpoint": "/api/website-builder/",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "details": "Create website",
+      "timestamp": "2025-07-23T23:39:59.127875"
+    },
+    {
+      "system": "Website Builder",
+      "endpoint": "/api/website-builder/stats",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Get website stats",
+      "timestamp": "2025-07-23T23:39:59.156467"
+    },
+    {
+      "system": "Template Marketplace",
+      "endpoint": "/api/template-marketplace/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:59.179411"
+    },
+    {
+      "system": "Template Marketplace",
+      "endpoint": "/api/template-marketplace/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "List templates",
+      "timestamp": "2025-07-23T23:39:59.202495"
+    },
+    {
+      "system": "Template Marketplace",
+      "endpoint": "/api/template-marketplace/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Create template",
+      "timestamp": "2025-07-23T23:39:59.239589"
+    },
+    {
+      "system": "Template Marketplace",
+      "endpoint": "/api/template-marketplace/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get marketplace stats",
+      "timestamp": "2025-07-23T23:39:59.260197"
+    },
+    {
+      "system": "Template Marketplace",
+      "endpoint": "/api/template-marketplace/browse",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Browse templates",
+      "timestamp": "2025-07-23T23:39:59.284431"
+    },
+    {
+      "system": "Template Marketplace",
+      "endpoint": "/api/template-marketplace/creator-earnings",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get creator earnings",
+      "timestamp": "2025-07-23T23:39:59.305752"
+    },
+    {
+      "system": "Link in Bio System",
+      "endpoint": "/api/complete-link-in-bio/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:59.324222"
+    },
+    {
+      "system": "Link in Bio System",
+      "endpoint": "/api/complete-link-in-bio/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "List link in bio pages",
+      "timestamp": "2025-07-23T23:39:59.347695"
+    },
+    {
+      "system": "Link in Bio System",
+      "endpoint": "/api/complete-link-in-bio/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Create link in bio page",
+      "timestamp": "2025-07-23T23:39:59.377476"
+    },
+    {
+      "system": "Link in Bio System",
+      "endpoint": "/api/complete-link-in-bio/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get link in bio stats",
+      "timestamp": "2025-07-23T23:39:59.402269"
+    },
+    {
+      "system": "Course & Community",
+      "endpoint": "/api/complete-course-community/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:59.422730"
+    },
+    {
+      "system": "Course & Community",
+      "endpoint": "/api/complete-course-community/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "List courses and communities",
+      "timestamp": "2025-07-23T23:39:59.446370"
+    },
+    {
+      "system": "Course & Community",
+      "endpoint": "/api/complete-course-community/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Create course/community",
+      "timestamp": "2025-07-23T23:39:59.481942"
+    },
+    {
+      "system": "Course & Community",
+      "endpoint": "/api/complete-course-community/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get course stats",
+      "timestamp": "2025-07-23T23:39:59.504258"
+    },
+    {
+      "system": "Multi-Vendor Marketplace",
+      "endpoint": "/api/multi-vendor-marketplace/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health check",
+      "timestamp": "2025-07-23T23:39:59.523345"
+    },
+    {
+      "system": "Multi-Vendor Marketplace",
+      "endpoint": "/api/multi-vendor-marketplace/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "List marketplace items",
+      "timestamp": "2025-07-23T23:39:59.545120"
+    },
+    {
+      "system": "Multi-Vendor Marketplace",
+      "endpoint": "/api/multi-vendor-marketplace/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Create marketplace item",
+      "timestamp": "2025-07-23T23:39:59.577024"
+    },
+    {
+      "system": "Multi-Vendor Marketplace",
+      "endpoint": "/api/multi-vendor-marketplace/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get marketplace stats",
+      "timestamp": "2025-07-23T23:39:59.598572"
+    },
+    {
+      "system": "AI",
+      "endpoint": "/api/ai/services",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "AI Services",
+      "timestamp": "2025-07-23T23:39:59.621062"
+    },
+    {
+      "system": "AI",
+      "endpoint": "/api/ai/conversations",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "AI Conversations",
+      "timestamp": "2025-07-23T23:39:59.641449"
+    },
+    {
+      "system": "AI",
+      "endpoint": "/api/ai/analyze-content",
+      "method": "POST",
+      "success": false,
+      "status_code": 405,
+      "details": "AI Content Analysis",
+      "timestamp": "2025-07-23T23:39:59.660872"
+    },
+    {
+      "system": "Analytics",
+      "endpoint": "/api/analytics-system/dashboard",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Analytics Dashboard",
+      "timestamp": "2025-07-23T23:39:59.681831"
+    },
+    {
+      "system": "Analytics",
+      "endpoint": "/api/analytics-system/overview",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Analytics Overview",
+      "timestamp": "2025-07-23T23:39:59.704217"
+    },
+    {
+      "system": "Analytics",
+      "endpoint": "/api/analytics-system/reports",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Analytics Reports",
+      "timestamp": "2025-07-23T23:39:59.722574"
+    },
+    {
+      "system": "Automation",
+      "endpoint": "/api/automation/workflows",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Automation Workflows",
+      "timestamp": "2025-07-23T23:39:59.748672"
+    },
+    {
+      "system": "Advanced",
+      "endpoint": "/api/automation/workflows/advanced",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Advanced Workflows",
+      "timestamp": "2025-07-23T23:39:59.771466"
+    },
+    {
+      "system": "Available",
+      "endpoint": "/api/automation/triggers/available",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Available Triggers",
+      "timestamp": "2025-07-23T23:39:59.790174"
+    },
+    {
+      "system": "Available",
+      "endpoint": "/api/automation/actions/available",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Available Actions",
+      "timestamp": "2025-07-23T23:39:59.811308"
+    },
+    {
+      "system": "Blog",
+      "endpoint": "/api/blog/posts",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Blog Posts",
+      "timestamp": "2025-07-23T23:39:59.831534"
+    },
+    {
+      "system": "Create",
+      "endpoint": "/api/blog/posts",
+      "method": "POST",
+      "success": false,
+      "status_code": 405,
+      "details": "Create Blog Post",
+      "timestamp": "2025-07-23T23:39:59.853539"
+    },
+    {
+      "system": "Blog",
+      "endpoint": "/api/blog/analytics",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Blog Analytics",
+      "timestamp": "2025-07-23T23:39:59.874211"
+    },
+    {
+      "system": "CRM",
+      "endpoint": "/api/crm/dashboard",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "CRM Dashboard",
+      "timestamp": "2025-07-23T23:39:59.893052"
+    },
+    {
+      "system": "CRM",
+      "endpoint": "/api/crm/contacts",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "CRM Contacts",
+      "timestamp": "2025-07-23T23:39:59.914137"
+    },
+    {
+      "system": "CRM",
+      "endpoint": "/api/crm/deals",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "CRM Deals",
+      "timestamp": "2025-07-23T23:39:59.933592"
+    },
+    {
+      "system": "Forms",
+      "endpoint": "/api/forms/dashboard",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Forms Dashboard",
+      "timestamp": "2025-07-23T23:39:59.953158"
+    },
+    {
+      "system": "List",
+      "endpoint": "/api/forms/forms",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "List Forms",
+      "timestamp": "2025-07-23T23:39:59.974754"
+    },
+    {
+      "system": "Available",
+      "endpoint": "/api/integrations/available",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Available Integrations",
+      "timestamp": "2025-07-23T23:40:00.002763"
+    },
+    {
+      "system": "Connected",
+      "endpoint": "/api/integrations/connected",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Connected Integrations",
+      "timestamp": "2025-07-23T23:40:00.030745"
+    },
+    {
+      "system": "Integration",
+      "endpoint": "/api/integrations/logs",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Integration Logs",
+      "timestamp": "2025-07-23T23:40:00.054139"
+    },
+    {
+      "system": "Team",
+      "endpoint": "/api/team-management/dashboard",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Team Dashboard",
+      "timestamp": "2025-07-23T23:40:00.075129"
+    },
+    {
+      "system": "Team",
+      "endpoint": "/api/team-management/members",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Team Members",
+      "timestamp": "2025-07-23T23:40:00.096903"
+    },
+    {
+      "system": "Team",
+      "endpoint": "/api/team-management/activity",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Team Activity",
+      "timestamp": "2025-07-23T23:40:00.116556"
+    },
+    {
+      "system": "Instagram",
+      "endpoint": "/api/instagram/search",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Instagram Search",
+      "timestamp": "2025-07-23T23:40:00.138724"
+    },
+    {
+      "system": "Instagram",
+      "endpoint": "/api/instagram/profiles",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Instagram Profiles",
+      "timestamp": "2025-07-23T23:40:00.158616"
+    },
+    {
+      "system": "Schedule",
+      "endpoint": "/api/posts/schedule",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Schedule Social Media Post",
+      "timestamp": "2025-07-23T23:40:00.175334"
+    },
+    {
+      "system": "Get",
+      "endpoint": "/api/posts/scheduled",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get Scheduled Posts",
+      "timestamp": "2025-07-23T23:40:00.197596"
+    },
+    {
+      "system": "Generate",
+      "endpoint": "/api/pwa/manifest/generate",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Generate PWA Manifest",
+      "timestamp": "2025-07-23T23:40:00.217260"
+    },
+    {
+      "system": "Get",
+      "endpoint": "/api/pwa/manifest/current",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Get Current Manifest",
+      "timestamp": "2025-07-23T23:40:00.235406"
+    },
+    {
+      "system": "List",
+      "endpoint": "/api/workflows/list",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "List AI Workflows",
+      "timestamp": "2025-07-23T23:40:00.252215"
+    },
+    {
+      "system": "Create",
+      "endpoint": "/api/workflows/create",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Create AI Workflow",
+      "timestamp": "2025-07-23T23:40:00.268391"
+    },
+    {
+      "system": "Register",
+      "endpoint": "/api/device/register",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Register Device",
+      "timestamp": "2025-07-23T23:40:00.286042"
+    },
+    {
+      "system": "Sync",
+      "endpoint": "/api/device/offline/sync",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Sync Offline Data",
+      "timestamp": "2025-07-23T23:40:00.307568"
+    },
+    {
+      "system": "Initiate",
+      "endpoint": "/api/disputes/initiate",
+      "method": "POST",
+      "success": false,
+      "status_code": 404,
+      "details": "Initiate Dispute",
+      "timestamp": "2025-07-23T23:40:00.325491"
+    },
+    {
+      "system": "List",
+      "endpoint": "/api/disputes/list",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "List Disputes",
+      "timestamp": "2025-07-23T23:40:00.343927"
+    },
+    {
+      "system": "Email",
+      "endpoint": "/api/email-automation/api/email-automation/campaigns",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Email Campaigns",
+      "timestamp": "2025-07-23T23:40:00.363907"
+    },
+    {
+      "system": "Email",
+      "endpoint": "/api/email-automation/api/email-automation/subscribers",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Email Subscribers",
+      "timestamp": "2025-07-23T23:40:00.394094"
+    },
+    {
+      "system": "Email",
+      "endpoint": "/api/email-automation/api/email-automation/email-logs",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Email Logs",
+      "timestamp": "2025-07-23T23:40:00.415273"
+    }
+  ]
+}
