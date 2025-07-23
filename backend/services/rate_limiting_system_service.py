@@ -1,6 +1,6 @@
 """
-Rate_Limiting_System Service - Comprehensive Business Logic
-Generated for complete service/API pairing with full CRUD operations
+Rate Limiting System Service
+Auto-generated service with proper database initialization
 """
 
 import uuid
@@ -8,180 +8,127 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 
-class Rate_Limiting_SystemService:
-    """Comprehensive rate_limiting_system service with full CRUD operations"""
-    
+class RateLimitingSystemService:
     def __init__(self):
-        self.db = None
+        pass
     
-    async def get_database(self):
-        """Get database connection with lazy initialization"""
-        if not self.db:
-            self.db = get_database()
-        return self.db
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
     
-    async def create_rate_limiting_system(self, rate_limiting_system_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create rate_limiting_system with real data persistence"""
+    async def create_rate_limiting_system(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new rate_limiting_system"""
         try:
-            # Add metadata
-            rate_limiting_system_data.update({
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["rate_limiting_system"]
+            data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
-                "status": rate_limiting_system_data.get("status", "active")
+                "status": "active"
             })
             
-            # Save to database
-            db = await self.get_database()
-            result = await db["rate_limiting_system"].insert_one(rate_limiting_system_data)
-            
-            return {
-                "success": True,
-                "message": f"Rate_Limiting_System created successfully",
-                "data": rate_limiting_system_data,
-                "id": rate_limiting_system_data["id"]
-            }
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create rate_limiting_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def get_rate_limiting_system(self, rate_limiting_system_id: str) -> Dict[str, Any]:
-        """Get rate_limiting_system by ID with real data"""
+    async def get_rate_limiting_system(self, item_id: str) -> Dict[str, Any]:
+        """Get rate_limiting_system by ID"""
         try:
-            db = await self.get_database()
-            result = await db["rate_limiting_system"].find_one({"id": rate_limiting_system_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            if not result:
-                return {
-                    "success": False,
-                    "error": f"Rate_Limiting_System not found"
-                }
+            collection = db["rate_limiting_system"]
+            doc = await collection.find_one({"id": item_id})
             
-            # Remove MongoDB _id
-            result.pop('_id', None)
+            if not doc:
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "data": result
-            }
+            doc.pop('_id', None)
+            return {"success": True, "data": doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to get rate_limiting_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def list_rate_limiting_system(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
-        """List all rate_limiting_system with real data"""
+    async def list_rate_limiting_systems(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List rate_limiting_systems"""
         try:
-            db = await self.get_database()
-            cursor = db["rate_limiting_system"].find({}).skip(offset).limit(limit)
-            results = await cursor.to_list(length=limit)
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
+            collection = db["rate_limiting_system"]
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            total_count = await db["rate_limiting_system"].count_documents({})
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
             
-            return {
-                "success": True,
-                "data": results,
-                "total": total_count,
-                "limit": limit,
-                "offset": offset
-            }
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to list rate_limiting_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def update_rate_limiting_system(self, rate_limiting_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update rate_limiting_system with real data persistence"""
+    async def update_rate_limiting_system(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update rate_limiting_system"""
         try:
-            # Add update timestamp
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["rate_limiting_system"]
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            db = await self.get_database()
-            result = await db["rate_limiting_system"].update_one(
-                {"id": rate_limiting_system_id},
+            result = await collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
             if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Rate_Limiting_System not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            # Get updated document
-            updated_doc = await db["rate_limiting_system"].find_one({"id": rate_limiting_system_id})
-            updated_doc.pop('_id', None)
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "message": f"Rate_Limiting_System updated successfully",
-                "data": updated_doc
-            }
+            return {"success": True, "data": updated_doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update rate_limiting_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def delete_rate_limiting_system(self, rate_limiting_system_id: str) -> Dict[str, Any]:
-        """Delete rate_limiting_system with real data persistence"""
+    async def delete_rate_limiting_system(self, item_id: str) -> Dict[str, Any]:
+        """Delete rate_limiting_system"""
         try:
-            db = await self.get_database()
-            result = await db["rate_limiting_system"].delete_one({"id": rate_limiting_system_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["rate_limiting_system"]
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Rate_Limiting_System not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "message": f"Rate_Limiting_System deleted successfully",
-                "deleted_count": result.deleted_count
-            }
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete rate_limiting_system: {str(e)}"
-            }
-    
-    async def search_rate_limiting_system(self, query: str, limit: int = 10) -> Dict[str, Any]:
-        """Search rate_limiting_system with real data"""
-        try:
-            db = await self.get_database()
-            
-            # Simple text search (can be enhanced with MongoDB text search)
-            search_filter = {
-                "$or": [
-                    {"name": {"$regex": query, "$options": "i"}},
-                    {"description": {"$regex": query, "$options": "i"}}
-                ]
-            }
-            
-            cursor = db["rate_limiting_system"].find(search_filter).limit(limit)
-            results = await cursor.to_list(length=limit)
-            
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
-            
-            return {
-                "success": True,
-                "data": results,
-                "query": query,
-                "count": len(results)
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to search rate_limiting_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
+
+# Service instance
+_service_instance = None
+
+def get_rate_limiting_system_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = RateLimitingSystemService()
+    return _service_instance
+
+# Backward compatibility
+rate_limiting_system_service = get_rate_limiting_system_service()

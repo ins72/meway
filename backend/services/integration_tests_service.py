@@ -1,6 +1,6 @@
 """
-Integration_Tests Service - Comprehensive Business Logic
-Generated for complete service/API pairing with full CRUD operations
+Integration Tests Service
+Auto-generated service with proper database initialization
 """
 
 import uuid
@@ -8,180 +8,127 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 
-class Integration_TestsService:
-    """Comprehensive integration_tests service with full CRUD operations"""
-    
+class IntegrationTestsService:
     def __init__(self):
-        self.db = None
+        pass
     
-    async def get_database(self):
-        """Get database connection with lazy initialization"""
-        if not self.db:
-            self.db = get_database()
-        return self.db
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
     
-    async def create_integration_tests(self, integration_tests_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create integration_tests with real data persistence"""
+    async def create_integration_tests(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new integration_tests"""
         try:
-            # Add metadata
-            integration_tests_data.update({
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["integration_tests"]
+            data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
-                "status": integration_tests_data.get("status", "active")
+                "status": "active"
             })
             
-            # Save to database
-            db = await self.get_database()
-            result = await db["integration_tests"].insert_one(integration_tests_data)
-            
-            return {
-                "success": True,
-                "message": f"Integration_Tests created successfully",
-                "data": integration_tests_data,
-                "id": integration_tests_data["id"]
-            }
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create integration_tests: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def get_integration_tests(self, integration_tests_id: str) -> Dict[str, Any]:
-        """Get integration_tests by ID with real data"""
+    async def get_integration_tests(self, item_id: str) -> Dict[str, Any]:
+        """Get integration_tests by ID"""
         try:
-            db = await self.get_database()
-            result = await db["integration_tests"].find_one({"id": integration_tests_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            if not result:
-                return {
-                    "success": False,
-                    "error": f"Integration_Tests not found"
-                }
+            collection = db["integration_tests"]
+            doc = await collection.find_one({"id": item_id})
             
-            # Remove MongoDB _id
-            result.pop('_id', None)
+            if not doc:
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "data": result
-            }
+            doc.pop('_id', None)
+            return {"success": True, "data": doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to get integration_tests: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def list_integration_tests(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
-        """List all integration_tests with real data"""
+    async def list_integration_testss(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List integration_testss"""
         try:
-            db = await self.get_database()
-            cursor = db["integration_tests"].find({}).skip(offset).limit(limit)
-            results = await cursor.to_list(length=limit)
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
+            collection = db["integration_tests"]
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            total_count = await db["integration_tests"].count_documents({})
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
             
-            return {
-                "success": True,
-                "data": results,
-                "total": total_count,
-                "limit": limit,
-                "offset": offset
-            }
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to list integration_tests: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def update_integration_tests(self, integration_tests_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update integration_tests with real data persistence"""
+    async def update_integration_tests(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update integration_tests"""
         try:
-            # Add update timestamp
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["integration_tests"]
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            db = await self.get_database()
-            result = await db["integration_tests"].update_one(
-                {"id": integration_tests_id},
+            result = await collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
             if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Integration_Tests not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            # Get updated document
-            updated_doc = await db["integration_tests"].find_one({"id": integration_tests_id})
-            updated_doc.pop('_id', None)
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "message": f"Integration_Tests updated successfully",
-                "data": updated_doc
-            }
+            return {"success": True, "data": updated_doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update integration_tests: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def delete_integration_tests(self, integration_tests_id: str) -> Dict[str, Any]:
-        """Delete integration_tests with real data persistence"""
+    async def delete_integration_tests(self, item_id: str) -> Dict[str, Any]:
+        """Delete integration_tests"""
         try:
-            db = await self.get_database()
-            result = await db["integration_tests"].delete_one({"id": integration_tests_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["integration_tests"]
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Integration_Tests not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "message": f"Integration_Tests deleted successfully",
-                "deleted_count": result.deleted_count
-            }
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete integration_tests: {str(e)}"
-            }
-    
-    async def search_integration_tests(self, query: str, limit: int = 10) -> Dict[str, Any]:
-        """Search integration_tests with real data"""
-        try:
-            db = await self.get_database()
-            
-            # Simple text search (can be enhanced with MongoDB text search)
-            search_filter = {
-                "$or": [
-                    {"name": {"$regex": query, "$options": "i"}},
-                    {"description": {"$regex": query, "$options": "i"}}
-                ]
-            }
-            
-            cursor = db["integration_tests"].find(search_filter).limit(limit)
-            results = await cursor.to_list(length=limit)
-            
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
-            
-            return {
-                "success": True,
-                "data": results,
-                "query": query,
-                "count": len(results)
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to search integration_tests: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
+
+# Service instance
+_service_instance = None
+
+def get_integration_tests_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = IntegrationTestsService()
+    return _service_instance
+
+# Backward compatibility
+integration_tests_service = get_integration_tests_service()

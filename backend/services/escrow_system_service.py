@@ -10,7 +10,20 @@ from core.database import get_database
 
 class Escrow_SystemService:
     def __init__(self):
-        self.db = get_database()
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self, collection_name: str):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()[collection_name]
+        return self.collection
 
     async def create_escrow_system(self, escrow_system_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new escrow_system"""
@@ -24,7 +37,7 @@ class Escrow_SystemService:
             })
             
             # Save to database
-            result = await self.db["escrow_system"].insert_one(escrow_system_data)
+            result = await self._get_db()["escrow_system"].insert_one(escrow_system_data)
             
             return {
                 "success": True,
@@ -41,7 +54,7 @@ class Escrow_SystemService:
     async def get_escrow_system(self, escrow_system_id: str) -> Dict[str, Any]:
         """Get escrow_system by ID"""
         try:
-            result = await self.db["escrow_system"].find_one({"id": escrow_system_id})
+            result = await self._get_db()["escrow_system"].find_one({"id": escrow_system_id})
             
             if not result:
                 return {
@@ -65,14 +78,14 @@ class Escrow_SystemService:
     async def list_escrow_system(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
         """List all escrow_system"""
         try:
-            cursor = self.db["escrow_system"].find({}).skip(offset).limit(limit)
+            cursor = self._get_db()["escrow_system"].find({}).skip(offset).limit(limit)
             results = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id from all results
             for result in results:
                 result.pop('_id', None)
             
-            total_count = await self.db["escrow_system"].count_documents({})
+            total_count = await self._get_db()["escrow_system"].count_documents({})
             
             return {
                 "success": True,
@@ -93,7 +106,7 @@ class Escrow_SystemService:
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.db["escrow_system"].update_one(
+            result = await self._get_db()["escrow_system"].update_one(
                 {"id": escrow_system_id},
                 {"$set": update_data}
             )
@@ -105,7 +118,7 @@ class Escrow_SystemService:
                 }
             
             # Get updated document
-            updated_doc = await self.db["escrow_system"].find_one({"id": escrow_system_id})
+            updated_doc = await self._get_db()["escrow_system"].find_one({"id": escrow_system_id})
             updated_doc.pop('_id', None)
             
             return {
@@ -122,7 +135,7 @@ class Escrow_SystemService:
     async def delete_escrow_system(self, escrow_system_id: str) -> Dict[str, Any]:
         """Delete escrow_system by ID"""
         try:
-            result = await self.db["escrow_system"].delete_one({"id": escrow_system_id})
+            result = await self._get_db()["escrow_system"].delete_one({"id": escrow_system_id})
             
             if result.deleted_count == 0:
                 return {

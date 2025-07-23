@@ -10,7 +10,20 @@ from core.database import get_database
 
 class ContentCreationService:
     def __init__(self):
-        self.db = get_database()
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self, collection_name: str):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()[collection_name]
+        return self.collection
 
     async def create_content(self, content_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create new content"""
@@ -24,7 +37,7 @@ class ContentCreationService:
             })
             
             # Save to database
-            result = await self.db["content_creation"].insert_one(content_data)
+            result = await self._get_db()["content_creation"].insert_one(content_data)
             
             return {
                 "success": True,
@@ -40,7 +53,7 @@ class ContentCreationService:
     async def get_content(self, content_id: str) -> Dict[str, Any]:
         """Get content by ID"""
         try:
-            result = await self.db["content_creation"].find_one({"id": content_id})
+            result = await self._get_db()["content_creation"].find_one({"id": content_id})
             if not result:
                 return {
                     "success": False,
@@ -63,14 +76,14 @@ class ContentCreationService:
     async def list_content(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
         """List content with pagination"""
         try:
-            cursor = self.db["content_creation"].find().skip(offset).limit(limit)
+            cursor = self._get_db()["content_creation"].find().skip(offset).limit(limit)
             results = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id from all results
             for result in results:
                 result.pop('_id', None)
             
-            total_count = await self.db["content_creation"].count_documents({})
+            total_count = await self._get_db()["content_creation"].count_documents({})
             
             return {
                 "success": True,
@@ -91,7 +104,7 @@ class ContentCreationService:
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.db["content_creation"].update_one(
+            result = await self._get_db()["content_creation"].update_one(
                 {"id": content_id},
                 {"$set": update_data}
             )
@@ -103,7 +116,7 @@ class ContentCreationService:
                 }
             
             # Get updated document
-            updated_doc = await self.db["content_creation"].find_one({"id": content_id})
+            updated_doc = await self._get_db()["content_creation"].find_one({"id": content_id})
             updated_doc.pop('_id', None)
             
             return {
@@ -120,7 +133,7 @@ class ContentCreationService:
     async def delete_content(self, content_id: str) -> Dict[str, Any]:
         """Delete content by ID"""
         try:
-            result = await self.db["content_creation"].delete_one({"id": content_id})
+            result = await self._get_db()["content_creation"].delete_one({"id": content_id})
             
             if result.deleted_count == 0:
                 return {

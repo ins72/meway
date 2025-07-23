@@ -1,6 +1,6 @@
 """
-Notification_System Service - Comprehensive Business Logic
-Generated for complete service/API pairing with full CRUD operations
+Notification System Service
+Auto-generated service with proper database initialization
 """
 
 import uuid
@@ -8,180 +8,127 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 
-class Notification_SystemService:
-    """Comprehensive notification_system service with full CRUD operations"""
-    
+class NotificationSystemService:
     def __init__(self):
-        self.db = None
+        pass
     
-    async def get_database(self):
-        """Get database connection with lazy initialization"""
-        if not self.db:
-            self.db = get_database()
-        return self.db
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
     
-    async def create_notification_system(self, notification_system_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create notification_system with real data persistence"""
+    async def create_notification_system(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new notification_system"""
         try:
-            # Add metadata
-            notification_system_data.update({
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["notification_system"]
+            data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
-                "status": notification_system_data.get("status", "active")
+                "status": "active"
             })
             
-            # Save to database
-            db = await self.get_database()
-            result = await db["notification_system"].insert_one(notification_system_data)
-            
-            return {
-                "success": True,
-                "message": f"Notification_System created successfully",
-                "data": notification_system_data,
-                "id": notification_system_data["id"]
-            }
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create notification_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def get_notification_system(self, notification_system_id: str) -> Dict[str, Any]:
-        """Get notification_system by ID with real data"""
+    async def get_notification_system(self, item_id: str) -> Dict[str, Any]:
+        """Get notification_system by ID"""
         try:
-            db = await self.get_database()
-            result = await db["notification_system"].find_one({"id": notification_system_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            if not result:
-                return {
-                    "success": False,
-                    "error": f"Notification_System not found"
-                }
+            collection = db["notification_system"]
+            doc = await collection.find_one({"id": item_id})
             
-            # Remove MongoDB _id
-            result.pop('_id', None)
+            if not doc:
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "data": result
-            }
+            doc.pop('_id', None)
+            return {"success": True, "data": doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to get notification_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def list_notification_system(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
-        """List all notification_system with real data"""
+    async def list_notification_systems(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List notification_systems"""
         try:
-            db = await self.get_database()
-            cursor = db["notification_system"].find({}).skip(offset).limit(limit)
-            results = await cursor.to_list(length=limit)
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
+            collection = db["notification_system"]
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            total_count = await db["notification_system"].count_documents({})
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
             
-            return {
-                "success": True,
-                "data": results,
-                "total": total_count,
-                "limit": limit,
-                "offset": offset
-            }
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to list notification_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def update_notification_system(self, notification_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update notification_system with real data persistence"""
+    async def update_notification_system(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update notification_system"""
         try:
-            # Add update timestamp
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["notification_system"]
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            db = await self.get_database()
-            result = await db["notification_system"].update_one(
-                {"id": notification_system_id},
+            result = await collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
             if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Notification_System not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            # Get updated document
-            updated_doc = await db["notification_system"].find_one({"id": notification_system_id})
-            updated_doc.pop('_id', None)
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "message": f"Notification_System updated successfully",
-                "data": updated_doc
-            }
+            return {"success": True, "data": updated_doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update notification_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def delete_notification_system(self, notification_system_id: str) -> Dict[str, Any]:
-        """Delete notification_system with real data persistence"""
+    async def delete_notification_system(self, item_id: str) -> Dict[str, Any]:
+        """Delete notification_system"""
         try:
-            db = await self.get_database()
-            result = await db["notification_system"].delete_one({"id": notification_system_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["notification_system"]
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Notification_System not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "message": f"Notification_System deleted successfully",
-                "deleted_count": result.deleted_count
-            }
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete notification_system: {str(e)}"
-            }
-    
-    async def search_notification_system(self, query: str, limit: int = 10) -> Dict[str, Any]:
-        """Search notification_system with real data"""
-        try:
-            db = await self.get_database()
-            
-            # Simple text search (can be enhanced with MongoDB text search)
-            search_filter = {
-                "$or": [
-                    {"name": {"$regex": query, "$options": "i"}},
-                    {"description": {"$regex": query, "$options": "i"}}
-                ]
-            }
-            
-            cursor = db["notification_system"].find(search_filter).limit(limit)
-            results = await cursor.to_list(length=limit)
-            
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
-            
-            return {
-                "success": True,
-                "data": results,
-                "query": query,
-                "count": len(results)
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to search notification_system: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
+
+# Service instance
+_service_instance = None
+
+def get_notification_system_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = NotificationSystemService()
+    return _service_instance
+
+# Backward compatibility
+notification_system_service = get_notification_system_service()

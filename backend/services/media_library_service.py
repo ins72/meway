@@ -1,6 +1,6 @@
 """
-Media_Library Service - Comprehensive Business Logic
-Generated for complete service/API pairing with full CRUD operations
+Media Library Service
+Auto-generated service with proper database initialization
 """
 
 import uuid
@@ -8,180 +8,127 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 
-class Media_LibraryService:
-    """Comprehensive media_library service with full CRUD operations"""
-    
+class MediaLibraryService:
     def __init__(self):
-        self.db = None
+        pass
     
-    async def get_database(self):
-        """Get database connection with lazy initialization"""
-        if not self.db:
-            self.db = get_database()
-        return self.db
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
     
-    async def create_media_library(self, media_library_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create media_library with real data persistence"""
+    async def create_media_library(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new media_library"""
         try:
-            # Add metadata
-            media_library_data.update({
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["media_library"]
+            data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
-                "status": media_library_data.get("status", "active")
+                "status": "active"
             })
             
-            # Save to database
-            db = await self.get_database()
-            result = await db["media_library"].insert_one(media_library_data)
-            
-            return {
-                "success": True,
-                "message": f"Media_Library created successfully",
-                "data": media_library_data,
-                "id": media_library_data["id"]
-            }
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create media_library: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def get_media_library(self, media_library_id: str) -> Dict[str, Any]:
-        """Get media_library by ID with real data"""
+    async def get_media_library(self, item_id: str) -> Dict[str, Any]:
+        """Get media_library by ID"""
         try:
-            db = await self.get_database()
-            result = await db["media_library"].find_one({"id": media_library_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            if not result:
-                return {
-                    "success": False,
-                    "error": f"Media_Library not found"
-                }
+            collection = db["media_library"]
+            doc = await collection.find_one({"id": item_id})
             
-            # Remove MongoDB _id
-            result.pop('_id', None)
+            if not doc:
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "data": result
-            }
+            doc.pop('_id', None)
+            return {"success": True, "data": doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to get media_library: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def list_media_library(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
-        """List all media_library with real data"""
+    async def list_media_librarys(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List media_librarys"""
         try:
-            db = await self.get_database()
-            cursor = db["media_library"].find({}).skip(offset).limit(limit)
-            results = await cursor.to_list(length=limit)
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
+            collection = db["media_library"]
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            total_count = await db["media_library"].count_documents({})
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
             
-            return {
-                "success": True,
-                "data": results,
-                "total": total_count,
-                "limit": limit,
-                "offset": offset
-            }
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to list media_library: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def update_media_library(self, media_library_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update media_library with real data persistence"""
+    async def update_media_library(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update media_library"""
         try:
-            # Add update timestamp
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["media_library"]
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            db = await self.get_database()
-            result = await db["media_library"].update_one(
-                {"id": media_library_id},
+            result = await collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
             if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Media_Library not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            # Get updated document
-            updated_doc = await db["media_library"].find_one({"id": media_library_id})
-            updated_doc.pop('_id', None)
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "message": f"Media_Library updated successfully",
-                "data": updated_doc
-            }
+            return {"success": True, "data": updated_doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update media_library: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def delete_media_library(self, media_library_id: str) -> Dict[str, Any]:
-        """Delete media_library with real data persistence"""
+    async def delete_media_library(self, item_id: str) -> Dict[str, Any]:
+        """Delete media_library"""
         try:
-            db = await self.get_database()
-            result = await db["media_library"].delete_one({"id": media_library_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["media_library"]
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Media_Library not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "message": f"Media_Library deleted successfully",
-                "deleted_count": result.deleted_count
-            }
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete media_library: {str(e)}"
-            }
-    
-    async def search_media_library(self, query: str, limit: int = 10) -> Dict[str, Any]:
-        """Search media_library with real data"""
-        try:
-            db = await self.get_database()
-            
-            # Simple text search (can be enhanced with MongoDB text search)
-            search_filter = {
-                "$or": [
-                    {"name": {"$regex": query, "$options": "i"}},
-                    {"description": {"$regex": query, "$options": "i"}}
-                ]
-            }
-            
-            cursor = db["media_library"].find(search_filter).limit(limit)
-            results = await cursor.to_list(length=limit)
-            
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
-            
-            return {
-                "success": True,
-                "data": results,
-                "query": query,
-                "count": len(results)
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to search media_library: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
+
+# Service instance
+_service_instance = None
+
+def get_media_library_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = MediaLibraryService()
+    return _service_instance
+
+# Backward compatibility
+media_library_service = get_media_library_service()

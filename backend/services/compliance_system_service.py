@@ -1,144 +1,134 @@
 """
 Compliance System Service
-Provides business logic for Compliance System
+Auto-generated service with proper database initialization
 """
 
-import os
 import uuid
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Dict, Any, List, Optional
 from core.database import get_database
 
 class ComplianceSystemService:
-    """Service class for Compliance System"""
-    
     def __init__(self):
-        self.db = get_database()
-
-    async def create_compliance_system(self, compliance_system_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new compliance_system"""
+        pass
+    
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
+    
+    async def create_compliance_system(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new compliance_system"""
         try:
-            # Add metadata
-            compliance_system_data.update({
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["compliance_system"]
+            data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
                 "status": "active"
             })
             
-            # Save to database
-            result = await self.db["compliance_system"].insert_one(compliance_system_data)
-            
-            return {
-                "success": True,
-                "message": "Compliance system created successfully",
-                "data": compliance_system_data,
-                "id": compliance_system_data["id"]
-            }
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create compliance system: {str(e)}"
-            }
-
-    async def update_compliance_system(self, compliance_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update compliance_system by ID"""
+            return {"success": False, "error": str(e)}
+    
+    async def get_compliance_system(self, item_id: str) -> Dict[str, Any]:
+        """Get compliance_system by ID"""
         try:
-            # Add update timestamp
-            update_data["updated_at"] = datetime.utcnow().isoformat()
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            result = await self.db["compliance_system"].update_one(
-                {"id": compliance_system_id},
-                {"$set": update_data}
-            )
-            
-            if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": "Compliance system not found"
-                }
-            
-            # Get updated document
-            updated_doc = await self.db["compliance_system"].find_one({"id": compliance_system_id})
-            if updated_doc:
-                updated_doc.pop('_id', None)
-            
-            return {
-                "success": True,
-                "message": "Compliance system updated successfully",
-                "data": updated_doc
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update compliance system: {str(e)}"
-            }
-
-    async def delete_compliance_system(self, compliance_system_id: str) -> Dict[str, Any]:
-        """Delete compliance_system by ID"""
-        try:
-            result = await self.db["compliance_system"].delete_one({"id": compliance_system_id})
-            
-            if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": "Compliance system not found"
-                }
-            
-            return {
-                "success": True,
-                "message": "Compliance system deleted successfully",
-                "deleted_count": result.deleted_count
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete compliance system: {str(e)}"
-            }
-
-    async def get_compliance_system(self, compliance_system_id: str) -> Dict[str, Any]:
-        """Get compliance system by ID"""
-        try:
-            doc = await self.db["compliance_system"].find_one({"id": compliance_system_id})
+            collection = db["compliance_system"]
+            doc = await collection.find_one({"id": item_id})
             
             if not doc:
-                return {
-                    "success": False,
-                    "error": "Compliance system not found"
-                }
+                return {"success": False, "error": "Not found"}
             
             doc.pop('_id', None)
-            return {
-                "success": True,
-                "data": doc
-            }
+            return {"success": True, "data": doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to get compliance system: {str(e)}"
-            }
-
-    async def list_compliance_systems(self, user_id: str = None, limit: int = 50) -> Dict[str, Any]:
-        """List compliance systems"""
+            return {"success": False, "error": str(e)}
+    
+    async def list_compliance_systems(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List compliance_systems"""
         try:
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["compliance_system"]
             query = {}
             if user_id:
                 query["user_id"] = user_id
             
-            cursor = self.db["compliance_system"].find(query).limit(limit)
+            cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
-            # Remove MongoDB _id field
             for doc in docs:
                 doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "data": docs,
-                "count": len(docs)
-            }
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to list compliance systems: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
+    
+    async def update_compliance_system(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update compliance_system"""
+        try:
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["compliance_system"]
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await collection.update_one(
+                {"id": item_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": "Not found"}
+            
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
+            
+            return {"success": True, "data": updated_doc}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def delete_compliance_system(self, item_id: str) -> Dict[str, Any]:
+        """Delete compliance_system"""
+        try:
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["compliance_system"]
+            result = await collection.delete_one({"id": item_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": "Not found"}
+            
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+# Service instance
+_service_instance = None
+
+def get_compliance_system_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = ComplianceSystemService()
+    return _service_instance
+
+# Backward compatibility
+compliance_system_service = get_compliance_system_service()

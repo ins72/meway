@@ -10,7 +10,20 @@ from core.database import get_database
 
 class Google_OauthService:
     def __init__(self):
-        self.db = get_database()
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self, collection_name: str):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()[collection_name]
+        return self.collection
 
     async def create_google_oauth(self, google_oauth_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new google_oauth"""
@@ -24,7 +37,7 @@ class Google_OauthService:
             })
             
             # Save to database
-            result = await self.db["google_oauth"].insert_one(google_oauth_data)
+            result = await self._get_db()["google_oauth"].insert_one(google_oauth_data)
             
             return {
                 "success": True,
@@ -41,7 +54,7 @@ class Google_OauthService:
     async def get_google_oauth(self, google_oauth_id: str) -> Dict[str, Any]:
         """Get google_oauth by ID"""
         try:
-            result = await self.db["google_oauth"].find_one({"id": google_oauth_id})
+            result = await self._get_db()["google_oauth"].find_one({"id": google_oauth_id})
             
             if not result:
                 return {
@@ -65,14 +78,14 @@ class Google_OauthService:
     async def list_google_oauth(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
         """List all google_oauth"""
         try:
-            cursor = self.db["google_oauth"].find({}).skip(offset).limit(limit)
+            cursor = self._get_db()["google_oauth"].find({}).skip(offset).limit(limit)
             results = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id from all results
             for result in results:
                 result.pop('_id', None)
             
-            total_count = await self.db["google_oauth"].count_documents({})
+            total_count = await self._get_db()["google_oauth"].count_documents({})
             
             return {
                 "success": True,
@@ -93,7 +106,7 @@ class Google_OauthService:
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.db["google_oauth"].update_one(
+            result = await self._get_db()["google_oauth"].update_one(
                 {"id": google_oauth_id},
                 {"$set": update_data}
             )
@@ -105,7 +118,7 @@ class Google_OauthService:
                 }
             
             # Get updated document
-            updated_doc = await self.db["google_oauth"].find_one({"id": google_oauth_id})
+            updated_doc = await self._get_db()["google_oauth"].find_one({"id": google_oauth_id})
             updated_doc.pop('_id', None)
             
             return {
@@ -122,7 +135,7 @@ class Google_OauthService:
     async def delete_google_oauth(self, google_oauth_id: str) -> Dict[str, Any]:
         """Delete google_oauth by ID"""
         try:
-            result = await self.db["google_oauth"].delete_one({"id": google_oauth_id})
+            result = await self._get_db()["google_oauth"].delete_one({"id": google_oauth_id})
             
             if result.deleted_count == 0:
                 return {

@@ -10,7 +10,20 @@ from core.database import get_database
 
 class AnalyticsService:
     def __init__(self):
-        self.db = get_database()
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self, collection_name: str):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()[collection_name]
+        return self.collection
 
     async def create_analytic(self, analytic_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new analytic"""
@@ -24,7 +37,7 @@ class AnalyticsService:
             })
             
             # Save to database
-            result = await self.db["analytics"].insert_one(analytic_data)
+            result = await self._get_db()["analytics"].insert_one(analytic_data)
             
             return {
                 "success": True,
@@ -41,7 +54,7 @@ class AnalyticsService:
     async def get_analytic(self, analytic_id: str) -> Dict[str, Any]:
         """Get analytic by ID"""
         try:
-            result = await self.db["analytics"].find_one({"id": analytic_id})
+            result = await self._get_db()["analytics"].find_one({"id": analytic_id})
             
             if not result:
                 return {
@@ -65,14 +78,14 @@ class AnalyticsService:
     async def list_analytics(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
         """List all analytics"""
         try:
-            cursor = self.db["analytics"].find({}).skip(offset).limit(limit)
+            cursor = self._get_db()["analytics"].find({}).skip(offset).limit(limit)
             results = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id from all results
             for result in results:
                 result.pop('_id', None)
             
-            total_count = await self.db["analytics"].count_documents({})
+            total_count = await self._get_db()["analytics"].count_documents({})
             
             return {
                 "success": True,
@@ -93,7 +106,7 @@ class AnalyticsService:
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.db["analytics"].update_one(
+            result = await self._get_db()["analytics"].update_one(
                 {"id": analytic_id},
                 {"$set": update_data}
             )
@@ -105,7 +118,7 @@ class AnalyticsService:
                 }
             
             # Get updated document
-            updated_doc = await self.db["analytics"].find_one({"id": analytic_id})
+            updated_doc = await self._get_db()["analytics"].find_one({"id": analytic_id})
             updated_doc.pop('_id', None)
             
             return {
@@ -122,7 +135,7 @@ class AnalyticsService:
     async def delete_analytic(self, analytic_id: str) -> Dict[str, Any]:
         """Delete analytic by ID"""
         try:
-            result = await self.db["analytics"].delete_one({"id": analytic_id})
+            result = await self._get_db()["analytics"].delete_one({"id": analytic_id})
             
             if result.deleted_count == 0:
                 return {

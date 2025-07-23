@@ -10,8 +10,21 @@ from core.database import get_database
 
 class CompleteEcommerceService:
     def __init__(self):
-        self.db = get_database()
-        self.collection = self.db["completeecommerce"]
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self, collection_name: str):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()[collection_name]
+        return self.collection
+        self.collection = self._get_db()["completeecommerce"]
 
     async def create_complete_ecommerce(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new complete_ecommerce"""
@@ -25,7 +38,7 @@ class CompleteEcommerceService:
             })
             
             # Save to database
-            result = await self.collection.insert_one(data)
+            result = await self._get_collection("default").insert_one(data)
             
             return {
                 "success": True,
@@ -42,7 +55,7 @@ class CompleteEcommerceService:
     async def get_complete_ecommerce(self, item_id: str) -> Dict[str, Any]:
         """Get complete_ecommerce by ID"""
         try:
-            doc = await self.collection.find_one({"id": item_id})
+            doc = await self._get_collection("default").find_one({"id": item_id})
             
             if not doc:
                 return {
@@ -68,14 +81,14 @@ class CompleteEcommerceService:
             if user_id:
                 query["user_id"] = user_id
             
-            cursor = self.collection.find(query).skip(offset).limit(limit)
+            cursor = self._get_collection("default").find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id field
             for doc in docs:
                 doc.pop('_id', None)
             
-            total_count = await self.collection.count_documents(query)
+            total_count = await self._get_collection("default").count_documents(query)
             
             return {
                 "success": True,
@@ -96,7 +109,7 @@ class CompleteEcommerceService:
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.collection.update_one(
+            result = await self._get_collection("default").update_one(
                 {"id": item_id},
                 {"$set": update_data}
             )
@@ -108,7 +121,7 @@ class CompleteEcommerceService:
                 }
             
             # Get updated document
-            updated_doc = await self.collection.find_one({"id": item_id})
+            updated_doc = await self._get_collection("default").find_one({"id": item_id})
             if updated_doc:
                 updated_doc.pop('_id', None)
             
@@ -126,7 +139,7 @@ class CompleteEcommerceService:
     async def delete_complete_ecommerce(self, item_id: str) -> Dict[str, Any]:
         """Delete complete_ecommerce by ID"""
         try:
-            result = await self.collection.delete_one({"id": item_id})
+            result = await self._get_collection("default").delete_one({"id": item_id})
             
             if result.deleted_count == 0:
                 return {
@@ -152,8 +165,8 @@ class CompleteEcommerceService:
             if user_id:
                 query["user_id"] = user_id
             
-            total_count = await self.collection.count_documents(query)
-            active_count = await self.collection.count_documents({**query, "status": "active"})
+            total_count = await self._get_collection("default").count_documents(query)
+            active_count = await self._get_collection("default").count_documents({**query, "status": "active"})
             
             return {
                 "success": True,

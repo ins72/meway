@@ -1,405 +1,134 @@
 """
-Multi-Vendor Marketplace Management Service
+Multi Vendor Marketplace Service
+Auto-generated service with proper database initialization
 """
-from bson import ObjectId
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
-import asyncio
+
+import uuid
+from datetime import datetime
+from typing import Dict, Any, List, Optional
+from core.database import get_database
 
 class MultiVendorMarketplaceService:
-    def __init__(self, db):
-        self.db = db
-        self.vendors = db["vendors"]
-        self.vendor_applications = db["vendor_applications"]
-        self.commission_settings = db["commission_settings"]
-        self.payouts = db["payouts"]
-        self.seller_analytics = db["seller_analytics"]
-        self.dynamic_pricing = db["dynamic_pricing"]
-        
-    async def vendor_onboarding(self, vendor_data: Dict) -> Dict:
-        """Complete vendor onboarding process"""
-        try:
-            vendor_id = str(uuid.uuid4())
-            
-            # Create vendor application
-            application = {
-                "_id": str(uuid.uuid4()),
-                "vendor_id": vendor_id,
-                "business_name": vendor_data.get("business_name"),
-                "contact_email": vendor_data.get("email"),
-                "business_type": vendor_data.get("business_type"),
-                "tax_id": vendor_data.get("tax_id"),
-                "business_address": vendor_data.get("address"),
-                "bank_details": vendor_data.get("bank_details"),
-                "documents": vendor_data.get("documents", []),
-                "status": "pending_review",
-                "submitted_at": datetime.utcnow(),
-                "review_notes": ""
-            }
-            
-            await self.vendor_applications.insert_one(application)
-            
-            # Create vendor profile
-            vendor_profile = {
-                "_id": vendor_id,
-                "business_name": vendor_data.get("business_name"),
-                "owner_name": vendor_data.get("owner_name"),
-                "email": vendor_data.get("email"),
-                "phone": vendor_data.get("phone"),
-                "business_type": vendor_data.get("business_type"),
-                "status": "pending_approval",
-                "verification_level": "basic",
-                "commission_rate": 15.0,  # Default commission
-                "total_sales": 0,
-                "product_count": 0,
-                "rating": 0.0,
-                "created_at": datetime.utcnow(),
-                "approved_at": None,
-                "store_settings": {
-                    "store_name": vendor_data.get("business_name"),
-                    "description": "",
-                    "logo": "",
-                    "banner": "",
-                    "theme": "default"
-                }
-            }
-            
-            await self.vendors.insert_one(vendor_profile)
-            
-            self.log(f"✅ Vendor application submitted: {vendor_id}")
-            return {"vendor_id": vendor_id, "application_id": application["_id"]}
-            
-        except Exception as e:
-            self.log(f"❌ Vendor onboarding failed: {str(e)}")
-            return {"error": str(e)}
+    def __init__(self):
+        pass
     
-    async def approve_vendor(self, vendor_id: str, admin_notes: str = "") -> Dict:
-        """Approve vendor application"""
-        try:
-            # Update vendor status
-            await self.vendors.update_one(
-                {"_id": vendor_id},
-                {
-                    "$set": {
-                        "status": "active",
-                        "approved_at": datetime.utcnow(),
-                        "verification_level": "verified"
-                    }
-                }
-            )
-            
-            # Update application status
-            await self.vendor_applications.update_one(
-                {"vendor_id": vendor_id},
-                {
-                    "$set": {
-                        "status": "approved",
-                        "review_notes": admin_notes,
-                        "reviewed_at": datetime.utcnow()
-                    }
-                }
-            )
-            
-            # Set up initial commission settings
-            await self.setup_vendor_commission(vendor_id)
-            
-            return {"status": "approved", "vendor_id": vendor_id}
-            
-        except Exception as e:
-            return {"error": str(e)}
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
     
-    async def setup_vendor_commission(self, vendor_id: str) -> Dict:
-        """Set up commission structure for vendor"""
+    async def create_multi_vendor_marketplace(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new multi_vendor_marketplace"""
         try:
-            commission_config = {
-                "_id": str(uuid.uuid4()),
-                "vendor_id": vendor_id,
-                "commission_type": "percentage",
-                "commission_rate": 15.0,
-                "minimum_payout": 100.0,
-                "payout_frequency": "weekly",
-                "payment_method": "bank_transfer",
-                "created_at": datetime.utcnow(),
-                "active": True
-            }
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            await self.commission_settings.insert_one(commission_config)
-            return commission_config
-            
-        except Exception as e:
-            return {"error": str(e)}
-    
-    async def calculate_dynamic_pricing(self, product_id: str, market_data: Dict) -> Dict:
-        """Calculate dynamic pricing using AI optimization"""
-        try:
-            # Mock AI-driven dynamic pricing algorithm
-            base_price = market_data.get("base_price", 0)
-            demand_factor = market_data.get("demand_factor", 1.0)
-            competition_price = market_data.get("competition_avg", base_price)
-            inventory_level = market_data.get("inventory_level", 100)
-            
-            # Simple dynamic pricing algorithm
-            if inventory_level < 10:
-                scarcity_multiplier = 1.2  # Increase price when low inventory
-            elif inventory_level > 100:
-                scarcity_multiplier = 0.95  # Decrease price when overstocked
-            else:
-                scarcity_multiplier = 1.0
-            
-            # Competition-based adjustment
-            if base_price > competition_price * 1.1:
-                competition_adjustment = 0.95  # Lower price if too high vs competition
-            else:
-                competition_adjustment = 1.0
-            
-            # Final optimized price
-            optimized_price = base_price * demand_factor * scarcity_multiplier * competition_adjustment
-            
-            pricing_data = {
-                "_id": str(uuid.uuid4()),
-                "product_id": product_id,
-                "base_price": base_price,
-                "optimized_price": round(optimized_price, 2),
-                "factors": {
-                    "demand_factor": demand_factor,
-                    "scarcity_multiplier": scarcity_multiplier,
-                    "competition_adjustment": competition_adjustment
-                },
-                "calculated_at": datetime.utcnow(),
-                "valid_until": datetime.utcnow() + timedelta(hours=24)
-            }
-            
-            await self.dynamic_pricing.insert_one(pricing_data)
-            return pricing_data
-            
-        except Exception as e:
-            return {"error": str(e)}
-    
-    async def process_vendor_payout(self, vendor_id: str) -> Dict:
-        """Process automated vendor payout"""
-        try:
-            # Get vendor commission settings
-            commission_config = await self.commission_settings.find_one({"vendor_id": vendor_id})
-            
-            if not commission_config:
-                return {"error": "Commission settings not found"}
-            
-            # Calculate earnings (mock calculation)
-            total_sales = 1500.00  # This would come from actual sales data
-            commission_rate = commission_config.get("commission_rate", 15.0)
-            platform_fee = total_sales * (commission_rate / 100)
-            vendor_earnings = total_sales - platform_fee
-            
-            if vendor_earnings >= commission_config.get("minimum_payout", 100.0):
-                payout_id = str(uuid.uuid4())
-                payout_data = {
-                    "_id": payout_id,
-                    "vendor_id": vendor_id,
-                    "amount": vendor_earnings,
-                    "currency": "USD",
-                    "commission_deducted": platform_fee,
-                    "payout_method": commission_config.get("payment_method", "bank_transfer"),
-                    "status": "processed",
-                    "processed_at": datetime.utcnow(),
-                    "transaction_id": f"txn_{str(ObjectId())[:12]}"
-                }
-                
-                await self.payouts.insert_one(payout_data)
-                return payout_data
-            else:
-                return {"error": "Minimum payout threshold not reached"}
-                
-        except Exception as e:
-            return {"error": str(e)}
-    
-    async def get_seller_performance_metrics(self, vendor_id: str) -> Dict:
-        """Get comprehensive seller performance analytics"""
-        try:
-            # Mock comprehensive analytics data
-            performance_data = {
-                "vendor_id": vendor_id,
-                "sales_metrics": {
-                    "total_revenue": 25000.00,
-                    "orders_count": 150,
-                    "average_order_value": 166.67,
-                    "conversion_rate": 3.5,
-                    "return_rate": 2.1
-                },
-                "product_metrics": {
-                    "total_products": 45,
-                    "active_products": 42,
-                    "out_of_stock": 3,
-                    "top_performing_products": [
-                        {"name": "Premium Widget", "sales": 890.00},
-                        {"name": "Deluxe Gadget", "sales": 675.00}
-                    ]
-                },
-                "customer_metrics": {
-                    "total_customers": 120,
-                    "repeat_customers": 35,
-                    "customer_satisfaction": 4.6,
-                    "reviews_count": 89,
-                    "average_rating": 4.5
-                },
-                "financial_metrics": {
-                    "gross_profit": 18750.00,
-                    "commission_paid": 3750.00,
-                    "net_earnings": 15000.00,
-                    "pending_payouts": 1200.00
-                },
-                "period": "last_30_days",
-                "generated_at": datetime.utcnow()
-            }
-            
-            # Store analytics data
-            await self.seller_analytics.insert_one(performance_data)
-            return performance_data
-            
-        except Exception as e:
-            return {"error": str(e)}
-    
-    def log(self, message: str):
-        """Simple logging method"""
-        print(f"[MARKETPLACE] {message}")
-
-    async def create_item(self, user_id: str, item_data: dict):
-        """Create new item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            new_item = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                **item_data,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
+            collection = db["multi_vendor_marketplace"]
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
                 "status": "active"
-            }
-            
-            await collections['items'].insert_one(new_item)
-            
-            return {
-                "success": True,
-                "data": new_item,
-                "message": "Item created successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
             })
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
-            
-            return {
-                "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
-            }
-            
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+            return {"success": False, "error": str(e)}
+    
+    async def get_multi_vendor_marketplace(self, item_id: str) -> Dict[str, Any]:
+        """Get multi_vendor_marketplace by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
+            collection = db["multi_vendor_marketplace"]
+            doc = await collection.find_one({"id": item_id})
             
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
+            if not doc:
+                return {"success": False, "error": "Not found"}
+            
+            doc.pop('_id', None)
+            return {"success": True, "data": doc}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def list_multi_vendor_marketplaces(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List multi_vendor_marketplaces"""
+        try:
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["multi_vendor_marketplace"]
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def update_multi_vendor_marketplace(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update multi_vendor_marketplace"""
+        try:
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["multi_vendor_marketplace"]
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
+            if result.matched_count == 0:
+                return {"success": False, "error": "Not found"}
             
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
-            }
-            
+            return {"success": True, "data": updated_doc}
         except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+            return {"success": False, "error": str(e)}
+    
+    async def delete_multi_vendor_marketplace(self, item_id: str) -> Dict[str, Any]:
+        """Delete multi_vendor_marketplace"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            collection = db["multi_vendor_marketplace"]
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "message": "Item deleted successfully"
-            }
-            
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "error": str(e)}
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
-            
-            return {
-                "success": True,
-                "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
+# Service instance
+_service_instance = None
+
+def get_multi_vendor_marketplace_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = MultiVendorMarketplaceService()
+    return _service_instance
+
+# Backward compatibility
+multi_vendor_marketplace_service = get_multi_vendor_marketplace_service()

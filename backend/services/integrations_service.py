@@ -1,6 +1,6 @@
 """
-Integrations Service - Comprehensive Business Logic
-Generated for complete service/API pairing with full CRUD operations
+Integrations Service
+Auto-generated service with proper database initialization
 """
 
 import uuid
@@ -9,179 +9,126 @@ from typing import Dict, Any, List, Optional
 from core.database import get_database
 
 class IntegrationsService:
-    """Comprehensive integrations service with full CRUD operations"""
-    
     def __init__(self):
-        self.db = None
+        pass
     
-    async def get_database(self):
-        """Get database connection with lazy initialization"""
-        if not self.db:
-            self.db = get_database()
-        return self.db
+    def _get_db(self):
+        """Get database connection"""
+        return get_database()
     
-    async def create_integrations(self, integrations_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create integrations with real data persistence"""
+    async def create_integrations(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create new integrations"""
         try:
-            # Add metadata
-            integrations_data.update({
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["integrations"]
+            data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
-                "status": integrations_data.get("status", "active")
+                "status": "active"
             })
             
-            # Save to database
-            db = await self.get_database()
-            result = await db["integrations"].insert_one(integrations_data)
-            
-            return {
-                "success": True,
-                "message": f"Integrations created successfully",
-                "data": integrations_data,
-                "id": integrations_data["id"]
-            }
+            result = await collection.insert_one(data)
+            return {"success": True, "data": data, "id": data["id"]}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create integrations: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def get_integrations(self, integrations_id: str) -> Dict[str, Any]:
-        """Get integrations by ID with real data"""
+    async def get_integrations(self, item_id: str) -> Dict[str, Any]:
+        """Get integrations by ID"""
         try:
-            db = await self.get_database()
-            result = await db["integrations"].find_one({"id": integrations_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            if not result:
-                return {
-                    "success": False,
-                    "error": f"Integrations not found"
-                }
+            collection = db["integrations"]
+            doc = await collection.find_one({"id": item_id})
             
-            # Remove MongoDB _id
-            result.pop('_id', None)
+            if not doc:
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "data": result
-            }
+            doc.pop('_id', None)
+            return {"success": True, "data": doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to get integrations: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def list_integrations(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
-        """List all integrations with real data"""
+    async def list_integrationss(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List integrationss"""
         try:
-            db = await self.get_database()
-            cursor = db["integrations"].find({}).skip(offset).limit(limit)
-            results = await cursor.to_list(length=limit)
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
             
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
+            collection = db["integrations"]
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            total_count = await db["integrations"].count_documents({})
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
             
-            return {
-                "success": True,
-                "data": results,
-                "total": total_count,
-                "limit": limit,
-                "offset": offset
-            }
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await collection.count_documents(query)
+            return {"success": True, "data": docs, "total": total_count, "limit": limit, "offset": offset}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to list integrations: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def update_integrations(self, integrations_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update integrations with real data persistence"""
+    async def update_integrations(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update integrations"""
         try:
-            # Add update timestamp
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["integrations"]
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            db = await self.get_database()
-            result = await db["integrations"].update_one(
-                {"id": integrations_id},
+            result = await collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
             if result.matched_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Integrations not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            # Get updated document
-            updated_doc = await db["integrations"].find_one({"id": integrations_id})
-            updated_doc.pop('_id', None)
+            updated_doc = await collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
-            return {
-                "success": True,
-                "message": f"Integrations updated successfully",
-                "data": updated_doc
-            }
+            return {"success": True, "data": updated_doc}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to update integrations: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
     
-    async def delete_integrations(self, integrations_id: str) -> Dict[str, Any]:
-        """Delete integrations with real data persistence"""
+    async def delete_integrations(self, item_id: str) -> Dict[str, Any]:
+        """Delete integrations"""
         try:
-            db = await self.get_database()
-            result = await db["integrations"].delete_one({"id": integrations_id})
+            db = self._get_db()
+            if not db:
+                return {"success": False, "error": "Database not available"}
+            
+            collection = db["integrations"]
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {
-                    "success": False,
-                    "error": f"Integrations not found"
-                }
+                return {"success": False, "error": "Not found"}
             
-            return {
-                "success": True,
-                "message": f"Integrations deleted successfully",
-                "deleted_count": result.deleted_count
-            }
+            return {"success": True, "message": "Deleted successfully", "deleted_count": result.deleted_count}
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to delete integrations: {str(e)}"
-            }
-    
-    async def search_integrations(self, query: str, limit: int = 10) -> Dict[str, Any]:
-        """Search integrations with real data"""
-        try:
-            db = await self.get_database()
-            
-            # Simple text search (can be enhanced with MongoDB text search)
-            search_filter = {
-                "$or": [
-                    {"name": {"$regex": query, "$options": "i"}},
-                    {"description": {"$regex": query, "$options": "i"}}
-                ]
-            }
-            
-            cursor = db["integrations"].find(search_filter).limit(limit)
-            results = await cursor.to_list(length=limit)
-            
-            # Remove MongoDB _id from all results
-            for result in results:
-                result.pop('_id', None)
-            
-            return {
-                "success": True,
-                "data": results,
-                "query": query,
-                "count": len(results)
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to search integrations: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
+
+# Service instance
+_service_instance = None
+
+def get_integrations_service():
+    """Get service instance"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = IntegrationsService()
+    return _service_instance
+
+# Backward compatibility
+integrations_service = get_integrations_service()
