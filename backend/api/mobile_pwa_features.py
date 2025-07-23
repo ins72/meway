@@ -43,16 +43,16 @@ class PushNotificationRequest(BaseModel):
 
 class CacheResourceRequest(BaseModel):
     url: str = Field(..., description="Resource URL to cache")
-    type: str = Field(..., regex="^(page|api|asset)$")
+    type: str = Field(..., pattern="^(page|api|asset)$")
     content: str = Field(..., description="Resource content")
     content_type: str = Field("text/html")
     strategy: str = Field("cache_first")
     ttl_hours: int = Field(24, ge=1, le=168)
 
 class PWASettingsRequest(BaseModel):
-    theme_color: str = Field("#1f2937", regex="^#[0-9A-Fa-f]{6}$")
-    background_color: str = Field("#ffffff", regex="^#[0-9A-Fa-f]{6}$")
-    display_mode: str = Field("standalone", regex="^(fullscreen|standalone|minimal-ui|browser)$")
+    theme_color: str = Field("#1f2937", pattern="^#[0-9A-Fa-f]{6}$")
+    background_color: str = Field("#ffffff", pattern="^#[0-9A-Fa-f]{6}$")
+    display_mode: str = Field("standalone", pattern="^(fullscreen|standalone|minimal-ui|browser)$")
     orientation: str = Field("any")
     start_url: str = Field("/")
     scope: str = Field("/")
