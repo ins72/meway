@@ -24,6 +24,8 @@ croniter
 numpy
 aiohttp
 requests
-qrcode
+qrcode[pil]
 tenacity
 emergentintegrations
+pyotp>=2.9.0
+Pillow>=10.1.0
