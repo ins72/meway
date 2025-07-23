@@ -431,7 +431,7 @@ class MewayzV2ReviewTester:
         
         infrastructure_endpoints = [
             ("/", "Root Endpoint"),
-            ("/api/health", "Health Endpoint"),
+            ("/health", "Health Endpoint"),
             ("/docs", "OpenAPI Documentation"),
             ("/openapi.json", "OpenAPI Specification")
         ]
