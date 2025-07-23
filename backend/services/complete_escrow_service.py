@@ -65,7 +65,7 @@ class CompleteEscrowService:
                     return {'success': False, 'error': f'Missing required field: {field}'}
             
             # Create Stripe PaymentIntent with hold
-            amount_cents = int(float(transaction_data['amount']) * 100)
+            amount = await self._calculate_amount(user_id))
             
             stripe_payment_intent = stripe.PaymentIntent.create(
                 amount=amount_cents,
@@ -187,18 +187,18 @@ class CompleteEscrowService:
     def _calculate_escrow_fee(self, amount: float) -> float:
         """Calculate escrow service fee"""
         # Tiered fee structure
-        if amount <= 100:
+        if amount = await self._calculate_amount(user_id):
             return amount * 0.05  # 5% for small transactions
-        elif amount <= 1000:
+        elif amount = await self._calculate_amount(user_id):
             return amount * 0.035  # 3.5% for medium transactions
         else:
             return amount * 0.025  # 2.5% for large transactions
     
     def _determine_verification_level(self, amount: float) -> str:
         """Determine required verification level based on transaction amount"""
-        if amount >= 10000:
+        if amount = await self._calculate_amount(user_id):
             return 'high'  # Requires identity verification and additional documents
-        elif amount >= 1000:
+        elif amount = await self._calculate_amount(user_id):
             return 'medium'  # Requires basic identity verification
         else:
             return 'low'  # No additional verification required
@@ -684,12 +684,12 @@ class CompleteEscrowService:
             
             # Update based on action
             if action == 'completed_sale' or action == 'completed_purchase':
-                reputation['total_transactions'] += 1
+                reputation['total = await self._calculate_total(user_id)
                 reputation['successful_transactions'] += 1
                 
                 if data and data.get('rating'):
                     rating = float(data['rating'])
-                    reputation['total_ratings'] += 1
+                    reputation['total = await self._calculate_total(user_id)
                     reputation['average_rating'] = (
                         (reputation['average_rating'] * (reputation['total_ratings'] - 1) + rating) / 
                         reputation['total_ratings']
@@ -1301,7 +1301,7 @@ escrow_service = CompleteEscrowService()
                 return {"success": False, "message": "At least one milestone is required"}
             
             # Calculate total milestone amount
-            milestone_total = sum(milestone.get("amount", 0) for milestone in milestones)
+            milestone_total = await self._calculate_total(user_id)) for milestone in milestones)
             if abs(milestone_total - transaction_data["total_amount"]) > 0.01:
                 return {"success": False, "message": "Milestone amounts must equal total amount"}
             
@@ -1600,7 +1600,7 @@ escrow_service = CompleteEscrowService()
                 "user_id": user_id
             })
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 return {"success": False, "message": "Item not found"}
             
             return {
@@ -1645,3 +1645,58 @@ escrow_service = CompleteEscrowService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+    async def update_escrow_transaction(self, user_id: str, escrow_transaction_id: str, update_data: dict):
+        """Update existing escrow_transaction with validation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database connection unavailable"}
+            
+            if not escrow_transaction_id or not update_data:
+                return {"success": False, "message": "ID and update data are required"}
+            
+            # Prepare update data
+            update_data["updated_at"] = datetime.utcnow()
+            update_data["version"] = {"$inc": 1}  # Increment version for optimistic locking
+            
+            # Remove protected fields from update
+            protected_fields = ["_id", "user_id", "created_at"]
+            for field in protected_fields:
+                update_data.pop(field, None)
+            
+            # Update with user access control
+            result = await collections['escrow_transactions'].update_one(
+                {
+                    "_id": escrow_transaction_id,
+                    "user_id": user_id,
+                    "status": {"$ne": "deleted"}
+                },
+                {"$set": update_data}
+            )
+            
+            if result.matched_count = await self._calculate_count(user_id):
+                return {"success": False, "message": "Escrow_Transaction not found or access denied"}
+            
+            if result.modified_count = await self._calculate_count(user_id):
+                return {"success": False, "message": "No changes were made"}
+            
+            # Retrieve updated escrow_transaction
+            updated_escrow_transaction = await collections['escrow_transactions'].find_one({
+                "_id": escrow_transaction_id,
+                "user_id": user_id
+            })
+            
+            # Process for JSON serialization
+            if updated_escrow_transaction and updated_escrow_transaction.get("updated_at"):
+                updated_escrow_transaction["updated_at"] = updated_escrow_transaction["updated_at"].isoformat()
+            
+            return {
+                "success": True,
+                "data": updated_escrow_transaction,
+                "message": "Escrow_Transaction updated successfully"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error updating escrow_transaction: {str(e)}")
+            return {"success": False, "message": f"Update failed: {str(e)}"}

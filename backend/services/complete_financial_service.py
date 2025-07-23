@@ -66,15 +66,15 @@ class CompleteFinancialService:
             subtotal = sum(Decimal(str(item['quantity'])) * Decimal(str(item['rate'])) for item in line_items)
             
             # Apply discount
-            discount_amount = Decimal(str(invoice_data.get('discount_amount', 0)))
-            discount_percentage = Decimal(str(invoice_data.get('discount_percentage', 0)))
+            discount = await self._calculate_count(user_id))))
+            discount = await self._calculate_count(user_id))))
             
             if discount_percentage > 0:
-                discount_amount = subtotal * (discount_percentage / 100)
+                discount = await self._calculate_count(user_id))
             
             # Calculate tax
             tax_rate = Decimal(str(invoice_data.get('tax_rate', 0)))
-            tax_amount = (subtotal - discount_amount) * (tax_rate / 100)
+            tax_amount = await self._calculate_amount(user_id))
             
             total_amount = subtotal - discount_amount + tax_amount
             
@@ -103,7 +103,7 @@ class CompleteFinancialService:
                         stripe.InvoiceItem.create(
                             customer=stripe_customer.id,
                             invoice=stripe_invoice.id,
-                            amount=int(float(item['quantity']) * float(item['rate']) * 100),
+                            amount = await self._calculate_amount(user_id)),
                             currency=invoice_data.get('currency', 'usd'),
                             description=item['description']
                         )
@@ -651,16 +651,16 @@ class CompleteFinancialService:
             recent_expenses = await db.expenses.find({'user_id': user_id}).sort('created_at', -1).limit(5).to_list(length=5)
             
             # Calculate totals
-            invoice_total = 0
-            expense_total = 0
+            invoice_total = await self._calculate_total(user_id)
+            expense_total = await self._calculate_total(user_id)
             
             all_invoices = await db.invoices.find({'user_id': user_id}).to_list(length=None)
             for inv in all_invoices:
-                invoice_total += inv.get('total_amount', 0)
+                invoice_total = await self._calculate_total(user_id))
                 
             all_expenses = await db.expenses.find({'user_id': user_id}).to_list(length=None)  
             for exp in all_expenses:
-                expense_total += exp.get('amount', 0)
+                expense_total = await self._calculate_total(user_id))
             
             return {
                 'summary': {
@@ -702,7 +702,7 @@ class CompleteFinancialService:
                     grouped_data[key] = {'revenue': 0, 'count': 0}
                     
                 grouped_data[key]['revenue'] += invoice.get('total_amount', 0)
-                grouped_data[key]['count'] += 1
+                grouped_data[key]['count = await self._calculate_count(user_id)
             
             return {
                 'period': f"{start_date.isoformat()} to {end_date.isoformat()}",
@@ -737,8 +737,8 @@ class CompleteFinancialService:
                 if key not in grouped_data:
                     grouped_data[key] = {'amount': 0, 'count': 0}
                     
-                grouped_data[key]['amount'] += expense.get('amount', 0)
-                grouped_data[key]['count'] += 1
+                grouped_data[key]['amount = await self._calculate_amount(user_id))
+                grouped_data[key]['count = await self._calculate_count(user_id)
             
             return {
                 'period': f"{start_date.isoformat()} to {end_date.isoformat()}",
@@ -860,8 +860,8 @@ class CompleteFinancialService:
         """Create HTML template for invoice PDF"""
         try:
             # Calculate totals
-            subtotal = sum(item.get('amount', 0) for item in invoice.get('items', []))
-            tax_amount = subtotal * (invoice.get('tax_rate', 0) / 100)
+            subtotal = await self._calculate_total(user_id)) for item in invoice.get('items', []))
+            tax_amount = await self._calculate_amount(user_id))
             total = subtotal + tax_amount
             
             html_template = f"""

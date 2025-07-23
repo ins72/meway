@@ -166,7 +166,7 @@ class EmailMarketingService:
         # Generate detailed campaign data
         recipients = await self._get_metric_from_db('general', 1000, 8000)
         opens = await self._get_real_metric_from_db('email_opens', int(recipients * 0.2), int(recipients * 0.5))
-        clicks = await self._get_real_metric_from_db('email_clicks', int(opens * 0.08), int(opens * 0.3))
+        clicks = await self._get_real_clicks(user_id)))
         
         campaign = {
             "id": campaign_id,
@@ -222,7 +222,7 @@ class EmailMarketingService:
         
         lists = []
         for i in range(await self._get_metric_from_db('count', 5, 15)):
-            subscriber_count = await self._get_metric_from_db('general', 100, 5000)
+            subscriber_count = await self._calculate_count(user_id))
             lists.append({
                 "id": str(uuid.uuid4()),
                 "name": await self._get_choice_from_db([
@@ -312,7 +312,7 @@ class EmailMarketingService:
         """Get user's email contacts"""
         
         contacts = []
-        contact_count = await self._get_metric_from_db('general', 50, 500)
+        contact_count = await self._calculate_count(user_id))
         
         for i in range(contact_count):
             first_names = ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Iris", "Jack"]
@@ -604,7 +604,7 @@ class EmailMarketingService:
         """Get contacts in a specific list"""
         
         contacts = []
-        contact_count = await self._get_metric_from_db('general', 20, 200)
+        contact_count = await self._calculate_count(user_id))
         
         for i in range(contact_count):
             contacts.append({
@@ -898,7 +898,7 @@ email_marketing_service = EmailMarketingService()
                 "user_id": user_id
             })
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 return {"success": False, "message": "Campaign not found"}
             
             return {
@@ -908,3 +908,60 @@ email_marketing_service = EmailMarketingService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+    async def list_campaigns(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's campaigns with pagination and filtering"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database connection unavailable"}
+            
+            # Build query with user filter
+            query = {
+                "user_id": user_id,
+                "status": {"$ne": "deleted"}
+            }
+            
+            # Apply additional filters
+            if filters:
+                for key, value in filters.items():
+                    if key not in ["user_id", "_id"]:  # Prevent overriding security filters
+                        query[key] = value
+            
+            # Calculate pagination
+            limit = min(max(1, limit), 100)  # Ensure reasonable limits
+            skip = (max(1, page) - 1) * limit
+            
+            # Execute query with pagination
+            cursor = collections['campaigns'].find(query).sort("created_at", -1).skip(skip).limit(limit)
+            campaigns = await cursor.to_list(length=limit)
+            
+            # Get total count for pagination info
+            total_count = await collections['campaigns'].count_documents(query)
+            
+            # Process results for JSON serialization
+            for campaign in campaigns:
+                if campaign.get("created_at"):
+                    campaign["created_at"] = campaign["created_at"].isoformat()
+                if campaign.get("updated_at"):
+                    campaign["updated_at"] = campaign["updated_at"].isoformat()
+            
+            return {
+                "success": True,
+                "data": {
+                    "campaigns": campaigns,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit,
+                        "has_next": skip + limit < total_count,
+                        "has_prev": page > 1
+                    }
+                },
+                "message": "{} campaigns retrieved successfully".format(len(campaigns))
+            }
+            
+        except Exception as e:
+            logger.error(f"Error listing campaigns: {str(e)}")
+            return {"success": False, "message": f"List operation failed: {str(e)}"}

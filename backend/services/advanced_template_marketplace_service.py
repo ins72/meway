@@ -970,7 +970,7 @@ class AdvancedTemplateMarketplaceService:
             # Get top performing templates
             templates = await collections['marketplace_templates'].find(
                 {"creator_id": creator_id}
-            ).sort("analytics.total_revenue", -1).limit(5).to_list(length=5)
+            ).sort("analytics.total = await self._calculate_total(user_id))
             
             # Calculate monthly earnings
             monthly_earnings = await self._calculate_monthly_earnings(creator_id)

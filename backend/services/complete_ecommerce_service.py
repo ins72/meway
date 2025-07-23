@@ -390,7 +390,7 @@ class CompleteEcommerceService:
             # Delete main product
             result = await self.products.delete_one({"_id": product_id})
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 raise Exception("Failed to delete product")
             
             return {
@@ -560,13 +560,13 @@ class CompleteEcommerceService:
             return base_slug
         
         # Generate unique slug with number
-        counter = 1
+        count = await self._calculate_count(user_id)
         while True:
             new_slug = f"{base_slug}-{counter}"
             existing = await self.stores.find_one({"slug": new_slug})
             if not existing:
                 return new_slug
-            counter += 1
+            count = await self._calculate_count(user_id)
 
     async def _generate_unique_sku(self, name: str) -> str:
         """Generate unique SKU for product"""
@@ -584,13 +584,13 @@ class CompleteEcommerceService:
             return sku
         
         # Generate unique SKU
-        counter = 1
+        count = await self._calculate_count(user_id)
         while True:
             new_sku = f"{base_sku}-{suffix}-{counter}"
             existing = await self.products.find_one({"sku": new_sku})
             if not existing:
                 return new_sku
-            counter += 1
+            count = await self._calculate_count(user_id)
 
     async def _create_default_categories(self, store_id: str):
         """Create default categories for new store"""
@@ -819,10 +819,10 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
 
     async def _calculate_order_totals(self, items: List[Dict[str, Any]]) -> Dict[str, float]:
         """Calculate order totals"""
-        subtotal = sum(float(item.get("price", 0)) * int(item.get("quantity", 1)) for item in items)
-        tax_amount = subtotal * 0.08  # 8% tax
-        shipping_amount = 9.99 if subtotal < 50 else 0  # Free shipping over $50
-        discount_amount = 0.0
+        subtotal = await self._calculate_total(user_id))) for item in items)
+        tax_amount = await self._calculate_amount(user_id)% tax
+        shipping_amount = await self._calculate_amount(user_id)
+        discount = await self._calculate_count(user_id)
         total_amount = subtotal + tax_amount + shipping_amount - discount_amount
         
         return {
@@ -869,7 +869,7 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
             
             # Create Stripe payment intent
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(amount * 100),  # Convert to cents
+                amount = await self._calculate_amount(user_id)),  # Convert to cents
                 currency='usd',
                 automatic_payment_methods={
                     'enabled': True,
@@ -944,7 +944,7 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
             
             # Calculate metrics
             total_orders = len(orders)
-            total_revenue = sum(order.get("total_amount", 0) for order in orders)
+            total = await self._calculate_total(user_id)) for order in orders)
             average_order_value = total_revenue / max(total_orders, 1)
             
             # Get top products
@@ -972,7 +972,7 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
         if not reviews:
             return 0.0
         
-        total_rating = sum(review.get("rating", 0) for review in reviews)
+        total = await self._calculate_total(user_id)) for review in reviews)
         return round(total_rating / len(reviews), 2)
 
     async def _update_inventory_quantity(self, product_id: str, quantity: int):
@@ -1010,7 +1010,7 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
             
             # Create base price in Stripe
             stripe_price = stripe.Price.create(
-                unit_amount=int(float(product_data['price']) * 100),  # Convert to cents
+                unit_amount = await self._calculate_amount(user_id)),  # Convert to cents
                 currency=product_data.get('currency', 'usd'),
                 product=stripe_product.id,
                 metadata={
@@ -1123,7 +1123,7 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
         try:
             # Create Stripe price for variant
             stripe_price = stripe.Price.create(
-                unit_amount=int(float(variant_data['price']) * 100),
+                unit_amount = await self._calculate_amount(user_id)),
                 currency=variant_data.get('currency', 'usd'),
                 product=stripe_product_id,
                 metadata={
@@ -1170,7 +1170,7 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
             order_id = str(uuid.uuid4())
             
             # Calculate order totals
-            subtotal = 0.0
+            subtotal = await self._calculate_total(user_id)
             order_items = []
             
             for item_data in order_data['items']:
@@ -1212,15 +1212,15 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
                 order_items.append(order_item)
             
             # Calculate taxes and shipping
-            tax_amount = subtotal * float(order_data.get('tax_rate', 0))
-            shipping_amount = float(order_data.get('shipping_cost', 0))
-            discount_amount = float(order_data.get('discount_amount', 0))
+            tax_amount = await self._calculate_amount(user_id)))
+            shipping_amount = await self._calculate_amount(user_id)))
+            discount = await self._calculate_count(user_id)))
             
             total_amount = subtotal + tax_amount + shipping_amount - discount_amount
             
             # Create Stripe PaymentIntent
             stripe_payment_intent = stripe.PaymentIntent.create(
-                amount=int(total_amount * 100),  # Convert to cents
+                amount = await self._calculate_amount(user_id)),  # Convert to cents
                 currency=order_data.get('currency', 'usd'),
                 customer=customer_id,
                 metadata={

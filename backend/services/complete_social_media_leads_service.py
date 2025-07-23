@@ -93,7 +93,7 @@ class CompleteSocialMediaLeadsService:
                     users = data.get('data', {}).get('users', [])
                     
                     for user in users:
-                        follower_count = user.get('follower_count', 0)
+                        follower_count = await self._calculate_count(user_id))
                         
                         # Filter by follower count
                         if min_followers <= follower_count <= max_followers:
@@ -202,7 +202,7 @@ class CompleteSocialMediaLeadsService:
                         
                         for user in users:
                             metrics = user.get('public_metrics', {})
-                            follower_count = metrics.get('followers_count', 0)
+                            follower_count = await self._calculate_count(user_id))
                             
                             # Filter by follower count
                             if min_followers <= follower_count <= max_followers:
@@ -439,12 +439,12 @@ class CompleteSocialMediaLeadsService:
                         logger.error(f"TikTok API error: {token_data.get('message', 'Unknown error')}")
                 
                 # Fallback: Try direct research API access (some endpoints don't need OAuth)
-                return f"mock_token_{self.tiktok_client_key[:8]}"  # For testing endpoints that don't require OAuth
+                return fawait self._get_actual_data()  # For testing endpoints that don't require OAuth
                     
         except Exception as e:
             logger.error(f"TikTok token error: {str(e)}")
             # Return mock token for testing
-            return f"mock_token_{self.tiktok_client_key[:8]}"
+            return fawait self._get_actual_data()
     
     async def _get_twitter_bearer_token(self) -> Optional[str]:
         """Get Twitter API Bearer token"""
@@ -1127,7 +1127,7 @@ complete_social_media_leads_service = CompleteSocialMediaLeadsService()
             "youtube": 250
         }
         
-        total_reach = sum(base_reach_per_platform.get(platform, 50) for platform in platforms)
+        total = await self._calculate_total(user_id)) for platform in platforms)
         return total_reach
 
     async def create_lead(self, user_id: str, lead_data: dict):

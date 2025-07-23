@@ -1096,7 +1096,7 @@ mobile_pwa_service = get_mobile_pwa_service()
                 "user_id": user_id
             })
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 return {"success": False, "message": "Item not found"}
             
             return {

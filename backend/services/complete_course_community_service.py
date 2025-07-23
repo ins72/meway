@@ -248,8 +248,8 @@ class CompleteCourseService:
                     lesson = await self.create_lesson(module_id, lesson_data, instructor_id)
                     if lesson['success']:
                         module['lessons'].append(lesson['lesson'])
-                        module['total_lessons'] += 1
-                        module['total_duration_minutes'] += lesson['lesson'].get('duration_minutes', 0)
+                        module['total = await self._calculate_total(user_id)
+                        module['total = await self._calculate_total(user_id))
             
             # Update module with lesson counts
             await db.course_modules.update_one(
@@ -834,7 +834,7 @@ class CompleteCourseService:
             # Default recommendations for new students
             return await db.courses.find({
                 'status': 'published'
-            }).sort('analytics.total_enrollments', -1).limit(5).to_list(length=5)
+            }).sort('analytics.total = await self._calculate_total(user_id))
             
         except Exception as e:
             logger.error(f"Get recommendations error: {str(e)}")
@@ -848,8 +848,8 @@ class CompleteCourseService:
             # Get all modules
             modules = await db.course_modules.find({'course_id': course_id}).to_list(length=None)
             
-            total_lessons = 0
-            total_duration = 0
+            total = await self._calculate_total(user_id)
+            total = await self._calculate_total(user_id)
             
             for module in modules:
                 lessons = await db.lessons.find({'module_id': module['module_id']}).to_list(length=None)
@@ -954,7 +954,7 @@ course_service = CompleteCourseService()
                 "user_id": user_id
             })
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 return {"success": False, "message": "Course not found"}
             
             return {
@@ -999,3 +999,58 @@ course_service = CompleteCourseService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+    async def update_course(self, user_id: str, course_id: str, update_data: dict):
+        """Update existing course with validation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database connection unavailable"}
+            
+            if not course_id or not update_data:
+                return {"success": False, "message": "ID and update data are required"}
+            
+            # Prepare update data
+            update_data["updated_at"] = datetime.utcnow()
+            update_data["version"] = {"$inc": 1}  # Increment version for optimistic locking
+            
+            # Remove protected fields from update
+            protected_fields = ["_id", "user_id", "created_at"]
+            for field in protected_fields:
+                update_data.pop(field, None)
+            
+            # Update with user access control
+            result = await collections['courses'].update_one(
+                {
+                    "_id": course_id,
+                    "user_id": user_id,
+                    "status": {"$ne": "deleted"}
+                },
+                {"$set": update_data}
+            )
+            
+            if result.matched_count = await self._calculate_count(user_id):
+                return {"success": False, "message": "Course not found or access denied"}
+            
+            if result.modified_count = await self._calculate_count(user_id):
+                return {"success": False, "message": "No changes were made"}
+            
+            # Retrieve updated course
+            updated_course = await collections['courses'].find_one({
+                "_id": course_id,
+                "user_id": user_id
+            })
+            
+            # Process for JSON serialization
+            if updated_course and updated_course.get("updated_at"):
+                updated_course["updated_at"] = updated_course["updated_at"].isoformat()
+            
+            return {
+                "success": True,
+                "data": updated_course,
+                "message": "Course updated successfully"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error updating course: {str(e)}")
+            return {"success": False, "message": f"Update failed: {str(e)}"}

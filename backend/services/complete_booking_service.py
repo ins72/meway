@@ -835,7 +835,7 @@ complete_booking_service = CompleteBookingService()
                 "user_id": user_id
             })
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 return {"success": False, "message": "Appointment not found"}
             
             return {
