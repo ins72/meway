@@ -27,7 +27,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 
 # Configuration
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 TEST_EMAIL = "tmonnens@outlook.com"
 TEST_PASSWORD = "Voetballen5"
 
@@ -536,7 +536,7 @@ from datetime import datetime
 
 class MewayzBackendTester:
     def __init__(self):
-        self.base_url = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+        self.base_url = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
         self.api_url = f"{self.base_url}/api"
         self.token = None
         self.workspace_id = None
@@ -1023,7 +1023,7 @@ EXPECTED FINAL RESULTS:
 - ZERO DUPLICATES: No duplicate endpoints or conflicting functionality
 
 CREDENTIALS: tmonnens@outlook.com/Voetballen5
-BACKEND URL: https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com
+BACKEND URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
 """
 
 import requests
@@ -1037,7 +1037,7 @@ import traceback
 import re
 
 # Backend URL from environment
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
@@ -1635,7 +1635,7 @@ from typing import Dict, Any, Optional
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
@@ -3364,7 +3364,7 @@ class BackendTester:
                 click_data = {
                     "visitor_ip": "192.168.1.100",
                     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                    "referrer": f"https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/bio/sarah_creates"
+                    "referrer": f"https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com/bio/sarah_creates"
                 }
                 self.test_endpoint(f"/link-in-bio/links/{created_link_id}/click", "POST", click_data, "Link in Bio - Track Link Click")
             

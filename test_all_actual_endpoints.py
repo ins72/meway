@@ -11,7 +11,7 @@ from datetime import datetime
 
 class ComprehensiveActualEndpointTest:
     def __init__(self):
-        self.base_url = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+        self.base_url = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
         self.session = requests.Session()
         self.auth_token = None
         self.results = {

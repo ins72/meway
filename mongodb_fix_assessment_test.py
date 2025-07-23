@@ -20,7 +20,7 @@ Success Metrics:
 - Real data usage percentage (target: >50% improvement from previous 32.5%)
 
 CREDENTIALS: tmonnens@outlook.com/Voetballen5
-BACKEND URL: https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com
+BACKEND URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
 """
 
 import requests
@@ -34,7 +34,7 @@ import traceback
 import re
 
 # Backend URL from environment
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials

@@ -13,7 +13,7 @@ This script will:
 7. Target 1000+ endpoints if they exist
 
 Credentials: tmonnens@outlook.com/Voetballen5
-Backend URL: https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com
+Backend URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
 """
 
 import requests
@@ -28,7 +28,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 
 # Backend URL from environment
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
@@ -663,7 +663,7 @@ TESTING SCOPE:
 
 CREDENTIALS:
 - Use: tmonnens@outlook.com/Voetballen5
-- Backend URL: https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com
+- Backend URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
 
 EXPECTED OUTCOME:
 - Detailed report of all working vs failing endpoints
@@ -684,7 +684,7 @@ import concurrent.futures
 import threading
 
 # Backend URL from environment
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials

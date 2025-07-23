@@ -11,7 +11,7 @@ TESTING OBJECTIVES:
 5. Real Data Verification - Check for real vs mock data
 
 CREDENTIALS: tmonnens@outlook.com/Voetballen5
-BACKEND URL: https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com
+BACKEND URL: https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com
 """
 
 import requests
@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 import traceback
 
 # Backend URL from environment
-BACKEND_URL = "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com"
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
