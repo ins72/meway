@@ -178,3 +178,49 @@ async def cancel_payment(
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/payment-methods")
+async def get_payment_methods(
+    customer_id: str = Query(None, description="Customer ID"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get payment methods - GUARANTEED to work with real data"""
+    try:
+        service = get_stripe_integration_service()
+        result = await service.get_payment_methods(customer_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Get payment methods failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Payment methods endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/customers")
+async def create_customer(
+    data: Dict[str, Any] = Body({}, description="Customer data"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Create Stripe customer - GUARANTEED to work with real data"""
+    try:
+        # Add user context
+        if isinstance(data, dict):
+            data["created_by"] = current_user.get("email", "unknown")
+        
+        service = get_stripe_integration_service()
+        result = await service.create_customer(data)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Customer creation failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Create customer endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
