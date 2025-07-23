@@ -773,3 +773,28 @@ class CompleteBookingService:
 
 # Global service instance
 complete_booking_service = CompleteBookingService()
+    async def cancel_booking(self, booking_id: str, user_id: str) -> dict:
+        """Cancel booking"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Update booking status
+            result = await collections['bookings'].update_one(
+                {"_id": booking_id, "$or": [{"client_id": user_id}, {"provider_id": user_id}]},
+                {
+                    "$set": {
+                        "status": "cancelled",
+                        "cancelled_at": datetime.utcnow(),
+                        "cancelled_by": user_id
+                    }
+                }
+            )
+            
+            if result.modified_count > 0:
+                return {"success": True, "message": "Booking cancelled successfully"}
+            else:
+                return {"success": False, "message": "Booking not found or not authorized"}
+        except Exception as e:
+            return {"success": False, "message": str(e)}

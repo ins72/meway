@@ -886,3 +886,32 @@ class CompleteMultiWorkspaceService:
 
 # Global service instance
 complete_multi_workspace_service = CompleteMultiWorkspaceService()
+    async def delete_workspace(self, workspace_id: str, user_id: str) -> bool:
+        """Delete workspace (soft delete)"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return False
+            
+            # Check if user is owner
+            workspace = await collections['workspaces'].find_one({
+                "_id": workspace_id,
+                "owner_id": user_id
+            })
+            
+            if not workspace:
+                return False
+            
+            result = await collections['workspaces'].update_one(
+                {"_id": workspace_id},
+                {
+                    "$set": {
+                        "deleted": True,
+                        "deleted_at": datetime.utcnow(),
+                        "status": "deleted"
+                    }
+                }
+            )
+            return result.modified_count > 0
+        except Exception:
+            return False

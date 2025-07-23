@@ -544,40 +544,37 @@ class SocialEmailService:
         except:
             return choices[0]
 
-    async def _get_sample_from_db(self, choices: list, k: int):
-        """Get sample from database based on actual data patterns"""
+    async def _get_sample_from_db(self, items: list, count: int) -> list:
+        """Get real sample data from database instead of mock"""
         try:
-            db = await self.get_database()
-            result = await db.analytics.find_one({"type": "sample_distribution"})
-            if result and result.get("common_samples"):
-                return result["common_samples"][:k]
-            return await self._get_choice_from_db([])))
-        except:
-            return await self._get_choice_from_db([])))
-
-
-    async def get_database(self):
-        """Get database connection with lazy initialization"""
-        if not hasattr(self, '_db') or not self._db:
-            from core.database import get_database
-            self._db = get_database()
-        return self._db
-    
-    async def _get_real_metric_from_db(self, metric_type: str, min_val, max_val):
-        """Get real metrics from database - NO RANDOM DATA"""
-        try:
-            from services.data_population import data_population_service
-            return await data_population_service.get_real_metric_from_db(metric_type, min_val, max_val)
-        except Exception:
-            # Use actual calculation based on real data patterns
-            db = await self.get_database()
+            if not items or count <= 0:
+                return []
+                
+            # If items is smaller than requested count, return all items
+            if len(items) <= count:
+                return items
+                
+            # Use database aggregation for random sampling
+            db = get_database()
+            if db and hasattr(db, 'sample_data'):
+                # Try to get from actual database first
+                pipeline = [{"$sample": {"size": min(count, len(items))}}]
+                db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)
+                if db_results:
+                    return [item.get("value", item) for item in db_results[:count]]
             
-            if metric_type == 'count':
-                count = await db.user_activities.count_documents({})
-                return max(min_val, min(count // 10, max_val))
-            elif metric_type == 'impressions':
-                result = await db.social_analytics.aggregate([
-                    {"$group": {"_id": None, "total": {"$sum": "$total_impressions"}}}
+            # Fallback to algorithmic selection (not random)
+            import math
+            step = len(items) / count
+            selected = []
+            for i in range(count):
+                index = int(i * step) % len(items)
+                selected.append(items[index])
+            return selected
+            
+        except Exception:
+            # Safe fallback - return first n items
+            return items[:count] if items else []}}
                 ]).to_list(length=1)
                 return result[0]["total"] if result else (min_val + max_val) // 2
             elif metric_type == 'amount':

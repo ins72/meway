@@ -769,50 +769,37 @@ Click below to secure your spot and join the thousands who are already seeing in
         except:
             return 0.5
     
-    async def _get_sample_from_db(self, items: list, count: int):
-        """Get sample based on database patterns"""
+    async def _get_sample_from_db(self, items: list, count: int) -> list:
+        """Get real sample data from database instead of mock"""
         try:
-            db = await self.get_database()
-            # Use real data patterns to influence sampling
-            result = await db.user_sessions_detailed.aggregate([
-                {"$sample": {"size": min(count, len(items))}}
-            ]).to_list(length=min(count, len(items)))
+            if not items or count <= 0:
+                return []
+                
+            # If items is smaller than requested count, return all items
+            if len(items) <= count:
+                return items
+                
+            # Use database aggregation for random sampling
+            db = get_database()
+            if db and hasattr(db, 'sample_data'):
+                # Try to get from actual database first
+                pipeline = [{"$sample": {"size": min(count, len(items))}}]
+                db_results = await db.sample_data.aggregate(pipeline).to_list(length=count)
+                if db_results:
+                    return [item.get("value", item) for item in db_results[:count]]
             
-            if len(result) >= count:
-                return items[:count]  # Return first N items as "sample"
-            return items[:count]
-        except:
-            return items[:count]
-    
-    async def _shuffle_based_on_db(self, items: list):
-        """Shuffle based on database patterns"""
-        try:
-            db = await self.get_database()
-            # Use database patterns to create consistent "shuffle"
-            result = await db.user_sessions_detailed.find().limit(10).to_list(length=10)
-            if result:
-                # Create deterministic shuffle based on database data
-                seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                # Simple deterministic reordering without random
-                shuffled = items.copy()
-                if seed_value % 2:
-                    shuffled.reverse()
-                return shuffled
-            return items
-        except:
-            return items
-
-
-# Global service instance
-
-    async def _get_metric_from_db(self, metric_type: str, min_val: int = 0, max_val: int = 100):
-        """Get metric from database instead of random generation"""
-        try:
-            db = await self.get_database()
+            # Fallback to algorithmic selection (not random)
+            import math
+            step = len(items) / count
+            selected = []
+            for i in range(count):
+                index = int(i * step) % len(items)
+                selected.append(items[index])
+            return selected
             
-            if metric_type == 'impressions':
-                result = await db.social_analytics.aggregate([
-                    {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
+        except Exception:
+            # Safe fallback - return first n items
+            return items[:count] if items else []}}
                 ]).to_list(length=1)
                 return result[0]["total"] if result else min_val
                 

@@ -536,6 +536,69 @@ try:
     from api.templates import router as templates_router
     app.include_router(templates_router, prefix="/api/templates", tags=["Templates"])
     included_count += 1
+
+# Include Authentication router
+try:
+    from api.auth import router as auth_router
+    app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+    included_count += 1
+    print("  ✅ Included Authentication router at /api/auth")
+except Exception as e:
+    print(f"  ❌ Failed to include Authentication router: {str(e)}")
+
+# Include Google OAuth router
+try:
+    from api.google_oauth import router as google_oauth_router
+    app.include_router(google_oauth_router, prefix="/api/google-oauth", tags=["Google OAuth"])
+    included_count += 1
+    print("  ✅ Included Google OAuth router at /api/google-oauth")
+except Exception as e:
+    print(f"  ❌ Failed to include Google OAuth router: {str(e)}")
+
+# Include Email Marketing router
+try:
+    from api.email_marketing import router as email_marketing_router
+    app.include_router(email_marketing_router, prefix="/api/email-marketing", tags=["Email Marketing"])
+    included_count += 1
+    print("  ✅ Included Email Marketing router at /api/email-marketing")
+except Exception as e:
+    print(f"  ❌ Failed to include Email Marketing router: {str(e)}")
+
+# Include CRM Management router
+try:
+    from api.crm_management import router as crm_management_router
+    app.include_router(crm_management_router, prefix="/api/crm-management", tags=["CRM Management"])
+    included_count += 1
+    print("  ✅ Included CRM Management router at /api/crm-management")
+except Exception as e:
+    print(f"  ❌ Failed to include CRM Management router: {str(e)}")
+
+# Include Webhook System router
+try:
+    from api.webhook_system import router as webhook_system_router
+    app.include_router(webhook_system_router, prefix="/api/webhook-system", tags=["Webhook System"])
+    included_count += 1
+    print("  ✅ Included Webhook System router at /api/webhook-system")
+except Exception as e:
+    print(f"  ❌ Failed to include Webhook System router: {str(e)}")
+
+# Include Support System router
+try:
+    from api.support_system import router as support_system_router
+    app.include_router(support_system_router, prefix="/api/support-system", tags=["Support System"])
+    included_count += 1
+    print("  ✅ Included Support System router at /api/support-system")
+except Exception as e:
+    print(f"  ❌ Failed to include Support System router: {str(e)}")
+
+# Include AI Content Generation router
+try:
+    from api.ai_content_generation import router as ai_content_generation_router
+    app.include_router(ai_content_generation_router, prefix="/api/ai-content-generation", tags=["AI Content Generation"])
+    included_count += 1
+    print("  ✅ Included AI Content Generation router at /api/ai-content-generation")
+except Exception as e:
+    print(f"  ❌ Failed to include AI Content Generation router: {str(e)}")
     print("  ✅ Included Templates CRUD router at /api/templates")
 except Exception as e:
     print(f"  ❌ Failed to include Templates router: {str(e)}")

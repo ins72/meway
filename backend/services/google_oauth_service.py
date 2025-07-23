@@ -74,7 +74,7 @@ class GoogleOAuthService:
             "id": f"google_{user_id}",
             "name": "Google User",
             "email": "user@gmail.com",
-            "picture": "https://via.placeholder.com/150",
+            "picture": "https://ui-avatars.com/api/?name=" + name.replace(" ", "+") + "&background=random",
             "verified_email": True
         }
         

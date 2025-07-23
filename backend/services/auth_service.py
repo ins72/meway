@@ -75,3 +75,44 @@ class AuthService:
 
 # Global service instance
 auth_service = AuthService()
+    async def delete_user(self, user_id: str) -> bool:
+        """Delete user account (soft delete)"""
+        try:
+            db = get_database()
+            if not db:
+                return False
+            
+            result = await db.users.update_one(
+                {"_id": user_id},
+                {
+                    "$set": {
+                        "deleted": True,
+                        "deleted_at": datetime.utcnow(),
+                        "status": "deleted"
+                    }
+                }
+            )
+            return result.modified_count > 0
+        except Exception:
+            return False
+
+    async def delete_user(self, user_id: str) -> bool:
+        """Delete user account (soft delete)"""
+        try:
+            db = get_database()
+            if not db:
+                return False
+            
+            result = await db.users.update_one(
+                {"_id": user_id},
+                {
+                    "$set": {
+                        "deleted": True,
+                        "deleted_at": datetime.utcnow(),
+                        "status": "deleted"
+                    }
+                }
+            )
+            return result.modified_count > 0
+        except Exception:
+            return False
