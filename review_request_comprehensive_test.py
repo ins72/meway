@@ -384,7 +384,7 @@ class ComprehensiveBackendTester:
                 "tags": ["business", "marketing", "automation"]
             }
             
-            async with self.session.post(f"{self.api_url}/tiktok/posts", json=video_data, headers=headers) as response:
+            async with self.session.post(f"{self.api_url}/tiktok/upload", json=video_data, headers=headers) as response:
                 if response.status == 200 or response.status == 201:
                     data = await response.json()
                     results["passed"] += 1
