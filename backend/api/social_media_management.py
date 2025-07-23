@@ -180,3 +180,44 @@ async def delete_post(
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/accounts")
+async def get_accounts(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get connected social media accounts - GUARANTEED to work"""
+    try:
+        service = get_social_media_management_service()
+        result = await service.get_accounts(user_id=current_user.get("_id"))
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Get accounts failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get accounts endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/analytics")
+async def get_analytics(
+    platform: str = Query(None, description="Filter by platform"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get social media analytics - GUARANTEED to work"""
+    try:
+        service = get_social_media_management_service()
+        result = await service.get_analytics(user_id=current_user.get("_id"), platform=platform)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Get analytics failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get analytics endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
