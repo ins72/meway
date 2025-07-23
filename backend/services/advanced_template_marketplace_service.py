@@ -32,12 +32,24 @@ class AdvancedTemplateMarketplaceService:
     """Advanced template marketplace with full monetization"""
     
     def __init__(self):
-        self.db = get_database()
-        self.templates_collection = self.db["templates"]
-        self.purchases_collection = self.db["template_purchases"]
-        self.reviews_collection = self.db["template_reviews"]
-        self.creators_collection = self.db["template_creators"]
-        self.analytics_collection = self.db["template_analytics"]
+        self.db = None
+        self.templates_collection = None
+        self.purchases_collection = None
+        self.reviews_collection = None
+        self.creators_collection = None
+        self.analytics_collection = None
+    
+    def _get_db(self):
+        """Lazy database initialization"""
+        if self.db is None:
+            self.db = get_database()
+            if self.db is not None:
+                self.templates_collection = self.db["templates"]
+                self.purchases_collection = self.db["template_purchases"]
+                self.reviews_collection = self.db["template_reviews"]
+                self.creators_collection = self.db["template_creators"]
+                self.analytics_collection = self.db["template_analytics"]
+        return self.db
         
     # Template Creation & Management
     async def create_template(self, creator_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
