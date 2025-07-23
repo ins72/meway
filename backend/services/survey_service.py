@@ -12,6 +12,9 @@ import io
 
 from core.database import get_database
 
+class SurveyService:
+    def __init__(self):
+        self.db = get_database()
 
     async def create_survey(self, survey_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new survey"""
