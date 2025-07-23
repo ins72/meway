@@ -96,26 +96,6 @@ class UserService:
         except Exception as e:
             raise ValueError(str(e))
 
-    async def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create new user"""
-        try:
-            db = self._get_db()
-            if not db:
-                return {"success": False, "error": "Database not available"}
-            
-            collection = db["user"]
-            data.update({
-                "id": str(uuid.uuid4()),
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat(),
-                "status": "active"
-            })
-            
-            result = await collection.insert_one(data)
-            return {"success": True, "data": data, "id": data["id"]}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
-    
     async def get_user(self, item_id: str) -> Dict[str, Any]:
         """Get user by ID"""
         try:
