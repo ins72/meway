@@ -329,12 +329,12 @@ class MewayzBackendTester:
         print("🔗 TESTING EXTERNAL API INTEGRATIONS")
         print("-" * 50)
         
-        # Test AI Services (OpenAI integration)
+        # Test AI Services
         try:
-            response = self.make_request('GET', '/ai/services')
+            response = self.make_request('GET', '/advanced-ai/')
             if response.status_code == 200:
                 data = response.json()
-                self.log_test("External API - AI Services", True, f"Services: {len(data) if isinstance(data, list) else 'available'}")
+                self.log_test("External API - AI Services", True, f"Data: {len(str(data))} chars")
             else:
                 self.log_test("External API - AI Services", False, error=f"HTTP {response.status_code}")
         except Exception as e:
@@ -342,26 +342,36 @@ class MewayzBackendTester:
         
         # Test Social Media Integration
         try:
-            response = self.make_request('GET', '/social-media/analytics')
+            response = self.make_request('GET', '/social-media-management/')
             if response.status_code == 200:
                 data = response.json()
-                self.log_test("External API - Social Media", True, f"Analytics: {len(str(data))} chars")
+                self.log_test("External API - Social Media", True, f"Data: {len(str(data))} chars")
             else:
                 self.log_test("External API - Social Media", False, error=f"HTTP {response.status_code}")
         except Exception as e:
             self.log_test("External API - Social Media", False, error=str(e))
         
-        # Test Payment Integration (Stripe)
+        # Test Payment Integration
         try:
-            response = self.make_request('GET', '/subscription/plans')
+            response = self.make_request('GET', '/stripe-integration/')
             if response.status_code == 200:
                 data = response.json()
-                plans = data.get('plans', []) if isinstance(data, dict) else data
-                self.log_test("External API - Payment/Stripe", True, f"Plans: {len(plans) if isinstance(plans, list) else 'available'}")
+                self.log_test("External API - Payment/Stripe", True, f"Data: {len(str(data))} chars")
             else:
                 self.log_test("External API - Payment/Stripe", False, error=f"HTTP {response.status_code}")
         except Exception as e:
             self.log_test("External API - Payment/Stripe", False, error=str(e))
+        
+        # Test Google OAuth
+        try:
+            response = self.make_request('GET', '/google-oauth/')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("External API - Google OAuth", True, f"Data: {len(str(data))} chars")
+            else:
+                self.log_test("External API - Google OAuth", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("External API - Google OAuth", False, error=str(e))
 
     def test_missing_systems(self):
         """Test for missing systems mentioned in current focus"""
