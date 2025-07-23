@@ -6,7 +6,7 @@
     {
       "endpoint": "/",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/",
       "status_code": 200,
       "response_time": 0.027494192123413086,
       "success": true,
@@ -18,7 +18,7 @@
     {
       "endpoint": "/api/automation/status",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/automation/status",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/automation/status",
       "status_code": 200,
       "response_time": 0.014205694198608398,
       "success": true,
@@ -30,7 +30,7 @@
     {
       "endpoint": "/api/blog/analytics",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/blog/analytics",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/blog/analytics",
       "status_code": 200,
       "response_time": 0.009793519973754883,
       "success": true,
@@ -42,7 +42,7 @@
     {
       "endpoint": "/api/blog/posts",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/blog/posts",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/blog/posts",
       "status_code": 200,
       "response_time": 0.010614156723022461,
       "success": true,
@@ -54,7 +54,7 @@
     {
       "endpoint": "/api/blog/posts",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/blog/posts",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/blog/posts",
       "status_code": 422,
       "response_time": 0.01142263412475586,
       "success": false,
@@ -66,7 +66,7 @@
     {
       "endpoint": "/api/content/api/content/",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/content/api/content/",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/content/api/content/",
       "status_code": 200,
       "response_time": 0.016529321670532227,
       "success": true,
@@ -78,7 +78,7 @@
     {
       "endpoint": "/api/content/api/content/analytics/performance",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/content/api/content/analytics/performance",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/content/api/content/analytics/performance",
       "status_code": 200,
       "response_time": 0.010320425033569336,
       "success": true,
@@ -90,7 +90,7 @@
     {
       "endpoint": "/api/content/api/content/categories/list",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/content/api/content/categories/list",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/content/api/content/categories/list",
       "status_code": 200,
       "response_time": 0.010144710540771484,
       "success": true,
@@ -102,7 +102,7 @@
     {
       "endpoint": "/api/content/api/content/search",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/content/api/content/search",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/content/api/content/search",
       "status_code": 200,
       "response_time": 0.00962686538696289,
       "success": true,
@@ -114,7 +114,7 @@
     {
       "endpoint": "/api/device/offline/sync",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/device/offline/sync",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/device/offline/sync",
       "status_code": 200,
       "response_time": 0.009456872940063477,
       "success": true,
@@ -126,7 +126,7 @@
     {
       "endpoint": "/api/device/register",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/device/register",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/device/register",
       "status_code": 200,
       "response_time": 0.00981760025024414,
       "success": true,
@@ -138,7 +138,7 @@
     {
       "endpoint": "/api/disputes/initiate",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/disputes/initiate",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/disputes/initiate",
       "status_code": 200,
       "response_time": 0.009880542755126953,
       "success": true,
@@ -150,7 +150,7 @@
     {
       "endpoint": "/api/disputes/list",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/disputes/list",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/disputes/list",
       "status_code": 200,
       "response_time": 0.010109424591064453,
       "success": true,
@@ -162,7 +162,7 @@
     {
       "endpoint": "/api/email-automation/analytics/overview",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/analytics/overview",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/analytics/overview",
       "status_code": 200,
       "response_time": 0.016506433486938477,
       "success": true,
@@ -174,7 +174,7 @@
     {
       "endpoint": "/api/email-automation/automation-sequence",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/automation-sequence",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/automation-sequence",
       "status_code": 200,
       "response_time": 0.009525299072265625,
       "success": true,
@@ -186,7 +186,7 @@
     {
       "endpoint": "/api/email-automation/bulk-email",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/bulk-email",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/bulk-email",
       "status_code": 200,
       "response_time": 0.010206222534179688,
       "success": true,
@@ -198,7 +198,7 @@
     {
       "endpoint": "/api/email-automation/campaigns",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/campaigns",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/campaigns",
       "status_code": 200,
       "response_time": 0.009839296340942383,
       "success": true,
@@ -210,7 +210,7 @@
     {
       "endpoint": "/api/email-automation/email-logs",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/email-logs",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/email-logs",
       "status_code": 200,
       "response_time": 0.011330127716064453,
       "success": true,
@@ -222,7 +222,7 @@
     {
       "endpoint": "/api/email-automation/send-email",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/send-email",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/send-email",
       "status_code": 422,
       "response_time": 0.009403705596923828,
       "success": false,
@@ -234,7 +234,7 @@
     {
       "endpoint": "/api/email-automation/subscribers",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/subscribers",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/subscribers",
       "status_code": 200,
       "response_time": 0.009930133819580078,
       "success": true,
@@ -246,7 +246,7 @@
     {
       "endpoint": "/api/email-automation/templates",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/email-automation/templates",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/email-automation/templates",
       "status_code": 200,
       "response_time": 0.010671377182006836,
       "success": true,
@@ -258,7 +258,7 @@
     {
       "endpoint": "/api/enterprise-security/audit/log",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/audit/log",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/audit/log",
       "status_code": 405,
       "response_time": 0.007809162139892578,
       "success": false,
@@ -270,7 +270,7 @@
     {
       "endpoint": "/api/enterprise-security/audit/logs",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/audit/logs",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/audit/logs",
       "status_code": 200,
       "response_time": 0.009902477264404297,
       "success": true,
@@ -282,7 +282,7 @@
     {
       "endpoint": "/api/enterprise-security/compliance/frameworks",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/compliance/frameworks",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/compliance/frameworks",
       "status_code": 200,
       "response_time": 0.010471820831298828,
       "success": true,
@@ -294,7 +294,7 @@
     {
       "endpoint": "/api/enterprise-security/compliance/report",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/compliance/report",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/compliance/report",
       "status_code": 405,
       "response_time": 0.008376121520996094,
       "success": false,
@@ -306,7 +306,7 @@
     {
       "endpoint": "/api/enterprise-security/compliance/reports",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/compliance/reports",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/compliance/reports",
       "status_code": 200,
       "response_time": 0.010895729064941406,
       "success": true,
@@ -318,7 +318,7 @@
     {
       "endpoint": "/api/enterprise-security/security/dashboard",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/security/dashboard",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/security/dashboard",
       "status_code": 200,
       "response_time": 0.009765863418579102,
       "success": true,
@@ -330,7 +330,7 @@
     {
       "endpoint": "/api/enterprise-security/threat-detection/alerts",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/threat-detection/alerts",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/threat-detection/alerts",
       "status_code": 200,
       "response_time": 0.009760141372680664,
       "success": true,
@@ -342,7 +342,7 @@
     {
       "endpoint": "/api/enterprise-security/threat-detection/setup",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/threat-detection/setup",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/threat-detection/setup",
       "status_code": 422,
       "response_time": 0.009838104248046875,
       "success": false,
@@ -354,7 +354,7 @@
     {
       "endpoint": "/api/enterprise-security/vulnerability-assessment",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/vulnerability-assessment",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/vulnerability-assessment",
       "status_code": 200,
       "response_time": 0.012230396270751953,
       "success": true,
@@ -366,7 +366,7 @@
     {
       "endpoint": "/api/enterprise-security/vulnerability-assessments",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/enterprise-security/vulnerability-assessments",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/enterprise-security/vulnerability-assessments",
       "status_code": 200,
       "response_time": 0.011048555374145508,
       "success": true,
@@ -378,7 +378,7 @@
     {
       "endpoint": "/api/escrow/transactions/list",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/escrow/transactions/list",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/escrow/transactions/list",
       "status_code": 200,
       "response_time": 0.009304046630859375,
       "success": true,
@@ -390,7 +390,7 @@
     {
       "endpoint": "/api/escrow/transactions/milestone",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/escrow/transactions/milestone",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/escrow/transactions/milestone",
       "status_code": 200,
       "response_time": 0.009335756301879883,
       "success": true,
@@ -402,7 +402,7 @@
     {
       "endpoint": "/api/health",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/health",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/health",
       "status_code": 200,
       "response_time": 0.008126497268676758,
       "success": true,
@@ -414,7 +414,7 @@
     {
       "endpoint": "/api/instagram/profiles",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/instagram/profiles",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/instagram/profiles",
       "status_code": 200,
       "response_time": 0.009792089462280273,
       "success": true,
@@ -426,7 +426,7 @@
     {
       "endpoint": "/api/instagram/search",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/instagram/search",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/instagram/search",
       "status_code": 200,
       "response_time": 0.010451555252075195,
       "success": true,
@@ -438,7 +438,7 @@
     {
       "endpoint": "/api/integration/available",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/integration/available",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/integration/available",
       "status_code": 200,
       "response_time": 0.009121417999267578,
       "success": true,
@@ -450,7 +450,7 @@
     {
       "endpoint": "/api/integration/connected",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/integration/connected",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/integration/connected",
       "status_code": 200,
       "response_time": 0.00992441177368164,
       "success": true,
@@ -462,7 +462,7 @@
     {
       "endpoint": "/api/integration/status",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/integration/status",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/integration/status",
       "status_code": 200,
       "response_time": 0.010440349578857422,
       "success": true,
@@ -474,7 +474,7 @@
     {
       "endpoint": "/api/marketing-website/ab-tests",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing-website/ab-tests",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing-website/ab-tests",
       "status_code": 404,
       "response_time": 0.0076446533203125,
       "success": false,
@@ -486,7 +486,7 @@
     {
       "endpoint": "/api/marketing-website/analytics/overview",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing-website/analytics/overview",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing-website/analytics/overview",
       "status_code": 404,
       "response_time": 0.007889509201049805,
       "success": false,
@@ -498,7 +498,7 @@
     {
       "endpoint": "/api/marketing-website/pages",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing-website/pages",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing-website/pages",
       "status_code": 404,
       "response_time": 0.007730007171630859,
       "success": false,
@@ -510,7 +510,7 @@
     {
       "endpoint": "/api/marketing-website/templates/marketplace",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing-website/templates/marketplace",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing-website/templates/marketplace",
       "status_code": 404,
       "response_time": 0.008226394653320312,
       "success": false,
@@ -522,7 +522,7 @@
     {
       "endpoint": "/api/marketing/analytics",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing/analytics",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing/analytics",
       "status_code": 200,
       "response_time": 0.012775659561157227,
       "success": true,
@@ -534,7 +534,7 @@
     {
       "endpoint": "/api/marketing/campaigns",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing/campaigns",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing/campaigns",
       "status_code": 200,
       "response_time": 0.011272668838500977,
       "success": true,
@@ -546,7 +546,7 @@
     {
       "endpoint": "/api/marketing/contacts",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/marketing/contacts",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/marketing/contacts",
       "status_code": 200,
       "response_time": 0.010762214660644531,
       "success": true,
@@ -558,7 +558,7 @@
     {
       "endpoint": "/api/notifications/api/notifications/connection-status",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/notifications/api/notifications/connection-status",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/notifications/api/notifications/connection-status",
       "status_code": 200,
       "response_time": 0.008695840835571289,
       "success": true,
@@ -570,7 +570,7 @@
     {
       "endpoint": "/api/notifications/api/notifications/history",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/notifications/api/notifications/history",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/notifications/api/notifications/history",
       "status_code": 200,
       "response_time": 0.01093149185180664,
       "success": true,
@@ -582,7 +582,7 @@
     {
       "endpoint": "/api/notifications/api/notifications/mark-all-read",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/notifications/api/notifications/mark-all-read",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/notifications/api/notifications/mark-all-read",
       "status_code": 405,
       "response_time": 0.007432699203491211,
       "success": false,
@@ -594,7 +594,7 @@
     {
       "endpoint": "/api/notifications/api/notifications/send",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/notifications/api/notifications/send",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/notifications/api/notifications/send",
       "status_code": 422,
       "response_time": 0.009441137313842773,
       "success": false,
@@ -606,7 +606,7 @@
     {
       "endpoint": "/api/notifications/api/notifications/send-bulk",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/notifications/api/notifications/send-bulk",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/notifications/api/notifications/send-bulk",
       "status_code": 422,
       "response_time": 0.00946354866027832,
       "success": false,
@@ -618,7 +618,7 @@
     {
       "endpoint": "/api/notifications/api/notifications/stats",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/notifications/api/notifications/stats",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/notifications/api/notifications/stats",
       "status_code": 200,
       "response_time": 0.013815164566040039,
       "success": true,
@@ -630,7 +630,7 @@
     {
       "endpoint": "/api/posts/schedule",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/posts/schedule",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/posts/schedule",
       "status_code": 200,
       "response_time": 0.009525299072265625,
       "success": true,
@@ -642,7 +642,7 @@
     {
       "endpoint": "/api/posts/scheduled",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/posts/scheduled",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/posts/scheduled",
       "status_code": 200,
       "response_time": 0.00937962532043457,
       "success": true,
@@ -654,7 +654,7 @@
     {
       "endpoint": "/api/pwa/manifest/current",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/pwa/manifest/current",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/pwa/manifest/current",
       "status_code": 200,
       "response_time": 0.009144067764282227,
       "success": true,
@@ -666,7 +666,7 @@
     {
       "endpoint": "/api/pwa/manifest/generate",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/pwa/manifest/generate",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/pwa/manifest/generate",
       "status_code": 200,
       "response_time": 0.009611129760742188,
       "success": true,
@@ -678,7 +678,7 @@
     {
       "endpoint": "/api/team-management/activity",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/team-management/activity",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/team-management/activity",
       "status_code": 200,
       "response_time": 0.009009599685668945,
       "success": true,
@@ -690,7 +690,7 @@
     {
       "endpoint": "/api/team-management/dashboard",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/team-management/dashboard",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/team-management/dashboard",
       "status_code": 200,
       "response_time": 0.00999307632446289,
       "success": true,
@@ -702,7 +702,7 @@
     {
       "endpoint": "/api/team-management/members",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/team-management/members",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/team-management/members",
       "status_code": 200,
       "response_time": 0.010582208633422852,
       "success": true,
@@ -714,7 +714,7 @@
     {
       "endpoint": "/api/team-management/teams",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/team-management/teams",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/team-management/teams",
       "status_code": 200,
       "response_time": 0.009582281112670898,
       "success": true,
@@ -726,7 +726,7 @@
     {
       "endpoint": "/api/template-marketplace/browse",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/template-marketplace/browse",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/template-marketplace/browse",
       "status_code": 200,
       "response_time": 0.009430170059204102,
       "success": true,
@@ -738,7 +738,7 @@
     {
       "endpoint": "/api/template-marketplace/creator-earnings",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/template-marketplace/creator-earnings",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/template-marketplace/creator-earnings",
       "status_code": 200,
       "response_time": 0.008931398391723633,
       "success": true,
@@ -750,7 +750,7 @@
     {
       "endpoint": "/api/workflows/create",
       "method": "POST",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/workflows/create",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/workflows/create",
       "status_code": 200,
       "response_time": 0.00938725471496582,
       "success": true,
@@ -762,7 +762,7 @@
     {
       "endpoint": "/api/workflows/list",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/workflows/list",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/workflows/list",
       "status_code": 200,
       "response_time": 0.009989738464355469,
       "success": true,
@@ -774,7 +774,7 @@
     {
       "endpoint": "/api/workspaces",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/api/workspaces",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/api/workspaces",
       "status_code": 200,
       "response_time": 0.009865999221801758,
       "success": true,
@@ -786,7 +786,7 @@
     {
       "endpoint": "/health",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/health",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/health",
       "status_code": 200,
       "response_time": 0.024145126342773438,
       "success": true,
@@ -798,7 +798,7 @@
     {
       "endpoint": "/healthz",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/healthz",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/healthz",
       "status_code": 200,
       "response_time": 0.013088464736938477,
       "success": true,
@@ -810,7 +810,7 @@
     {
       "endpoint": "/metrics",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/metrics",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/metrics",
       "status_code": 200,
       "response_time": 0.019877195358276367,
       "success": true,
@@ -822,7 +822,7 @@
     {
       "endpoint": "/ready",
       "method": "GET",
-      "url": "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com/ready",
+      "url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com/ready",
       "status_code": 200,
       "response_time": 0.09486842155456543,
       "success": true,
