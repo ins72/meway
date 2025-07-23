@@ -1,3 +1,6 @@
+import logging
+
+logger = logging.getLogger(__name__)
 """
 Comprehensive Marketing Website API Endpoints
 Multi-page site management, SEO, A/B testing, CMS, and analytics
