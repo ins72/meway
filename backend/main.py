@@ -319,6 +319,28 @@ try:
     print("✅ Included all critical missing endpoints")
 except ImportError as e:
     print(f"⚠️  Could not import critical endpoints: {e}")
+
+# Include key routers that were missing from tests
+try:
+    from api.blog import router as blog_router
+    app.include_router(blog_router, prefix="/api/blog", tags=["Blog"])
+    print("✅ Included blog router")
+except ImportError as e:
+    print(f"⚠️  Could not import blog router: {e}")
+
+try:
+    from api.real_email_automation import router as email_automation_router
+    app.include_router(email_automation_router, prefix="/api/email-automation", tags=["Email Automation"])
+    print("✅ Included email automation router")
+except ImportError as e:
+    print(f"⚠️  Could not import email automation router: {e}")
+
+try:
+    from api.enterprise_security_compliance import router as enterprise_security_router
+    app.include_router(enterprise_security_router, prefix="/api/enterprise-security", tags=["Enterprise Security"])
+    print("✅ Included enterprise security router")
+except ImportError as e:
+    print(f"⚠️  Could not import enterprise security router: {e}")
     app.include_router(support_router, tags=["Support"])
     app.include_router(monitoring_router, tags=["Monitoring"])
     included_count += 6
