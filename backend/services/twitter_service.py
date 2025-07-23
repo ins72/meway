@@ -276,46 +276,80 @@ class TwitterService:
 
 
     async def search_tweets(self, query: str, limit: int = 20) -> dict:
-        """Search for tweets - REAL API integration"""
+        """Search for tweets using real Twitter API v2"""
         try:
             collection = await self._get_collection_async()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
-            # Simulate real Twitter API search with database storage
-            search_results = []
-            for i in range(min(limit, 10)):  # Simulate 10 results
-                tweet_data = {
-                    "id": f"tweet_{uuid.uuid4().hex[:10]}",
-                    "text": f"Tweet result {i+1} for query: {query}",
-                    "author": f"user_{uuid.uuid4().hex[:8]}",
-                    "created_at": datetime.utcnow().isoformat(),
-                    "engagement": {
-                        "likes": i * 5,
-                        "retweets": i * 2,
-                        "replies": i
-                    }
+            if not self.bearer_token:
+                return {
+                    "success": False, 
+                    "error": "Twitter API not available - no bearer token"
                 }
-                search_results.append(tweet_data)
             
-            # Store search in database
-            search_record = {
-                "id": str(uuid.uuid4()),
-                "query": query,
-                "results": search_results,
-                "result_count": len(search_results),
-                "searched_at": datetime.utcnow().isoformat()
+            headers = {
+                'Authorization': f'Bearer {self.bearer_token}',
+                'Content-Type': 'application/json'
             }
             
-            await collection.insert_one(search_record)
-            
-            return {
-                "success": True,
-                "query": query,
-                "results": search_results,
-                "count": len(search_results)
+            params = {
+                'query': query,
+                'max_results': min(limit, 100),  # Twitter API limit
+                'tweet.fields': 'created_at,author_id,public_metrics,text'
             }
             
+            response = requests.get(
+                'https://api.twitter.com/2/tweets/search/recent',
+                headers=headers,
+                params=params
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                tweets = data.get('data', [])
+                
+                # Process tweets into our format and store in database
+                processed_tweets = []
+                for tweet in tweets:
+                    processed_tweet = {
+                        "id": tweet.get('id'),
+                        "text": tweet.get('text', ''),
+                        "author_id": tweet.get('author_id'),
+                        "metrics": tweet.get('public_metrics', {}),
+                        "created_at": tweet.get('created_at'),
+                        "source": "twitter_api_v2",
+                        "search_query": query,
+                        "retrieved_at": datetime.utcnow().isoformat()
+                    }
+                    processed_tweets.append(processed_tweet)
+                
+                # Store search results in database
+                search_record = {
+                    "id": str(uuid.uuid4()),
+                    "query": query,
+                    "results": processed_tweets,
+                    "result_count": len(processed_tweets),
+                    "searched_at": datetime.utcnow().isoformat(),
+                    "source": "real_twitter_api"
+                }
+                
+                await collection.insert_one(search_record)
+                
+                return {
+                    "success": True,
+                    "query": query,
+                    "tweets": processed_tweets,
+                    "count": len(processed_tweets),
+                    "source": "real_twitter_api"
+                }
+            else:
+                logger.error(f"Twitter API error: {response.status_code} - {response.text}")
+                return {
+                    "success": False,
+                    "error": f"Twitter API error: {response.status_code}"
+                }
+                
         except Exception as e:
             logger.error(f"Twitter search error: {e}")
             return {"success": False, "error": str(e)}
