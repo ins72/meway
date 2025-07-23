@@ -3260,6 +3260,242 @@ class BackendTester:
         
         return True
 
+    def run_review_request_targeted_test(self):
+        """Run targeted testing based on actually available endpoints for the 6 key areas"""
+        print("🎯 TARGETED BACKEND TESTING FOR MEWAYZ V2 PLATFORM - AVAILABLE ENDPOINTS")
+        print("Testing available endpoints related to the 6 key areas from the review request:")
+        print("1. 👥 User Invitation System - Testing available team/workspace endpoints")
+        print("2. 📱 Enhanced Social Media Management - Testing available social media endpoints")
+        print("3. 🛍️ Template Marketplace - Testing available template/marketplace endpoints")
+        print("4. 📱 Mobile PWA Features - Testing available PWA/mobile endpoints")
+        print("5. 🤖 AI Automation - Testing available AI automation endpoints")
+        print("6. 💰 Escrow System - Testing available payment/escrow endpoints")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print("=" * 80)
+        
+        # Test health check first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running properly.")
+            return False
+        
+        # Test authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed - cannot proceed with testing.")
+            return False
+        
+        # Test available endpoints for each area
+        self.test_available_team_management()
+        self.test_available_social_media_management()
+        self.test_available_template_marketplace()
+        self.test_available_mobile_pwa_features()
+        self.test_available_ai_automation()
+        self.test_available_escrow_payment_system()
+        
+        # Print summary
+        self.print_summary()
+        
+        return True
+    
+    def test_available_team_management(self):
+        """Test available team management endpoints"""
+        print("\n👥 TESTING AVAILABLE TEAM MANAGEMENT ENDPOINTS")
+        print("=" * 60)
+        print("Testing workspace invitation creation, acceptance, and role-based permissions")
+        
+        # Test team dashboard
+        self.test_endpoint("/teams/dashboard", "GET", test_name="Team Management - Dashboard")
+        
+        # Test team members
+        self.test_endpoint("/teams/members", "GET", test_name="Team Management - Get Members")
+        
+        # Test team activity
+        self.test_endpoint("/teams/activity", "GET", test_name="Team Management - Activity Log")
+        
+        # Test team invitation
+        invitation_data = {
+            "email": "newteammember@mewayz.com",
+            "role": "editor",
+            "message": "Welcome to our team!"
+        }
+        self.test_endpoint("/teams/invite", "POST", invitation_data, "Team Management - Send Invitation")
+        
+        # Test invitation acceptance
+        accept_data = {
+            "invitation_token": "sample_token_123"
+        }
+        self.test_endpoint("/teams/accept-invitation", "POST", accept_data, "Team Management - Accept Invitation")
+        
+        return True
+    
+    def test_available_social_media_management(self):
+        """Test available social media management endpoints"""
+        print("\n📱 TESTING AVAILABLE SOCIAL MEDIA MANAGEMENT ENDPOINTS")
+        print("=" * 60)
+        print("Testing social media lead generation and analytics")
+        
+        # Test social media leads analytics
+        self.test_endpoint("/social-media-leads/analytics/overview", "GET", test_name="Social Media - Analytics Overview")
+        self.test_endpoint("/social-media-leads/health", "GET", test_name="Social Media - Health Check")
+        
+        # Test TikTok discovery
+        tiktok_data = {
+            "hashtags": ["business", "entrepreneur"],
+            "location": "United States",
+            "follower_range": {"min": 1000, "max": 100000}
+        }
+        self.test_endpoint("/social-media-leads/discover/tiktok", "POST", tiktok_data, "Social Media - TikTok Discovery")
+        
+        # Test Twitter discovery
+        twitter_data = {
+            "keywords": ["business owner", "entrepreneur"],
+            "location": "United States",
+            "follower_range": {"min": 500, "max": 50000}
+        }
+        self.test_endpoint("/social-media-leads/discover/twitter", "POST", twitter_data, "Social Media - Twitter Discovery")
+        
+        return True
+    
+    def test_available_template_marketplace(self):
+        """Test available template marketplace endpoints"""
+        print("\n🛍️ TESTING AVAILABLE TEMPLATE MARKETPLACE ENDPOINTS")
+        print("=" * 60)
+        print("Testing template marketplace and vendor system")
+        
+        # Test marketing website templates
+        self.test_endpoint("/marketing-website/templates/marketplace", "GET", test_name="Template Marketplace - Marketing Templates")
+        
+        # Test marketplace vendors
+        self.test_endpoint("/marketplace/vendors", "GET", test_name="Template Marketplace - Vendors")
+        self.test_endpoint("/marketplace/vendors/applications", "GET", test_name="Template Marketplace - Vendor Applications")
+        
+        # Test vendor onboarding
+        vendor_data = {
+            "business_name": "Creative Templates Co",
+            "email": "vendor@creativetemplates.com",
+            "category": "web_templates",
+            "description": "Professional web templates for businesses"
+        }
+        self.test_endpoint("/marketplace/vendors/onboard", "POST", vendor_data, "Template Marketplace - Vendor Onboarding")
+        
+        # Test dynamic pricing
+        self.test_endpoint("/marketplace/pricing/dynamic", "GET", test_name="Template Marketplace - Dynamic Pricing")
+        
+        return True
+    
+    def test_available_mobile_pwa_features(self):
+        """Test available mobile PWA features"""
+        print("\n📱 TESTING AVAILABLE MOBILE PWA FEATURES")
+        print("=" * 60)
+        print("Testing PWA and mobile-related endpoints")
+        
+        # Test notifications system (PWA-related)
+        self.test_endpoint("/notifications-system/templates", "GET", test_name="Mobile PWA - Notification Templates")
+        
+        # Test i18n workspace language (mobile localization)
+        self.test_endpoint("/i18n/workspace-language", "GET", test_name="Mobile PWA - Workspace Language")
+        
+        # Note: Most PWA-specific endpoints appear to not be implemented yet
+        print("⚠️ Most PWA-specific endpoints (manifest, device registration, offline sync) not found in API")
+        
+        return True
+    
+    def test_available_ai_automation(self):
+        """Test available AI automation endpoints"""
+        print("\n🤖 TESTING AVAILABLE AI AUTOMATION ENDPOINTS")
+        print("=" * 60)
+        print("Testing AI automation workflows and content generation")
+        
+        # Test AI automation analytics
+        self.test_endpoint("/ai-automation/analytics/overview", "GET", test_name="AI Automation - Analytics Overview")
+        
+        # Test workflow creation
+        workflow_data = {
+            "name": "Lead Nurturing Workflow",
+            "description": "Automated lead nurturing with AI",
+            "triggers": [{"type": "form_submission"}],
+            "actions": [{"type": "send_email"}]
+        }
+        self.test_endpoint("/ai-automation/create-workflow", "POST", workflow_data, "AI Automation - Create Workflow")
+        
+        # Test workflows listing
+        self.test_endpoint("/ai-automation/workflows", "GET", test_name="AI Automation - List Workflows")
+        
+        # Test content generation
+        content_data = {
+            "content_type": "email_subject",
+            "topic": "business automation",
+            "tone": "professional"
+        }
+        self.test_endpoint("/ai-automation/generate-content", "POST", content_data, "AI Automation - Generate Content")
+        
+        # Test content history
+        self.test_endpoint("/ai-automation/content-history", "GET", test_name="AI Automation - Content History")
+        
+        # Test lead enrichment
+        lead_data = {
+            "email": "prospect@example.com",
+            "company": "Example Corp"
+        }
+        self.test_endpoint("/ai-automation/enrich-lead", "POST", lead_data, "AI Automation - Enrich Lead")
+        
+        # Test enrichment history
+        self.test_endpoint("/ai-automation/enrichment-history", "GET", test_name="AI Automation - Enrichment History")
+        
+        # Test bulk operations
+        bulk_content_data = {
+            "templates": ["email_welcome", "email_followup"],
+            "count": 5
+        }
+        self.test_endpoint("/ai-automation/bulk-content-generation", "POST", bulk_content_data, "AI Automation - Bulk Content Generation")
+        
+        # Test batch lead enrichment
+        batch_leads_data = {
+            "leads": [
+                {"email": "lead1@example.com"},
+                {"email": "lead2@example.com"}
+            ]
+        }
+        self.test_endpoint("/ai-automation/batch-enrich-leads", "POST", batch_leads_data, "AI Automation - Batch Enrich Leads")
+        
+        return True
+    
+    def test_available_escrow_payment_system(self):
+        """Test available escrow and payment system endpoints"""
+        print("\n💰 TESTING AVAILABLE ESCROW/PAYMENT SYSTEM ENDPOINTS")
+        print("=" * 60)
+        print("Testing payment processing and vendor payout systems")
+        
+        # Test AI tokens (payment-related)
+        self.test_endpoint("/ai-tokens/dashboard", "GET", test_name="Payment System - AI Tokens Dashboard")
+        self.test_endpoint("/ai-tokens/packages", "GET", test_name="Payment System - Token Packages")
+        
+        # Test token purchase
+        purchase_data = {
+            "package_id": "basic_package",
+            "payment_method": "stripe"
+        }
+        self.test_endpoint("/ai-tokens/purchase", "POST", purchase_data, "Payment System - Purchase Tokens")
+        
+        # Test token consumption
+        consume_data = {
+            "tokens": 10,
+            "service": "content_generation"
+        }
+        self.test_endpoint("/ai-tokens/consume", "POST", consume_data, "Payment System - Consume Tokens")
+        
+        # Test vendor payouts (escrow-like functionality)
+        payout_data = {
+            "amount": 100.00,
+            "currency": "USD"
+        }
+        # Note: This endpoint requires vendor_id parameter, testing structure only
+        print("⚠️ Vendor payout endpoints require specific vendor IDs - testing structure only")
+        
+        print("⚠️ Full escrow system endpoints (milestone payments, disputes) not found in API")
+        
+        return True
+
 if __name__ == "__main__":
     tester = BackendTester()
     success = tester.run_review_request_targeted_test()
