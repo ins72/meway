@@ -96,7 +96,7 @@ try:
     from api.i18n_system import router as i18n_system_router
     from api.course import router as course_router
     from api.support_system import router as support_system_router
-    from api.import import router as import_router
+    from api.import_api import router as import_router
     from api.link_shortener import router as link_shortener_router
     from api.security import router as security_router
     from api.social_media_suite import router as social_media_suite_router
