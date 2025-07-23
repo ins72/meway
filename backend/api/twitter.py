@@ -136,26 +136,6 @@ async def get_stats(
         raise
     except Exception as e:
         logger.error(f"STATS endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))")
-async def update_tweet(
-    tweet_id: str = Path(..., description="Tweet ID"),
-    data: Dict[str, Any] = Body({}, description="Updated tweet data"),
-    current_user: dict = Depends(get_current_admin)
-):
-    """UPDATE tweet - GUARANTEED to work with real data"""
-    try:
-        service = get_twitter_service()
-        result = await service.update_tweet(tweet_id, data)
-        
-        if result.get("success"):
-            return result
-        else:
-            raise HTTPException(status_code=400, detail=result.get("error", "Update failed"))
-            
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"UPDATE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{tweet_id}")
