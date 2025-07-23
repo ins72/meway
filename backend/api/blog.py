@@ -133,7 +133,7 @@ async def get_blog_posts(
 @router.get("/posts/{post_id}")
 async def get_blog_post(
     post_id: str,
-    current_user: dict = Depends(get_current_active_user)
+    current_user: dict = Depends(get_current_user)
 ):
     """Get single blog post with real database operations"""
     try:
