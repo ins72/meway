@@ -443,7 +443,7 @@ class PostFixTester:
         create_working = len(self.crud_results['CREATE']['working'])
         create_total = create_working + len(self.crud_results['CREATE']['failing'])
         read_working = len(self.crud_results['READ']['working'])
-        read_total = read_working + len(self.crud_results['read']['failing'])
+        read_total = read_working + len(self.crud_results['READ']['failing'])
         
         print(f"   CREATE Operations: {create_working}/{create_total} working")
         print(f"   READ Operations: {read_working}/{read_total} working")
