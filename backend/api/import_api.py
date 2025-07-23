@@ -36,7 +36,7 @@ async def create_import(
             data["user_id"] = current_user.get("id", "unknown")
             data["created_by"] = current_user.get("email", "unknown")
         
-        service = get_import_service()
+        service = get_import_api_service()
         result = await service.create_import(data)
         
         if result.get("success"):
