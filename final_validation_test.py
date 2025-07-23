@@ -189,7 +189,7 @@ class FinalValidationTester:
         print("\n📦 Testing Orders CRUD - Cancel Order...")
         
         # First, try to get existing orders to find one to cancel
-        success, orders_data = self.test_endpoint("/ecommerce/orders", "GET", test_name="Orders - Get All Orders")
+        success, orders_data = self.test_endpoint("/orders", "GET", test_name="Orders - Get All Orders")
         
         order_id = None
         if success and orders_data:
@@ -202,18 +202,18 @@ class FinalValidationTester:
         if order_id:
             # Test cancel order operation
             cancel_data = {"reason": "Customer requested cancellation", "refund_amount": 50.00}
-            self.test_endpoint(f"/ecommerce/orders/{order_id}/cancel", "POST", cancel_data, "Orders - Cancel Order")
+            self.test_endpoint(f"/orders/{order_id}/cancel", "POST", cancel_data, "Orders - Cancel Order")
         else:
             # Test with a sample order ID if no real orders exist
             sample_order_id = "sample_order_123"
             cancel_data = {"reason": "Customer requested cancellation", "refund_amount": 50.00}
-            self.test_endpoint(f"/ecommerce/orders/{sample_order_id}/cancel", "POST", cancel_data, "Orders - Cancel Order (Sample)")
+            self.test_endpoint(f"/orders/{sample_order_id}/cancel", "POST", cancel_data, "Orders - Cancel Order (Sample)")
         
         # Test Contacts CRUD - Update and Delete
         print("\n👥 Testing Contacts CRUD - Update/Delete...")
         
         # First, try to get existing contacts
-        success, contacts_data = self.test_endpoint("/marketing/contacts", "GET", test_name="Contacts - Get All Contacts")
+        success, contacts_data = self.test_endpoint("/email-marketing/contacts", "GET", test_name="Contacts - Get All Contacts")
         
         contact_id = None
         if success and contacts_data:
@@ -231,10 +231,10 @@ class FinalValidationTester:
                 "tags": ["updated", "premium"],
                 "notes": "Contact information updated via API"
             }
-            self.test_endpoint(f"/marketing/contacts/{contact_id}", "PUT", update_data, "Contacts - Update Contact")
+            self.test_endpoint(f"/email-marketing/contacts/{contact_id}", "PUT", update_data, "Contacts - Update Contact")
             
             # Test delete contact operation
-            self.test_endpoint(f"/marketing/contacts/{contact_id}", "DELETE", test_name="Contacts - Delete Contact")
+            self.test_endpoint(f"/email-marketing/contacts/{contact_id}", "DELETE", test_name="Contacts - Delete Contact")
         else:
             # Test with sample contact ID if no real contacts exist
             sample_contact_id = "sample_contact_123"
@@ -244,8 +244,8 @@ class FinalValidationTester:
                 "tags": ["updated", "premium"],
                 "notes": "Contact information updated via API"
             }
-            self.test_endpoint(f"/marketing/contacts/{sample_contact_id}", "PUT", update_data, "Contacts - Update Contact (Sample)")
-            self.test_endpoint(f"/marketing/contacts/{sample_contact_id}", "DELETE", test_name="Contacts - Delete Contact (Sample)")
+            self.test_endpoint(f"/email-marketing/contacts/{sample_contact_id}", "PUT", update_data, "Contacts - Update Contact (Sample)")
+            self.test_endpoint(f"/email-marketing/contacts/{sample_contact_id}", "DELETE", test_name="Contacts - Delete Contact (Sample)")
         
         # Test Payments CRUD - All Operations
         print("\n💳 Testing Payments CRUD - All Operations...")
