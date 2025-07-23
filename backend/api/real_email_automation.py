@@ -1,20 +1,21 @@
+from datetime import datetime
+import uuid
 import logging
-router = APIRouter()
-logger = logging.getLogger(__name__)
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
+from typing import List, Dict, Any, Optional
+import asyncio
+
+from core.auth import get_current_active_user as get_current_user
+from core.database import get_database
+from services.real_email_automation_service import RealEmailAutomationService
+
 """
 Real Email Automation API - ElasticMail Integration - NO MOCK DATA
 Endpoints for email campaigns, automation, and subscriber management
 """
 
-from fastapi import APIRouter, Depends, HTTPException
-from typing import Dict, List, Optional
-import uuid
-from datetime import datetime
-import asyncio
-
-from core.database import get_database
-from core.auth import get_current_user
-from services.real_email_automation_service import RealEmailAutomationService
+router = APIRouter(prefix="/api/email-automation", tags=["Email Automation"])
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/email-automation", tags=["Email Automation"])
 
