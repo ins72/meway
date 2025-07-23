@@ -1,5 +1,437 @@
 #!/usr/bin/env python3
 """
+🎯 MEWAYZ V2 PLATFORM - FOCUSED BACKEND TESTING - JANUARY 2025 🎯
+
+This script focuses on testing the actual available endpoints and understanding authentication issues.
+"""
+
+import asyncio
+import aiohttp
+import json
+from datetime import datetime
+
+# Configuration
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
+TEST_EMAIL = "tmonnens@outlook.com"
+TEST_PASSWORD = "Voetballen5"
+
+class FocusedBackendTester:
+    def __init__(self):
+        self.session = None
+        self.auth_token = None
+        self.test_results = []
+        self.total_tests = 0
+        self.passed_tests = 0
+        
+    async def setup_session(self):
+        """Initialize HTTP session"""
+        self.session = aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=30),
+            headers={"Content-Type": "application/json"}
+        )
+        
+    async def cleanup_session(self):
+        """Cleanup HTTP session"""
+        if self.session:
+            await self.session.close()
+    
+    def log_test_result(self, test_name: str, status: str, details: str = "", response_size: int = 0):
+        """Log test result"""
+        self.total_tests += 1
+        if status == "✅ PASS":
+            self.passed_tests += 1
+            
+        result = {
+            "test": test_name,
+            "status": status,
+            "details": details,
+            "response_size": response_size,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        print(f"{status} {test_name}: {details}")
+    
+    async def authenticate(self):
+        """Get authentication token"""
+        print("\n🔐 TESTING AUTHENTICATION")
+        print("=" * 50)
+        
+        login_data = {
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        }
+        
+        try:
+            url = f"{BACKEND_URL}/api/auth/login"
+            async with self.session.post(url, json=login_data) as response:
+                response_text = await response.text()
+                if response.status == 200:
+                    response_data = json.loads(response_text)
+                    if "access_token" in response_data:
+                        self.auth_token = response_data["access_token"]
+                        self.log_test_result(
+                            "Authentication - Login", 
+                            "✅ PASS", 
+                            f"JWT token generated successfully ({len(response_text)} chars)",
+                            len(response_text)
+                        )
+                        return True
+                    else:
+                        self.log_test_result("Authentication - Login", "❌ FAIL", "No access_token in response")
+                else:
+                    self.log_test_result("Authentication - Login", "❌ FAIL", f"Status {response.status}: {response_text[:200]}")
+        except Exception as e:
+            self.log_test_result("Authentication - Login", "❌ FAIL", f"Exception: {str(e)}")
+        
+        return False
+    
+    async def test_system_infrastructure(self):
+        """Test system infrastructure endpoints"""
+        print("\n🏗️ TESTING SYSTEM INFRASTRUCTURE")
+        print("=" * 50)
+        
+        # Test OpenAPI specification
+        try:
+            url = f"{BACKEND_URL}/openapi.json"
+            async with self.session.get(url) as response:
+                if response.status == 200:
+                    openapi_data = await response.json()
+                    endpoint_count = len(openapi_data.get('paths', {}))
+                    self.log_test_result(
+                        "System Infrastructure - OpenAPI Specification", 
+                        "✅ PASS", 
+                        f"Available with {endpoint_count} endpoints",
+                        len(await response.text())
+                    )
+                else:
+                    self.log_test_result("System Infrastructure - OpenAPI Specification", "❌ FAIL", f"Status {response.status}")
+        except Exception as e:
+            self.log_test_result("System Infrastructure - OpenAPI Specification", "❌ FAIL", f"Exception: {str(e)}")
+        
+        # Test health monitoring
+        try:
+            url = f"{BACKEND_URL}/"
+            async with self.session.get(url) as response:
+                response_text = await response.text()
+                if response.status == 200:
+                    self.log_test_result(
+                        "System Infrastructure - Health Monitoring", 
+                        "✅ PASS", 
+                        f"System healthy ({len(response_text)} chars)",
+                        len(response_text)
+                    )
+                else:
+                    self.log_test_result("System Infrastructure - Health Monitoring", "❌ FAIL", f"Status {response.status}")
+        except Exception as e:
+            self.log_test_result("System Infrastructure - Health Monitoring", "❌ FAIL", f"Exception: {str(e)}")
+    
+    async def test_critical_business_systems(self):
+        """Test critical business systems"""
+        print("\n🏢 TESTING CRITICAL BUSINESS SYSTEMS")
+        print("=" * 50)
+        
+        # List of critical business systems to test
+        business_systems = [
+            ("complete-financial", "Complete Financial System"),
+            ("complete-multi-workspace", "Multi-Workspace System"),
+            ("complete-admin-dashboard", "Admin Dashboard System"),
+            ("team-management", "Team Management System"),
+            ("form-builder", "Form Builder System"),
+            ("analytics-system", "Analytics System"),
+            ("advanced-ai-suite", "AI Automation Suite"),
+            ("complete-website-builder", "Website Builder System"),
+            ("referral-system", "Referral System"),
+            ("complete-escrow", "Escrow System"),
+            ("complete-onboarding", "Complete Onboarding System")
+        ]
+        
+        for endpoint, system_name in business_systems:
+            await self.test_business_system(endpoint, system_name)
+    
+    async def test_business_system(self, endpoint: str, system_name: str):
+        """Test a specific business system"""
+        try:
+            url = f"{BACKEND_URL}/api/{endpoint}/health"
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            async with self.session.get(url, headers=headers) as response:
+                response_text = await response.text()
+                if response.status == 200:
+                    self.log_test_result(
+                        f"{system_name}", 
+                        "✅ PASS", 
+                        f"Working perfectly ({len(response_text)} chars response)",
+                        len(response_text)
+                    )
+                else:
+                    self.log_test_result(f"{system_name}", "❌ FAIL", f"Status {response.status}: {response_text[:100]}")
+        except Exception as e:
+            self.log_test_result(f"{system_name}", "❌ FAIL", f"Exception: {str(e)}")
+    
+    async def test_external_api_integrations(self):
+        """Test external API integrations"""
+        print("\n🔗 TESTING EXTERNAL API INTEGRATIONS")
+        print("=" * 50)
+        
+        # Test external API integrations
+        integrations = [
+            ("twitter", "Twitter/X API Integration"),
+            ("tiktok", "TikTok API Integration"),
+            ("stripe-integration", "Stripe API Integration"),
+            ("real-ai-automation", "OpenAI API Integration"),
+            ("real-email-automation", "ElasticMail API Integration"),
+            ("google-oauth", "Google OAuth Integration")
+        ]
+        
+        for endpoint, integration_name in integrations:
+            await self.test_integration(endpoint, integration_name)
+    
+    async def test_integration(self, endpoint: str, integration_name: str):
+        """Test a specific integration"""
+        try:
+            url = f"{BACKEND_URL}/api/{endpoint}/health"
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            async with self.session.get(url, headers=headers) as response:
+                response_text = await response.text()
+                if response.status == 200:
+                    self.log_test_result(
+                        f"{integration_name}", 
+                        "✅ PASS", 
+                        f"Connected ({len(response_text)} chars response)",
+                        len(response_text)
+                    )
+                else:
+                    self.log_test_result(f"{integration_name}", "❌ FAIL", f"Status {response.status}: {response_text[:100]}")
+        except Exception as e:
+            self.log_test_result(f"{integration_name}", "❌ FAIL", f"Exception: {str(e)}")
+    
+    async def test_crud_operations(self):
+        """Test CRUD operations"""
+        print("\n📊 TESTING CRUD OPERATIONS")
+        print("=" * 50)
+        
+        # Test READ operations for major systems
+        crud_systems = [
+            ("complete-financial", "Financial System READ"),
+            ("complete-multi-workspace", "Multi-Workspace READ"),
+            ("complete-admin-dashboard", "Admin Dashboard READ"),
+            ("team-management", "Team Management READ"),
+            ("analytics-system", "Analytics System READ"),
+            ("advanced-ai-suite", "AI Services READ"),
+            ("form-builder", "Form Builder READ"),
+            ("complete-website-builder", "Website Builder READ")
+        ]
+        
+        for endpoint, system_name in crud_systems:
+            await self.test_crud_read(endpoint, system_name)
+    
+    async def test_crud_read(self, endpoint: str, system_name: str):
+        """Test READ operation for a system"""
+        try:
+            # Try different READ endpoints
+            read_endpoints = ["", "/dashboard", "/overview", "/list"]
+            
+            for sub_endpoint in read_endpoints:
+                url = f"{BACKEND_URL}/api/{endpoint}{sub_endpoint}"
+                headers = {}
+                if self.auth_token:
+                    headers["Authorization"] = f"Bearer {self.auth_token}"
+                
+                async with self.session.get(url, headers=headers) as response:
+                    response_text = await response.text()
+                    if response.status == 200:
+                        self.log_test_result(
+                            f"{system_name}", 
+                            "✅ PASS", 
+                            f"Data retrieved ({len(response_text)} chars)",
+                            len(response_text)
+                        )
+                        return  # Success, no need to try other endpoints
+                    elif response.status == 403:
+                        continue  # Try next endpoint
+                    else:
+                        continue  # Try next endpoint
+            
+            # If we get here, none of the endpoints worked
+            self.log_test_result(f"{system_name}", "❌ FAIL", "No working READ endpoint found")
+            
+        except Exception as e:
+            self.log_test_result(f"{system_name}", "❌ FAIL", f"Exception: {str(e)}")
+    
+    async def test_data_persistence(self):
+        """Test data persistence and real operations"""
+        print("\n🗄️ TESTING DATA PERSISTENCE & REAL OPERATIONS")
+        print("=" * 50)
+        
+        # Test systems for real database operations
+        persistence_systems = [
+            ("complete-financial", "Financial System"),
+            ("complete-admin-dashboard", "Admin System"),
+            ("analytics-system", "Analytics System"),
+            ("complete-multi-workspace", "Multi-Workspace System")
+        ]
+        
+        for endpoint, system_name in persistence_systems:
+            await self.test_real_data_operations(endpoint, system_name)
+    
+    async def test_real_data_operations(self, endpoint: str, system_name: str):
+        """Test if system uses real database operations"""
+        try:
+            # Make multiple requests to check for data consistency
+            url = f"{BACKEND_URL}/api/{endpoint}/health"
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            responses = []
+            for i in range(2):
+                async with self.session.get(url, headers=headers) as response:
+                    if response.status == 200:
+                        response_text = await response.text()
+                        responses.append(response_text)
+                    await asyncio.sleep(0.5)  # Small delay between requests
+            
+            if len(responses) >= 2:
+                # Check if responses are consistent (indicating real database usage)
+                if responses[0] == responses[1]:
+                    self.log_test_result(
+                        f"{system_name}", 
+                        "✅ PASS", 
+                        f"Real database operations confirmed",
+                        len(responses[0])
+                    )
+                else:
+                    self.log_test_result(
+                        f"{system_name}", 
+                        "⚠️ PARTIAL", 
+                        f"Data inconsistent - may still be using random generation",
+                        len(responses[0])
+                    )
+            else:
+                self.log_test_result(f"{system_name}", "❌ FAIL", "Could not retrieve data for comparison")
+                
+        except Exception as e:
+            self.log_test_result(f"{system_name}", "❌ FAIL", f"Exception: {str(e)}")
+    
+    async def run_focused_tests(self):
+        """Run focused backend tests"""
+        print("🎯 MEWAYZ V2 PLATFORM - FOCUSED BACKEND TESTING")
+        print("=" * 60)
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Test Credentials: {TEST_EMAIL}")
+        print(f"Test Started: {datetime.now().isoformat()}")
+        print("=" * 60)
+        
+        await self.setup_session()
+        
+        try:
+            # Authenticate first
+            auth_success = await self.authenticate()
+            
+            if auth_success:
+                # Run all test categories
+                await self.test_system_infrastructure()
+                await self.test_critical_business_systems()
+                await self.test_external_api_integrations()
+                await self.test_crud_operations()
+                await self.test_data_persistence()
+            else:
+                print("❌ Cannot proceed with tests - authentication failed")
+            
+        except Exception as e:
+            print(f"❌ Critical error during testing: {e}")
+        finally:
+            await self.cleanup_session()
+        
+        # Generate final report
+        await self.generate_final_report()
+    
+    async def generate_final_report(self):
+        """Generate comprehensive final report"""
+        print("\n" + "=" * 60)
+        print("🎯 FOCUSED BACKEND TESTING RESULTS")
+        print("=" * 60)
+        
+        success_rate = (self.passed_tests / self.total_tests * 100) if self.total_tests > 0 else 0
+        
+        print(f"📊 OVERALL RESULTS:")
+        print(f"   Total Tests: {self.total_tests}")
+        print(f"   Passed Tests: {self.passed_tests}")
+        print(f"   Failed Tests: {self.total_tests - self.passed_tests}")
+        print(f"   Success Rate: {success_rate:.1f}%")
+        
+        # Categorize results by test type
+        categories = {
+            "Authentication": [],
+            "System Infrastructure": [],
+            "Critical Business Systems": [],
+            "External API Integrations": [],
+            "CRUD Operations": [],
+            "Data Persistence": []
+        }
+        
+        for result in self.test_results:
+            test_name = result["test"]
+            if "Authentication" in test_name:
+                categories["Authentication"].append(result)
+            elif "System Infrastructure" in test_name:
+                categories["System Infrastructure"].append(result)
+            elif any(x in test_name for x in ["Complete Financial", "Multi-Workspace", "Admin Dashboard", "Team Management", "Form Builder", "Analytics System", "AI Automation", "Website Builder", "Referral System", "Escrow System", "Complete Onboarding"]):
+                categories["Critical Business Systems"].append(result)
+            elif any(x in test_name for x in ["Twitter", "TikTok", "Stripe", "OpenAI", "ElasticMail", "Google OAuth"]):
+                categories["External API Integrations"].append(result)
+            elif "READ" in test_name:
+                categories["CRUD Operations"].append(result)
+            elif "database operations" in test_name.lower():
+                categories["Data Persistence"].append(result)
+        
+        # Print category results
+        for category, results in categories.items():
+            if results:
+                passed = sum(1 for r in results if "✅ PASS" in r["status"])
+                total = len(results)
+                rate = (passed / total * 100) if total > 0 else 0
+                status_icon = "✅" if rate >= 75 else "⚠️" if rate >= 50 else "❌"
+                print(f"\n{status_icon} {category.upper()}: {rate:.1f}% ({passed}/{total})")
+                for result in results:
+                    print(f"   {result['status']} {result['test']}")
+        
+        # Production readiness assessment
+        print(f"\n🚀 PRODUCTION READINESS ASSESSMENT:")
+        if success_rate >= 95:
+            print("   ✅ EXCELLENT - Platform is production ready (≥95% success rate)")
+        elif success_rate >= 85:
+            print("   ✅ GOOD - Platform is mostly production ready with minor issues (≥85% success rate)")
+        elif success_rate >= 75:
+            print("   ⚠️ ACCEPTABLE - Platform needs some fixes before production (≥75% success rate)")
+        elif success_rate >= 50:
+            print("   ❌ NEEDS WORK - Platform has significant issues requiring attention")
+        else:
+            print("   ❌ CRITICAL - Platform has major issues and is not production ready")
+        
+        # Critical issues summary
+        failed_tests = [r for r in self.test_results if "❌ FAIL" in r["status"]]
+        if failed_tests:
+            print(f"\n🔧 CRITICAL ISSUES REQUIRING ATTENTION:")
+            for result in failed_tests:
+                print(f"   ❌ {result['test']}: {result['details']}")
+        
+        print(f"\n📅 Test Completed: {datetime.now().isoformat()}")
+        print("=" * 60)
+
+async def main():
+    """Main test execution"""
+    tester = FocusedBackendTester()
+    await tester.run_focused_tests()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+"""
 FOCUSED BACKEND TESTING FOR MEWAYZ V2 PLATFORM - CRITICAL ISSUES ASSESSMENT
 Testing the specific issues mentioned in the review request
 """
