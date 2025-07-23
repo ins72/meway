@@ -281,7 +281,6 @@ class MonitoringSystemService:
         """Health check with proper async database connection"""
         try:
             from core.database import get_database_async
-from bson import ObjectId
             db = await get_database_async()
             if db is None:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}

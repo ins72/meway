@@ -35,7 +35,6 @@ class ApiTestingService:
         """Get collection for async database operations"""
         try:
             from core.database import get_database_async
-from bson import ObjectId
             db = await get_database_async()
             if db is None:
                 logger.error("Database not available")
