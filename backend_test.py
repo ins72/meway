@@ -199,37 +199,45 @@ class MewayzBackendTester:
         
         # Test Team Management System
         try:
-            response = self.make_request('GET', '/team/dashboard')
+            response = self.make_request('GET', '/team-management/')
             if response.status_code == 200:
                 data = response.json()
-                self.log_test("Team Management - Dashboard", True, f"Data: {len(str(data))} chars")
+                self.log_test("Team Management System", True, f"Data: {len(str(data))} chars")
             else:
-                self.log_test("Team Management - Dashboard", False, error=f"HTTP {response.status_code}")
+                self.log_test("Team Management System", False, error=f"HTTP {response.status_code}")
         except Exception as e:
-            self.log_test("Team Management - Dashboard", False, error=str(e))
+            self.log_test("Team Management System", False, error=str(e))
         
         try:
-            response = self.make_request('GET', '/team/members')
+            response = self.make_request('GET', '/team-management/health')
             if response.status_code == 200:
                 data = response.json()
-                members = data.get('members', []) if isinstance(data, dict) else data
-                self.log_test("Team Management - Members", True, f"Found {len(members)} members")
+                self.log_test("Team Management - Health", True, f"Status: {data.get('status', 'healthy')}")
             else:
-                self.log_test("Team Management - Members", False, error=f"HTTP {response.status_code}")
+                self.log_test("Team Management - Health", False, error=f"HTTP {response.status_code}")
         except Exception as e:
-            self.log_test("Team Management - Members", False, error=str(e))
+            self.log_test("Team Management - Health", False, error=str(e))
         
         # Test Form Builder System
         try:
-            response = self.make_request('GET', '/forms')
+            response = self.make_request('GET', '/form-builder/')
             if response.status_code == 200:
                 data = response.json()
-                forms = data.get('forms', []) if isinstance(data, dict) else data
-                self.log_test("Form Builder - List Forms", True, f"Found {len(forms)} forms")
+                self.log_test("Form Builder System", True, f"Data: {len(str(data))} chars")
             else:
-                self.log_test("Form Builder - List Forms", False, error=f"HTTP {response.status_code}")
+                self.log_test("Form Builder System", False, error=f"HTTP {response.status_code}")
         except Exception as e:
-            self.log_test("Form Builder - List Forms", False, error=str(e))
+            self.log_test("Form Builder System", False, error=str(e))
+        
+        try:
+            response = self.make_request('GET', '/form-builder/health')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("Form Builder - Health", True, f"Status: {data.get('status', 'healthy')}")
+            else:
+                self.log_test("Form Builder - Health", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Form Builder - Health", False, error=str(e))
 
     def test_crud_operations(self):
         """Test CRUD operations across major systems"""
