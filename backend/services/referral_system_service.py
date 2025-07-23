@@ -152,6 +152,8 @@ class ReferralSystemService:
             doc = await collection.find_one({"id": program_id})
             
             if doc:
+                # Convert ObjectId to string for JSON serialization
+                doc = safe_document_return(doc)
                 return {
                     "success": True,
                     "data": doc
