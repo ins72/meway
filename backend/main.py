@@ -150,6 +150,7 @@ try:
     from api.tiktok import router as tiktok_router
     from api.stripe_integration import router as stripe_integration_router
     from api.referral_system import router as referral_system_router
+    from api.production_monitoring import router as production_monitoring_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
