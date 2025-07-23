@@ -282,7 +282,7 @@ async def get_available_integrations(current_user: dict = Depends(get_current_us
         {
             "id": "instagram", 
             "name": "TikTok Business API",
-            "description": "Manage your TikTok & Twitter/X
+            "description": "Manage your TikTok & Twitter/X accounts",
             "category": "social_media",
             "status": "available",
             "features": ["media_publishing", "analytics", "story_management"]
