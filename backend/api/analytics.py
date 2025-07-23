@@ -63,7 +63,7 @@ async def health_check():
 # Create Operation
 @router.post("/", response_model=AnalyticsResponse, status_code=status.HTTP_201_CREATED)
 async def create_analytics(
-    item: item: AnalyticsCreate = Body(...),
+    item: AnalyticsCreate = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Create new analytics with comprehensive validation"""
