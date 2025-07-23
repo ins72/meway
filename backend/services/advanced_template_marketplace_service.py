@@ -223,14 +223,15 @@ class AdvancedTemplateMarketplaceService:
     async def _track_template_event(self, template_id: str, event: str, user_id: str):
         """Track template analytics event"""
         collections = self._get_collections()
-        await collections['analytics'].insert_one({
-            "id": str(uuid.uuid4()),
-            "template_id": template_id,
-            "user_id": user_id,
-            "event": event,
-            "timestamp": datetime.utcnow(),
-            "metadata": {}
-        })
+        if collections:
+            await collections['analytics'].insert_one({
+                "id": str(uuid.uuid4()),
+                "template_id": template_id,
+                "user_id": user_id,
+                "event": event,
+                "timestamp": datetime.utcnow(),
+                "metadata": {}
+            })
 
 def get_advanced_template_marketplace_service():
     """Factory function to get service instance"""
