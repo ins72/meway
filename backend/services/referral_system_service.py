@@ -127,6 +127,9 @@ class ReferralSystemService:
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
+            # Convert ObjectIds to strings for JSON serialization
+            docs = safe_documents_return(docs)
+            
             # Get total count
             total = await collection.count_documents(query)
             
