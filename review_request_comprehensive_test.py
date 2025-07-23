@@ -556,7 +556,7 @@ class ComprehensiveBackendTester:
         # Test 3: Analytics System
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/analytics-system/overview", headers=headers) as response:
+            async with self.session.get(f"{self.api_url}/analytics-system/", headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
