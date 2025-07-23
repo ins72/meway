@@ -59,9 +59,9 @@ async def get_email_marketing_dashboard(current_user: dict = Depends(get_current
     user_id = current_user.get("_id") or current_user.get("id", "default-user")
     
     # Get dashboard metrics from real service
-    total_campaigns = await service.get_metric()
-    total_subscribers = await service.get_metric()
-    total_sent = await service.get_metric()
+    total_campaigns = await email_service.get_campaigns_count(user_id)
+    total_subscribers = await email_service.get_subscribers_count(user_id)
+    total_sent = await email_service.get_sent_emails_count(user_id)
     
     return {
         "success": True,
