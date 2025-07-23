@@ -158,6 +158,7 @@ async def delete_tweet(
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/search")
 async def search_tweets(
     query: str = Query(..., description="Search query"),
