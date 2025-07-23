@@ -3749,6 +3749,9 @@ class BackendTester:
             # 5. Performance & Integration
             self.test_performance_integration()
             
+            # 6. Test existing endpoints that were mentioned as working
+            self.test_existing_endpoints_from_history()
+            
         except Exception as e:
             print(f"❌ Error during testing: {str(e)}")
             import traceback
