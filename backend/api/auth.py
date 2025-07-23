@@ -18,6 +18,15 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    full_name: Optional[str] = None
+
 @router.get("/health")
 async def health_check():
     """Health check - GUARANTEED to work"""
