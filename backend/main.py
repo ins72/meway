@@ -314,7 +314,7 @@ try:
     app.include_router(social_media_management_router, prefix="/api/social-media-management", tags=["social_media_management"])
 
     
-    logger.info(f"✅ Successfully included 128 bulletproof routers")
+    logger.info(f"✅ Successfully included 129 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
