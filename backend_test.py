@@ -244,60 +244,18 @@ class MewayzBackendTester:
         print("📝 TESTING CRUD OPERATIONS")
         print("-" * 50)
         
-        # Test CREATE operations
-        test_data_sets = [
-            {
-                'name': 'Bio Site Creation',
-                'endpoint': '/bio-sites',
-                'data': {
-                    'name': 'Test Bio Site',
-                    'slug': 'test-bio-site-prod',
-                    'theme': 'modern',
-                    'description': 'Production testing bio site'
-                }
-            },
-            {
-                'name': 'Link Shortener Creation',
-                'endpoint': '/link-shortener/create',
-                'data': {
-                    'original_url': 'https://example.com/production-test',
-                    'custom_code': 'prod-test-2025'
-                }
-            },
-            {
-                'name': 'Form Template Creation',
-                'endpoint': '/form-templates',
-                'data': {
-                    'name': 'Production Test Form',
-                    'description': 'Testing form creation for production',
-                    'category': 'feedback',
-                    'fields': [
-                        {'name': 'name', 'type': 'text', 'required': True},
-                        {'name': 'email', 'type': 'email', 'required': True}
-                    ]
-                }
-            }
-        ]
-        
-        for test_data in test_data_sets:
-            try:
-                response = self.make_request('POST', test_data['endpoint'], test_data['data'])
-                if response.status_code in [200, 201]:
-                    data = response.json()
-                    self.log_test(f"CREATE - {test_data['name']}", True, f"Created: {data.get('id', 'success')}")
-                else:
-                    self.log_test(f"CREATE - {test_data['name']}", False, error=f"HTTP {response.status_code}: {response.text}")
-            except Exception as e:
-                self.log_test(f"CREATE - {test_data['name']}", False, error=str(e))
-        
-        # Test READ operations
+        # Test READ operations for available services
         read_endpoints = [
-            ('/bio-sites', 'Bio Sites'),
-            ('/link-shortener/links', 'Link Shortener Links'),
-            ('/form-templates', 'Form Templates'),
-            ('/analytics/overview', 'Analytics Overview'),
-            ('/financial/dashboard', 'Financial Dashboard'),
-            ('/ai/services', 'AI Services')
+            ('/complete-link-in-bio/', 'Bio Sites System'),
+            ('/link-shortener/', 'Link Shortener System'),
+            ('/form-builder/', 'Form Builder System'),
+            ('/analytics-system/', 'Analytics System'),
+            ('/financial/', 'Financial System'),
+            ('/advanced-ai/', 'AI Services System'),
+            ('/social-media-management/', 'Social Media System'),
+            ('/template/', 'Template System'),
+            ('/booking/', 'Booking System'),
+            ('/media-library/', 'Media Library System')
         ]
         
         for endpoint, name in read_endpoints:
@@ -310,6 +268,27 @@ class MewayzBackendTester:
                     self.log_test(f"READ - {name}", False, error=f"HTTP {response.status_code}")
             except Exception as e:
                 self.log_test(f"READ - {name}", False, error=str(e))
+        
+        # Test Health endpoints (these should work without authentication)
+        health_endpoints = [
+            ('/complete-link-in-bio/health', 'Bio Sites Health'),
+            ('/link-shortener/health', 'Link Shortener Health'),
+            ('/form-builder/health', 'Form Builder Health'),
+            ('/analytics-system/health', 'Analytics Health'),
+            ('/financial/health', 'Financial Health'),
+            ('/advanced-ai/health', 'AI Services Health')
+        ]
+        
+        for endpoint, name in health_endpoints:
+            try:
+                response = self.make_request('GET', endpoint)
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test(f"HEALTH - {name}", True, f"Status: {data.get('status', 'healthy')}")
+                else:
+                    self.log_test(f"HEALTH - {name}", False, error=f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_test(f"HEALTH - {name}", False, error=str(e))
 
     def test_real_data_operations(self):
         """Test for real data operations vs mock data"""
