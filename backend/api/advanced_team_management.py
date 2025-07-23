@@ -196,6 +196,5 @@ async def team_management_health():
             "Multi-tier Team Support"
         ],
         "supported_roles": [role.value for role in TeamRole],
-        "invitation_statuses": [status.value for status in InvitationStatus],
         "timestamp": datetime.utcnow().isoformat()
     }
