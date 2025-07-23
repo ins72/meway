@@ -537,7 +537,7 @@ class ComprehensiveBackendTester:
         # Test 2: Admin Dashboard
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/complete-admin-dashboard/dashboard", headers=headers) as response:
+            async with self.session.get(f"{self.api_url}/complete-admin-dashboard/", headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
