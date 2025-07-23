@@ -43,7 +43,7 @@ class BlogPostUpdate(BaseModel):
 @router.post("/posts")
 async def create_blog_post(
     post_data: BlogPostCreate,
-    current_user: dict = Depends(get_current_active_user)
+    current_user: dict = Depends(get_current_user)
 ):
     """Create blog post with real database operations"""
     try:
