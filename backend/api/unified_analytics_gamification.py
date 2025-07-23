@@ -55,7 +55,7 @@ async def get_unified_dashboard(
 @router.get("/metrics/{metric_type}", tags=["Analytics Metrics"])
 async def get_specific_metrics(
     metric_type: str,
-    period: str = Query("month", regex="^(day|week|month|quarter|year)$"),
+    period: str = Query("month", pattern="^(day|week|month|quarter|year)$"),
     current_user: dict = Depends(get_current_user)
 ):
     """Get specific metric data"""
