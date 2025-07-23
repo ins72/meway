@@ -454,7 +454,7 @@ class ComprehensiveBackendTester:
                 "description": "Test payment from Mewayz platform"
             }
             
-            async with self.session.post(f"{self.api_url}/stripe-integration/payment-intent", json=payment_data, headers=headers) as response:
+            async with self.session.post(f"{self.api_url}/stripe-integration/", json=payment_data, headers=headers) as response:
                 if response.status == 200 or response.status == 201:
                     data = await response.json()
                     results["passed"] += 1
