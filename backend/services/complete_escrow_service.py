@@ -904,3 +904,192 @@ escrow_service = CompleteEscrowService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+    async def create_milestone_payment_plan(self, transaction_id: str, milestones: list, user_id: str):
+        """Create milestone-based payment plan for large transactions"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            milestone_plan = {
+                "_id": str(uuid.uuid4()),
+                "transaction_id": transaction_id,
+                "created_by": user_id,
+                "milestones": [],
+                "total_amount": 0,
+                "status": "pending_approval",
+                "created_at": datetime.utcnow()
+            }
+            
+            for i, milestone in enumerate(milestones):
+                milestone_data = {
+                    "milestone_id": str(uuid.uuid4()),
+                    "sequence": i + 1,
+                    "title": milestone.get("title"),
+                    "description": milestone.get("description"),
+                    "amount": milestone.get("amount", 0),
+                    "due_date": milestone.get("due_date"),
+                    "requirements": milestone.get("requirements", []),
+                    "status": "pending",
+                    "approved_by": None,
+                    "completed_at": None
+                }
+                milestone_plan["milestones"].append(milestone_data)
+                milestone_plan["total_amount"] += milestone_data["amount"]
+            
+            await collections['milestone_plans'].insert_one(milestone_plan)
+            return {"success": True, "plan": milestone_plan, "message": "Milestone payment plan created"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def initiate_dispute_resolution(self, transaction_id: str, dispute_data: dict, user_id: str):
+        """Initiate dispute resolution process"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            dispute = {
+                "_id": str(uuid.uuid4()),
+                "transaction_id": transaction_id,
+                "initiated_by": user_id,
+                "dispute_type": dispute_data.get("type", "general"),
+                "subject": dispute_data.get("subject"),
+                "description": dispute_data.get("description"),
+                "evidence": dispute_data.get("evidence", []),
+                "status": "open",
+                "priority": dispute_data.get("priority", "medium"),
+                "assigned_mediator": None,
+                "resolution_deadline": datetime.utcnow() + timedelta(days=7),
+                "created_at": datetime.utcnow(),
+                "messages": [],
+                "timeline": [
+                    {
+                        "action": "dispute_initiated",
+                        "by": user_id,
+                        "timestamp": datetime.utcnow(),
+                        "details": "Dispute resolution process started"
+                    }
+                ]
+            }
+            
+            await collections['dispute_resolutions'].insert_one(dispute)
+            
+            # Auto-assign mediator based on dispute type and complexity
+            mediator = await self._assign_dispute_mediator(dispute)
+            if mediator:
+                dispute["assigned_mediator"] = mediator["_id"]
+                await collections['dispute_resolutions'].update_one(
+                    {"_id": dispute["_id"]},
+                    {"$set": {"assigned_mediator": mediator["_id"]}}
+                )
+            
+            return {"success": True, "dispute": dispute, "message": "Dispute resolution initiated"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def verify_identity_advanced(self, user_id: str, verification_data: dict):
+        """Advanced identity verification for high-value transactions"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            verification = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "verification_level": verification_data.get("level", "standard"),
+                "documents_provided": verification_data.get("documents", []),
+                "verification_methods": [],
+                "status": "pending",
+                "risk_score": 0,
+                "automated_checks": {},
+                "manual_review_required": False,
+                "submitted_at": datetime.utcnow(),
+                "processing_time_estimate": "2-4 hours"
+            }
+            
+            # Automated verification checks
+            verification["automated_checks"] = {
+                "document_authenticity": {"status": "processing", "confidence": 0},
+                "face_match": {"status": "processing", "confidence": 0},
+                "database_cross_reference": {"status": "processing", "matches": []},
+                "risk_assessment": {"status": "processing", "score": 0}
+            }
+            
+            # Determine verification methods based on level
+            if verification_data.get("level") == "premium":
+                verification["verification_methods"] = [
+                    "government_id_scan",
+                    "facial_recognition", 
+                    "live_video_call",
+                    "bank_account_verification",
+                    "address_confirmation"
+                ]
+            else:
+                verification["verification_methods"] = [
+                    "government_id_scan",
+                    "facial_recognition",
+                    "bank_account_verification"
+                ]
+            
+            await collections['identity_verifications'].insert_one(verification)
+            return {"success": True, "verification": verification, "message": "Advanced identity verification initiated"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def calculate_escrow_fees(self, transaction_amount: float, transaction_type: str, participants: dict):
+        """Calculate dynamic escrow fees based on transaction complexity"""
+        try:
+            base_fee_percentage = 0.025  # 2.5% base fee
+            
+            # Adjust fee based on transaction type
+            type_multipliers = {
+                "digital_product": 1.0,
+                "physical_product": 1.2,
+                "service": 1.1,
+                "social_media_account": 1.5,
+                "intellectual_property": 1.8,
+                "domain_name": 1.3,
+                "cryptocurrency": 2.0
+            }
+            
+            multiplier = type_multipliers.get(transaction_type, 1.0)
+            
+            # Volume discounts
+            if transaction_amount > 10000:
+                multiplier *= 0.8  # 20% discount for high value
+            elif transaction_amount > 5000:
+                multiplier *= 0.9  # 10% discount for medium value
+            
+            # Complexity adjustments
+            if len(participants) > 2:
+                multiplier *= 1.1  # Multi-party transactions
+            
+            calculated_fee = transaction_amount * base_fee_percentage * multiplier
+            
+            # Minimum and maximum fee limits
+            min_fee = 5.00
+            max_fee = 500.00
+            final_fee = max(min_fee, min(calculated_fee, max_fee))
+            
+            fee_breakdown = {
+                "base_amount": transaction_amount * base_fee_percentage,
+                "type_adjustment": (multiplier - 1.0) * transaction_amount * base_fee_percentage,
+                "final_fee": final_fee,
+                "fee_percentage": (final_fee / transaction_amount) * 100,
+                "breakdown": {
+                    "platform_fee": final_fee * 0.6,
+                    "payment_processing": final_fee * 0.25,
+                    "insurance": final_fee * 0.1,
+                    "dispute_resolution_reserve": final_fee * 0.05
+                }
+            }
+            
+            return {"success": True, "fee_calculation": fee_breakdown, "message": "Escrow fees calculated"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

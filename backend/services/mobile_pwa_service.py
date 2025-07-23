@@ -360,3 +360,164 @@ mobile_pwa_service = get_mobile_pwa_service()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+    async def register_device_for_analytics(self, device_data: dict, user_id: str):
+        """Register device for advanced analytics tracking"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            device_registration = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "device_id": device_data.get("device_id"),
+                "device_type": device_data.get("device_type", "unknown"),
+                "operating_system": device_data.get("os", "unknown"),
+                "browser": device_data.get("browser", "unknown"),
+                "screen_resolution": device_data.get("screen_resolution"),
+                "user_agent": device_data.get("user_agent"),
+                "registered_at": datetime.utcnow(),
+                "last_active": datetime.utcnow(),
+                "analytics_enabled": True,
+                "push_enabled": device_data.get("push_enabled", False)
+            }
+            
+            await collections['device_registrations'].insert_one(device_registration)
+            return {"success": True, "device": device_registration, "message": "Device registered for analytics"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def track_app_usage(self, user_id: str, usage_data: dict):
+        """Track comprehensive app usage for PWA analytics"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            usage_event = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "session_id": usage_data.get("session_id"),
+                "feature_used": usage_data.get("feature"),
+                "action_type": usage_data.get("action"),
+                "duration_seconds": usage_data.get("duration", 0),
+                "device_type": usage_data.get("device_type"),
+                "is_offline": usage_data.get("offline_mode", False),
+                "timestamp": datetime.utcnow(),
+                "page_url": usage_data.get("page_url"),
+                "performance_metrics": usage_data.get("performance", {})
+            }
+            
+            await collections['app_usage_analytics'].insert_one(usage_event)
+            return {"success": True, "message": "Usage tracked successfully"}
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def sync_offline_data(self, user_id: str, offline_data: list):
+        """Sync data created while offline"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            synced_items = []
+            
+            for item in offline_data:
+                sync_record = {
+                    "_id": str(uuid.uuid4()),
+                    "user_id": user_id,
+                    "original_id": item.get("offline_id"),
+                    "data_type": item.get("type"),
+                    "data": item.get("data"),
+                    "created_offline_at": item.get("created_at"),
+                    "synced_at": datetime.utcnow(),
+                    "sync_status": "completed"
+                }
+                
+                await collections['offline_sync'].insert_one(sync_record)
+                synced_items.append(sync_record)
+            
+            return {
+                "success": True,
+                "synced_items": len(synced_items),
+                "items": synced_items,
+                "message": "Offline data synced successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    
+    async def generate_app_manifest(self, workspace_id: str, customization: dict):
+        """Generate custom PWA manifest for workspace branding"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Get workspace branding
+            workspace = await collections['workspaces'].find_one({"_id": workspace_id})
+            if not workspace:
+                return {"success": False, "message": "Workspace not found"}
+            
+            manifest = {
+                "name": customization.get("app_name", f"Mewayz - {workspace.get('name', 'Business Hub')}"),
+                "short_name": customization.get("short_name", workspace.get('name', 'Mewayz')[:12]),
+                "description": customization.get("description", "All-in-One Business Platform"),
+                "start_url": "/",
+                "display": "standalone",
+                "orientation": "portrait-primary",
+                "theme_color": customization.get("theme_color", "#007AFF"),
+                "background_color": customization.get("background_color", "#101010"),
+                "icons": [
+                    {
+                        "src": customization.get("icon_192", "/icons/icon-192x192.png"),
+                        "sizes": "192x192",
+                        "type": "image/png"
+                    },
+                    {
+                        "src": customization.get("icon_512", "/icons/icon-512x512.png"),
+                        "sizes": "512x512",
+                        "type": "image/png"
+                    }
+                ],
+                "categories": ["business", "productivity", "social"],
+                "screenshots": customization.get("screenshots", []),
+                "shortcuts": [
+                    {
+                        "name": "Dashboard",
+                        "short_name": "Dashboard",
+                        "description": "View your business dashboard",
+                        "url": "/dashboard",
+                        "icons": [{"src": "/icons/dashboard-icon.png", "sizes": "192x192"}]
+                    },
+                    {
+                        "name": "Social Media",
+                        "short_name": "Social",
+                        "description": "Manage social media",
+                        "url": "/social",
+                        "icons": [{"src": "/icons/social-icon.png", "sizes": "192x192"}]
+                    }
+                ]
+            }
+            
+            # Store manifest in database
+            manifest_record = {
+                "_id": str(uuid.uuid4()),
+                "workspace_id": workspace_id,
+                "manifest": manifest,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            
+            await collections['pwa_manifests'].insert_one(manifest_record)
+            
+            return {
+                "success": True,
+                "manifest": manifest,
+                "message": "PWA manifest generated successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
