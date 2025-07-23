@@ -301,32 +301,9 @@ class UserService:
 # Create service instance function (dependency injection)
 def get_user_service() -> UserService:
     return UserService()
+
 # Global service instance
 user_service = UserService()
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
-            
-            if not item:
-                return {"success": False, "message": "Item not found"}
-            
-            return {
-                "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
 
     async def delete_item(self, user_id: str, item_id: str):
         """Delete item"""
