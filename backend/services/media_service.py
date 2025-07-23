@@ -273,8 +273,7 @@ class MediaService:
         return result.deleted_count > 0
     
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def create_folder(user_id: str, folder_name: str, parent_folder: str = "") -> Dict[str, Any]:
         """Create new folder"""
         database = get_database()
         
