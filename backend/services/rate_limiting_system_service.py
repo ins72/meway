@@ -3,7 +3,6 @@ Rate_Limiting_System Service - Comprehensive Business Logic
 Generated for complete service/API pairing with full CRUD operations
 """
 
-from bson import ObjectId
 import uuid
 import logging
 logger = logging.getLogger(__name__)
@@ -235,6 +234,7 @@ class Rate_Limiting_SystemService:
             
             # Get recent activity (last 30 days)
             from datetime import datetime, timedelta
+from bson import ObjectId
             thirty_days_ago = (datetime.utcnow() - timedelta(days=30)).isoformat()
             recent_query = query.copy()
             recent_query["created_at"] = {"$gte": thirty_days_ago}
