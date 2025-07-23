@@ -116,7 +116,9 @@ async def update_website(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"UPDATE endpoint error: {e}
+        logger.error(f"UPDATE endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/stats")
 async def get_stats(
     current_user: dict = Depends(get_current_admin)
