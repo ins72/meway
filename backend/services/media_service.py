@@ -288,7 +288,7 @@ class MediaService:
         folders_collection = database.media_folders
         existing = await folders_collection.find_one({
             "workspace_id": str(workspace["_id"]),
-            "name": name,
+            "name": folder_name,
             "parent_folder": parent_folder
         })
         
