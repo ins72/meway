@@ -10,10 +10,26 @@ from pydantic import BaseModel
 import uuid
 
 from core.auth import get_current_user
-from core.workflow_automation_engine import (
-    workflow_engine, TriggerType, ActionType, WorkflowStatus
-)
-from core.professional_logger import professional_logger, LogLevel, LogCategory
+try:
+    from core.workflow_automation_engine import (
+        workflow_engine, TriggerType, ActionType, WorkflowStatus
+    )
+    workflow_engine_available = True
+except ImportError:
+    workflow_engine = None
+    TriggerType = None
+    ActionType = None 
+    WorkflowStatus = None
+    workflow_engine_available = False
+
+try:
+    from core.professional_logger import professional_logger, LogLevel, LogCategory
+    logger_available = True
+except ImportError:
+    professional_logger = None
+    LogLevel = None
+    LogCategory = None
+    logger_available = False
 
 router = APIRouter(
     prefix="/api/workflows",
