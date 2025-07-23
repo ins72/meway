@@ -182,6 +182,148 @@ async def get_template_categories():
         ]
     }
 
+@router.get("/creator/analytics", tags=["Creator Analytics"])
+async def get_creator_analytics(
+    period: str = Query("month", pattern="^(week|month|quarter|year)$"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get comprehensive analytics for template creator"""
+    try:
+        # Mock analytics data for now
+        analytics = {
+            "period": period,
+            "revenue": {
+                "total": 1250.00,
+                "this_period": 340.50,
+                "growth": 23.5
+            },
+            "templates": {
+                "total_active": 12,
+                "total_downloads": 456,
+                "average_rating": 4.3
+            },
+            "performance": {
+                "conversion_rate": 8.2,
+                "customer_satisfaction": 4.1,
+                "repeat_purchase_rate": 15.3
+            }
+        }
+        
+        return {
+            "success": True,
+            "analytics": analytics,
+            "message": "Creator analytics retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting creator analytics: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/creator/revenue", tags=["Creator Analytics"])
+async def get_creator_revenue(
+    period: str = Query("month", pattern="^(week|month|quarter|year)$"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get creator revenue breakdown"""
+    try:
+        revenue_data = {
+            "period": period,
+            "total_revenue": 1250.00,
+            "net_revenue": 1000.00,  # After platform fees
+            "platform_fee": 250.00,
+            "breakdown": {
+                "premium_templates": 800.00,
+                "basic_templates": 450.00
+            },
+            "transactions": 23,
+            "avg_transaction": 54.35
+        }
+        
+        return {
+            "success": True,
+            "revenue": revenue_data,
+            "message": "Creator revenue retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting creator revenue: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/my-templates", tags=["Creator Analytics"])
+async def get_my_templates(
+    status: Optional[str] = Query(None),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get creator's own templates"""
+    try:
+        # Mock template data
+        templates = [
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Modern Business Landing",
+                "status": "approved",
+                "downloads": 156,
+                "revenue": 430.50,
+                "rating": 4.2,
+                "created_at": "2025-01-15T10:30:00Z"
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "E-commerce Template",
+                "status": "pending_review",
+                "downloads": 0,
+                "revenue": 0,
+                "rating": 0,
+                "created_at": "2025-01-20T14:20:00Z"
+            }
+        ]
+        
+        # Filter by status if provided
+        if status:
+            templates = [t for t in templates if t["status"] == status]
+        
+        return {
+            "success": True,
+            "templates": templates,
+            "count": len(templates),
+            "message": "Templates retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting my templates: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/purchases", tags=["Template Usage"])
+async def get_my_purchases(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's template purchases"""
+    try:
+        # Mock purchase data
+        purchases = [
+            {
+                "id": str(uuid.uuid4()),
+                "template_id": str(uuid.uuid4()),
+                "template_title": "Professional Portfolio",
+                "amount_paid": 39.99,
+                "purchased_at": "2025-01-10T09:15:00Z",
+                "license_type": "standard",
+                "download_count": 3,
+                "max_downloads": 10
+            }
+        ]
+        
+        return {
+            "success": True,
+            "purchases": purchases,
+            "count": len(purchases),
+            "message": "Purchases retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting purchases: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/health", tags=["System"])
 async def template_marketplace_health():
     """Health check for template marketplace system"""
