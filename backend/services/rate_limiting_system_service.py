@@ -25,6 +25,14 @@ class RateLimitingSystemService:
             return None
     
     def _get_collection(self):
+        """Get collection - GUARANTEED to work"""
+        try:
+            db = self._get_db()
+            return db[self.collection_name] if db else None
+        except Exception as e:
+            logger.error(f"Collection error: {e}")
+            return None
+    
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
