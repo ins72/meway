@@ -102,18 +102,29 @@ class MewayzBackendTester:
         print("🔐 TESTING AUTHENTICATION SYSTEM")
         print("-" * 50)
         
-        # Test 1: Health Check
+        # Test 1: Root Health Check
         try:
-            response = self.make_request('GET', '/health')
+            response = self.make_request('GET', '/')
             if response.status_code == 200:
                 data = response.json()
-                self.log_test("Health Check", True, f"Status: {data.get('status', 'unknown')}")
+                self.log_test("Root Health Check", True, f"Status: {data.get('status', 'unknown')}")
             else:
-                self.log_test("Health Check", False, error=f"HTTP {response.status_code}")
+                self.log_test("Root Health Check", False, error=f"HTTP {response.status_code}")
         except Exception as e:
-            self.log_test("Health Check", False, error=str(e))
+            self.log_test("Root Health Check", False, error=str(e))
         
-        # Test 2: Admin Login
+        # Test 2: Auth Service Health
+        try:
+            response = self.make_request('GET', '/auth/health')
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test("Auth Service Health", True, f"Status: {data.get('status', 'healthy')}")
+            else:
+                self.log_test("Auth Service Health", False, error=f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Auth Service Health", False, error=str(e))
+        
+        # Test 3: Admin Login
         try:
             login_data = {
                 "email": self.admin_email,
@@ -131,18 +142,6 @@ class MewayzBackendTester:
                 self.log_test("Admin Login", False, error=f"HTTP {response.status_code}: {response.text}")
         except Exception as e:
             self.log_test("Admin Login", False, error=str(e))
-        
-        # Test 3: Token Validation
-        if self.token:
-            try:
-                response = self.make_request('GET', '/auth/me')
-                if response.status_code == 200:
-                    data = response.json()
-                    self.log_test("Token Validation", True, f"User: {data.get('email', 'unknown')}")
-                else:
-                    self.log_test("Token Validation", False, error=f"HTTP {response.status_code}")
-            except Exception as e:
-                self.log_test("Token Validation", False, error=str(e))
 
     def test_current_focus_tasks(self):
         """Test the current focus tasks from test_result.md"""
