@@ -268,7 +268,7 @@ async def get_analytics_stats(
 # Bulk Operations
 @router.post("/bulk", response_model=AnalyticsResponse)
 async def bulk_create_analyticss(
-    items: items: List[AnalyticsCreate] = Body(...),
+    items: List[AnalyticsCreate] = Body(...),
     current_user: dict = Depends(get_current_user)
 ):
     """Bulk create multiple analyticss"""
