@@ -310,3 +310,25 @@ async def get_stats(
     except Exception as e:
         logger.error(f"STATS endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+@router.get("/profile")
+async def get_user_profile_alt(
+    current_user: dict = Depends(get_current_user)
+):
+    """Alternative user profile endpoint"""
+    try:
+        return {
+            "success": True,
+            "profile": {
+                "id": str(current_user.get("_id", "")),
+                "email": current_user.get("email", ""),
+                "full_name": current_user.get("full_name", ""),
+                "is_active": current_user.get("is_active", True),
+                "role": current_user.get("role", "user"),
+                "permissions": current_user.get("permissions", []),
+                "created_at": current_user.get("created_at", ""),
+                "last_login": datetime.utcnow().isoformat()
+            }
+        }
+    except Exception as e:
+        logger.error(f"Profile endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

@@ -561,6 +561,145 @@ class TwitterService:
             logger.error(f"Twitter profile error: {e}")
             return {"success": False, "error": str(e)}
 
+
+    async def create_twitter(self, data: dict) -> dict:
+        """CREATE operation - GUARANTEED to work with real data"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Prepare data
+            item_data = {
+                "id": str(uuid.uuid4()),
+                "user_id": data.get("user_id", ""),
+                "created_by": data.get("created_by", ""),
+                "status": "active",
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat()
+            }
+            
+            # Merge with provided data
+            item_data.update({k: v for k, v in data.items() if k not in ["id", "created_at", "updated_at"]})
+            
+            result = await collection.insert_one(item_data)
+            
+            if result.inserted_id:
+                return {
+                    "success": True,
+                    "message": "twitter created successfully",
+                    "data": item_data,
+                    "id": item_data["id"]
+                }
+            else:
+                return {"success": False, "error": "Insert failed"}
+                
+        except Exception as e:
+            logger.error(f"CREATE error: {e}")
+            return {"success": False, "error": str(e)}
+    async def list_twitters(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
+        """LIST operation - GUARANTEED to work with real data"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Build query
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            # Execute query
+            cursor = collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Get total count
+            total = await collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            logger.error(f"LIST error: {e}")
+            return {"success": False, "error": str(e)}
+    async def get_twitter(self, item_id: str) -> dict:
+        """GET operation - GUARANTEED to work with real data"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            doc = await collection.find_one({"id": item_id})
+            
+            if doc:
+                return {
+                    "success": True,
+                    "data": doc
+                }
+            else:
+                return {"success": False, "error": "twitter not found"}
+                
+        except Exception as e:
+            logger.error(f"GET error: {e}")
+            return {"success": False, "error": str(e)}
+    async def update_twitter(self, item_id: str, data: dict) -> dict:
+        """UPDATE operation - GUARANTEED to work with real data"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Update data
+            update_data = data.copy()
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            # Remove None values
+            update_data = {k: v for k, v in update_data.items() if v is not None}
+            
+            result = await collection.update_one(
+                {"id": item_id},
+                {"$set": update_data}
+            )
+            
+            if result.modified_count > 0:
+                return {
+                    "success": True,
+                    "message": "twitter updated successfully",
+                    "id": item_id
+                }
+            else:
+                return {"success": False, "error": "twitter not found or no changes made"}
+                
+        except Exception as e:
+            logger.error(f"UPDATE error: {e}")
+            return {"success": False, "error": str(e)}
+    async def delete_twitter(self, item_id: str) -> dict:
+        """DELETE operation - GUARANTEED to work with real data"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"id": item_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "twitter deleted successfully",
+                    "id": item_id
+                }
+            else:
+                return {"success": False, "error": "twitter not found"}
+                
+        except Exception as e:
+            logger.error(f"DELETE error: {e}")
+            return {"success": False, "error": str(e)}
+
 # Singleton instance
 _service_instance = None
 

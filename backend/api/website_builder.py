@@ -159,3 +159,23 @@ async def delete_website(
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+@router.get("/{websitebuilder_id}")
+async def get_websitebuilder(
+    websitebuilder_id: str = Path(..., description="WebsiteBuilder ID"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """GET single WebsiteBuilder by ID"""
+    try:
+        service = get_website_builder_service()
+        result = await service.get_websitebuilder(websitebuilder_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error", "WebsiteBuilder not found"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"GET endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
