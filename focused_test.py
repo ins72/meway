@@ -102,9 +102,9 @@ class FocusedTester:
         # Test multiple possible endpoints for AI workflows
         endpoints_to_test = [
             "/api/ai-automation/workflows",
-            "/api/workflows/",
-            "/api/workflows",
-            "/api/ai-automation/workflows/list"
+            "/api/automation/workflows",
+            "/api/automation/workflows/advanced",
+            "/api/ai-automation/analytics/overview"
         ]
         
         success_count = 0
