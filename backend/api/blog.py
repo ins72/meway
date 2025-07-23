@@ -5,7 +5,7 @@ import logging
 Blog/Content API Routes
 Professional Mewayz Platform
 """
-from fastapi import APIRouter, HTTPException, Depends, status, Query
+from fastapi import APIRouter, HTTPException, Depends, status, Query, Body
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 
