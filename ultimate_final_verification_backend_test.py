@@ -244,12 +244,12 @@ class UltimateFinalVerificationTester:
         }
         
         # CREATE
-        result = await self.test_endpoint("POST", "/api/complete-financial/create", financial_data, 
+        result = await self.test_endpoint("POST", "/api/complete-financial/", financial_data, 
                                         test_name="Financial System CREATE")
         self.test_results.append(result)
         
         # READ
-        result = await self.test_endpoint("GET", "/api/complete-financial/list", 
+        result = await self.test_endpoint("GET", "/api/complete-financial/", 
                                         test_name="Financial System READ")
         self.test_results.append(result)
         
@@ -261,12 +261,12 @@ class UltimateFinalVerificationTester:
         }
         
         # CREATE
-        result = await self.test_endpoint("POST", "/api/referral-system/create", referral_data,
+        result = await self.test_endpoint("POST", "/api/referral-system/", referral_data,
                                         test_name="Referral System CREATE")
         self.test_results.append(result)
         
         # READ
-        result = await self.test_endpoint("GET", "/api/referral-system/list",
+        result = await self.test_endpoint("GET", "/api/referral-system/",
                                         test_name="Referral System READ")
         self.test_results.append(result)
         
@@ -277,12 +277,12 @@ class UltimateFinalVerificationTester:
         }
         
         # CREATE
-        result = await self.test_endpoint("POST", "/api/complete-multi-workspace/create", workspace_data,
+        result = await self.test_endpoint("POST", "/api/complete-multi-workspace/", workspace_data,
                                         test_name="Workspace System CREATE")
         self.test_results.append(result)
         
         # READ
-        result = await self.test_endpoint("GET", "/api/complete-multi-workspace/list",
+        result = await self.test_endpoint("GET", "/api/complete-multi-workspace/",
                                         test_name="Workspace System READ")
         self.test_results.append(result)
 
