@@ -492,8 +492,7 @@ class MediaService:
         }
     
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def move_files_to_folder(file_ids: List[str], folder_id: str, user_id: str) -> Dict[str, Any]:
         """Move multiple files to folder"""
         database = get_database()
         
