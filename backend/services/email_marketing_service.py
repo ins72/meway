@@ -670,7 +670,6 @@ class EmailMarketingService:
                 result = await db.social_analytics.aggregate([
                     {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
                 ]).to_list(length=1)
-                return result[0]]).to_list(length=1)
                 return result[0]["total"] if result else min_val
                 
             elif metric_type == 'count':
@@ -695,9 +694,7 @@ class EmailMarketingService:
             db = await self.get_database()
             result = await db.analytics.aggregate([
                 {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
-            ]).to_list(length=1)
-                return result[0]]).to_list(length=1)
-                return result[0]["avg"] if result else (min_val + max_val) / 2
+            ["avg"] if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
     
@@ -747,9 +744,7 @@ class EmailMarketingService:
             result = await db.email_campaigns_detailed.aggregate([
                 {"$match": {"sent_count": {"$gt": 0}}},
                 {"$group": {"_id": None, "avg": {"$avg": {"$divide": ["$opened_count", "$sent_count"]}}}},
-            ]).to_list(length=1)
-                return result[0]]).to_list(length=1)
-                return result[0]["avg"] if result else (min_val + max_val) / 2
+            ["avg"] if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
     
@@ -761,8 +756,7 @@ class EmailMarketingService:
                 {"$group": {"_id": "$status", "count": {"$sum": 1}}},
                 {"$sort": {"count": -1}},
                 {"$limit": 1}
-            ]).to_list(length=1)
-                return result[0]["_id"] if result and result[0]["_id"] in choices else choices[0]
+            ["_id"] if result and result[0]["_id"] in choices else choices[0]
         except:
             return choices[0]
 
@@ -789,8 +783,7 @@ class EmailMarketingService:
             elif metric_type == 'impressions':
                 result = await db.social_analytics.aggregate([
                     {"$group": {"_id": None, "total": {"$sum": "$total_impressions"}}}
-                ]).to_list(length=1)
-                return result[0]["total"] if result else (min_val + max_val) // 2
+                ["total"] if result else (min_val + max_val) // 2
             elif metric_type == 'amount':
                 result = await db.user_actions.aggregate([
                     {"$match": {"type": "purchase"}},
@@ -816,8 +809,7 @@ class EmailMarketingService:
                     "_id": None,
                     "conversion_rate": {"$avg": {"$cond": [{"$eq": ["$type", "purchase"]}, 1, 0]}}
                 }}
-            ]).to_list(length=1)
-                return result[0]["conversion_rate"] if result else (min_val + max_val) / 2
+            ["conversion_rate"] if result else (min_val + max_val) / 2
     
     async def _get_real_choice_from_db(self, choices: list):
         """Get choice based on real data patterns"""
@@ -900,7 +892,7 @@ class EmailMarketingService:
                 "user_id": user_id
             })
             
-            if result.deleted_count == 0:
+            if result.deleted_count = await self._calculate_count(user_id):
                 return {"success": False, "message": "Campaign not found"}
             
             return {
