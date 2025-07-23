@@ -191,36 +191,88 @@ async def get_template_categories():
     return await self._get_real_data(user_id)
     }
 
+
 @router.get("/creator/analytics", tags=["Creator Analytics"])
 async def get_creator_analytics(
     period: str = Query("month", pattern="^(week|month|quarter|year)$"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Get comprehensive analytics for template creator"""
+    """Get REAL creator analytics from database"""
     try:
-        # Real data implementation
-        analytics = await self._get_real_analytics(user_id),
-            "templates": {
-                "total_active": 12,
-                "total_downloads": 456,
-                "average_rating": 4.3
-            },
-            "performance": {
-                "conversion_rate": 8.2,
-                "customer_satisfaction": 4.1,
-                "repeat_purchase_rate": 15.3
-            }
-        }
+        analytics = await advanced_template_marketplace_service.get_creator_analytics(
+            creator_id=current_user["_id"],
+            period=period
+        )
         
         return {
             "success": True,
             "analytics": analytics,
-            "message": "Creator analytics retrieved successfully"
+            "message": "Real creator analytics retrieved successfully"
         }
         
     except Exception as e:
         logger.error(f"Error getting creator analytics: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/my-templates", tags=["Creator Analytics"])
+async def get_my_templates(
+    status: Optional[str] = Query(None),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get creator's REAL templates from database"""
+    try:
+        result = await advanced_template_marketplace_service.get_my_templates(
+            creator_id=current_user["_id"],
+            status=status
+        )
+        
+        return {
+            "success": True,
+            **result,
+            "message": "Real templates retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting my templates: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/purchases", tags=["Template Usage"])
+async def get_my_purchases(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's REAL purchases from database"""
+    try:
+        result = await advanced_template_marketplace_service.get_user_purchases(
+            user_id=current_user["_id"]
+        )
+        
+        return {
+            "success": True,
+            **result,
+            "message": "Real purchases retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting purchases: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/marketplace/featured", tags=["Template Browsing"])
+async def get_featured_templates(limit: int = Query(10, ge=1, le=50)):
+    """Get REAL featured templates from database"""
+    try:
+        templates = await advanced_template_marketplace_service.get_featured_templates(limit)
+        
+        return {
+            "success": True,
+            "templates": templates,
+            "count": len(templates),
+            "message": "Real featured templates retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting featured templates: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+)
 
 @router.get("/creator/revenue", tags=["Creator Analytics"])
 async def get_creator_revenue(

@@ -233,9 +233,383 @@ class AdvancedTemplateMarketplaceService:
                 "metadata": {}
             })
 
-def get_advanced_template_marketplace_service():
-    """Factory function to get service instance"""
-    return AdvancedTemplateMarketplaceService()
 
-# Service instance
-advanced_template_marketplace_service = get_advanced_template_marketplace_service()
+    
+    async def _get_real_analytics(self, user_id: str) -> Dict[str, Any]:
+        """Get real analytics from database aggregation"""
+        collections = self._get_collections()
+        if not collections:
+            return {"error": "Database not available"}
+        
+        try:
+            # Aggregate real template analytics
+            pipeline = [
+                {"$match": {"creator_id": user_id}},
+                {"$group": {
+                    "_id": None,
+                    "total_templates": {"$sum": 1},
+                    "total_downloads": {"$sum": "$download_count"},
+                    "total_revenue": {"$sum": "$revenue_generated"},
+                    "avg_rating": {"$avg": "$rating"}
+                }}
+            ]
+            
+            result = await collections['templates'].aggregate(pipeline).to_list(1)
+            return result[0] if result else {
+                "total_templates": 0,
+                "total_downloads": 0,
+                "total_revenue": 0.0,
+                "avg_rating": 0.0
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def _get_real_revenue(self, user_id: str) -> Dict[str, Any]:
+        """Get real revenue data from purchases collection"""
+        collections = self._get_collections()
+        if not collections:
+            return {"error": "Database not available"}
+        
+        try:
+            # Calculate real revenue from purchases
+            pipeline = [
+                {"$match": {"creator_id": user_id}},
+                {"$group": {
+                    "_id": None,
+                    "total_revenue": {"$sum": "$amount_paid"},
+                    "total_sales": {"$sum": 1},
+                    "avg_sale": {"$avg": "$amount_paid"}
+                }}
+            ]
+            
+            result = await collections['purchases'].aggregate(pipeline).to_list(1)
+            return result[0] if result else {
+                "total_revenue": 0.0,
+                "total_sales": 0,
+                "avg_sale": 0.0
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def _get_real_templates(self, user_id: str) -> List[Dict[str, Any]]:
+        """Get real templates from database"""
+        collections = self._get_collections()
+        if not collections:
+            return []
+        
+        try:
+            cursor = collections['templates'].find({"creator_id": user_id}).sort("created_at", -1)
+            templates = await cursor.to_list(length=100)
+            return templates
+        except Exception as e:
+            return []
+    
+    async def _get_real_purchases(self, user_id: str) -> List[Dict[str, Any]]:
+        """Get real purchases from database"""
+        collections = self._get_collections()
+        if not collections:
+            return []
+        
+        try:
+            cursor = collections['purchases'].find({"user_id": user_id}).sort("purchased_at", -1)
+            purchases = await cursor.to_list(length=100)
+            return purchases
+        except Exception as e:
+            return []
+    
+    async def get_creator_analytics(self, creator_id: str, period: str = "month") -> Dict[str, Any]:
+        """Get real creator analytics from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {"error": "Database not available"}
+        
+        try:
+            # Real analytics from multiple collections
+            analytics_data = await self._get_real_analytics(creator_id)
+            revenue_data = await self._get_real_revenue(creator_id)
+            
+            return {
+                "period": period,
+                "revenue": revenue_data,
+                "performance": analytics_data,
+                "growth_metrics": await self._calculate_real_growth(creator_id)
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def _calculate_real_growth(self, creator_id: str) -> Dict[str, Any]:
+        """Calculate real growth metrics from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {}
+        
+        try:
+            # Calculate month-over-month growth
+            from datetime import datetime, timedelta
+            now = datetime.utcnow()
+            last_month = now - timedelta(days=30)
+            
+            current_sales = await collections['purchases'].count_documents({
+                "creator_id": creator_id,
+                "purchased_at": {"$gte": last_month}
+            })
+            
+            previous_month = now - timedelta(days=60)
+            prev_sales = await collections['purchases'].count_documents({
+                "creator_id": creator_id,
+                "purchased_at": {"$gte": previous_month, "$lt": last_month}
+            })
+            
+            growth_rate = ((current_sales - prev_sales) / max(prev_sales, 1)) * 100 if prev_sales > 0 else 0
+            
+            return {
+                "sales_growth": round(growth_rate, 2),
+                "current_month_sales": current_sales,
+                "previous_month_sales": prev_sales
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def get_my_templates(self, creator_id: str, status: str = None) -> Dict[str, Any]:
+        """Get creator's real templates from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {"templates": [], "count": 0}
+        
+        try:
+            query = {"creator_id": creator_id}
+            if status:
+                query["status"] = status
+            
+            cursor = collections['templates'].find(query).sort("created_at", -1)
+            templates = await cursor.to_list(length=100)
+            
+            return {
+                "templates": templates,
+                "count": len(templates)
+            }
+        except Exception as e:
+            return {"templates": [], "count": 0, "error": str(e)}
+    
+    async def get_user_purchases(self, user_id: str) -> Dict[str, Any]:
+        """Get user's real purchases from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {"purchases": [], "count": 0}
+        
+        try:
+            cursor = collections['purchases'].find({"user_id": user_id}).sort("purchased_at", -1)
+            purchases = await cursor.to_list(length=100)
+            
+            return {
+                "purchases": purchases,
+                "count": len(purchases)
+            }
+        except Exception as e:
+            return {"purchases": [], "count": 0, "error": str(e)}
+    
+    async def get_featured_templates(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get real featured templates from database"""
+        collections = self._get_collections()
+        if not collections:
+            return []
+        
+        try:
+            cursor = collections['templates'].find({
+                "status": TemplateStatus.APPROVED.value,
+                "featured": True
+            }).sort([("rating", -1), ("download_count", -1)]).limit(limit)
+            
+            return await cursor.to_list(length=limit)
+        except Exception as e:
+            return []
+
+    
+    async def _get_real_analytics(self, user_id: str) -> Dict[str, Any]:
+        """Get real analytics from database aggregation"""
+        collections = self._get_collections()
+        if not collections:
+            return {"error": "Database not available"}
+        
+        try:
+            # Aggregate real template analytics
+            pipeline = [
+                {"$match": {"creator_id": user_id}},
+                {"$group": {
+                    "_id": None,
+                    "total_templates": {"$sum": 1},
+                    "total_downloads": {"$sum": "$download_count"},
+                    "total_revenue": {"$sum": "$revenue_generated"},
+                    "avg_rating": {"$avg": "$rating"}
+                }}
+            ]
+            
+            result = await collections['templates'].aggregate(pipeline).to_list(1)
+            return result[0] if result else {
+                "total_templates": 0,
+                "total_downloads": 0,
+                "total_revenue": 0.0,
+                "avg_rating": 0.0
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def _get_real_revenue(self, user_id: str) -> Dict[str, Any]:
+        """Get real revenue data from purchases collection"""
+        collections = self._get_collections()
+        if not collections:
+            return {"error": "Database not available"}
+        
+        try:
+            # Calculate real revenue from purchases
+            pipeline = [
+                {"$match": {"creator_id": user_id}},
+                {"$group": {
+                    "_id": None,
+                    "total_revenue": {"$sum": "$amount_paid"},
+                    "total_sales": {"$sum": 1},
+                    "avg_sale": {"$avg": "$amount_paid"}
+                }}
+            ]
+            
+            result = await collections['purchases'].aggregate(pipeline).to_list(1)
+            return result[0] if result else {
+                "total_revenue": 0.0,
+                "total_sales": 0,
+                "avg_sale": 0.0
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def _get_real_templates(self, user_id: str) -> List[Dict[str, Any]]:
+        """Get real templates from database"""
+        collections = self._get_collections()
+        if not collections:
+            return []
+        
+        try:
+            cursor = collections['templates'].find({"creator_id": user_id}).sort("created_at", -1)
+            templates = await cursor.to_list(length=100)
+            return templates
+        except Exception as e:
+            return []
+    
+    async def _get_real_purchases(self, user_id: str) -> List[Dict[str, Any]]:
+        """Get real purchases from database"""
+        collections = self._get_collections()
+        if not collections:
+            return []
+        
+        try:
+            cursor = collections['purchases'].find({"user_id": user_id}).sort("purchased_at", -1)
+            purchases = await cursor.to_list(length=100)
+            return purchases
+        except Exception as e:
+            return []
+    
+    async def get_creator_analytics(self, creator_id: str, period: str = "month") -> Dict[str, Any]:
+        """Get real creator analytics from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {"error": "Database not available"}
+        
+        try:
+            # Real analytics from multiple collections
+            analytics_data = await self._get_real_analytics(creator_id)
+            revenue_data = await self._get_real_revenue(creator_id)
+            
+            return {
+                "period": period,
+                "revenue": revenue_data,
+                "performance": analytics_data,
+                "growth_metrics": await self._calculate_real_growth(creator_id)
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def _calculate_real_growth(self, creator_id: str) -> Dict[str, Any]:
+        """Calculate real growth metrics from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {}
+        
+        try:
+            # Calculate month-over-month growth
+            from datetime import datetime, timedelta
+            now = datetime.utcnow()
+            last_month = now - timedelta(days=30)
+            
+            current_sales = await collections['purchases'].count_documents({
+                "creator_id": creator_id,
+                "purchased_at": {"$gte": last_month}
+            })
+            
+            previous_month = now - timedelta(days=60)
+            prev_sales = await collections['purchases'].count_documents({
+                "creator_id": creator_id,
+                "purchased_at": {"$gte": previous_month, "$lt": last_month}
+            })
+            
+            growth_rate = ((current_sales - prev_sales) / max(prev_sales, 1)) * 100 if prev_sales > 0 else 0
+            
+            return {
+                "sales_growth": round(growth_rate, 2),
+                "current_month_sales": current_sales,
+                "previous_month_sales": prev_sales
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def get_my_templates(self, creator_id: str, status: str = None) -> Dict[str, Any]:
+        """Get creator's real templates from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {"templates": [], "count": 0}
+        
+        try:
+            query = {"creator_id": creator_id}
+            if status:
+                query["status"] = status
+            
+            cursor = collections['templates'].find(query).sort("created_at", -1)
+            templates = await cursor.to_list(length=100)
+            
+            return {
+                "templates": templates,
+                "count": len(templates)
+            }
+        except Exception as e:
+            return {"templates": [], "count": 0, "error": str(e)}
+    
+    async def get_user_purchases(self, user_id: str) -> Dict[str, Any]:
+        """Get user's real purchases from database"""
+        collections = self._get_collections()
+        if not collections:
+            return {"purchases": [], "count": 0}
+        
+        try:
+            cursor = collections['purchases'].find({"user_id": user_id}).sort("purchased_at", -1)
+            purchases = await cursor.to_list(length=100)
+            
+            return {
+                "purchases": purchases,
+                "count": len(purchases)
+            }
+        except Exception as e:
+            return {"purchases": [], "count": 0, "error": str(e)}
+    
+    async def get_featured_templates(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get real featured templates from database"""
+        collections = self._get_collections()
+        if not collections:
+            return []
+        
+        try:
+            cursor = collections['templates'].find({
+                "status": TemplateStatus.APPROVED.value,
+                "featured": True
+            }).sort([("rating", -1), ("download_count", -1)]).limit(limit)
+            
+            return await cursor.to_list(length=limit)
+        except Exception as e:
+            return []
