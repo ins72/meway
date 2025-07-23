@@ -161,7 +161,7 @@ async def get_blog_post(
 @router.get("/posts/slug/{slug}")
 async def get_blog_post_by_slug(
     slug: str,
-    current_user: dict = Depends(get_current_active_user)
+    current_user: dict = Depends(get_current_user)
 ):
     """Get blog post by slug with real database operations"""
     try:
@@ -190,7 +190,7 @@ async def get_blog_post_by_slug(
 async def update_blog_post(
     post_id: str,
     post_data: BlogPostUpdate,
-    current_user: dict = Depends(get_current_active_user)
+    current_user: dict = Depends(get_current_user)
 ):
     """Update blog post with real database operations"""
     try:
@@ -228,7 +228,7 @@ async def update_blog_post(
 @router.delete("/posts/{post_id}")
 async def delete_blog_post(
     post_id: str,
-    current_user: dict = Depends(get_current_active_user)
+    current_user: dict = Depends(get_current_user)
 ):
     """Delete blog post with real database operations"""
     try:
@@ -293,4 +293,3 @@ async def get_blog_analytics(current_user: dict = Depends(get_current_user)):
             "error": str(e),
             "message": "Failed to retrieve blog analytics"
         }
-
