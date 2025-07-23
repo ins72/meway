@@ -25,3 +25,5 @@ numpy
 aiohttp
 requests
 qrcode
+tenacity
+emergentintegrations
