@@ -244,10 +244,12 @@ class AuthService:
     async def health_check(self) -> dict:
         """HEALTH CHECK - GUARANTEED to work"""
         try:
-            collection = self._get_collection()
-            if not collection:
+            from core.database import get_database_async
+            db = await get_database_async()
+            if not db:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
+            collection = db[self.collection_name]
             # Test database connection
             await collection.count_documents({})
             
