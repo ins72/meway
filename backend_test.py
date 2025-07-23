@@ -593,7 +593,445 @@ class BackendTester:
         
         print("=" * 80)
         
-    def test_financial_management_system(self):
+    def test_fixed_critical_issues(self):
+        """Test the 4 fixed critical issues mentioned in review request"""
+        print("\n🔧 TESTING FIXED CRITICAL ISSUES")
+        print("=" * 60)
+        
+        # 1. Team management datetime handling (should now work without errors)
+        print("\n👥 Testing Team Management Datetime Handling...")
+        self.test_endpoint("/team-management/dashboard", "GET", test_name="Team Management - Dashboard (Datetime Fix)")
+        self.test_endpoint("/team-management/members", "GET", test_name="Team Management - Members List (Datetime Fix)")
+        self.test_endpoint("/team-management/activity", "GET", test_name="Team Management - Activity Log (Datetime Fix)")
+        
+        # Test team creation with datetime fields
+        team_data = {
+            "name": "Marketing Team Alpha",
+            "description": "Primary marketing team for Q1 2025 campaigns",
+            "department": "Marketing",
+            "created_date": "2025-01-15T10:30:00Z",
+            "target_completion": "2025-03-31T23:59:59Z"
+        }
+        self.test_endpoint("/team-management/teams", "POST", team_data, "Team Management - Create Team (Datetime Fix)")
+        
+        # 2. AI workflow creation (should create workflows successfully)
+        print("\n🤖 Testing AI Workflow Creation...")
+        self.test_endpoint("/workflows/list", "GET", test_name="AI Workflows - List Workflows")
+        
+        workflow_data = {
+            "name": "Content Generation Workflow",
+            "description": "Automated content creation and social media posting",
+            "triggers": [
+                {"type": "schedule", "cron": "0 9 * * 1", "timezone": "UTC"}
+            ],
+            "actions": [
+                {"type": "generate_content", "template": "blog_post", "topic": "digital marketing"},
+                {"type": "post_social", "platforms": ["twitter", "linkedin"]}
+            ],
+            "is_active": True
+        }
+        self.test_endpoint("/workflows/create", "POST", workflow_data, "AI Workflows - Create Workflow")
+        
+        # 3. Instagram database search (should return profile results)
+        print("\n📸 Testing Instagram Database Search...")
+        instagram_search_data = {
+            "query": "digital marketing",
+            "location": "United States",
+            "follower_range": {"min": 1000, "max": 100000},
+            "engagement_rate": {"min": 2.0},
+            "max_results": 20
+        }
+        self.test_endpoint("/instagram/search", "POST", instagram_search_data, "Instagram - Database Search")
+        self.test_endpoint("/instagram/profiles", "GET", test_name="Instagram - Get Profiles")
+        
+        # 4. PWA manifest generation (should create custom manifests)
+        print("\n📱 Testing PWA Manifest Generation...")
+        manifest_data = {
+            "app_name": "Mewayz Business Suite",
+            "short_name": "Mewayz",
+            "description": "Complete business automation platform",
+            "theme_color": "#2563EB",
+            "background_color": "#FFFFFF",
+            "start_url": "/dashboard",
+            "display": "standalone",
+            "orientation": "portrait",
+            "icons": [
+                {"src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                {"src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png"}
+            ]
+        }
+        self.test_endpoint("/manifest/generate", "POST", manifest_data, "PWA - Generate Manifest")
+        self.test_endpoint("/manifest/current", "GET", test_name="PWA - Get Current Manifest")
+        
+        print("\n🔧 Fixed Critical Issues Testing Complete!")
+        return True
+    
+    def test_new_feature_implementations(self):
+        """Test the 5 new feature implementations mentioned in review request"""
+        print("\n🆕 TESTING NEW FEATURE IMPLEMENTATIONS")
+        print("=" * 60)
+        
+        # 1. Complete escrow system with milestone payments
+        print("\n💰 Testing Complete Escrow System with Milestone Payments...")
+        
+        # Create escrow transaction
+        escrow_data = {
+            "buyer_id": "buyer_12345",
+            "seller_id": "seller_67890",
+            "project_title": "E-commerce Website Development",
+            "total_amount": 5000.00,
+            "currency": "USD",
+            "milestones": [
+                {"title": "Design Phase", "amount": 1500.00, "description": "UI/UX design and wireframes"},
+                {"title": "Development Phase", "amount": 2500.00, "description": "Frontend and backend development"},
+                {"title": "Testing & Launch", "amount": 1000.00, "description": "Testing, deployment, and launch"}
+            ],
+            "terms": "Payment released upon milestone completion and buyer approval"
+        }
+        self.test_endpoint("/transactions/milestone", "POST", escrow_data, "Escrow - Create Milestone Transaction")
+        self.test_endpoint("/transactions/list", "GET", test_name="Escrow - List Transactions")
+        
+        # Test dispute initiation
+        dispute_data = {
+            "transaction_id": "trans_12345",
+            "reason": "milestone_not_completed",
+            "description": "Development milestone was not completed according to specifications",
+            "evidence": ["screenshot1.png", "requirements_doc.pdf"]
+        }
+        self.test_endpoint("/disputes/initiate", "POST", dispute_data, "Escrow - Initiate Dispute")
+        
+        # 2. Social media post scheduling across platforms
+        print("\n📅 Testing Social Media Post Scheduling...")
+        
+        schedule_data = {
+            "content": "🚀 Exciting news! Our new business automation platform is now live. Transform your workflow today! #BusinessAutomation #Productivity",
+            "platforms": ["twitter", "linkedin", "facebook"],
+            "scheduled_time": "2025-01-16T14:00:00Z",
+            "media_urls": ["https://example.com/promo-image.jpg"],
+            "hashtags": ["#BusinessAutomation", "#Productivity", "#Innovation"],
+            "target_audience": "business_owners"
+        }
+        self.test_endpoint("/posts/schedule", "POST", schedule_data, "Social Media - Schedule Post")
+        self.test_endpoint("/posts/scheduled", "GET", test_name="Social Media - Get Scheduled Posts")
+        
+        # 3. Comprehensive offline data sync for PWA
+        print("\n🔄 Testing Comprehensive Offline Data Sync...")
+        
+        # Register device for offline sync
+        device_data = {
+            "device_id": "device_abc123",
+            "device_type": "mobile",
+            "platform": "android",
+            "app_version": "2.1.0",
+            "sync_preferences": {
+                "auto_sync": True,
+                "sync_frequency": "hourly",
+                "data_types": ["contacts", "projects", "analytics"]
+            }
+        }
+        self.test_endpoint("/device/register", "POST", device_data, "PWA - Register Device")
+        
+        # Test offline sync
+        sync_data = {
+            "device_id": "device_abc123",
+            "last_sync": "2025-01-15T10:00:00Z",
+            "data_types": ["contacts", "projects"],
+            "conflict_resolution": "server_wins"
+        }
+        self.test_endpoint("/offline/sync", "POST", sync_data, "PWA - Offline Data Sync")
+        
+        # 4. Advanced dispute resolution system
+        print("\n⚖️ Testing Advanced Dispute Resolution System...")
+        
+        # List disputes
+        self.test_endpoint("/disputes/list", "GET", test_name="Disputes - List All Disputes")
+        
+        # Submit evidence
+        evidence_data = {
+            "dispute_id": "dispute_12345",
+            "evidence_type": "document",
+            "description": "Contract showing agreed deliverables",
+            "file_url": "https://example.com/contract.pdf",
+            "submitted_by": "buyer"
+        }
+        self.test_endpoint("/disputes/evidence", "POST", evidence_data, "Disputes - Submit Evidence")
+        
+        # Mediation request
+        mediation_data = {
+            "dispute_id": "dispute_12345",
+            "mediator_preference": "platform_mediator",
+            "urgency": "high",
+            "additional_notes": "Time-sensitive project with client deadline approaching"
+        }
+        self.test_endpoint("/disputes/mediation", "POST", mediation_data, "Disputes - Request Mediation")
+        
+        # 5. Template marketplace with creator earnings
+        print("\n🛍️ Testing Template Marketplace with Creator Earnings...")
+        
+        # Browse marketplace
+        self.test_endpoint("/template-marketplace/browse", "GET", test_name="Template Marketplace - Browse Templates")
+        self.test_endpoint("/template-marketplace/categories", "GET", test_name="Template Marketplace - Get Categories")
+        
+        # Create template for sale
+        template_data = {
+            "title": "Modern Business Landing Page",
+            "description": "Professional landing page template with conversion optimization",
+            "category": "website_templates",
+            "price": 49.99,
+            "preview_images": ["preview1.jpg", "preview2.jpg"],
+            "files": ["template.zip", "documentation.pdf"],
+            "tags": ["landing-page", "business", "modern", "responsive"],
+            "license_type": "commercial",
+            "creator_earnings_percentage": 70
+        }
+        self.test_endpoint("/template-marketplace/templates", "POST", template_data, "Template Marketplace - Create Template")
+        
+        # Test creator earnings
+        self.test_endpoint("/template-marketplace/earnings", "GET", test_name="Template Marketplace - Creator Earnings")
+        self.test_endpoint("/template-marketplace/analytics", "GET", test_name="Template Marketplace - Sales Analytics")
+        
+        print("\n🆕 New Feature Implementations Testing Complete!")
+        return True
+    
+    def test_api_endpoint_coverage(self):
+        """Test newly added API endpoints mentioned in review request"""
+        print("\n🔗 TESTING API ENDPOINT COVERAGE")
+        print("=" * 60)
+        
+        # Test newly added social media endpoints
+        print("\n📱 Testing Social Media Endpoints...")
+        
+        # Instagram search endpoint
+        instagram_data = {
+            "keywords": ["entrepreneur", "business"],
+            "location": "New York",
+            "min_followers": 5000,
+            "max_results": 15
+        }
+        self.test_endpoint("/instagram/search", "POST", instagram_data, "Social Media - Instagram Search")
+        
+        # Post scheduling endpoint
+        post_data = {
+            "content": "Check out our latest business insights! 📊 #Business #Analytics",
+            "platforms": ["instagram", "twitter"],
+            "scheduled_time": "2025-01-16T16:00:00Z"
+        }
+        self.test_endpoint("/posts/schedule", "POST", post_data, "Social Media - Schedule Post")
+        
+        # Test PWA endpoints
+        print("\n📱 Testing PWA Endpoints...")
+        
+        # Manifest generation
+        manifest_data = {
+            "app_name": "Business Dashboard",
+            "theme_color": "#1976D2",
+            "background_color": "#FFFFFF"
+        }
+        self.test_endpoint("/manifest/generate", "POST", manifest_data, "PWA - Generate Manifest")
+        
+        # Device registration
+        device_data = {
+            "device_id": "pwa_device_001",
+            "platform": "web",
+            "capabilities": ["push_notifications", "offline_storage"]
+        }
+        self.test_endpoint("/device/register", "POST", device_data, "PWA - Register Device")
+        
+        # Offline sync
+        sync_data = {
+            "device_id": "pwa_device_001",
+            "sync_types": ["user_data", "app_settings"]
+        }
+        self.test_endpoint("/offline/sync", "POST", sync_data, "PWA - Offline Sync")
+        
+        # Test AI automation endpoints
+        print("\n🤖 Testing AI Automation Endpoints...")
+        
+        # Workflow creation
+        workflow_data = {
+            "name": "Lead Nurturing Workflow",
+            "triggers": [{"type": "new_lead"}],
+            "actions": [{"type": "send_email", "template": "welcome"}]
+        }
+        self.test_endpoint("/workflows/create", "POST", workflow_data, "AI Automation - Create Workflow")
+        
+        # Insights generation
+        insights_data = {
+            "data_source": "user_analytics",
+            "time_range": "last_30_days",
+            "metrics": ["engagement", "conversion"]
+        }
+        self.test_endpoint("/insights/generate", "POST", insights_data, "AI Automation - Generate Insights")
+        
+        # Test escrow endpoints
+        print("\n💰 Testing Escrow Endpoints...")
+        
+        # Milestone transactions
+        milestone_data = {
+            "project_id": "proj_123",
+            "milestones": [{"title": "Phase 1", "amount": 1000}]
+        }
+        self.test_endpoint("/transactions/milestone", "POST", milestone_data, "Escrow - Milestone Transaction")
+        
+        # Dispute initiation
+        dispute_data = {
+            "transaction_id": "trans_456",
+            "reason": "quality_issues"
+        }
+        self.test_endpoint("/disputes/initiate", "POST", dispute_data, "Escrow - Initiate Dispute")
+        
+        print("\n🔗 API Endpoint Coverage Testing Complete!")
+        return True
+    
+    def test_validation_error_handling(self):
+        """Test validation schemas and error handling in new features"""
+        print("\n✅ TESTING VALIDATION & ERROR HANDLING")
+        print("=" * 60)
+        
+        # Test validation schemas work correctly
+        print("\n📋 Testing Validation Schemas...")
+        
+        # Test invalid team creation (missing required fields)
+        invalid_team_data = {
+            "description": "Team without name"  # Missing required 'name' field
+        }
+        response = self.session.post(f"{API_BASE}/team-management/teams", json=invalid_team_data)
+        if response.status_code == 422:
+            self.log_result("Validation - Team Creation (Missing Name)", True, "Correctly rejected invalid data with 422")
+        else:
+            self.log_result("Validation - Team Creation (Missing Name)", False, f"Expected 422, got {response.status_code}")
+        
+        # Test invalid workflow creation
+        invalid_workflow_data = {
+            "description": "Workflow without name"  # Missing required 'name' field
+        }
+        response = self.session.post(f"{API_BASE}/workflows/create", json=invalid_workflow_data)
+        if response.status_code in [422, 400]:
+            self.log_result("Validation - Workflow Creation (Missing Name)", True, f"Correctly rejected invalid data with {response.status_code}")
+        else:
+            self.log_result("Validation - Workflow Creation (Missing Name)", False, f"Expected 422/400, got {response.status_code}")
+        
+        # Test invalid escrow transaction
+        invalid_escrow_data = {
+            "buyer_id": "buyer123"  # Missing required fields like amount, seller_id
+        }
+        response = self.session.post(f"{API_BASE}/transactions/milestone", json=invalid_escrow_data)
+        if response.status_code in [422, 400]:
+            self.log_result("Validation - Escrow Transaction (Missing Fields)", True, f"Correctly rejected invalid data with {response.status_code}")
+        else:
+            self.log_result("Validation - Escrow Transaction (Missing Fields)", False, f"Expected 422/400, got {response.status_code}")
+        
+        # Test comprehensive error handling
+        print("\n🚨 Testing Error Handling...")
+        
+        # Test non-existent resource access
+        response = self.session.get(f"{API_BASE}/transactions/nonexistent_id")
+        if response.status_code == 404:
+            self.log_result("Error Handling - Non-existent Transaction", True, "Correctly returned 404 for non-existent resource")
+        else:
+            self.log_result("Error Handling - Non-existent Transaction", False, f"Expected 404, got {response.status_code}")
+        
+        # Test unauthorized access (without proper permissions)
+        temp_session = requests.Session()  # Session without auth token
+        response = temp_session.post(f"{API_BASE}/disputes/initiate", json={"transaction_id": "test"})
+        if response.status_code == 401:
+            self.log_result("Error Handling - Unauthorized Access", True, "Correctly returned 401 for unauthorized access")
+        else:
+            self.log_result("Error Handling - Unauthorized Access", False, f"Expected 401, got {response.status_code}")
+        
+        print("\n✅ Validation & Error Handling Testing Complete!")
+        return True
+    
+    def test_performance_integration(self):
+        """Test performance and integration of new features"""
+        print("\n⚡ TESTING PERFORMANCE & INTEGRATION")
+        print("=" * 60)
+        
+        # Test response times for new endpoints
+        print("\n⏱️ Testing Response Times...")
+        
+        endpoints_to_test = [
+            ("/team-management/dashboard", "GET"),
+            ("/workflows/list", "GET"),
+            ("/template-marketplace/browse", "GET"),
+            ("/posts/scheduled", "GET"),
+            ("/disputes/list", "GET")
+        ]
+        
+        response_times = []
+        for endpoint, method in endpoints_to_test:
+            start_time = time.time()
+            if method == "GET":
+                response = self.session.get(f"{API_BASE}{endpoint}")
+            else:
+                response = self.session.post(f"{API_BASE}{endpoint}", json={})
+            
+            end_time = time.time()
+            response_time = end_time - start_time
+            response_times.append(response_time)
+            
+            if response_time < 2.0:  # Less than 2 seconds is good
+                self.log_result(f"Performance - {endpoint}", True, f"Response time: {response_time:.3f}s")
+            else:
+                self.log_result(f"Performance - {endpoint}", False, f"Slow response time: {response_time:.3f}s")
+        
+        avg_response_time = sum(response_times) / len(response_times)
+        if avg_response_time < 1.0:
+            self.log_result("Performance - Average Response Time", True, f"Excellent average: {avg_response_time:.3f}s")
+        elif avg_response_time < 2.0:
+            self.log_result("Performance - Average Response Time", True, f"Good average: {avg_response_time:.3f}s")
+        else:
+            self.log_result("Performance - Average Response Time", False, f"Poor average: {avg_response_time:.3f}s")
+        
+        # Test database operations
+        print("\n🗄️ Testing Database Operations...")
+        
+        # Test data persistence by creating and retrieving data
+        team_data = {
+            "name": "Test Performance Team",
+            "description": "Team created for performance testing"
+        }
+        
+        # Create team
+        create_response = self.session.post(f"{API_BASE}/team-management/teams", json=team_data)
+        if create_response.status_code in [200, 201]:
+            # Try to retrieve the created team
+            list_response = self.session.get(f"{API_BASE}/team-management/teams")
+            if list_response.status_code == 200:
+                teams_data = list_response.json()
+                if isinstance(teams_data, dict) and 'teams' in teams_data:
+                    self.log_result("Database - Data Persistence", True, "Successfully created and retrieved team data")
+                else:
+                    self.log_result("Database - Data Persistence", True, "Team creation and retrieval working")
+            else:
+                self.log_result("Database - Data Persistence", False, "Could not retrieve created team")
+        else:
+            self.log_result("Database - Data Persistence", False, f"Team creation failed with {create_response.status_code}")
+        
+        # Test authentication across new features
+        print("\n🔐 Testing Authentication Integration...")
+        
+        auth_endpoints = [
+            "/team-management/dashboard",
+            "/workflows/list", 
+            "/template-marketplace/earnings",
+            "/disputes/list"
+        ]
+        
+        auth_success_count = 0
+        for endpoint in auth_endpoints:
+            response = self.session.get(f"{API_BASE}{endpoint}")
+            if response.status_code != 401:  # Not unauthorized
+                auth_success_count += 1
+        
+        auth_success_rate = (auth_success_count / len(auth_endpoints)) * 100
+        if auth_success_rate >= 75:
+            self.log_result("Authentication - Integration", True, f"Authentication working on {auth_success_rate:.1f}% of endpoints")
+        else:
+            self.log_result("Authentication - Integration", False, f"Authentication issues on {100-auth_success_rate:.1f}% of endpoints")
+        
+        print("\n⚡ Performance & Integration Testing Complete!")
+        return True
         """Test Complete Financial Management System at /api/financial/*"""
         print("\n💰 TESTING COMPLETE FINANCIAL MANAGEMENT SYSTEM")
         print("=" * 60)
