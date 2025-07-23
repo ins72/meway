@@ -12,7 +12,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field
 
 from core.auth import get_current_user
-from services.advanced_template_marketplace_service import advanced_template_marketplace_service, TemplateCategory, TemplateStatus
+from services.advanced_template_marketplace_service import advanced_template_marketplace_service, TemplateCategory, TemplateStatus, AdvancedTemplateMarketplaceService
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
