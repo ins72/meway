@@ -187,3 +187,14 @@ class Rate_Limiting_SystemService:
                 "success": False,
                 "error": f"Failed to search rate_limiting_system: {str(e)}"
             }
+
+
+# Singleton instance
+_service_instance = None
+
+def get_rate_limiting_system_service():
+    """Get singleton instance of Rate_Limiting_SystemService"""
+    global _service_instance
+    if _service_instance is None:
+        _service_instance = Rate_Limiting_SystemService()
+    return _service_instance
