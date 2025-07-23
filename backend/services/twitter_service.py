@@ -149,28 +149,6 @@ class TwitterService:
         except Exception as e:
             logger.error(f"Post tweet error: {e}")
             return {"success": False, "error": str(e)}
-            
-            # Store search record in database
-            search_record = {
-                "id": str(uuid.uuid4()),
-                "query": query,
-                "results": search_results,
-                "result_count": len(search_results),
-                "searched_at": datetime.utcnow().isoformat()
-            }
-            
-            await collection.insert_one(search_record)
-            
-            return {
-                "success": True,
-                "query": query,
-                "tweets": search_results,
-                "count": len(search_results)
-            }
-            
-        except Exception as e:
-            logger.error(f"Twitter search error: {e}")
-            return {"success": False, "error": str(e)}
 
 
     async def get_timeline(self, *args, **kwargs) -> dict:
