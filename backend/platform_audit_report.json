@@ -1,0 +1,95 @@
+{
+  "total_issues": 16,
+  "missing_pairs": [
+    "API 'missing_endpoints_fix' missing service",
+    "API 'missing_critical_endpoints' missing service"
+  ],
+  "duplicates": [
+    {
+      "group": "datapopulation",
+      "files": [
+        "data_population",
+        "data_population",
+        "data_population_service"
+      ]
+    }
+  ],
+  "random_data_issues": [
+    {
+      "file": "integration_tests_service.py",
+      "pattern": "Test.*data",
+      "matches": 2
+    },
+    {
+      "file": "data_population.py",
+      "pattern": "Sample.*data",
+      "matches": 1
+    },
+    {
+      "file": "data_population.py",
+      "pattern": "Mock.*data",
+      "matches": 1
+    },
+    {
+      "file": "data_population.py",
+      "pattern": "sample_\\w+",
+      "matches": 1
+    },
+    {
+      "file": "twitter_service.py",
+      "pattern": "uuid\\.uuid4\\(\\)\\.hex",
+      "matches": 5
+    },
+    {
+      "file": "twitter_service.py",
+      "pattern": "sample_\\w+",
+      "matches": 2
+    },
+    {
+      "file": "referral_system_service.py",
+      "pattern": "uuid\\.uuid4\\(\\)\\.hex",
+      "matches": 1
+    },
+    {
+      "file": "tiktok_service.py",
+      "pattern": "uuid\\.uuid4\\(\\)\\.hex",
+      "matches": 5
+    },
+    {
+      "file": "stripe_integration_service.py",
+      "pattern": "uuid\\.uuid4\\(\\)\\.hex",
+      "matches": 6
+    },
+    {
+      "file": "stripe_integration_service.py",
+      "pattern": "test_\\w+",
+      "matches": 2
+    },
+    {
+      "file": "api_testing_service.py",
+      "pattern": "test_\\w+",
+      "matches": 32
+    }
+  ],
+  "crud_issues": [
+    {
+      "file": "__init__.py",
+      "missing": [
+        "create",
+        "list",
+        "get",
+        "update",
+        "delete"
+      ]
+    },
+    {
+      "file": "api_testing_service.py",
+      "missing": [
+        "create",
+        "list",
+        "update",
+        "delete"
+      ]
+    }
+  ]
+}
