@@ -200,107 +200,66 @@ class BackendTester:
         print("\n🛍️ Real Template Marketplace System Testing Complete!")
         return True
         
-    def test_team_management_system(self):
-        """Test Advanced Team Management at /api/team-management/*"""
-        print("\n👥 TESTING ADVANCED TEAM MANAGEMENT")
+    def test_real_team_management_system(self):
+        """Test Real Team Management at /api/teams/*"""
+        print("\n👥 TESTING REAL TEAM MANAGEMENT")
         print("=" * 60)
         
-        # Test variables to store created resources
-        created_team_id = None
-        invitation_id = None
+        # 1. Test Team Dashboard
+        print("\n📊 Testing Team Dashboard...")
+        success, dashboard_data = self.test_endpoint("/teams/dashboard", "GET", test_name="Team Management - Dashboard")
         
-        # 1. Test Health Check
-        print("\n🏥 Testing Health Check...")
-        self.test_endpoint("/team-management/health", "GET", test_name="Team Management - Health Check")
+        if success and dashboard_data:
+            # Check for mock data patterns
+            data_str = str(dashboard_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Team Dashboard - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Team Dashboard - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 2. Test Teams List
-        print("\n📋 Testing Teams List...")
-        self.test_endpoint("/team-management/teams", "GET", test_name="Team Management - Get Teams")
+        # 2. Test Team Members
+        print("\n👤 Testing Team Members...")
+        success, members_data = self.test_endpoint("/teams/members", "GET", test_name="Team Management - Get Members")
         
-        # 3. Test Team Creation
-        print("\n➕ Testing Team Creation...")
-        create_team_data = {
-            "name": "Digital Marketing Squad",
-            "description": "Our core digital marketing team focused on growth and customer acquisition",
-            "team_type": "marketing",
-            "settings": {
-                "privacy": "private",
-                "auto_approve_invites": False,
-                "allow_member_invites": True,
-                "max_members": 25
-            },
-            "permissions": {
-                "can_create_projects": True,
-                "can_manage_content": True,
-                "can_view_analytics": True,
-                "can_export_data": False
-            }
+        if success and members_data:
+            # Check for mock data patterns
+            data_str = str(members_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Team Members - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Team Members - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 3. Test Team Invitation
+        print("\n📧 Testing Team Invitation...")
+        invitation_data = {
+            "email": "newmember@company.com",
+            "role": "member",
+            "permissions": ["view_projects", "create_content"]
         }
         
-        success, team_data = self.test_endpoint("/team-management/teams", "POST", create_team_data, "Team Management - Create Team")
-        if success and team_data:
-            created_team_id = team_data.get("team_id") or team_data.get("id") or team_data.get("data", {}).get("id")
-            print(f"   Created team ID: {created_team_id}")
+        success, invite_response = self.test_endpoint("/teams/invite", "POST", invitation_data, "Team Management - Send Invitation")
         
-        # 4. Test Team Invitations
-        if created_team_id:
-            print("\n📧 Testing Team Invitations...")
-            invitation_data = {
-                "email": "newmember@company.com",
-                "role": "member",
-                "permissions": ["view_projects", "create_content"],
-                "custom_message": "Welcome to our marketing team! We're excited to have you join us.",
-                "expires_in_days": 7
-            }
-            
-            success, invite_data = self.test_endpoint(f"/team-management/teams/{created_team_id}/invitations", "POST", invitation_data, "Team Management - Send Invitation")
-            if success and invite_data:
-                invitation_id = invite_data.get("invitation_id") or invite_data.get("id")
-                print(f"   Created invitation ID: {invitation_id}")
+        if success and invite_response:
+            # Check for mock data patterns
+            data_str = str(invite_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Team Invitation - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Team Invitation - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 5. Test Roles Management
-        if created_team_id:
-            print("\n🎭 Testing Roles Management...")
-            self.test_endpoint(f"/team-management/teams/{created_team_id}/roles", "GET", test_name="Team Management - Get Team Roles")
-            
-            # Create custom role
-            custom_role_data = {
-                "name": "Content Creator",
-                "description": "Can create and edit content but cannot manage team settings",
-                "permissions": [
-                    "create_content",
-                    "edit_own_content", 
-                    "view_team_analytics",
-                    "comment_on_content"
-                ]
-            }
-            self.test_endpoint(f"/team-management/teams/{created_team_id}/roles", "POST", custom_role_data, "Team Management - Create Custom Role")
+        # 4. Test Team Activity
+        print("\n📈 Testing Team Activity...")
+        success, activity_data = self.test_endpoint("/teams/activity", "GET", test_name="Team Management - Activity Log")
         
-        # 6. Test Member Management
-        if created_team_id:
-            print("\n👤 Testing Member Management...")
-            self.test_endpoint(f"/team-management/teams/{created_team_id}/members", "GET", test_name="Team Management - Get Team Members")
-            
-            # Update member role (if we had members)
-            member_update_data = {
-                "role": "admin",
-                "permissions": ["manage_team", "invite_members", "view_analytics"]
-            }
-            # This would normally use a real member ID
-            self.test_endpoint(f"/team-management/teams/{created_team_id}/members/member_123", "PUT", member_update_data, "Team Management - Update Member Role")
+        if success and activity_data:
+            # Check for mock data patterns
+            data_str = str(activity_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Team Activity - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Team Activity - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 7. Test Team Analytics
-        if created_team_id:
-            print("\n📊 Testing Team Analytics...")
-            self.test_endpoint(f"/team-management/teams/{created_team_id}/analytics", "GET", test_name="Team Management - Team Analytics")
-            self.test_endpoint(f"/team-management/teams/{created_team_id}/activity", "GET", test_name="Team Management - Team Activity")
-        
-        # 8. Test Multi-tier Support
-        print("\n🏢 Testing Multi-tier Support...")
-        self.test_endpoint("/team-management/organization/structure", "GET", test_name="Team Management - Organization Structure")
-        self.test_endpoint("/team-management/permissions/matrix", "GET", test_name="Team Management - Permissions Matrix")
-        
-        print("\n👥 Team Management System Testing Complete!")
+        print("\n👥 Real Team Management System Testing Complete!")
         return True
         
     def test_unified_analytics_system(self):
