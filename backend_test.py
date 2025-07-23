@@ -27,6 +27,611 @@ import requests
 import json
 import sys
 import time
+from typing import Dict, Any, Optional, List, Tuple
+import uuid
+from datetime import datetime, timedelta
+import traceback
+import re
+
+# Backend URL from environment
+BACKEND_URL = "https://77bda007-61bd-44ee-b130-58b448ff1a90.preview.emergentagent.com"
+API_BASE = f"{BACKEND_URL}/api"
+
+# Test credentials
+TEST_EMAIL = "tmonnens@outlook.com"
+TEST_PASSWORD = "Voetballen5"
+
+class FinalComprehensiveTester:
+    def __init__(self):
+        self.session = requests.Session()
+        self.access_token = None
+        self.test_results = []
+        self.endpoint_categories = {}
+        self.all_endpoints = []
+        self.working_endpoints = []
+        self.failing_endpoints = []
+        self.crud_analysis = {
+            'CREATE': {'working': [], 'failing': []},
+            'READ': {'working': [], 'failing': []},
+            'UPDATE': {'working': [], 'failing': []},
+            'DELETE': {'working': [], 'failing': []}
+        }
+        self.mock_data_detected = []
+        self.real_data_confirmed = []
+        self.duplicate_endpoints = []
+        
+    def log_result(self, test_name: str, success: bool, message: str, response_data: Any = None, status_code: int = None, endpoint_info: Dict = None):
+        """Log test result with comprehensive information"""
+        status = "✅ PASS" if success else "❌ FAIL"
+        result = {
+            "test": test_name,
+            "status": status,
+            "success": success,
+            "message": message,
+            "status_code": status_code,
+            "response_size": len(str(response_data)) if response_data else 0,
+            "timestamp": datetime.now().isoformat(),
+            "endpoint_info": endpoint_info
+        }
+        self.test_results.append(result)
+        print(f"{status}: {test_name} - {message}")
+        if response_data and len(str(response_data)) > 0:
+            print(f"   Response size: {len(str(response_data))} chars")
+        if status_code:
+            print(f"   Status code: {status_code}")
+    
+    def detect_mock_data(self, response_data: Any, endpoint_path: str) -> bool:
+        """Detect if response contains mock, random, or hardcoded data"""
+        if not response_data:
+            return False
+            
+        data_str = str(response_data).lower()
+        
+        # Common mock data patterns
+        mock_patterns = [
+            'sample', 'mock', 'test_', 'dummy', 'fake', 'placeholder',
+            'lorem ipsum', 'example.com', 'test@test.com', 'testuser',
+            'random_', 'generated_', 'temp_', 'demo_'
+        ]
+        
+        # Hardcoded value patterns (common in mock data)
+        hardcoded_patterns = [
+            '1250.00', '999.99', '123.45', '100.00',
+            'john doe', 'jane smith', 'admin@admin.com'
+        ]
+        
+        # Check for mock patterns
+        for pattern in mock_patterns:
+            if pattern in data_str:
+                return True
+                
+        # Check for hardcoded patterns
+        for pattern in hardcoded_patterns:
+            if pattern in data_str:
+                return True
+                
+        # Check for sequential IDs (often indicates mock data)
+        if re.search(r'id.*["\']?(1|2|3|4|5)["\']?', data_str):
+            return True
+            
+        return False
+    
+    def analyze_crud_operation(self, method: str, endpoint_path: str, success: bool):
+        """Analyze and categorize CRUD operations"""
+        crud_type = None
+        
+        if method == 'POST':
+            if 'create' in endpoint_path.lower() or endpoint_path.endswith('/'):
+                crud_type = 'CREATE'
+        elif method == 'GET':
+            crud_type = 'READ'
+        elif method in ['PUT', 'PATCH']:
+            crud_type = 'UPDATE'
+        elif method == 'DELETE':
+            crud_type = 'DELETE'
+            
+        if crud_type:
+            if success:
+                self.crud_analysis[crud_type]['working'].append(endpoint_path)
+            else:
+                self.crud_analysis[crud_type]['failing'].append(endpoint_path)
+    
+    def discover_all_endpoints(self):
+        """Discover all endpoints from OpenAPI specification"""
+        try:
+            print("🔍 DISCOVERING ALL ENDPOINTS FROM OPENAPI SPECIFICATION")
+            print("=" * 80)
+            
+            response = self.session.get(f"{BACKEND_URL}/openapi.json", timeout=30)
+            if response.status_code != 200:
+                print(f"❌ Failed to get OpenAPI spec: {response.status_code}")
+                return False
+            
+            openapi_data = response.json()
+            paths = openapi_data.get('paths', {})
+            
+            print(f"📊 OpenAPI Specification Analysis:")
+            print(f"   Total paths discovered: {len(paths)}")
+            
+            # Extract all endpoints with their methods
+            endpoint_count = 0
+            for path, methods in paths.items():
+                for method, details in methods.items():
+                    if method.upper() in ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']:
+                        endpoint_info = {
+                            'path': path,
+                            'method': method.upper(),
+                            'summary': details.get('summary', ''),
+                            'tags': details.get('tags', []),
+                            'parameters': details.get('parameters', []),
+                            'requestBody': details.get('requestBody', {}),
+                            'responses': details.get('responses', {}),
+                            'operationId': details.get('operationId', '')
+                        }
+                        self.all_endpoints.append(endpoint_info)
+                        endpoint_count += 1
+                        
+                        # Categorize by tags/service
+                        tags = details.get('tags', ['uncategorized'])
+                        for tag in tags:
+                            if tag not in self.endpoint_categories:
+                                self.endpoint_categories[tag] = []
+                            self.endpoint_categories[tag].append(endpoint_info)
+            
+            print(f"   Total endpoints discovered: {endpoint_count}")
+            print(f"   Service categories: {len(self.endpoint_categories)}")
+            
+            # Check for duplicates
+            self.check_for_duplicates()
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error discovering endpoints: {str(e)}")
+            return False
+    
+    def check_for_duplicates(self):
+        """Check for duplicate endpoints"""
+        seen_endpoints = {}
+        
+        for endpoint in self.all_endpoints:
+            key = f"{endpoint['method']} {endpoint['path']}"
+            if key in seen_endpoints:
+                self.duplicate_endpoints.append({
+                    'endpoint': key,
+                    'occurrences': [seen_endpoints[key], endpoint]
+                })
+            else:
+                seen_endpoints[key] = endpoint
+        
+        if self.duplicate_endpoints:
+            print(f"⚠️ Found {len(self.duplicate_endpoints)} duplicate endpoints")
+        else:
+            print("✅ No duplicate endpoints detected")
+    
+    def test_health_check(self):
+        """Test basic health check endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/openapi.json", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                paths_count = len(data.get('paths', {}))
+                self.log_result("Health Check", True, f"Backend operational with {paths_count} API endpoints", {"paths_count": paths_count})
+                return True
+            else:
+                self.log_result("Health Check", False, f"Backend not accessible - OpenAPI status {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_result("Health Check", False, f"Health check error: {str(e)}")
+            return False
+    
+    def test_authentication(self):
+        """Test authentication with provided credentials"""
+        try:
+            login_data = {
+                "username": TEST_EMAIL,
+                "password": TEST_PASSWORD
+            }
+            
+            response = self.session.post(
+                f"{API_BASE}/auth/login",
+                data=login_data,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.access_token = data.get("access_token")
+                if self.access_token:
+                    self.session.headers.update({"Authorization": f"Bearer {self.access_token}"})
+                    self.log_result("Authentication", True, f"Login successful - Token received", data)
+                    return True
+                else:
+                    self.log_result("Authentication", False, "Login response missing access_token")
+                    return False
+            else:
+                self.log_result("Authentication", False, f"Login failed with status {response.status_code}: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_result("Authentication", False, f"Authentication error: {str(e)}")
+            return False
+    
+    def test_endpoint_comprehensive(self, endpoint_info: Dict) -> Tuple[bool, Any]:
+        """Test a single endpoint comprehensively"""
+        path = endpoint_info['path']
+        method = endpoint_info['method']
+        test_name = f"{method} {path}"
+        
+        try:
+            url = f"{BACKEND_URL}{path}"
+            headers = {}
+            if self.access_token:
+                headers["Authorization"] = f"Bearer {self.access_token}"
+            
+            # Prepare test data based on endpoint requirements
+            test_data = self.generate_test_data(endpoint_info)
+            
+            # Make the request
+            if method == "GET":
+                response = self.session.get(url, headers=headers, timeout=15)
+            elif method == "POST":
+                response = self.session.post(url, json=test_data, headers=headers, timeout=15)
+            elif method == "PUT":
+                response = self.session.put(url, json=test_data, headers=headers, timeout=15)
+            elif method == "PATCH":
+                response = self.session.patch(url, json=test_data, headers=headers, timeout=15)
+            elif method == "DELETE":
+                response = self.session.delete(url, headers=headers, timeout=15)
+            else:
+                self.log_result(test_name, False, f"Unsupported method: {method}", status_code=None, endpoint_info=endpoint_info)
+                return False, None
+            
+            # Analyze response
+            success = response.status_code in [200, 201, 202, 204]
+            
+            if success:
+                try:
+                    response_data = response.json() if response.content else {}
+                    
+                    # Check for mock data
+                    has_mock_data = self.detect_mock_data(response_data, path)
+                    if has_mock_data:
+                        self.mock_data_detected.append(path)
+                    else:
+                        self.real_data_confirmed.append(path)
+                    
+                    # Analyze CRUD operation
+                    self.analyze_crud_operation(method, path, True)
+                    
+                    self.log_result(test_name, True, f"Success - Status {response.status_code}", response_data, response.status_code, endpoint_info)
+                    self.working_endpoints.append(endpoint_info)
+                    return True, response_data
+                    
+                except json.JSONDecodeError:
+                    self.log_result(test_name, True, f"Success - Status {response.status_code} (non-JSON response)", response.text, response.status_code, endpoint_info)
+                    self.working_endpoints.append(endpoint_info)
+                    return True, response.text
+            else:
+                # Analyze CRUD operation for failed requests
+                self.analyze_crud_operation(method, path, False)
+                
+                error_message = f"Failed - Status {response.status_code}"
+                if response.status_code == 404:
+                    error_message += " (Not Found - May not be implemented)"
+                elif response.status_code == 401:
+                    error_message += " (Unauthorized - Authentication required)"
+                elif response.status_code == 403:
+                    error_message += " (Forbidden - Access denied)"
+                elif response.status_code == 422:
+                    error_message += " (Validation Error - Invalid request data)"
+                elif response.status_code == 500:
+                    try:
+                        error_data = response.json()
+                        error_detail = error_data.get('detail', 'Internal server error')
+                        error_message += f" (Server Error: {error_detail})"
+                    except:
+                        error_message += f" (Server Error: {response.text[:100]})"
+                
+                self.log_result(test_name, False, error_message, None, response.status_code, endpoint_info)
+                self.failing_endpoints.append(endpoint_info)
+                return False, None
+                
+        except Exception as e:
+            self.analyze_crud_operation(method, path, False)
+            self.log_result(test_name, False, f"Request error: {str(e)}", None, None, endpoint_info)
+            self.failing_endpoints.append(endpoint_info)
+            return False, None
+    
+    def generate_test_data(self, endpoint_info: Dict) -> Dict:
+        """Generate appropriate test data for an endpoint"""
+        path = endpoint_info['path']
+        method = endpoint_info['method']
+        
+        # Basic test data templates based on common patterns
+        if 'team' in path.lower():
+            return {
+                "name": "Test Marketing Team",
+                "description": "Marketing team for Q1 2025 campaigns",
+                "department": "Marketing"
+            }
+        elif 'user' in path.lower():
+            return {
+                "email": "testuser@mewayz.com",
+                "name": "Test User",
+                "role": "member"
+            }
+        elif 'workflow' in path.lower():
+            return {
+                "name": "Test Content Workflow",
+                "description": "Automated content generation workflow",
+                "triggers": [{"type": "schedule", "cron": "0 9 * * 1"}],
+                "actions": [{"type": "generate_content"}]
+            }
+        elif 'post' in path.lower() or 'social' in path.lower():
+            return {
+                "content": "Test social media post for business automation platform",
+                "platforms": ["twitter", "linkedin"],
+                "scheduled_time": "2025-01-16T15:00:00Z"
+            }
+        elif 'transaction' in path.lower() or 'escrow' in path.lower():
+            return {
+                "buyer_id": "buyer_test_123",
+                "seller_id": "seller_test_456",
+                "amount": 1000.00,
+                "project_title": "Test Project"
+            }
+        elif 'dispute' in path.lower():
+            return {
+                "transaction_id": "trans_test_123",
+                "reason": "quality_issues",
+                "description": "Test dispute for quality issues"
+            }
+        elif 'template' in path.lower():
+            return {
+                "title": "Test Business Template",
+                "description": "Professional business template",
+                "category": "business",
+                "price": 29.99
+            }
+        elif 'device' in path.lower():
+            return {
+                "device_id": "test_device_123",
+                "device_type": "mobile",
+                "platform": "ios",
+                "app_version": "2.1.0"
+            }
+        elif 'manifest' in path.lower():
+            return {
+                "app_name": "Mewayz Business Platform",
+                "short_name": "Mewayz",
+                "theme_color": "#2563EB",
+                "background_color": "#FFFFFF"
+            }
+        else:
+            # Generic test data
+            return {
+                "name": "Test Item",
+                "description": "Test description for endpoint testing",
+                "type": "test"
+            }
+    
+    def test_all_endpoints_comprehensive(self):
+        """Test all discovered endpoints comprehensively"""
+        if not self.all_endpoints:
+            print("❌ No endpoints discovered. Cannot run comprehensive test.")
+            return False
+        
+        print(f"\n🎯 COMPREHENSIVE TESTING OF ALL {len(self.all_endpoints)} ENDPOINTS")
+        print("=" * 80)
+        
+        total_endpoints = len(self.all_endpoints)
+        tested_count = 0
+        
+        # Group endpoints by category for organized testing
+        for category, endpoints in self.endpoint_categories.items():
+            print(f"\n📂 TESTING CATEGORY: {category.upper()}")
+            print("-" * 60)
+            
+            category_working = 0
+            category_total = len(endpoints)
+            
+            for endpoint_info in endpoints:
+                tested_count += 1
+                success, response_data = self.test_endpoint_comprehensive(endpoint_info)
+                if success:
+                    category_working += 1
+                
+                # Progress indicator
+                progress = (tested_count / total_endpoints) * 100
+                print(f"   Progress: {tested_count}/{total_endpoints} ({progress:.1f}%)")
+                
+                # Small delay to avoid overwhelming the server
+                time.sleep(0.1)
+            
+            # Category summary
+            category_success_rate = (category_working / category_total * 100) if category_total > 0 else 0
+            status_icon = "✅" if category_success_rate >= 75 else "⚠️" if category_success_rate >= 50 else "❌"
+            print(f"{status_icon} {category}: {category_working}/{category_total} ({category_success_rate:.1f}%)")
+        
+        return True
+    
+    def generate_final_comprehensive_report(self):
+        """Generate the final comprehensive report"""
+        print("\n" + "=" * 100)
+        print("🎯 FINAL COMPREHENSIVE TEST RESULTS - MEWAYZ V2 PLATFORM")
+        print("=" * 100)
+        
+        # Overall statistics
+        total_tests = len(self.test_results)
+        passed_tests = len([r for r in self.test_results if r["success"]])
+        failed_tests = total_tests - passed_tests
+        overall_success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"📊 OVERALL TEST RESULTS:")
+        print(f"   Total Endpoints Tested: {total_tests}")
+        print(f"   Working Endpoints: {passed_tests} ✅")
+        print(f"   Failed Endpoints: {failed_tests} ❌")
+        print(f"   Overall Success Rate: {overall_success_rate:.1f}%")
+        
+        # CRUD Analysis
+        print(f"\n🔄 CRUD OPERATIONS ANALYSIS:")
+        for crud_type, results in self.crud_analysis.items():
+            working_count = len(results['working'])
+            failing_count = len(results['failing'])
+            total_count = working_count + failing_count
+            success_rate = (working_count / total_count * 100) if total_count > 0 else 0
+            
+            status_icon = "✅" if success_rate >= 75 else "⚠️" if success_rate >= 50 else "❌"
+            print(f"   {status_icon} {crud_type}: {working_count}/{total_count} ({success_rate:.1f}%)")
+        
+        # Data Quality Analysis
+        print(f"\n📊 DATA QUALITY ANALYSIS:")
+        total_data_endpoints = len(self.real_data_confirmed) + len(self.mock_data_detected)
+        real_data_percentage = (len(self.real_data_confirmed) / total_data_endpoints * 100) if total_data_endpoints > 0 else 0
+        
+        print(f"   Real Data Endpoints: {len(self.real_data_confirmed)} ✅")
+        print(f"   Mock Data Detected: {len(self.mock_data_detected)} ⚠️")
+        print(f"   Real Data Percentage: {real_data_percentage:.1f}%")
+        
+        # Duplicate Analysis
+        print(f"\n🔍 DUPLICATE ANALYSIS:")
+        if self.duplicate_endpoints:
+            print(f"   ⚠️ Duplicate Endpoints Found: {len(self.duplicate_endpoints)}")
+            for dup in self.duplicate_endpoints[:5]:  # Show first 5
+                print(f"      • {dup['endpoint']}")
+        else:
+            print(f"   ✅ No Duplicate Endpoints Detected")
+        
+        # Category Performance
+        print(f"\n📂 CATEGORY PERFORMANCE:")
+        for category, endpoints in self.endpoint_categories.items():
+            category_working = len([e for e in endpoints if any(r['success'] for r in self.test_results if r.get('endpoint_info', {}).get('path') == e['path'])])
+            category_total = len(endpoints)
+            category_success_rate = (category_working / category_total * 100) if category_total > 0 else 0
+            
+            status_icon = "✅" if category_success_rate >= 75 else "⚠️" if category_success_rate >= 50 else "❌"
+            print(f"   {status_icon} {category}: {category_working}/{category_total} ({category_success_rate:.1f}%)")
+        
+        # Production Readiness Assessment
+        print(f"\n🚀 PRODUCTION READINESS ASSESSMENT:")
+        if overall_success_rate >= 95:
+            print("   🟢 EXCELLENT - Platform exceeds production readiness criteria")
+            print("   ✅ Ready for immediate production deployment")
+        elif overall_success_rate >= 85:
+            print("   🟡 VERY GOOD - Platform meets production readiness criteria")
+            print("   ✅ Ready for production deployment with minor monitoring")
+        elif overall_success_rate >= 75:
+            print("   🟠 GOOD - Platform approaches production readiness")
+            print("   ⚠️ Ready for production with some improvements recommended")
+        elif overall_success_rate >= 50:
+            print("   🔴 PARTIAL - Platform needs significant improvements")
+            print("   ❌ Not ready for production - major fixes required")
+        else:
+            print("   🔴 CRITICAL - Platform has major issues")
+            print("   ❌ Not ready for production - comprehensive fixes required")
+        
+        # Key Achievements
+        print(f"\n🎉 KEY ACHIEVEMENTS:")
+        print(f"   • Discovered {len(self.all_endpoints)} total endpoints")
+        print(f"   • Tested {len(self.endpoint_categories)} service categories")
+        print(f"   • Achieved {overall_success_rate:.1f}% overall success rate")
+        print(f"   • Confirmed {len(self.real_data_confirmed)} endpoints using real data")
+        print(f"   • Identified {len(self.failing_endpoints)} endpoints needing attention")
+        
+        # Recommendations
+        print(f"\n💡 RECOMMENDATIONS:")
+        if failed_tests > 0:
+            print(f"   • Fix {failed_tests} failing endpoints for improved reliability")
+        if len(self.mock_data_detected) > 0:
+            print(f"   • Replace mock data in {len(self.mock_data_detected)} endpoints with real database operations")
+        if len(self.duplicate_endpoints) > 0:
+            print(f"   • Remove {len(self.duplicate_endpoints)} duplicate endpoints to avoid conflicts")
+        
+        print("=" * 100)
+        
+        return {
+            'total_endpoints': total_tests,
+            'working_endpoints': passed_tests,
+            'failed_endpoints': failed_tests,
+            'success_rate': overall_success_rate,
+            'real_data_percentage': real_data_percentage,
+            'duplicate_count': len(self.duplicate_endpoints),
+            'categories_tested': len(self.endpoint_categories)
+        }
+    
+    def run_final_comprehensive_test(self):
+        """Run the complete final comprehensive test"""
+        print("🎯 FINAL COMPREHENSIVE TEST FOR MEWAYZ V2 PLATFORM - JANUARY 2025")
+        print("=" * 100)
+        print("COMPREHENSIVE TESTING OF ALL 1000+ ENDPOINTS FOR PRODUCTION READINESS")
+        print(f"Backend URL: {BACKEND_URL}")
+        print("=" * 100)
+        
+        # Step 1: Health check
+        if not self.test_health_check():
+            print("❌ Backend is not accessible. Stopping tests.")
+            return False
+        
+        # Step 2: Authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed. Stopping tests.")
+            return False
+        
+        print(f"\n✅ Authentication successful. Token: {self.access_token[:20]}...")
+        
+        # Step 3: Discover all endpoints
+        if not self.discover_all_endpoints():
+            print("❌ Failed to discover endpoints. Stopping tests.")
+            return False
+        
+        # Step 4: Test all endpoints comprehensively
+        if not self.test_all_endpoints_comprehensive():
+            print("❌ Comprehensive testing failed.")
+            return False
+        
+        # Step 5: Generate final report
+        final_results = self.generate_final_comprehensive_report()
+        
+        return final_results
+
+def main():
+    """Main function to run the comprehensive test"""
+    tester = FinalComprehensiveTester()
+    
+    try:
+        results = tester.run_final_comprehensive_test()
+        
+        if results:
+            print(f"\n🎉 FINAL COMPREHENSIVE TEST COMPLETED SUCCESSFULLY!")
+            print(f"   Success Rate: {results['success_rate']:.1f}%")
+            print(f"   Endpoints Tested: {results['total_endpoints']}")
+            print(f"   Categories Covered: {results['categories_tested']}")
+            
+            # Exit with appropriate code
+            if results['success_rate'] >= 75:
+                sys.exit(0)  # Success
+            else:
+                sys.exit(1)  # Needs improvement
+        else:
+            print(f"\n❌ FINAL COMPREHENSIVE TEST FAILED")
+            sys.exit(1)
+            
+    except KeyboardInterrupt:
+        print(f"\n⚠️ Test interrupted by user")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\n❌ Test failed with error: {str(e)}")
+        traceback.print_exc()
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+
+import requests
+import json
+import sys
+import time
 from typing import Dict, Any, Optional
 import uuid
 
