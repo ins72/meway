@@ -275,7 +275,122 @@ class TwitterService:
             return {"success": False, "error": str(e)}
 
 
-    async def search_tweets(self, query: str, limit: int = 20) -> dict:
+    async def get_tweet(self, tweet_id: str) -> dict:
+        """Get single tweet by ID - Database operation"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Find tweet in database
+            tweet = await collection.find_one({"id": tweet_id})
+            
+            if tweet:
+                # Convert ObjectId to string for JSON serialization
+                tweet = safe_document_return(tweet)
+                return {
+                    "success": True,
+                    "data": tweet
+                }
+            else:
+                return {"success": False, "error": "Tweet not found"}
+                
+        except Exception as e:
+            logger.error(f"Get tweet error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    async def update_tweet(self, tweet_id: str, data: Dict[str, Any]) -> dict:
+        """Update tweet - Database operation"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Prepare update data
+            update_data = {
+                **data,
+                "updated_at": datetime.utcnow().isoformat()
+            }
+            
+            # Update tweet
+            result = await collection.update_one(
+                {"id": tweet_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count > 0:
+                # Get updated tweet
+                updated_tweet = await collection.find_one({"id": tweet_id})
+                if updated_tweet:
+                    updated_tweet = safe_document_return(updated_tweet)
+                
+                return {
+                    "success": True,
+                    "data": updated_tweet,
+                    "message": "Tweet updated successfully"
+                }
+            else:
+                return {"success": False, "error": "Tweet not found"}
+                
+        except Exception as e:
+            logger.error(f"Update tweet error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    async def delete_tweet(self, tweet_id: str) -> dict:
+        """Delete tweet - Database operation"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Delete tweet
+            result = await collection.delete_one({"id": tweet_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "Tweet deleted successfully"
+                }
+            else:
+                return {"success": False, "error": "Tweet not found"}
+                
+        except Exception as e:
+            logger.error(f"Delete tweet error: {e}")
+            return {"success": False, "error": str(e)}
+    
+    async def list_tweets(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
+        """List tweets - Database operation"""
+        try:
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Build query
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            # Execute query
+            cursor = collection.find(query).skip(offset).limit(limit)
+            tweets = await cursor.to_list(length=limit)
+            
+            # Convert ObjectIds to strings
+            tweets = safe_documents_return(tweets)
+            
+            # Get total count
+            total = await collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": tweets,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            logger.error(f"List tweets error: {e}")
+            return {"success": False, "error": str(e)}
         """Search for tweets using real Twitter API v2"""
         try:
             collection = await self._get_collection_async()
