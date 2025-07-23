@@ -155,16 +155,16 @@ class BackendTester:
         print("\n🎯 TESTING NEWLY IMPLEMENTED FEATURES - JANUARY 2025")
         print("=" * 80)
         print("Testing the four major new features:")
-        print("1. Advanced Template Marketplace")
-        print("2. Advanced Team Management") 
-        print("3. Unified Analytics with Gamification")
-        print("4. Mobile PWA Features")
+        print("1. Template Marketplace (Real Endpoints)")
+        print("2. Team Management (Real Endpoints)") 
+        print("3. Unified Analytics (Real Endpoints)")
+        print("4. Mobile PWA Features (Real Endpoints)")
         
-        # Test all new features
-        self.test_template_marketplace_system()
-        self.test_team_management_system()
-        self.test_unified_analytics_system()
-        self.test_mobile_pwa_system()
+        # Test all new features with real endpoints
+        self.test_real_template_marketplace_system()
+        self.test_real_team_management_system()
+        self.test_real_unified_analytics_system()
+        self.test_real_mobile_pwa_system()
         
     def test_template_marketplace_system(self):
         """Test Advanced Template Marketplace at /api/template-marketplace/*"""
