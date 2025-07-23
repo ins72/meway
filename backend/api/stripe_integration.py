@@ -204,3 +204,45 @@ async def create_customer(
     except Exception as e:
         logger.error(f"Create customer endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/payment-intents")
+async def create_payment_intent(
+    data: Dict[str, Any] = Body(..., description="Payment intent data"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Create Stripe payment intent - Real implementation"""
+    try:
+        service = get_stripe_integration_service()
+        result = await service.create_payment_intent(data)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Payment intent creation failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Create payment intent error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/subscriptions")
+async def get_subscriptions(
+    customer_id: str = Query(None, description="Customer ID"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get customer subscriptions - Real implementation"""
+    try:
+        service = get_stripe_integration_service()
+        result = await service.get_subscriptions(customer_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error", "Subscriptions not found"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get subscriptions error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
