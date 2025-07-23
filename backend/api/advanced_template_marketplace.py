@@ -42,14 +42,32 @@ async def create_template(
 ):
     """Create new template for marketplace"""
     try:
+        # Normalize request data - handle both 'name' and 'title' fields
+        data = request.dict()
+        if not data.get('title') and data.get('name'):
+            data['title'] = data['name']
+        elif not data.get('title'):
+            data['title'] = "Untitled Template"
+            
+        # Set default template_data if not provided
+        if not data.get('template_data'):
+            data['template_data'] = {
+                "html": data.get('html', ''),
+                "css": data.get('css', ''),
+                "js": data.get('js', ''),
+                "components": data.get('components', [])
+            }
+        
         template = await advanced_template_marketplace_service.create_template(
             creator_id=current_user["_id"],
-            data=request.dict()
+            data=data
         )
         
         return {
             "success": True,
             "template": template,
+            "template_id": template["id"],
+            "id": template["id"],  # Alternative field name
             "message": "Template created successfully"
         }
         
