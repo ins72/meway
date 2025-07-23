@@ -600,7 +600,8 @@ class AIContentService:
             elif metric_type == "float":
                 result = await db.analytics.aggregate([
                     {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
-                ["avg"] if result else (min_val + max_val) / 2
+                ]).to_list(length=1)
+                return result[0]["avg"] if result else (min_val + max_val) / 2
             else:
                 return (min_val + max_val) // 2 if isinstance(min_val, int) else (min_val + max_val) / 2
         except:
