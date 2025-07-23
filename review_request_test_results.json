@@ -1,7 +1,7 @@
 {
   "total_tests": 25,
-  "passed_tests": 5,
-  "failed_tests": 20,
+  "passed_tests": 6,
+  "failed_tests": 19,
   "test_categories": {
     "Authentication System": {
       "total": 2,
@@ -29,7 +29,7 @@
       "failed": 3,
       "details": [
         "\u2705 Twitter Health Check - Working perfectly",
-        "\u274c Twitter Search - HTTP 404: {\"detail\":\"Tweet not found\"}",
+        "\u274c Twitter Search - HTTP 404: {\"detail\":\"Not Found\"}",
         "\u274c Tweet Creation - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
         "\u274c Twitter Analytics - HTTP 404: {\"detail\":\"Tweet not found\"}"
       ]
@@ -40,20 +40,20 @@
       "failed": 3,
       "details": [
         "\u2705 TikTok Health Check - Working perfectly",
-        "\u274c TikTok Search - HTTP 404: {\"detail\":\"Post not found\"}",
-        "\u274c TikTok Video Upload - HTTP 500: Internal Server Error",
+        "\u274c TikTok Search - HTTP 404: {\"detail\":\"Not Found\"}",
+        "\u274c TikTok Video Upload - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
         "\u274c TikTok Analytics - HTTP 404: {\"detail\":\"Post not found\"}"
       ]
     },
     "Stripe Integration": {
       "total": 4,
-      "passed": 0,
-      "failed": 4,
+      "passed": 1,
+      "failed": 3,
       "details": [
-        "\u274c Stripe Health Check - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c Create Payment Intent - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c Payment Methods - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c Subscription Management - HTTP 404: {\"detail\":\"Not Found\"}"
+        "\u2705 Stripe Health Check - Working perfectly",
+        "\u274c Create Payment Intent - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c Payment Methods - HTTP 404: {\"detail\":\"Payment not found\"}",
+        "\u274c Subscription Management - HTTP 404: {\"detail\":\"Payment not found\"}"
       ]
     },
     "Core Business Systems": {
