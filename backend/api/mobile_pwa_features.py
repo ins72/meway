@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field
 
 from core.auth import get_current_user
-from services.mobile_pwa_service import mobile_pwa_service, NotificationType, OfflineStrategy
+from services.mobile_pwa_service import mobile_pwa_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
