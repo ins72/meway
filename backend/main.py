@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 import uvicorn
 import logging
-from core.database import init_mongo_connection, close_mongo_connection
+from core.database import connect_to_mongo, close_mongo_connection
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     """Application lifespan"""
     try:
         # Initialize database
-        await init_mongo_connection()
+        await connect_to_mongo()
         logger.info("✅ Database connection initialized")
         
         yield
