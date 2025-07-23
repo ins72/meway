@@ -399,7 +399,7 @@ class MewayzV2ReviewTester:
         print("\n🔌 TESTING EXTERNAL INTEGRATIONS")
         
         integration_endpoints = [
-            ("/api/referral/health", "Referral System"),
+            ("/api/referral-system/health", "Referral System"),
             ("/api/stripe/health", "Stripe Integration"),
             ("/api/twitter/health", "Twitter/X API"),
             ("/api/tiktok/health", "TikTok API"),
