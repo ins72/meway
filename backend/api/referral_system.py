@@ -137,26 +137,6 @@ async def get_stats(
     except Exception as e:
         logger.error(f"STATS endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-async def update_program(
-    program_id: str = Path(..., description="Program ID"),
-    data: Dict[str, Any] = Body({}, description="Updated program data"),
-    current_user: dict = Depends(get_current_admin)
-):
-    """UPDATE referral program - GUARANTEED to work with real data"""
-    try:
-        service = get_referral_system_service()
-        result = await service.update_program(program_id, data)
-        
-        if result.get("success"):
-            return result
-        else:
-            raise HTTPException(status_code=400, detail=result.get("error", "Update failed"))
-            
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"UPDATE endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{program_id}")
 async def delete_program(
