@@ -169,12 +169,11 @@ class MewayzV2ReviewTester:
             "type": "income",
             "amount": 1500.00,
             "description": "Review Test Transaction",
-            "category": "consulting",
-            "date": datetime.utcnow().isoformat()
+            "category": "consulting"
         }
         
         success, response, size = await self.make_request(
-            "POST", "/api/complete-financial/transactions", 
+            "POST", "/api/complete-financial/", 
             data=financial_data
         )
         
@@ -189,7 +188,7 @@ class MewayzV2ReviewTester:
             
             # Test READ operation
             success, read_response, read_size = await self.make_request(
-                "GET", "/api/complete-financial/transactions"
+                "GET", "/api/complete-financial/"
             )
             
             if success:
