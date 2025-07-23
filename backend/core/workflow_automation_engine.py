@@ -874,7 +874,7 @@ class WorkflowEngine:
         
         for key, value in variables.items():
             placeholder = f"{{{key}}}"
-            text = text.replace(production implementation))
+            text = text.replace(placeholder, str(value))
         
         return text
     
