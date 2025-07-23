@@ -294,7 +294,7 @@ class ComprehensiveBackendTester:
                 "scheduled": False
             }
             
-            async with self.session.post(f"{self.api_url}/twitter/tweet", json=tweet_data, headers=headers) as response:
+            async with self.session.post(f"{self.api_url}/twitter/tweets", json=tweet_data, headers=headers) as response:
                 if response.status == 200 or response.status == 201:
                     data = await response.json()
                     results["passed"] += 1
