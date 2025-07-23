@@ -72,7 +72,47 @@ class RealDataPopulationService:
                         if twitter_data.get("success") and twitter_data.get("data"):
                             await self._store_twitter_data(db, user_id, twitter_data["data"])
                             populated_data["twitter"] = twitter_data["data"]
-                    
+                except Exception as e:
+                    print(f"Error populating {platform} data: {str(e)}")
+                    continue
+            
+            return {
+                "success": True,
+                "message": "Social media data populated successfully",
+                "data": populated_data
+            }
+        
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to populate social media data: {str(e)}"
+            }
+
+    async def create_real_data_population(self, real_data_population_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new real_data_population"""
+        try:
+            # Add metadata
+            real_data_population_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["real_data_population"].insert_one(real_data_population_data)
+            
+            return {
+                "success": True,
+                "message": "Real_data_population created successfully",
+                "data": real_data_population_data,
+                "id": real_data_population_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create real_data_population: {str(e)}"
+            }
 
     async def update_real_data_population(self, real_data_population_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
         """Update real_data_population by ID"""
