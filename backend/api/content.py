@@ -174,10 +174,10 @@ async def get_content(
 # Update Operation
 @router.put("/{item_id}", response_model=ContentResponse)
 async def update_content(
-    item_id: str = Path(..., description="ID of the content to update"),
+    item_id: str = Path(..., description="ID of the content to update"),    item: ContentUpdate, = Body(...),
+
     
     current_user: dict = Depends(get_current_user),
-    item: ContentUpdate,
 ):
     """Update content with comprehensive validation"""
     try:

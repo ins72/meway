@@ -174,10 +174,10 @@ async def get_backup(
 # Update Operation
 @router.put("/{item_id}", response_model=BackupResponse)
 async def update_backup(
-    item_id: str = Path(..., description="ID of the backup to update"),
+    item_id: str = Path(..., description="ID of the backup to update"),    item: BackupUpdate, = Body(...),
+
     
     current_user: dict = Depends(get_current_user),
-    item: BackupUpdate,
 ):
     """Update backup with comprehensive validation"""
     try:
