@@ -575,7 +575,7 @@ class ComprehensiveBackendTester:
         # Test 4: Workspace Management
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/workspace/workspaces", headers=headers) as response:
+            async with self.session.get(f"{self.api_url}/workspace/", headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
