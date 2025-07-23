@@ -279,15 +279,11 @@ class MewayzV2ReviewTester:
         workspace_data = {
             "name": f"Review Test Workspace {datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
             "description": "Workspace created during review testing",
-            "type": "business",
-            "settings": {
-                "theme": "professional",
-                "notifications": True
-            }
+            "type": "business"
         }
         
         success, response, size = await self.make_request(
-            "POST", "/api/complete-multi-workspace/workspaces", 
+            "POST", "/api/workspace/", 
             data=workspace_data
         )
         
@@ -302,7 +298,7 @@ class MewayzV2ReviewTester:
             
             # Test READ operation
             success, read_response, read_size = await self.make_request(
-                "GET", "/api/complete-multi-workspace/workspaces"
+                "GET", "/api/workspace/"
             )
             
             if success:
