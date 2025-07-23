@@ -537,6 +537,83 @@ class UserService:
         except Exception as e:
             return self._handle_error("HEALTH_CHECK", e)
 
+    async def authenticate_user(self, email: str, password: str) -> Optional[Dict[str, Any]]:
+        """Authenticate user with real database operations"""
+        try:
+            collection = self._get_collection()
+            if collection is None:
+                return None
+            
+            # Find user by email
+            user = await collection.find_one({"email": email})
+            if not user:
+                return None
+            
+            # Verify password
+            if not verify_password(password, user.get("password", "")):
+                return None
+            
+            # Update last login
+            await collection.update_one(
+                {"email": email},
+                {
+                    "$set": {"last_login": datetime.utcnow().isoformat()},
+                    "$inc": {"login_count": 1}
+                }
+            )
+            
+            # Remove password from response
+            user_response = self._sanitize_response(user)
+            return user_response
+            
+        except Exception as e:
+            logger.error(f"Authentication error: {e}")
+            return None
+
+    async def create_user(self, email: str, password: str, name: str) -> Dict[str, Any]:
+        """Create a new user with real database operations"""
+        try:
+            collection = self._get_collection()
+            if collection is None:
+                raise Exception("Database connection failed")
+            
+            # Check if user already exists
+            existing_user = await collection.find_one({"email": email})
+            if existing_user:
+                raise ValueError("User already exists")
+            
+            # Hash password
+            hashed_password = get_password_hash(password)
+            
+            # Create user document
+            user_doc = {
+                "id": str(uuid.uuid4()),
+                "email": email,
+                "password": hashed_password,
+                "name": name,
+                "is_active": True,
+                "is_verified": False,
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "subscription_plan": "free",
+                "login_count": 0,
+                "last_login": None
+            }
+            
+            # Insert user
+            result = await collection.insert_one(user_doc)
+            
+            if result.inserted_id:
+                # Remove password from response
+                user_response = self._sanitize_response(user_doc)
+                return user_response
+            else:
+                raise Exception("Failed to create user")
+                
+        except Exception as e:
+            logger.error(f"User creation error: {e}")
+            raise e
+
 # Service instance with lazy initialization
 _service_instance = None
 
