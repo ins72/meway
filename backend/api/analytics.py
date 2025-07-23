@@ -175,8 +175,9 @@ async def get_analytics(
 @router.put("/{item_id}", response_model=AnalyticsResponse)
 async def update_analytics(
     item_id: str = Path(..., description="ID of the analytics to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: AnalyticsUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update analytics with comprehensive validation"""
     try:

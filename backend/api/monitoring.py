@@ -175,8 +175,9 @@ async def get_monitoring(
 @router.put("/{item_id}", response_model=MonitoringResponse)
 async def update_monitoring(
     item_id: str = Path(..., description="ID of the monitoring to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: MonitoringUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update monitoring with comprehensive validation"""
     try:

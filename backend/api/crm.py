@@ -175,8 +175,9 @@ async def get_crm(
 @router.put("/{item_id}", response_model=CrmResponse)
 async def update_crm(
     item_id: str = Path(..., description="ID of the crm to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: CrmUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update crm with comprehensive validation"""
     try:

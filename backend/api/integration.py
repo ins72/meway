@@ -175,8 +175,9 @@ async def get_integration(
 @router.put("/{item_id}", response_model=IntegrationResponse)
 async def update_integration(
     item_id: str = Path(..., description="ID of the integration to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: IntegrationUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update integration with comprehensive validation"""
     try:

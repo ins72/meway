@@ -175,8 +175,9 @@ async def get_content(
 @router.put("/{item_id}", response_model=ContentResponse)
 async def update_content(
     item_id: str = Path(..., description="ID of the content to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: ContentUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update content with comprehensive validation"""
     try:

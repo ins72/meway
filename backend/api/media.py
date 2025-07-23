@@ -175,8 +175,9 @@ async def get_media(
 @router.put("/{item_id}", response_model=MediaResponse)
 async def update_media(
     item_id: str = Path(..., description="ID of the media to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: MediaUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update media with comprehensive validation"""
     try:

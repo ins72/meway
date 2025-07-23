@@ -175,8 +175,9 @@ async def get_notification(
 @router.put("/{item_id}", response_model=NotificationResponse)
 async def update_notification(
     item_id: str = Path(..., description="ID of the notification to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: NotificationUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update notification with comprehensive validation"""
     try:

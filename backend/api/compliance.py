@@ -175,8 +175,9 @@ async def get_compliance(
 @router.put("/{item_id}", response_model=ComplianceResponse)
 async def update_compliance(
     item_id: str = Path(..., description="ID of the compliance to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: ComplianceUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update compliance with comprehensive validation"""
     try:

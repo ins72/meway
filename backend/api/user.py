@@ -175,8 +175,9 @@ async def get_user(
 @router.put("/{item_id}", response_model=UserResponse)
 async def update_user(
     item_id: str = Path(..., description="ID of the user to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: UserUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update user with comprehensive validation"""
     try:

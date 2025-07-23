@@ -175,8 +175,9 @@ async def get_email_marketing(
 @router.put("/{item_id}", response_model=EmailMarketingResponse)
 async def update_email_marketing(
     item_id: str = Path(..., description="ID of the email_marketing to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: EmailMarketingUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update email_marketing with comprehensive validation"""
     try:

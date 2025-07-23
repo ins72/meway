@@ -175,8 +175,9 @@ async def get_team(
 @router.put("/{item_id}", response_model=TeamResponse)
 async def update_team(
     item_id: str = Path(..., description="ID of the team to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: TeamUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update team with comprehensive validation"""
     try:

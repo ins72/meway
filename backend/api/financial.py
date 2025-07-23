@@ -175,8 +175,9 @@ async def get_financial(
 @router.put("/{item_id}", response_model=FinancialResponse)
 async def update_financial(
     item_id: str = Path(..., description="ID of the financial to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: FinancialUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update financial with comprehensive validation"""
     try:

@@ -175,8 +175,9 @@ async def get_ai_content(
 @router.put("/{item_id}", response_model=AiContentResponse)
 async def update_ai_content(
     item_id: str = Path(..., description="ID of the ai_content to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: AiContentUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update ai_content with comprehensive validation"""
     try:

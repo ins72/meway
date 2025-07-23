@@ -175,8 +175,9 @@ async def get_support(
 @router.put("/{item_id}", response_model=SupportResponse)
 async def update_support(
     item_id: str = Path(..., description="ID of the support to update"),
+    
+    current_user: dict = Depends(get_current_user),
     item: SupportUpdate,
-    current_user: dict = Depends(get_current_user)
 ):
     """Update support with comprehensive validation"""
     try:
