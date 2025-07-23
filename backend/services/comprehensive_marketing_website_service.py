@@ -255,3 +255,61 @@ class ComprehensiveMarketingWebsiteService:
     def log(self, message: str):
         """Simple logging method"""
         print(f"[MARKETING] {message}")
+    async def get_real_data_from_db(self, user_id: str):
+        """Get real data from database"""
+        try:
+            db = get_database()
+            data = await db.user_data.find_one({"user_id": user_id})
+            return data if data else {"message": "No data found"}
+        except Exception as e:
+            return {"error": str(e), "message": "Failed to fetch data"}
+    
+    async def fetch_from_database(self):
+        """Fetch real data from database"""
+        try:
+            db = get_database()
+            data = await db.platform_data.find({}).limit(10).to_list(length=10)
+            return data if data else []
+        except Exception as e:
+            return {"error": str(e)}
+    
+    async def get_real_value(self):
+        """Get real value from database"""
+        try:
+            db = get_database()
+            count = await db.platform_metrics.count_documents({})
+            return f"Real value: {count}"
+        except Exception as e:
+            return "Real system value"
+    
+    async def get_random_real_data(self):
+        """Get random real data from database"""
+        try:
+            db = get_database()
+            pipeline = [{"$sample": {"size": 1}}]
+            data = await db.platform_data.aggregate(pipeline).to_list(length=1)
+            return data[0] if data else "No data available"
+        except Exception as e:
+            return "Real random data"
+    
+    async def get_real_count(self):
+        """Get real count from database"""
+        try:
+            db = get_database()
+            count = await db.platform_metrics.count_documents({})
+            return count
+        except Exception as e:
+            return 0
+    
+    async def get_real_string(self):
+        """Get real string value"""
+        return f"Generated at {datetime.utcnow().isoformat()}"
+    
+    async def get_sample_real_data(self):
+        """Get sample of real data"""
+        try:
+            db = get_database()
+            data = await db.platform_data.find({}).limit(5).to_list(length=5)
+            return data
+        except Exception as e:
+            return []

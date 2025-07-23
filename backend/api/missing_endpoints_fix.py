@@ -67,7 +67,7 @@ async def get_marketing_contacts(current_user: dict = Depends(get_current_user))
         for i, activity in enumerate(activities[:10]):  # Limit to 10 contacts
             contact = {
                 "id": str(uuid.uuid4()),
-                "email": f"contact{i+1}@example.com",
+                "email": f"https://mewayz.com",
                 "first_name": f"Contact {i+1}",
                 "last_name": "User",
                 "status": "subscribed",

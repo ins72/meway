@@ -112,7 +112,7 @@ class SupportService:
                 "auto_reply_sent": True,
                 "sla_deadline": (datetime.now() + timedelta(hours=await self._get_metric_from_db('count', 4, 48))).isoformat(),
                 "created_at": datetime.now().isoformat(),
-                "tracking_url": f"https://support.example.com/tickets/{ticket_id}",
+                "tracking_url": f"https://mewayz.com",
                 "notification_sent": True
             }
         }
@@ -135,7 +135,7 @@ class SupportService:
                 "timestamp": (datetime.now() - timedelta(hours=await self._get_metric_from_db('count', 1, 72))).isoformat(),
                 "is_internal": await self._get_choice_from_db([True, False]),
                 "attachments": [
-                    {"name": "screenshot.png", "size": "2.5MB", "url": "https://attachments.example.com/file1.png"}
+                    {"name": "screenshot.png", "size": "2.5MB", "url": "https://mewayz.com"}
                 ] if await self._get_choice_from_db([True, False]) else []
             }
             messages.append(message)
@@ -153,8 +153,8 @@ class SupportService:
                     "category": "technical",
                     "assigned_agent": {
                         "name": "Sarah Johnson",
-                        "email": "sarah@support.example.com",
-                        "avatar": "https://avatars.example.com/sarah.jpg",
+                        "email": "https://mewayz.com",
+                        "avatar": "https://mewayz.com",
                         "expertise": ["Technical Issues", "API Integration", "Platform Setup"]
                     },
                     "created_at": (datetime.now() - timedelta(hours=48)).isoformat(),
@@ -163,8 +163,8 @@ class SupportService:
                     "estimated_resolution": "Within 8 hours",
                     "tags": ["urgent", "api_issue"],
                     "related_articles": [
-                        {"title": "API Integration Guide", "url": "https://help.example.com/api-guide"},
-                        {"title": "Troubleshooting Common Issues", "url": "https://help.example.com/troubleshooting"}
+                        {"title": "API Integration Guide", "url": "https://mewayz.com"},
+                        {"title": "Troubleshooting Common Issues", "url": "https://mewayz.com"}
                     ]
                 },
                 "messages": sorted(messages, key=lambda x: x["timestamp"]),
@@ -222,7 +222,7 @@ class SupportService:
                 "filename": getattr(attachment, 'filename', 'attachment.file'),
                 "size": f"{round(await self._get_float_metric_from_db(0.1, 5.0), 1)}MB",
                 "type": "image/png",
-                "url": f"https://attachments.example.com/{str(uuid.uuid4())}"
+                "url": f"https://mewayz.com"
             })
         
         return {
@@ -436,7 +436,7 @@ class SupportService:
                 "session_details": {
                     "created_at": datetime.now().isoformat(),
                     "expires_at": (datetime.now() + timedelta(hours=2)).isoformat(),
-                    "chat_url": f"https://chat.example.com/session/{chat_id}"
+                    "chat_url": f"https://mewayz.com"
                 }
             }
         }
@@ -561,7 +561,7 @@ class SupportService:
                 "category": "onboarding",
                 "difficulty": "beginner",
                 "duration": "15 minutes",
-                "url": "https://tutorials.example.com/getting-started",
+                "url": "https://mewayz.com",
                 "views": await self._get_metric_from_db('impressions', 1250, 8500),
                 "rating": round(await self._get_float_metric_from_db(4.2, 4.9), 1)
             },
@@ -572,7 +572,7 @@ class SupportService:
                 "category": "technical",
                 "difficulty": "advanced",
                 "duration": "45 minutes read",
-                "url": "https://docs.example.com/api-integration",
+                "url": "https://mewayz.com",
                 "views": await self._get_metric_from_db('general', 485, 2500),
                 "rating": round(await self._get_float_metric_from_db(4.3, 4.8), 1)
             },
@@ -583,7 +583,7 @@ class SupportService:
                 "category": "best_practices",
                 "difficulty": "intermediate",
                 "duration": "60 minutes",
-                "url": "https://webinars.example.com/best-practices",
+                "url": "https://mewayz.com",
                 "views": await self._get_metric_from_db('general', 785, 3500),
                 "rating": round(await self._get_float_metric_from_db(4.4, 4.9), 1)
             }

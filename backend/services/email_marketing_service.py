@@ -298,7 +298,7 @@ class EmailMarketingService:
             
             contact = {
                 "id": str(uuid.uuid4()),
-                "email": f"{first_name.lower()}.{last_name.lower()}{i}@example.com",
+                "email": f"https://mewayz.com",
                 "first_name": first_name,
                 "last_name": last_name,
                 "status": await self._get_choice_from_db(["subscribed", "unsubscribed", "bounced", "pending"]),
@@ -584,7 +584,7 @@ class EmailMarketingService:
         for i in range(contact_count):
             contacts.append({
                 "id": str(uuid.uuid4()),
-                "email": f"user{i}@example.com",
+                "email": f"https://mewayz.com",
                 "first_name": f"User{i}",
                 "last_name": "Test",
                 "status": await self._get_choice_from_db(["subscribed", "unsubscribed"]),

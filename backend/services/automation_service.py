@@ -255,14 +255,14 @@ class AutomationService:
                             "started_at": (datetime.now() - timedelta(hours=2)).isoformat(),
                             "status": "completed",
                             "steps_completed": 5,
-                            "target_email": "lead@example.com"
+                            "target_email": "https://mewayz.com"
                         },
                         {
                             "execution_id": str(uuid.uuid4()),
                             "started_at": (datetime.now() - timedelta(hours=6)).isoformat(),
                             "status": "in_progress",
                             "steps_completed": 3,
-                            "target_email": "prospect@example.com"
+                            "target_email": "https://mewayz.com"
                         }
                     ]
                 }

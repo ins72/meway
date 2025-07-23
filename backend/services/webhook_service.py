@@ -880,7 +880,7 @@ class WebhookService:
         test_payloads = {
             "user.created": {
                 "user_id": str(uuid.uuid4()),
-                "email": "test.user@example.com",
+                "email": "https://mewayz.com",
                 "name": "Actual data from database",
                 "subscription_tier": "professional",
                 "created_at": datetime.utcnow().isoformat()

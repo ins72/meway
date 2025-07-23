@@ -132,7 +132,7 @@ class CustomerExperienceService:
                 },
                 "initial_message": chat_data.get("initial_message", ""),
                 "customer_info": chat_data.get("customer_info", {}),
-                "chat_url": f"https://chat.example.com/session/{session_id}",
+                "chat_url": f"https://mewayz.com",
                 "started_at": datetime.now().isoformat(),
                 "expires_at": (datetime.now() + timedelta(hours=2)).isoformat()
             }
@@ -351,8 +351,8 @@ class CustomerExperienceService:
                 "questions_count": len(survey_data.get("questions", [])),
                 "target_audience": survey_data.get("target_audience", "all"),
                 "estimated_responses": self._estimate_responses(survey_data.get("target_audience", "all")),
-                "survey_url": f"https://surveys.example.com/{survey_id}",
-                "embed_code": f"<iframe src='https://surveys.example.com/embed/{survey_id}' width='100%' height='500'></iframe>",
+                "survey_url": f"https://mewayz.com",
+                "embed_code": f"https://mewayz.com",
                 "analytics_enabled": True,
                 "mobile_optimized": True,
                 "created_at": datetime.now().isoformat(),

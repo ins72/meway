@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel, EmailStr
 from typing import Optional, Dict, Any, List, Union
 from datetime import datetime
-import uuid
+from bson import ObjectId
 
 from core.auth import get_current_active_user
 from core.database import get_database
@@ -266,7 +266,7 @@ async def create_form(
         for i, field in enumerate(form_data.fields):
             field_dict = field.dict()
             if not field_dict.get("id"):
-                field_dict["id"] = f"field_{i+1}_{uuid.uuid4().hex[:8]}"
+                field_dict["id"] = f"field_{i+1}_{str(ObjectId())[:8]}"
             processed_fields.append(field_dict)
         
         # Create form document

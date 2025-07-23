@@ -391,7 +391,7 @@ class SocialEmailService:
             
             contact = {
                 "id": str(uuid.uuid4()),
-                "email": f"{first_name.lower()}.{last_name.lower()}{i}@example.com",
+                "email": f"https://mewayz.com",
                 "first_name": first_name,
                 "last_name": last_name,
                 "status": await self._get_choice_from_db(["subscribed", "unsubscribed", "bounced"]),

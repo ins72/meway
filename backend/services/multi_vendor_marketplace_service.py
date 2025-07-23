@@ -1,7 +1,7 @@
 """
 Multi-Vendor Marketplace Management Service
 """
-import uuid
+from bson import ObjectId
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 import asyncio
@@ -201,7 +201,7 @@ class MultiVendorMarketplaceService:
                     "payout_method": commission_config.get("payment_method", "bank_transfer"),
                     "status": "processed",
                     "processed_at": datetime.utcnow(),
-                    "transaction_id": f"txn_{uuid.uuid4().hex[:12]}"
+                    "transaction_id": f"txn_{str(ObjectId())[:12]}"
                 }
                 
                 await self.payouts.insert_one(payout_data)

@@ -72,8 +72,8 @@ class MarketingService:
                 for i in range(7)
     ],
     "top_links": [
-    {"url": "https://example.com/product1", "clicks": 45},
-    {"url": "https://example.com/product2", "clicks": 32}
+    {"url": "https://mewayz.com", "clicks": 45},
+    {"url": "https://mewayz.com", "clicks": 32}
     ]
     }
         

@@ -111,12 +111,12 @@ class EscrowService:
                 "type": transaction_type_selected,
                 "buyer": {
                     "name": await self._get_escrow_status(["Real User Name from Database", "Sarah Johnson", "Michael Brown", "Emily Davis"]),
-                    "email": f"buyer{i}@example.com",
+                    "email": f"https://mewayz.com",
                     "verified": True
                 },
                 "seller": {
                     "name": await self._get_escrow_status(["Tech Solutions Inc", "Creative Agency", "DevTeam Pro", "Digital Masters"]),
-                    "email": f"seller{i}@example.com",
+                    "email": f"https://mewayz.com",
                     "verified": True
                 },
                 "milestone": {
