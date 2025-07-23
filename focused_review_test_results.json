@@ -1,0 +1,209 @@
+{
+  "summary": {
+    "total_tests": 28,
+    "passed_tests": 14,
+    "success_rate": 50.0,
+    "duration_seconds": 0.670654,
+    "backend_url": "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com",
+    "authentication_working": true,
+    "timestamp": "2025-07-23T20:35:36.885729"
+  },
+  "test_results": [
+    {
+      "test": "Authentication - JWT Token Generation",
+      "success": true,
+      "details": "Login successful, token received (343 chars response)",
+      "response_length": 343,
+      "timestamp": "2025-07-23T20:35:37.194334"
+    },
+    {
+      "test": "Authentication - JWT Token Validation",
+      "success": true,
+      "details": "Token validation successful (281 chars response)",
+      "response_length": 281,
+      "timestamp": "2025-07-23T20:35:37.210123"
+    },
+    {
+      "test": "Referral System - Health Check",
+      "success": true,
+      "details": "Health check: 200 (100 chars response)",
+      "response_length": 100,
+      "timestamp": "2025-07-23T20:35:37.224405"
+    },
+    {
+      "test": "Referral System - List Referrals",
+      "success": false,
+      "details": "List operation: 500 (194 chars response)",
+      "response_length": 194,
+      "timestamp": "2025-07-23T20:35:37.248321"
+    },
+    {
+      "test": "Referral System - Create Referral",
+      "success": false,
+      "details": "Create operation: 500 (194 chars response)",
+      "response_length": 194,
+      "timestamp": "2025-07-23T20:35:37.266731"
+    },
+    {
+      "test": "Referral System - Update Referral",
+      "success": false,
+      "details": "Cannot test update - referral creation failed",
+      "response_length": 0,
+      "timestamp": "2025-07-23T20:35:37.266775"
+    },
+    {
+      "test": "Referral System - Delete Referral",
+      "success": false,
+      "details": "Cannot test delete - referral creation failed",
+      "response_length": 0,
+      "timestamp": "2025-07-23T20:35:37.266804"
+    },
+    {
+      "test": "Twitter API - Health Check",
+      "success": true,
+      "details": "Health check: 200 (122 chars response)",
+      "response_length": 122,
+      "timestamp": "2025-07-23T20:35:37.278203"
+    },
+    {
+      "test": "Twitter API - List Tweets",
+      "success": true,
+      "details": "List operation: 200 (67 chars response)",
+      "response_length": 67,
+      "timestamp": "2025-07-23T20:35:37.290721"
+    },
+    {
+      "test": "Twitter API - Create Tweet",
+      "success": false,
+      "details": "Create operation: 500 (193 chars response)",
+      "response_length": 193,
+      "timestamp": "2025-07-23T20:35:37.320223"
+    },
+    {
+      "test": "Twitter API - Search Tweets",
+      "success": false,
+      "details": "Search operation: 404 (29 chars response)",
+      "response_length": 29,
+      "timestamp": "2025-07-23T20:35:37.331461"
+    },
+    {
+      "test": "Twitter API - Get Profile",
+      "success": false,
+      "details": "Profile operation: 404 (29 chars response)",
+      "response_length": 29,
+      "timestamp": "2025-07-23T20:35:37.343794"
+    },
+    {
+      "test": "TikTok API - Health Check",
+      "success": true,
+      "details": "Health check: 200 (121 chars response)",
+      "response_length": 121,
+      "timestamp": "2025-07-23T20:35:37.354122"
+    },
+    {
+      "test": "TikTok API - List Posts",
+      "success": true,
+      "details": "List operation: 200 (67 chars response)",
+      "response_length": 67,
+      "timestamp": "2025-07-23T20:35:37.365289"
+    },
+    {
+      "test": "TikTok API - Create Post",
+      "success": false,
+      "details": "Create operation: 500 (192 chars response)",
+      "response_length": 192,
+      "timestamp": "2025-07-23T20:35:37.390463"
+    },
+    {
+      "test": "TikTok API - Search Videos",
+      "success": false,
+      "details": "Search operation: 404 (28 chars response)",
+      "response_length": 28,
+      "timestamp": "2025-07-23T20:35:37.401617"
+    },
+    {
+      "test": "TikTok API - Upload Video",
+      "success": false,
+      "details": "Upload operation: 500 (198 chars response)",
+      "response_length": 198,
+      "timestamp": "2025-07-23T20:35:37.415533"
+    },
+    {
+      "test": "Stripe Integration - Health Check",
+      "success": true,
+      "details": "Health check: 200 (136 chars response)",
+      "response_length": 136,
+      "timestamp": "2025-07-23T20:35:37.425653"
+    },
+    {
+      "test": "Stripe Integration - List Payments",
+      "success": true,
+      "details": "List operation: 200 (67 chars response)",
+      "response_length": 67,
+      "timestamp": "2025-07-23T20:35:37.438155"
+    },
+    {
+      "test": "Stripe Integration - Create Payment Intent",
+      "success": false,
+      "details": "Create operation: 500 (204 chars response)",
+      "response_length": 204,
+      "timestamp": "2025-07-23T20:35:37.464609"
+    },
+    {
+      "test": "Stripe Integration - Get Payment Methods",
+      "success": false,
+      "details": "Payment methods: 404 (31 chars response)",
+      "response_length": 31,
+      "timestamp": "2025-07-23T20:35:37.476387"
+    },
+    {
+      "test": "Stripe Integration - Create Customer",
+      "success": false,
+      "details": "Create customer: 500 (213 chars response)",
+      "response_length": 213,
+      "timestamp": "2025-07-23T20:35:37.490818"
+    },
+    {
+      "test": "Financial System - Health Check",
+      "success": true,
+      "details": "Health check: 200 (101 chars response)",
+      "response_length": 101,
+      "timestamp": "2025-07-23T20:35:37.500094"
+    },
+    {
+      "test": "Financial System - List Financial Records",
+      "success": true,
+      "details": "List operation: 200 (408 chars response)",
+      "response_length": 408,
+      "timestamp": "2025-07-23T20:35:37.510946"
+    },
+    {
+      "test": "Financial System - Create Financial Record",
+      "success": true,
+      "details": "Create operation: 200 (499 chars response)",
+      "response_length": 499,
+      "timestamp": "2025-07-23T20:35:37.525005"
+    },
+    {
+      "test": "Admin Dashboard - Health Check",
+      "success": true,
+      "details": "Health check: 200 (97 chars response)",
+      "response_length": 97,
+      "timestamp": "2025-07-23T20:35:37.533802"
+    },
+    {
+      "test": "Admin Dashboard - List Admin Records",
+      "success": true,
+      "details": "List operation: 200 (67 chars response)",
+      "response_length": 67,
+      "timestamp": "2025-07-23T20:35:37.545644"
+    },
+    {
+      "test": "Admin Dashboard - Get Statistics",
+      "success": false,
+      "details": "Stats operation: 404 (23 chars response)",
+      "response_length": 23,
+      "timestamp": "2025-07-23T20:35:37.556289"
+    }
+  ]
+}
