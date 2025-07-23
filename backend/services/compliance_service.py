@@ -31,7 +31,7 @@ class ComplianceService:
         try:
             from core.database import get_database_async
             db = await get_database_async()
-            return db[self.collection_name] if db else None
+            return db[self.collection_name] if db is not None else None
         except Exception as e:
             logger.error(f"Async collection error: {e}")
             return None
@@ -39,7 +39,7 @@ class ComplianceService:
         """Get collection - GUARANTEED to work"""
         try:
             db = self._get_db()
-            return db[self.collection_name] if db else None
+            return db[self.collection_name] if db is not None else None
         except Exception as e:
             logger.error(f"Collection error: {e}")
             return None
@@ -79,7 +79,7 @@ class ComplianceService:
         """CREATE operation - GUARANTEED to work with real data"""
         try:
             collection = self._get_collection()
-            if not collection:
+            if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
             # Prepare data
@@ -109,7 +109,7 @@ class ComplianceService:
                 return {"success": False, "error": "ID required"}
             
             collection = self._get_collection()
-            if not collection:
+            if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
             # Find document - REAL DATA OPERATION
@@ -131,7 +131,7 @@ class ComplianceService:
         """LIST operation - GUARANTEED to work with real data"""
         try:
             collection = self._get_collection()
-            if not collection:
+            if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
             # Build query
@@ -168,7 +168,7 @@ class ComplianceService:
                 return {"success": False, "error": "ID required"}
             
             collection = self._get_collection()
-            if not collection:
+            if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
             # Prepare update data
@@ -206,7 +206,7 @@ class ComplianceService:
                 return {"success": False, "error": "ID required"}
             
             collection = self._get_collection()
-            if not collection:
+            if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
             # Delete document - REAL DATA OPERATION
@@ -229,7 +229,7 @@ class ComplianceService:
         """STATS operation - GUARANTEED to work with real data"""
         try:
             collection = self._get_collection()
-            if not collection:
+            if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
             query = {}
@@ -257,7 +257,7 @@ class ComplianceService:
         try:
             from core.database import get_database_async
             db = await get_database_async()
-            if not db:
+            if db is None:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
