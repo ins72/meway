@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-07-23T11:27:15.048993",
+  "timestamp": "2025-07-23T12:02:17.164428",
   "missing_crud_operations": [
     {
       "service": "media_service",
@@ -784,16 +784,16 @@
       "service": "user_service",
       "file_path": "/app/backend/services/user_service.py",
       "missing_operations": [
-        "read"
+        "read",
+        "delete",
+        "list"
       ],
       "found_operations": [
         "create",
         "get",
-        "update",
-        "delete",
-        "list"
+        "update"
       ],
-      "completeness_percentage": 83.33333333333334
+      "completeness_percentage": 50.0
     },
     {
       "service": "enterprise_security_compliance_service",
@@ -859,16 +859,16 @@
       "service": "real_data_population_service",
       "file_path": "/app/backend/services/real_data_population_service.py",
       "missing_operations": [
-        "read"
-      ],
-      "found_operations": [
         "create",
-        "get",
+        "read",
         "update",
         "delete",
         "list"
       ],
-      "completeness_percentage": 83.33333333333334
+      "found_operations": [
+        "get"
+      ],
+      "completeness_percentage": 16.666666666666664
     },
     {
       "service": "survey_service",
@@ -2019,37 +2019,6 @@
       "count": 4
     },
     {
-      "file_path": "/app/backend/services/complete_social_media_leads_service.py",
-      "relative_path": "services/complete_social_media_leads_service.py",
-      "instances": [
-        {
-          "line_number": 442,
-          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"  # For testing endpoints that don't require OAuth",
-          "pattern_matched": "mock_\\w+",
-          "match_text": "mock_token_"
-        },
-        {
-          "line_number": 442,
-          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"  # For testing endpoints that don't require OAuth",
-          "pattern_matched": "\\\"mock.*\\\"",
-          "match_text": "\"mock_token_{self.tiktok_client_key[:8]}\""
-        },
-        {
-          "line_number": 447,
-          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"",
-          "pattern_matched": "mock_\\w+",
-          "match_text": "mock_token_"
-        },
-        {
-          "line_number": 447,
-          "line_content": "return f\"mock_token_{self.tiktok_client_key[:8]}\"",
-          "pattern_matched": "\\\"mock.*\\\"",
-          "match_text": "\"mock_token_{self.tiktok_client_key[:8]}\""
-        }
-      ],
-      "count": 4
-    },
-    {
       "file_path": "/app/backend/core/workflow_automation_engine.py",
       "relative_path": "core/workflow_automation_engine.py",
       "instances": [
@@ -2469,14 +2438,14 @@
         {
           "path": "/app/backend/services/complete_ecommerce_service.py",
           "relative_path": "services/complete_ecommerce_service.py",
-          "size": 63108,
+          "size": 63327,
           "lines": 1508,
           "functions": 37,
           "classes": 5,
           "async_functions": 35
         }
       ],
-      "similarity_score": 0.5113683192572583
+      "similarity_score": 0.5111201904422152
     },
     {
       "normalized_name": "enterprise_security_compliance",
@@ -2565,14 +2534,14 @@
         {
           "path": "/app/backend/services/mobile_pwa_service.py",
           "relative_path": "services/mobile_pwa_service.py",
-          "size": 49238,
+          "size": 49272,
           "lines": 1143,
           "functions": 36,
           "classes": 1,
           "async_functions": 33
         }
       ],
-      "similarity_score": 0.038119714511995875
+      "similarity_score": 0.038115840897826915
     },
     {
       "normalized_name": "business_intelligence",
@@ -2613,14 +2582,14 @@
         {
           "path": "/app/backend/services/email_marketing_service.py",
           "relative_path": "services/email_marketing_service.py",
-          "size": 39299,
-          "lines": 910,
-          "functions": 41,
+          "size": 41731,
+          "lines": 967,
+          "functions": 42,
           "classes": 1,
-          "async_functions": 40
+          "async_functions": 41
         }
       ],
-      "similarity_score": 0.37616421160631003
+      "similarity_score": 0.36327595662514606
     },
     {
       "normalized_name": "user",
@@ -2637,14 +2606,14 @@
         {
           "path": "/app/backend/services/user_service.py",
           "relative_path": "services/user_service.py",
-          "size": 13515,
-          "lines": 387,
-          "functions": 15,
+          "size": 10666,
+          "lines": 306,
+          "functions": 12,
           "classes": 1,
-          "async_functions": 11
+          "async_functions": 8
         }
       ],
-      "similarity_score": 0.4114846735428518
+      "similarity_score": 0.448614607040391
     },
     {
       "normalized_name": "data_population",
@@ -2703,14 +2672,14 @@
         {
           "path": "/app/backend/services/advanced_template_marketplace_service.py",
           "relative_path": "services/advanced_template_marketplace_service.py",
-          "size": 43705,
+          "size": 43704,
           "lines": 1120,
           "functions": 42,
           "classes": 3,
           "async_functions": 40
         }
       ],
-      "similarity_score": 0.29724805200601995
+      "similarity_score": 0.2972489092461114
     },
     {
       "normalized_name": "automation_system",
@@ -2871,14 +2840,14 @@
         {
           "path": "/app/backend/services/complete_escrow_service.py",
           "relative_path": "services/complete_escrow_service.py",
-          "size": 72284,
-          "lines": 1647,
-          "functions": 36,
+          "size": 75045,
+          "lines": 1702,
+          "functions": 37,
           "classes": 1,
-          "async_functions": 31
+          "async_functions": 32
         }
       ],
-      "similarity_score": 0.36086543662698517
+      "similarity_score": 0.3507571306217444
     },
     {
       "normalized_name": "rate_limiting",
@@ -3384,14 +3353,14 @@
         {
           "path": "/app/backend/services/real_data_population_service.py",
           "relative_path": "services/real_data_population_service.py",
-          "size": 32154,
-          "lines": 740,
-          "functions": 19,
+          "size": 27215,
+          "lines": 598,
+          "functions": 14,
           "classes": 1,
-          "async_functions": 18
+          "async_functions": 13
         }
       ],
-      "similarity_score": 0.19175612722945787
+      "similarity_score": 0.25329586851493724
     },
     {
       "normalized_name": "ai",
@@ -3528,14 +3497,14 @@
         {
           "path": "/app/backend/services/complete_financial_service.py",
           "relative_path": "services/complete_financial_service.py",
-          "size": 52400,
+          "size": 52495,
           "lines": 1261,
           "functions": 34,
           "classes": 1,
           "async_functions": 32
         }
       ],
-      "similarity_score": 0.4381078707642169
+      "similarity_score": 0.437967895601188
     },
     {
       "normalized_name": "customer_experience",
@@ -3562,6 +3531,30 @@
       "similarity_score": 0.13553427052308625
     },
     {
+      "normalized_name": "course_community",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_course_community.py",
+          "relative_path": "api/complete_course_community.py",
+          "size": 7209,
+          "lines": 206,
+          "functions": 7,
+          "classes": 0,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/complete_course_community_service.py",
+          "relative_path": "services/complete_course_community_service.py",
+          "size": 43735,
+          "lines": 1056,
+          "functions": 23,
+          "classes": 1,
+          "async_functions": 22
+        }
+      ],
+      "similarity_score": 0.1964878118196896
+    },
+    {
       "normalized_name": "promotions_referrals",
       "files": [
         {
@@ -3584,6 +3577,54 @@
         }
       ],
       "similarity_score": 0.554134517633365
+    },
+    {
+      "normalized_name": "booking",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_booking.py",
+          "relative_path": "api/complete_booking.py",
+          "size": 7399,
+          "lines": 206,
+          "functions": 7,
+          "classes": 0,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/complete_booking_service.py",
+          "relative_path": "services/complete_booking_service.py",
+          "size": 36403,
+          "lines": 882,
+          "functions": 22,
+          "classes": 4,
+          "async_functions": 20
+        }
+      ],
+      "similarity_score": 0.2209988776152083
+    },
+    {
+      "normalized_name": "social_media_leads",
+      "files": [
+        {
+          "path": "/app/backend/api/complete_social_media_leads.py",
+          "relative_path": "api/complete_social_media_leads.py",
+          "size": 7117,
+          "lines": 206,
+          "functions": 7,
+          "classes": 0,
+          "async_functions": 7
+        },
+        {
+          "path": "/app/backend/services/complete_social_media_leads_service.py",
+          "relative_path": "services/complete_social_media_leads_service.py",
+          "size": 53615,
+          "lines": 1217,
+          "functions": 27,
+          "classes": 1,
+          "async_functions": 23
+        }
+      ],
+      "similarity_score": 0.17312369629134547
     },
     {
       "normalized_name": "survey_system",
@@ -3637,39 +3678,9 @@
   "missing_pairs": {
     "services_without_apis": [
       {
-        "service_name": "complete_course_community",
-        "service_file": "/app/backend/services/complete_course_community_service.py",
-        "relative_path": "services/complete_course_community_service.py"
-      },
-      {
-        "service_name": "team",
-        "service_file": "/app/backend/services/team_service.py",
-        "relative_path": "services/team_service.py"
-      },
-      {
-        "service_name": "multi_vendor_marketplace",
-        "service_file": "/app/backend/services/multi_vendor_marketplace_service.py",
-        "relative_path": "services/multi_vendor_marketplace_service.py"
-      },
-      {
-        "service_name": "ai_token",
-        "service_file": "/app/backend/services/ai_token_service.py",
-        "relative_path": "services/ai_token_service.py"
-      },
-      {
         "service_name": "customer_experience_suite",
         "service_file": "/app/backend/services/customer_experience_suite_service.py",
         "relative_path": "services/customer_experience_suite_service.py"
-      },
-      {
-        "service_name": "monitoring",
-        "service_file": "/app/backend/services/monitoring_system_service.py",
-        "relative_path": "services/monitoring_system_service.py"
-      },
-      {
-        "service_name": "i18n",
-        "service_file": "/app/backend/services/i18n_service.py",
-        "relative_path": "services/i18n_service.py"
       },
       {
         "service_name": "enterprise_security",
@@ -3677,19 +3688,9 @@
         "relative_path": "services/enterprise_security_service.py"
       },
       {
-        "service_name": "complete_booking",
-        "service_file": "/app/backend/services/complete_booking_service.py",
-        "relative_path": "services/complete_booking_service.py"
-      },
-      {
-        "service_name": "content_creation_suite",
-        "service_file": "/app/backend/services/content_creation_suite_service.py",
-        "relative_path": "services/content_creation_suite_service.py"
-      },
-      {
-        "service_name": "complete_subscription",
-        "service_file": "/app/backend/services/complete_subscription_service.py",
-        "relative_path": "services/complete_subscription_service.py"
+        "service_name": "multi_vendor_marketplace",
+        "service_file": "/app/backend/services/multi_vendor_marketplace_service.py",
+        "relative_path": "services/multi_vendor_marketplace_service.py"
       },
       {
         "service_name": "social_email",
@@ -3697,14 +3698,14 @@
         "relative_path": "services/social_email_integration_service.py"
       },
       {
-        "service_name": "complete_link_in_bio",
-        "service_file": "/app/backend/services/complete_link_in_bio_service.py",
-        "relative_path": "services/complete_link_in_bio_service.py"
+        "service_name": "crm",
+        "service_file": "/app/backend/services/crm_management_service.py",
+        "relative_path": "services/crm_management_service.py"
       },
       {
-        "service_name": "complete_onboarding",
-        "service_file": "/app/backend/services/complete_onboarding_service.py",
-        "relative_path": "services/complete_onboarding_service.py"
+        "service_name": "team",
+        "service_file": "/app/backend/services/team_service.py",
+        "relative_path": "services/team_service.py"
       },
       {
         "service_name": "complete_website_builder",
@@ -3712,51 +3713,46 @@
         "relative_path": "services/complete_website_builder_service.py"
       },
       {
-        "service_name": "crm",
-        "service_file": "/app/backend/services/crm_management_service.py",
-        "relative_path": "services/crm_management_service.py"
+        "service_name": "content_creation_suite",
+        "service_file": "/app/backend/services/content_creation_suite_service.py",
+        "relative_path": "services/content_creation_suite_service.py"
       },
       {
-        "service_name": "complete_social_media_leads",
-        "service_file": "/app/backend/services/complete_social_media_leads_service.py",
-        "relative_path": "services/complete_social_media_leads_service.py"
+        "service_name": "complete_link_in_bio",
+        "service_file": "/app/backend/services/complete_link_in_bio_service.py",
+        "relative_path": "services/complete_link_in_bio_service.py"
+      },
+      {
+        "service_name": "monitoring",
+        "service_file": "/app/backend/services/monitoring_system_service.py",
+        "relative_path": "services/monitoring_system_service.py"
+      },
+      {
+        "service_name": "complete_onboarding",
+        "service_file": "/app/backend/services/complete_onboarding_service.py",
+        "relative_path": "services/complete_onboarding_service.py"
+      },
+      {
+        "service_name": "ai_token",
+        "service_file": "/app/backend/services/ai_token_service.py",
+        "relative_path": "services/ai_token_service.py"
+      },
+      {
+        "service_name": "complete_subscription",
+        "service_file": "/app/backend/services/complete_subscription_service.py",
+        "relative_path": "services/complete_subscription_service.py"
+      },
+      {
+        "service_name": "i18n",
+        "service_file": "/app/backend/services/i18n_service.py",
+        "relative_path": "services/i18n_service.py"
       }
     ],
     "apis_without_services": [
       {
-        "api_name": "content_creation",
-        "api_file": "/app/backend/api/content_creation.py",
-        "relative_path": "api/content_creation.py"
-      },
-      {
-        "api_name": "escrow_system",
-        "api_file": "/app/backend/api/escrow_system.py",
-        "relative_path": "api/escrow_system.py"
-      },
-      {
         "api_name": "unified_analytics_gamification",
         "api_file": "/app/backend/api/unified_analytics_gamification.py",
         "relative_path": "api/unified_analytics_gamification.py"
-      },
-      {
-        "api_name": "enhanced_features",
-        "api_file": "/app/backend/api/enhanced_features.py",
-        "relative_path": "api/enhanced_features.py"
-      },
-      {
-        "api_name": "missing_endpoints_fix",
-        "api_file": "/app/backend/api/missing_endpoints_fix.py",
-        "relative_path": "api/missing_endpoints_fix.py"
-      },
-      {
-        "api_name": "missing_critical_endpoints",
-        "api_file": "/app/backend/api/missing_critical_endpoints.py",
-        "relative_path": "api/missing_critical_endpoints.py"
-      },
-      {
-        "api_name": "team_management",
-        "api_file": "/app/backend/api/team_management.py",
-        "relative_path": "api/team_management.py"
       },
       {
         "api_name": "google_oauth",
@@ -3764,24 +3760,9 @@
         "relative_path": "api/google_oauth.py"
       },
       {
-        "api_name": "integrations",
-        "api_file": "/app/backend/api/integrations.py",
-        "relative_path": "api/integrations.py"
-      },
-      {
-        "api_name": "templates",
-        "api_file": "/app/backend/api/templates.py",
-        "relative_path": "api/templates.py"
-      },
-      {
-        "api_name": "mobile_pwa_features",
-        "api_file": "/app/backend/api/mobile_pwa_features.py",
-        "relative_path": "api/mobile_pwa_features.py"
-      },
-      {
-        "api_name": "integration_tests",
-        "api_file": "/app/backend/api/integration_tests.py",
-        "relative_path": "api/integration_tests.py"
+        "api_name": "missing_critical_endpoints",
+        "api_file": "/app/backend/api/missing_critical_endpoints.py",
+        "relative_path": "api/missing_critical_endpoints.py"
       },
       {
         "api_name": "real_ai_automation",
@@ -3789,9 +3770,24 @@
         "relative_path": "api/real_ai_automation.py"
       },
       {
-        "api_name": "analytics",
-        "api_file": "/app/backend/api/unified_analytics_gamification.py",
-        "relative_path": "api/unified_analytics_gamification.py"
+        "api_name": "enhanced_features",
+        "api_file": "/app/backend/api/enhanced_features.py",
+        "relative_path": "api/enhanced_features.py"
+      },
+      {
+        "api_name": "escrow_system",
+        "api_file": "/app/backend/api/escrow_system.py",
+        "relative_path": "api/escrow_system.py"
+      },
+      {
+        "api_name": "content_creation",
+        "api_file": "/app/backend/api/content_creation.py",
+        "relative_path": "api/content_creation.py"
+      },
+      {
+        "api_name": "templates",
+        "api_file": "/app/backend/api/templates.py",
+        "relative_path": "api/templates.py"
       },
       {
         "api_name": "workflow_automation",
@@ -3799,24 +3795,24 @@
         "relative_path": "api/workflow_automation.py"
       },
       {
-        "api_name": "rate_limiting_system",
-        "api_file": "/app/backend/api/rate_limiting_system.py",
-        "relative_path": "api/rate_limiting_system.py"
+        "api_name": "analytics",
+        "api_file": "/app/backend/api/unified_analytics_gamification.py",
+        "relative_path": "api/unified_analytics_gamification.py"
       },
       {
-        "api_name": "media_library",
-        "api_file": "/app/backend/api/media_library.py",
-        "relative_path": "api/media_library.py"
+        "api_name": "auth",
+        "api_file": "/app/backend/api/auth.py",
+        "relative_path": "api/auth.py"
       },
       {
-        "api_name": "ai_content_generation",
-        "api_file": "/app/backend/api/ai_content_generation.py",
-        "relative_path": "api/ai_content_generation.py"
+        "api_name": "mobile_pwa_features",
+        "api_file": "/app/backend/api/mobile_pwa_features.py",
+        "relative_path": "api/mobile_pwa_features.py"
       },
       {
-        "api_name": "analytics_system",
-        "api_file": "/app/backend/api/analytics_system.py",
-        "relative_path": "api/analytics_system.py"
+        "api_name": "missing_endpoints_fix",
+        "api_file": "/app/backend/api/missing_endpoints_fix.py",
+        "relative_path": "api/missing_endpoints_fix.py"
       },
       {
         "api_name": "notification_system",
@@ -3824,17 +3820,47 @@
         "relative_path": "api/notification_system.py"
       },
       {
-        "api_name": "auth",
-        "api_file": "/app/backend/api/auth.py",
-        "relative_path": "api/auth.py"
+        "api_name": "ai_content_generation",
+        "api_file": "/app/backend/api/ai_content_generation.py",
+        "relative_path": "api/ai_content_generation.py"
+      },
+      {
+        "api_name": "integration_tests",
+        "api_file": "/app/backend/api/integration_tests.py",
+        "relative_path": "api/integration_tests.py"
+      },
+      {
+        "api_name": "integrations",
+        "api_file": "/app/backend/api/integrations.py",
+        "relative_path": "api/integrations.py"
+      },
+      {
+        "api_name": "rate_limiting_system",
+        "api_file": "/app/backend/api/rate_limiting_system.py",
+        "relative_path": "api/rate_limiting_system.py"
+      },
+      {
+        "api_name": "team_management",
+        "api_file": "/app/backend/api/team_management.py",
+        "relative_path": "api/team_management.py"
+      },
+      {
+        "api_name": "media_library",
+        "api_file": "/app/backend/api/media_library.py",
+        "relative_path": "api/media_library.py"
+      },
+      {
+        "api_name": "analytics_system",
+        "api_file": "/app/backend/api/analytics_system.py",
+        "relative_path": "api/analytics_system.py"
       }
     ]
   },
   "statistics": {
-    "total_api_files": 71,
+    "total_api_files": 74,
     "total_service_files": 67,
     "crud_completeness": 0,
-    "mock_data_instances": 192,
-    "duplicate_file_sets": 50
+    "mock_data_instances": 188,
+    "duplicate_file_sets": 53
   }
 }
