@@ -224,7 +224,7 @@ class ComprehensiveBackendTester:
         # Test 4: Referral Analytics
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/referral/analytics", headers=headers) as response:
+            async with self.session.get(f"{self.api_url}/referral/stats", headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
