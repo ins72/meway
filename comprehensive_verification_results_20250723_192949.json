@@ -1,0 +1,1012 @@
+{
+  "timestamp": "2025-07-23T19:29:49.124473",
+  "backend_url": "https://1e8b1ad5-8db8-4882-94e1-e795cd3cf46d.preview.emergentagent.com",
+  "total_tests": 49,
+  "passed_tests": 20,
+  "success_rate": 40.816326530612244,
+  "status": 200,
+  "test_results": [
+    {
+      "test_name": "Twitter Health Check",
+      "method": "GET",
+      "endpoint": "/api/twitter/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 122,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'twitter', 'api_connected': True, 'timestamp': '2025-07-23T19:29:48.690473'}"
+    },
+    {
+      "test_name": "Twitter Search",
+      "method": "GET",
+      "endpoint": "/api/twitter/search",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 29,
+      "response_preview": "{'detail': 'Tweet not found'}"
+    },
+    {
+      "test_name": "Twitter Profile",
+      "method": "GET",
+      "endpoint": "/api/twitter/profile",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 29,
+      "response_preview": "{'detail': 'Tweet not found'}"
+    },
+    {
+      "test_name": "Twitter Post Creation",
+      "method": "POST",
+      "endpoint": "/api/twitter/post",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "TikTok Health Check",
+      "method": "GET",
+      "endpoint": "/api/tiktok/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 121,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'tiktok', 'api_connected': True, 'timestamp': '2025-07-23T19:29:48.729639'}"
+    },
+    {
+      "test_name": "TikTok Search",
+      "method": "GET",
+      "endpoint": "/api/tiktok/search",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 28,
+      "response_preview": "{'detail': 'Post not found'}"
+    },
+    {
+      "test_name": "TikTok Profile",
+      "method": "GET",
+      "endpoint": "/api/tiktok/profile",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 28,
+      "response_preview": "{'detail': 'Post not found'}"
+    },
+    {
+      "test_name": "TikTok Video Upload",
+      "method": "POST",
+      "endpoint": "/api/tiktok/upload",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "Stripe Health Check",
+      "method": "GET",
+      "endpoint": "/api/stripe-integration/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 136,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'stripe_integration', 'stripe_connected': True, 'timestamp': '2025-07-23T19:29:48.765263'}"
+    },
+    {
+      "test_name": "Stripe Create Payment Intent",
+      "method": "POST",
+      "endpoint": "/api/stripe-integration/create-payment-intent",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "Stripe Payment Methods",
+      "method": "GET",
+      "endpoint": "/api/stripe-integration/payment-methods",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 31,
+      "response_preview": "{'detail': 'Payment not found'}"
+    },
+    {
+      "test_name": "Stripe Create Customer",
+      "method": "POST",
+      "endpoint": "/api/stripe-integration/create-customer",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "Social Media Management Health Check",
+      "method": "GET",
+      "endpoint": "/api/social-media-management/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 151,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'social_media_management', 'platforms': ['twitter', 'tiktok'], 'timestamp': '2025-07-23T19:29:48.799462'}"
+    },
+    {
+      "test_name": "Social Media Accounts",
+      "method": "GET",
+      "endpoint": "/api/social-media-management/accounts",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 28,
+      "response_preview": "{'detail': 'Post not found'}"
+    },
+    {
+      "test_name": "Schedule Social Media Post",
+      "method": "POST",
+      "endpoint": "/api/social-media-management/schedule-post",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "Social Media Analytics",
+      "method": "GET",
+      "endpoint": "/api/social-media-management/analytics",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 28,
+      "response_preview": "{'detail': 'Post not found'}"
+    },
+    {
+      "test_name": "Referral System Health Check",
+      "method": "GET",
+      "endpoint": "/api/referral-system/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 157,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'referral_system', 'features': ['tracking', 'rewards', 'analytics'], 'timestamp': '2025-07-23T19:29:48.836263'}"
+    },
+    {
+      "test_name": "Get Referrals",
+      "method": "GET",
+      "endpoint": "/api/referral-system/referrals",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 31,
+      "response_preview": "{'detail': 'Program not found'}"
+    },
+    {
+      "test_name": "Create Referral",
+      "method": "POST",
+      "endpoint": "/api/referral-system/create",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "Referral Stats",
+      "method": "GET",
+      "endpoint": "/api/referral-system/stats",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 31,
+      "response_preview": "{'detail': 'Program not found'}"
+    },
+    {
+      "test_name": "Update Referral",
+      "method": "PUT",
+      "endpoint": "/api/referral-system/referrals/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Update Referral (Alternative)",
+      "method": "PUT",
+      "endpoint": "/api/referral/update/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Delete Referral",
+      "method": "DELETE",
+      "endpoint": "/api/referral-system/referrals/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Delete Referral (Alternative)",
+      "method": "DELETE",
+      "endpoint": "/api/referral/delete/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Update Website",
+      "method": "PUT",
+      "endpoint": "/api/website-builder/sites/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Update Website (Complete)",
+      "method": "PUT",
+      "endpoint": "/api/complete-website-builder/update/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Delete Website",
+      "method": "DELETE",
+      "endpoint": "/api/website-builder/sites/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Delete Website (Complete)",
+      "method": "DELETE",
+      "endpoint": "/api/complete-website-builder/delete/test-id",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Website Builder Templates",
+      "method": "GET",
+      "endpoint": "/api/website-builder/templates",
+      "status": 500,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 21,
+      "response_preview": "Internal Server Error"
+    },
+    {
+      "test_name": "Complete Website Builder Templates",
+      "method": "GET",
+      "endpoint": "/api/complete-website-builder/templates",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not found'}"
+    },
+    {
+      "test_name": "Template Marketplace Templates",
+      "method": "GET",
+      "endpoint": "/api/template-marketplace/templates",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not found'}"
+    },
+    {
+      "test_name": "Data Population Health",
+      "method": "GET",
+      "endpoint": "/api/data-population/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 107,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'data_population', 'timestamp': '2025-07-23T19:29:48.963153'}"
+    },
+    {
+      "test_name": "Real Data Population Health",
+      "method": "GET",
+      "endpoint": "/api/real-data-population/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 112,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'real_data_population', 'timestamp': '2025-07-23T19:29:48.970993'}"
+    },
+    {
+      "test_name": "Data Population Sample Data",
+      "method": "GET",
+      "endpoint": "/api/data-population/sample-data",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not found'}"
+    },
+    {
+      "test_name": "Survey Service Backup Removed",
+      "method": "GET",
+      "endpoint": "/api/survey-service-backup/health",
+      "status": 404,
+      "expected_status": 404,
+      "success": true,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Survey Backup Endpoint Removed",
+      "method": "GET",
+      "endpoint": "/api/survey/backup/health",
+      "status": 404,
+      "expected_status": 404,
+      "success": true,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not Found'}"
+    },
+    {
+      "test_name": "Financial Management System",
+      "method": "GET",
+      "endpoint": "/api/complete-financial/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 110,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'complete_financial', 'timestamp': '2025-07-23T19:29:49.006998'}"
+    },
+    {
+      "test_name": "Multi-Workspace System",
+      "method": "GET",
+      "endpoint": "/api/complete-multi-workspace/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 116,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'complete_multi_workspace', 'timestamp': '2025-07-23T19:29:49.017840'}"
+    },
+    {
+      "test_name": "Admin Dashboard System",
+      "method": "GET",
+      "endpoint": "/api/complete-admin-dashboard/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 116,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'complete_admin_dashboard', 'timestamp': '2025-07-23T19:29:49.026196'}"
+    },
+    {
+      "test_name": "Team Management System",
+      "method": "GET",
+      "endpoint": "/api/team-management/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 107,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'team_management', 'timestamp': '2025-07-23T19:29:49.035870'}"
+    },
+    {
+      "test_name": "Form Builder System",
+      "method": "GET",
+      "endpoint": "/api/form-builder/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 104,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'form_builder', 'timestamp': '2025-07-23T19:29:49.045652'}"
+    },
+    {
+      "test_name": "Analytics System",
+      "method": "GET",
+      "endpoint": "/api/analytics-system/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 108,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'analytics_system', 'timestamp': '2025-07-23T19:29:49.052546'}"
+    },
+    {
+      "test_name": "AI Automation Suite",
+      "method": "GET",
+      "endpoint": "/api/advanced-ai-suite/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 109,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'advanced_ai_suite', 'timestamp': '2025-07-23T19:29:49.062054'}"
+    },
+    {
+      "test_name": "Get Current User",
+      "method": "GET",
+      "endpoint": "/api/auth/me",
+      "status": 404,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 23,
+      "response_preview": "{'detail': 'Not found'}"
+    },
+    {
+      "test_name": "Refresh Token",
+      "method": "POST",
+      "endpoint": "/api/auth/refresh",
+      "status": 405,
+      "expected_status": 200,
+      "success": false,
+      "response_length": 32,
+      "response_preview": "{'detail': 'Method Not Allowed'}"
+    },
+    {
+      "test_name": "Auth Health Check",
+      "method": "GET",
+      "endpoint": "/api/auth/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 96,
+      "response_preview": "{'success': True, 'healthy': True, 'service': 'auth', 'timestamp': '2025-07-23T19:29:49.087467'}"
+    },
+    {
+      "test_name": "Root Endpoint",
+      "method": "GET",
+      "endpoint": "/",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 1140,
+      "response_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <link rel=\"icon\" href=\"/favicon.ico\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <meta "
+    },
+    {
+      "test_name": "Health Endpoint",
+      "method": "GET",
+      "endpoint": "/health",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 86,
+      "response_preview": "{'status': 'healthy', 'services': 123, 'timestamp': '{datetime.utcnow().isoformat()}'}"
+    },
+    {
+      "test_name": "API Documentation",
+      "method": "GET",
+      "endpoint": "/docs",
+      "status": 200,
+      "expected_status": 200,
+      "success": true,
+      "response_length": 974,
+      "response_preview": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css\">\n    <link rel=\"shortcut icon\" href=\"http"
+    }
+  ],
+  "categories": {
+    "Twitter API Integration": [
+      {
+        "test_name": "Twitter Health Check",
+        "method": "GET",
+        "endpoint": "/api/twitter/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 122,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'twitter', 'api_connected': True, 'timestamp': '2025-07-23T19:29:48.690473'}"
+      },
+      {
+        "test_name": "Twitter Search",
+        "method": "GET",
+        "endpoint": "/api/twitter/search",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 29,
+        "response_preview": "{'detail': 'Tweet not found'}"
+      },
+      {
+        "test_name": "Twitter Profile",
+        "method": "GET",
+        "endpoint": "/api/twitter/profile",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 29,
+        "response_preview": "{'detail': 'Tweet not found'}"
+      },
+      {
+        "test_name": "Twitter Post Creation",
+        "method": "POST",
+        "endpoint": "/api/twitter/post",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      }
+    ],
+    "TikTok API Integration": [
+      {
+        "test_name": "TikTok Health Check",
+        "method": "GET",
+        "endpoint": "/api/tiktok/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 121,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'tiktok', 'api_connected': True, 'timestamp': '2025-07-23T19:29:48.729639'}"
+      },
+      {
+        "test_name": "TikTok Search",
+        "method": "GET",
+        "endpoint": "/api/tiktok/search",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 28,
+        "response_preview": "{'detail': 'Post not found'}"
+      },
+      {
+        "test_name": "TikTok Profile",
+        "method": "GET",
+        "endpoint": "/api/tiktok/profile",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 28,
+        "response_preview": "{'detail': 'Post not found'}"
+      },
+      {
+        "test_name": "TikTok Video Upload",
+        "method": "POST",
+        "endpoint": "/api/tiktok/upload",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      }
+    ],
+    "Stripe Payment Integration": [
+      {
+        "test_name": "Stripe Health Check",
+        "method": "GET",
+        "endpoint": "/api/stripe-integration/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 136,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'stripe_integration', 'stripe_connected': True, 'timestamp': '2025-07-23T19:29:48.765263'}"
+      },
+      {
+        "test_name": "Stripe Create Payment Intent",
+        "method": "POST",
+        "endpoint": "/api/stripe-integration/create-payment-intent",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      },
+      {
+        "test_name": "Stripe Payment Methods",
+        "method": "GET",
+        "endpoint": "/api/stripe-integration/payment-methods",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 31,
+        "response_preview": "{'detail': 'Payment not found'}"
+      },
+      {
+        "test_name": "Stripe Create Customer",
+        "method": "POST",
+        "endpoint": "/api/stripe-integration/create-customer",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      }
+    ],
+    "Social Media Management": [
+      {
+        "test_name": "Social Media Management Health Check",
+        "method": "GET",
+        "endpoint": "/api/social-media-management/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 151,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'social_media_management', 'platforms': ['twitter', 'tiktok'], 'timestamp': '2025-07-23T19:29:48.799462'}"
+      },
+      {
+        "test_name": "Social Media Accounts",
+        "method": "GET",
+        "endpoint": "/api/social-media-management/accounts",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 28,
+        "response_preview": "{'detail': 'Post not found'}"
+      },
+      {
+        "test_name": "Schedule Social Media Post",
+        "method": "POST",
+        "endpoint": "/api/social-media-management/schedule-post",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      },
+      {
+        "test_name": "Social Media Analytics",
+        "method": "GET",
+        "endpoint": "/api/social-media-management/analytics",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 28,
+        "response_preview": "{'detail': 'Post not found'}"
+      }
+    ],
+    "Referral System": [
+      {
+        "test_name": "Referral System Health Check",
+        "method": "GET",
+        "endpoint": "/api/referral-system/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 157,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'referral_system', 'features': ['tracking', 'rewards', 'analytics'], 'timestamp': '2025-07-23T19:29:48.836263'}"
+      },
+      {
+        "test_name": "Get Referrals",
+        "method": "GET",
+        "endpoint": "/api/referral-system/referrals",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 31,
+        "response_preview": "{'detail': 'Program not found'}"
+      },
+      {
+        "test_name": "Create Referral",
+        "method": "POST",
+        "endpoint": "/api/referral-system/create",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      },
+      {
+        "test_name": "Referral Stats",
+        "method": "GET",
+        "endpoint": "/api/referral-system/stats",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 31,
+        "response_preview": "{'detail': 'Program not found'}"
+      },
+      {
+        "test_name": "Update Referral",
+        "method": "PUT",
+        "endpoint": "/api/referral-system/referrals/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Update Referral (Alternative)",
+        "method": "PUT",
+        "endpoint": "/api/referral/update/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Delete Referral",
+        "method": "DELETE",
+        "endpoint": "/api/referral-system/referrals/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Delete Referral (Alternative)",
+        "method": "DELETE",
+        "endpoint": "/api/referral/delete/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      }
+    ],
+    "CRUD Operations": [
+      {
+        "test_name": "Update Website",
+        "method": "PUT",
+        "endpoint": "/api/website-builder/sites/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Update Website (Complete)",
+        "method": "PUT",
+        "endpoint": "/api/complete-website-builder/update/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Delete Website",
+        "method": "DELETE",
+        "endpoint": "/api/website-builder/sites/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Delete Website (Complete)",
+        "method": "DELETE",
+        "endpoint": "/api/complete-website-builder/delete/test-id",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      }
+    ],
+    "Mock Data Elimination": [
+      {
+        "test_name": "Website Builder Templates",
+        "method": "GET",
+        "endpoint": "/api/website-builder/templates",
+        "status": 500,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 21,
+        "response_preview": "Internal Server Error"
+      },
+      {
+        "test_name": "Complete Website Builder Templates",
+        "method": "GET",
+        "endpoint": "/api/complete-website-builder/templates",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not found'}"
+      },
+      {
+        "test_name": "Template Marketplace Templates",
+        "method": "GET",
+        "endpoint": "/api/template-marketplace/templates",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not found'}"
+      },
+      {
+        "test_name": "Data Population Health",
+        "method": "GET",
+        "endpoint": "/api/data-population/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 107,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'data_population', 'timestamp': '2025-07-23T19:29:48.963153'}"
+      },
+      {
+        "test_name": "Real Data Population Health",
+        "method": "GET",
+        "endpoint": "/api/real-data-population/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 112,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'real_data_population', 'timestamp': '2025-07-23T19:29:48.970993'}"
+      },
+      {
+        "test_name": "Data Population Sample Data",
+        "method": "GET",
+        "endpoint": "/api/data-population/sample-data",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not found'}"
+      },
+      {
+        "test_name": "Survey Service Backup Removed",
+        "method": "GET",
+        "endpoint": "/api/survey-service-backup/health",
+        "status": 404,
+        "expected_status": 404,
+        "success": true,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      },
+      {
+        "test_name": "Survey Backup Endpoint Removed",
+        "method": "GET",
+        "endpoint": "/api/survey/backup/health",
+        "status": 404,
+        "expected_status": 404,
+        "success": true,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not Found'}"
+      }
+    ],
+    "Critical Business Systems": [
+      {
+        "test_name": "Financial Management System",
+        "method": "GET",
+        "endpoint": "/api/complete-financial/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 110,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'complete_financial', 'timestamp': '2025-07-23T19:29:49.006998'}"
+      },
+      {
+        "test_name": "Multi-Workspace System",
+        "method": "GET",
+        "endpoint": "/api/complete-multi-workspace/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 116,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'complete_multi_workspace', 'timestamp': '2025-07-23T19:29:49.017840'}"
+      },
+      {
+        "test_name": "Admin Dashboard System",
+        "method": "GET",
+        "endpoint": "/api/complete-admin-dashboard/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 116,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'complete_admin_dashboard', 'timestamp': '2025-07-23T19:29:49.026196'}"
+      },
+      {
+        "test_name": "Team Management System",
+        "method": "GET",
+        "endpoint": "/api/team-management/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 107,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'team_management', 'timestamp': '2025-07-23T19:29:49.035870'}"
+      },
+      {
+        "test_name": "Form Builder System",
+        "method": "GET",
+        "endpoint": "/api/form-builder/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 104,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'form_builder', 'timestamp': '2025-07-23T19:29:49.045652'}"
+      },
+      {
+        "test_name": "Analytics System",
+        "method": "GET",
+        "endpoint": "/api/analytics-system/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 108,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'analytics_system', 'timestamp': '2025-07-23T19:29:49.052546'}"
+      },
+      {
+        "test_name": "AI Automation Suite",
+        "method": "GET",
+        "endpoint": "/api/advanced-ai-suite/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 109,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'advanced_ai_suite', 'timestamp': '2025-07-23T19:29:49.062054'}"
+      }
+    ],
+    "Authentication System": [
+      {
+        "test_name": "Auth Health Check",
+        "method": "GET",
+        "endpoint": "/api/auth/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 96,
+        "response_preview": "{'success': True, 'healthy': True, 'service': 'auth', 'timestamp': '2025-07-23T19:29:49.087467'}"
+      }
+    ],
+    "Platform Health": [
+      {
+        "test_name": "Get Current User",
+        "method": "GET",
+        "endpoint": "/api/auth/me",
+        "status": 404,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 23,
+        "response_preview": "{'detail': 'Not found'}"
+      },
+      {
+        "test_name": "Refresh Token",
+        "method": "POST",
+        "endpoint": "/api/auth/refresh",
+        "status": 405,
+        "expected_status": 200,
+        "success": false,
+        "response_length": 32,
+        "response_preview": "{'detail': 'Method Not Allowed'}"
+      },
+      {
+        "test_name": "Root Endpoint",
+        "method": "GET",
+        "endpoint": "/",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 1140,
+        "response_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <link rel=\"icon\" href=\"/favicon.ico\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <meta "
+      },
+      {
+        "test_name": "Health Endpoint",
+        "method": "GET",
+        "endpoint": "/health",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 86,
+        "response_preview": "{'status': 'healthy', 'services': 123, 'timestamp': '{datetime.utcnow().isoformat()}'}"
+      },
+      {
+        "test_name": "API Documentation",
+        "method": "GET",
+        "endpoint": "/docs",
+        "status": 200,
+        "expected_status": 200,
+        "success": true,
+        "response_length": 974,
+        "response_preview": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css\">\n    <link rel=\"shortcut icon\" href=\"http"
+      }
+    ]
+  }
+}
