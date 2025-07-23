@@ -413,8 +413,7 @@ class MediaService:
         }
     
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def search_files(user_id: str, query: str, file_type: str = "", limit: int = 50) -> Dict[str, Any]:
         """Search media files"""
         database = get_database()
         
