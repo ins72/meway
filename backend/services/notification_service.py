@@ -11,6 +11,33 @@ from fastapi import BackgroundTasks
 
 from core.database import get_database
 
+
+    async def create_notification(self, notification_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new notification"""
+        try:
+            # Add metadata
+            notification_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["notification"].insert_one(notification_data)
+            
+            return {
+                "success": True,
+                "message": f"Notification created successfully",
+                "data": notification_data,
+                "id": notification_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create notification: {str(e)}"
+            }
+
 class NotificationService:
     
     # Available notification channels
@@ -37,6 +64,39 @@ class NotificationService:
         },
         "push": {
             "id": "push",
+
+    async def update_notification(self, notification_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update notification by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["notification"].update_one(
+                {"id": notification_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Notification not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["notification"].find_one({"id": notification_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Notification updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update notification: {str(e)}"
+            }
+
             "name": "Push Notifications",
             "description": "Browser and mobile push notifications",
             "icon": "🔔",

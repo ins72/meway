@@ -1028,6 +1028,33 @@ complete_multi_workspace_service = CompleteMultiWorkspaceService()
         except Exception as e:
             return {"success": False, "message": str(e)}
     
+
+    async def create_multi_workspace(self, multi_workspace_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new multi_workspace"""
+        try:
+            # Add metadata
+            multi_workspace_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["multi_workspace"].insert_one(multi_workspace_data)
+            
+            return {
+                "success": True,
+                "message": f"Multi_Workspace created successfully",
+                "data": multi_workspace_data,
+                "id": multi_workspace_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create multi_workspace: {str(e)}"
+            }
+
     def _get_role_permissions(self, role: str) -> dict:
         """Get permissions for specific role"""
         permissions = {
@@ -1054,6 +1081,39 @@ complete_multi_workspace_service = CompleteMultiWorkspaceService()
             "editor": {
                 "manage_workspace": False,
                 "invite_users": False,
+
+    async def update_multi_workspace(self, multi_workspace_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update multi_workspace by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["multi_workspace"].update_one(
+                {"id": multi_workspace_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Multi_Workspace not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["multi_workspace"].find_one({"id": multi_workspace_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Multi_Workspace updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update multi_workspace: {str(e)}"
+            }
+
                 "manage_members": False,
                 "manage_billing": False,
                 "delete_workspace": False,
@@ -1086,6 +1146,29 @@ complete_multi_workspace_service = CompleteMultiWorkspaceService()
                     "workspace_name": workspace_name,
                     "inviter_name": inviter_name,
                     "invitation_url": invitation_url,
+
+    async def delete_multi_workspace(self, multi_workspace_id: str) -> Dict[str, Any]:
+        """Delete multi_workspace by ID"""
+        try:
+            result = await self.db["multi_workspace"].delete_one({"id": multi_workspace_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Multi_Workspace not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Multi_Workspace deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete multi_workspace: {str(e)}"
+            }
+
                     "message": message,
                     "expires_in": "7 days"
                 }

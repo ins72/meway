@@ -875,6 +875,33 @@ class WebhookService:
             print(f"Webhook delivery {delivery_id} failed: {str(e)}")
     
     @staticmethod
+
+    async def create_webhook(self, webhook_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new webhook"""
+        try:
+            # Add metadata
+            webhook_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["webhook"].insert_one(webhook_data)
+            
+            return {
+                "success": True,
+                "message": f"Webhook created successfully",
+                "data": webhook_data,
+                "id": webhook_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create webhook: {str(e)}"
+            }
+
     def _generate_test_payload(event_type: str) -> Dict[str, Any]:
         """Generate test payload for event type"""
         test_payloads = {
@@ -901,6 +928,39 @@ class WebhookService:
                 "failure_reason": "Insufficient funds",
                 "retry_available": True,
                 "failed_at": datetime.utcnow().isoformat()
+
+    async def update_webhook(self, webhook_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update webhook by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["webhook"].update_one(
+                {"id": webhook_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Webhook not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["webhook"].find_one({"id": webhook_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Webhook updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update webhook: {str(e)}"
+            }
+
             }
         }
         
@@ -933,6 +993,29 @@ class WebhookService:
                 return max(min_val, min(count // 10, max_val))
             elif metric_type == 'impressions':
                 result = await db.social_analytics.aggregate([
+
+    async def delete_webhook(self, webhook_id: str) -> Dict[str, Any]:
+        """Delete webhook by ID"""
+        try:
+            result = await self.db["webhook"].delete_one({"id": webhook_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Webhook not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Webhook deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete webhook: {str(e)}"
+            }
+
                     {"$group": {"_id": None, "total": {"$sum": "$total_impressions"}}}
                 ]).to_list(length=1)
                 return result[0]["total"] if result else (min_val + max_val) // 2

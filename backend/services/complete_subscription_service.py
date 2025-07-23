@@ -485,6 +485,33 @@ class CompleteSubscriptionService:
             'comparison': self._generate_plan_comparison()
         }
     
+
+    async def create_subscription(self, subscription_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new subscription"""
+        try:
+            # Add metadata
+            subscription_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["subscription"].insert_one(subscription_data)
+            
+            return {
+                "success": True,
+                "message": f"Subscription created successfully",
+                "data": subscription_data,
+                "id": subscription_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create subscription: {str(e)}"
+            }
+
     def _generate_plan_comparison(self) -> List[Dict[str, Any]]:
         """Generate plan comparison data"""
         comparison_features = [
@@ -511,6 +538,39 @@ class CompleteSubscriptionService:
             # This would integrate with actual Stripe API
             # For now, simulate the response
             stripe_subscription = {
+
+    async def update_subscription(self, subscription_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update subscription by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["subscription"].update_one(
+                {"id": subscription_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Subscription not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["subscription"].find_one({"id": subscription_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Subscription updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update subscription: {str(e)}"
+            }
+
                 'id': f'sub_{str(uuid.uuid4())[:8]}',
                 'customer': f'cus_{str(uuid.uuid4())[:8]}',
                 'status': 'active',

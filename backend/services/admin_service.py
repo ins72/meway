@@ -12,6 +12,33 @@ from core.database import get_database
 class AdminService:
     """Service class for Admin"""
     
+
+    async def create_admin(self, admin_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new admin"""
+        try:
+            # Add metadata
+            admin_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["admin"].insert_one(admin_data)
+            
+            return {
+                "success": True,
+                "message": f"Admin created successfully",
+                "data": admin_data,
+                "id": admin_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create admin: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["admin"]
@@ -38,6 +65,39 @@ class AdminService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_admin(self, admin_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update admin by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["admin"].update_one(
+                {"id": admin_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Admin not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["admin"].find_one({"id": admin_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Admin updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update admin: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class AdminService:
         
         return result.deleted_count > 0
     
+
+    async def delete_admin(self, admin_id: str) -> Dict[str, Any]:
+        """Delete admin by ID"""
+        try:
+            result = await self.db["admin"].delete_one({"id": admin_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Admin not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Admin deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete admin: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

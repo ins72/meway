@@ -12,6 +12,33 @@ from core.database import get_database
 class AiTokenManagementService:
     """Service class for Ai Token Management"""
     
+
+    async def create_ai_token_management(self, ai_token_management_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new ai_token_management"""
+        try:
+            # Add metadata
+            ai_token_management_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["ai_token_management"].insert_one(ai_token_management_data)
+            
+            return {
+                "success": True,
+                "message": f"Ai_Token_Management created successfully",
+                "data": ai_token_management_data,
+                "id": ai_token_management_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create ai_token_management: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["ai_token_management"]
@@ -38,6 +65,39 @@ class AiTokenManagementService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_ai_token_management(self, ai_token_management_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update ai_token_management by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["ai_token_management"].update_one(
+                {"id": ai_token_management_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Ai_Token_Management not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["ai_token_management"].find_one({"id": ai_token_management_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Ai_Token_Management updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update ai_token_management: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class AiTokenManagementService:
         
         return result.deleted_count > 0
     
+
+    async def delete_ai_token_management(self, ai_token_management_id: str) -> Dict[str, Any]:
+        """Delete ai_token_management by ID"""
+        try:
+            result = await self.db["ai_token_management"].delete_one({"id": ai_token_management_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Ai_Token_Management not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Ai_Token_Management deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete ai_token_management: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

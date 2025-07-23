@@ -8,6 +8,39 @@ from typing import Dict, Any, List, Optional
 from core.database import get_database
 import uuid
 
+
+    async def update_crm(self, crm_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update crm by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["crm"].update_one(
+                {"id": crm_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Crm not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["crm"].find_one({"id": crm_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Crm updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update crm: {str(e)}"
+            }
+
 class CRMService:
     """Service for CRM operations"""
     
@@ -40,6 +73,29 @@ class CRMService:
     "updated_at": datetime.utcnow()
     }
         
+
+    async def delete_crm(self, crm_id: str) -> Dict[str, Any]:
+        """Delete crm by ID"""
+        try:
+            result = await self.db["crm"].delete_one({"id": crm_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Crm not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Crm deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete crm: {str(e)}"
+            }
+
         result = await db.crm_contacts.insert_one(contact)
         return contact
     

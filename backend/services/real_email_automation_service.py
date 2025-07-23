@@ -296,6 +296,33 @@ class RealEmailAutomationService:
         except Exception as e:
             return {"error": str(e)}
     
+
+    async def create_real_email_automation(self, real_email_automation_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new real_email_automation"""
+        try:
+            # Add metadata
+            real_email_automation_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["real_email_automation"].insert_one(real_email_automation_data)
+            
+            return {
+                "success": True,
+                "message": f"Real_Email_Automation created successfully",
+                "data": real_email_automation_data,
+                "id": real_email_automation_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create real_email_automation: {str(e)}"
+            }
+
     def log(self, message: str):
         print(f"[EMAIL] {message}")
 

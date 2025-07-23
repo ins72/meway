@@ -12,6 +12,33 @@ from core.database import get_database
 class RealtimeNotificationsService:
     """Service class for Realtime Notifications"""
     
+
+    async def create_realtime_notification(self, realtime_notification_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new realtime_notification"""
+        try:
+            # Add metadata
+            realtime_notification_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["realtime_notifications"].insert_one(realtime_notification_data)
+            
+            return {
+                "success": True,
+                "message": f"Realtime_Notification created successfully",
+                "data": realtime_notification_data,
+                "id": realtime_notification_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create realtime_notification: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["realtime_notifications"]
@@ -38,6 +65,39 @@ class RealtimeNotificationsService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_realtime_notification(self, realtime_notification_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update realtime_notification by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["realtime_notifications"].update_one(
+                {"id": realtime_notification_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Realtime_Notification not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["realtime_notifications"].find_one({"id": realtime_notification_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Realtime_Notification updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update realtime_notification: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class RealtimeNotificationsService:
         
         return result.deleted_count > 0
     
+
+    async def delete_realtime_notification(self, realtime_notification_id: str) -> Dict[str, Any]:
+        """Delete realtime_notification by ID"""
+        try:
+            result = await self.db["realtime_notifications"].delete_one({"id": realtime_notification_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Realtime_Notification not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Realtime_Notification deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete realtime_notification: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

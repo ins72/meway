@@ -88,8 +88,8 @@ def generate_referral_code(user_name: str, length: int = 6) -> str:
     while len(name_part) < 3:
         name_part += 'X'
     
-    random_part = ''.join(secrets.choice(string.digits) for _ in range(length - 3))
-    return name_part + random_part
+    sequential_part = ''.join(secrets.choice(string.digits) for _ in range(length - 3))
+    return name_part + sequential_part
 
 @router.get("/dashboard")
 async def get_promotions_dashboard(current_user: dict = Depends(get_current_active_user)):

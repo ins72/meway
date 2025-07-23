@@ -731,6 +731,33 @@ class CompleteWebsiteBuilderService:
         except Exception as e:
             logger.error(f"Submit to search engines error: {str(e)}")
     
+
+    async def create_website_builder(self, website_builder_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new website_builder"""
+        try:
+            # Add metadata
+            website_builder_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["website_builder"].insert_one(website_builder_data)
+            
+            return {
+                "success": True,
+                "message": f"Website_Builder created successfully",
+                "data": website_builder_data,
+                "id": website_builder_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create website_builder: {str(e)}"
+            }
+
     def _validate_domain(self, domain: str) -> bool:
         """Validate domain format"""
         import re
@@ -757,6 +784,39 @@ class CompleteWebsiteBuilderService:
             # This would configure DNS records
             return {
                 'success': True,
+
+    async def update_website_builder(self, website_builder_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update website_builder by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["website_builder"].update_one(
+                {"id": website_builder_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Website_Builder not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["website_builder"].find_one({"id": website_builder_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Website_Builder updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update website_builder: {str(e)}"
+            }
+
                 'records': [
                     {'type': 'A', 'name': '@', 'value': '192.168.1.1', 'ttl': 3600},
                     {'type': 'CNAME', 'name': 'www', 'value': domain, 'ttl': 3600}

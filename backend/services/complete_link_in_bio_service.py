@@ -38,6 +38,33 @@ class PageStatus(str, Enum):
     ARCHIVED = "archived"
 
 class CompleteLinkInBioService:
+
+    async def create_link_in_bio(self, link_in_bio_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new link_in_bio"""
+        try:
+            # Add metadata
+            link_in_bio_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["link_in_bio"].insert_one(link_in_bio_data)
+            
+            return {
+                "success": True,
+                "message": f"Link_In_Bio created successfully",
+                "data": link_in_bio_data,
+                "id": link_in_bio_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create link_in_bio: {str(e)}"
+            }
+
     def __init__(self, db: AsyncIOMotorDatabase):
         self.db = db
         # Real database collections - no mock data
@@ -64,6 +91,39 @@ class CompleteLinkInBioService:
         
         # Template catalog with real configurations
         self.TEMPLATE_CATALOG = {
+
+    async def update_link_in_bio(self, link_in_bio_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update link_in_bio by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["link_in_bio"].update_one(
+                {"id": link_in_bio_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Link_In_Bio not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["link_in_bio"].find_one({"id": link_in_bio_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Link_In_Bio updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update link_in_bio: {str(e)}"
+            }
+
             PageTemplate.MINIMAL: {
                 "name": "Minimal",
                 "description": "Clean and simple design for professionals",
@@ -96,6 +156,29 @@ class CompleteLinkInBioService:
                     "links": {"style": "corporate", "spacing": "compact"},
                     "footer": {"show_branding": True, "show_contact": True}
                 },
+
+    async def delete_link_in_bio(self, link_in_bio_id: str) -> Dict[str, Any]:
+        """Delete link_in_bio by ID"""
+        try:
+            result = await self.db["link_in_bio"].delete_one({"id": link_in_bio_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Link_In_Bio not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Link_In_Bio deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete link_in_bio: {str(e)}"
+            }
+
                 "features": ["custom_avatar", "social_icons", "contact_form", "analytics", "custom_domain"]
             },
             PageTemplate.CREATIVE: {

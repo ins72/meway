@@ -12,6 +12,33 @@ from core.database import get_database
 class WebhookSystemService:
     """Service class for Webhook System"""
     
+
+    async def create_webhook_system(self, webhook_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new webhook_system"""
+        try:
+            # Add metadata
+            webhook_system_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["webhook_system"].insert_one(webhook_system_data)
+            
+            return {
+                "success": True,
+                "message": f"Webhook_System created successfully",
+                "data": webhook_system_data,
+                "id": webhook_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create webhook_system: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["webhook_system"]
@@ -38,6 +65,39 @@ class WebhookSystemService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_webhook_system(self, webhook_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update webhook_system by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["webhook_system"].update_one(
+                {"id": webhook_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Webhook_System not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["webhook_system"].find_one({"id": webhook_system_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Webhook_System updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update webhook_system: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class WebhookSystemService:
         
         return result.deleted_count > 0
     
+
+    async def delete_webhook_system(self, webhook_system_id: str) -> Dict[str, Any]:
+        """Delete webhook_system by ID"""
+        try:
+            result = await self.db["webhook_system"].delete_one({"id": webhook_system_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Webhook_System not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Webhook_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete webhook_system: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

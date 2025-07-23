@@ -275,6 +275,33 @@ class EnterpriseSecurityService:
         except Exception as e:
             return {"error": str(e)}
     
+
+    async def create_enterprise_security(self, enterprise_security_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new enterprise_security"""
+        try:
+            # Add metadata
+            enterprise_security_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["enterprise_security"].insert_one(enterprise_security_data)
+            
+            return {
+                "success": True,
+                "message": f"Enterprise_Security created successfully",
+                "data": enterprise_security_data,
+                "id": enterprise_security_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create enterprise_security: {str(e)}"
+            }
+
     def log(self, message: str):
         """Simple logging method"""
         print(f"[SECURITY] {message}")

@@ -299,8 +299,57 @@ class UserService:
         }
 
 # Create service instance function (dependency injection)
+
+    async def create_user(self, user_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new user"""
+        try:
+            # Add metadata
+            user_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["user"].insert_one(user_data)
+            
+            return {
+                "success": True,
+                "message": f"User created successfully",
+                "data": user_data,
+                "id": user_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create user: {str(e)}"
+            }
+
 def get_user_service() -> UserService:
     return UserService()
 
 # Global service instance
 user_service = UserService()
+
+    async def delete_user(self, user_id: str) -> Dict[str, Any]:
+        """Delete user by ID"""
+        try:
+            result = await self.db["user"].delete_one({"id": user_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"User not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"User deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete user: {str(e)}"
+            }

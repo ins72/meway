@@ -20,6 +20,33 @@ from core.external_api_integrator import (
 class RealDataPopulationService:
     """Service to populate database with real external API data"""
     
+
+    async def create_real_data_population(self, real_data_population_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new real_data_population"""
+        try:
+            # Add metadata
+            real_data_population_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["real_data_population"].insert_one(real_data_population_data)
+            
+            return {
+                "success": True,
+                "message": f"Real_Data_Population created successfully",
+                "data": real_data_population_data,
+                "id": real_data_population_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create real_data_population: {str(e)}"
+            }
+
     def __init__(self):
         self.db = None
     
@@ -46,6 +73,39 @@ class RealDataPopulationService:
                             await self._store_twitter_data(db, user_id, twitter_data["data"])
                             populated_data["twitter"] = twitter_data["data"]
                     
+
+    async def update_real_data_population(self, real_data_population_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update real_data_population by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["real_data_population"].update_one(
+                {"id": real_data_population_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Real_Data_Population not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["real_data_population"].find_one({"id": real_data_population_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Real_Data_Population updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update real_data_population: {str(e)}"
+            }
+
                     elif platform == "instagram":
                         # Get real Instagram data
                         instagram_data = await social_media_integrator.get_instagram_data("example_user_id")
@@ -78,6 +138,29 @@ class RealDataPopulationService:
             return {
                 "success": True,
                 "populated_platforms": list(populated_data.keys()),
+
+    async def delete_real_data_population(self, real_data_population_id: str) -> Dict[str, Any]:
+        """Delete real_data_population by ID"""
+        try:
+            result = await self.db["real_data_population"].delete_one({"id": real_data_population_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Real_Data_Population not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Real_Data_Population deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete real_data_population: {str(e)}"
+            }
+
                 "data": populated_data
             }
             

@@ -502,6 +502,39 @@ class CompleteSocialMediaLeadsService:
         except Exception:
             return 0.0
     
+
+    async def update_social_media_lead(self, social_media_lead_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update social_media_lead by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["social_media_leads"].update_one(
+                {"id": social_media_lead_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Social_Media_Lead not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["social_media_leads"].find_one({"id": social_media_lead_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Social_Media_Lead updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update social_media_lead: {str(e)}"
+            }
+
     def _calculate_lead_score(self, user_data: Dict, platform: str) -> int:
         """Calculate lead score based on various factors"""
         try:
@@ -534,6 +567,29 @@ class CompleteSocialMediaLeadsService:
                 # Content activity score (0-20 points)
                 if videos > 100:
                     score += 20
+
+    async def delete_social_media_lead(self, social_media_lead_id: str) -> Dict[str, Any]:
+        """Delete social_media_lead by ID"""
+        try:
+            result = await self.db["social_media_leads"].delete_one({"id": social_media_lead_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Social_Media_Lead not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Social_Media_Lead deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete social_media_lead: {str(e)}"
+            }
+
                 elif videos > 50:
                     score += 15
                 elif videos > 10:

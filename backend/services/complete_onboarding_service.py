@@ -740,6 +740,33 @@ class CompleteOnboardingService:
         
         return None
 
+
+    async def create_onboarding(self, onboarding_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new onboarding"""
+        try:
+            # Add metadata
+            onboarding_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["onboarding"].insert_one(onboarding_data)
+            
+            return {
+                "success": True,
+                "message": f"Onboarding created successfully",
+                "data": onboarding_data,
+                "id": onboarding_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create onboarding: {str(e)}"
+            }
+
     def _validate_email(self, email: str) -> bool:
         """Validate email format"""
         import re
@@ -766,6 +793,39 @@ class CompleteOnboardingService:
                 "data": item,
                 "message": "Item retrieved successfully"
             }
+
+    async def update_onboarding(self, onboarding_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update onboarding by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["onboarding"].update_one(
+                {"id": onboarding_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Onboarding not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["onboarding"].find_one({"id": onboarding_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Onboarding updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update onboarding: {str(e)}"
+            }
+
             
         except Exception as e:
             return {"success": False, "message": str(e)}
@@ -798,6 +858,29 @@ class CompleteOnboardingService:
                         "total": total_count,
                         "pages": (total_count + limit - 1) // limit
                     }
+
+    async def delete_onboarding(self, onboarding_id: str) -> Dict[str, Any]:
+        """Delete onboarding by ID"""
+        try:
+            result = await self.db["onboarding"].delete_one({"id": onboarding_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Onboarding not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Onboarding deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete onboarding: {str(e)}"
+            }
+
                 },
                 "message": "Items retrieved successfully"
             }

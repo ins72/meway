@@ -856,6 +856,33 @@ class CompleteFinancialService:
             logger.error(f"Create invoice activity error: {str(e)}")
     
     
+
+    async def create_financial(self, financial_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new financial"""
+        try:
+            # Add metadata
+            financial_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["financial"].insert_one(financial_data)
+            
+            return {
+                "success": True,
+                "message": f"Financial created successfully",
+                "data": financial_data,
+                "id": financial_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create financial: {str(e)}"
+            }
+
     def _create_invoice_html_template(self, invoice: Dict[str, Any]) -> str:
         """Create HTML template for invoice PDF"""
         try:
@@ -882,6 +909,39 @@ class CompleteFinancialService:
                 </style>
             </head>
             <body>
+
+    async def update_financial(self, financial_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update financial by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["financial"].update_one(
+                {"id": financial_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Financial not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["financial"].find_one({"id": financial_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Financial updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update financial: {str(e)}"
+            }
+
                 <div class="header">
                     <h1>INVOICE</h1>
                     <h2>#{invoice.get('invoice_number', 'N/A')}</h2>
@@ -914,6 +974,29 @@ class CompleteFinancialService:
             
             # Add items
             for item in invoice.get('items', []):
+
+    async def delete_financial(self, financial_id: str) -> Dict[str, Any]:
+        """Delete financial by ID"""
+        try:
+            result = await self.db["financial"].delete_one({"id": financial_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Financial not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Financial deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete financial: {str(e)}"
+            }
+
                 html_template += f"""
                         <tr>
                             <td>{item.get('description', 'N/A')}</td>

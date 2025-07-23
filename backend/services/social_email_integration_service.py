@@ -13,6 +13,33 @@ from core.database import get_collection
 class SocialEmailIntegrationService:
     """Service class for social email integration operations"""
     
+
+    async def create_social_email_integration(self, social_email_integration_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new social_email_integration"""
+        try:
+            # Add metadata
+            social_email_integration_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["social_email_integration"].insert_one(social_email_integration_data)
+            
+            return {
+                "success": True,
+                "message": f"Social_Email_Integration created successfully",
+                "data": social_email_integration_data,
+                "id": social_email_integration_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create social_email_integration: {str(e)}"
+            }
+
     def __init__(self):
         self.collection = get_collection("social_email_integrations")
         self.campaigns_collection = get_collection("social_email_campaigns")
@@ -39,6 +66,39 @@ class SocialEmailIntegrationService:
                 "user_id": user_id,
                 "platform": data.get("platform"),
                 "email_provider": data.get("email_provider"),
+
+    async def update_social_email_integration(self, social_email_integration_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update social_email_integration by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["social_email_integration"].update_one(
+                {"id": social_email_integration_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Social_Email_Integration not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["social_email_integration"].find_one({"id": social_email_integration_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Social_Email_Integration updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update social_email_integration: {str(e)}"
+            }
+
                 "configuration": data.get("configuration", {}),
                 "is_active": True,
                 "created_at": datetime.utcnow(),
@@ -71,6 +131,29 @@ class SocialEmailIntegrationService:
             return {"error": "Failed to get integration details"}
     
     async def update_integration(self, integration_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
+
+    async def delete_social_email_integration(self, social_email_integration_id: str) -> Dict[str, Any]:
+        """Delete social_email_integration by ID"""
+        try:
+            result = await self.db["social_email_integration"].delete_one({"id": social_email_integration_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Social_Email_Integration not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Social_Email_Integration deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete social_email_integration: {str(e)}"
+            }
+
         """Update an existing integration"""
         try:
             update_data = {

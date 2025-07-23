@@ -712,6 +712,33 @@ class CompleteBookingService:
             logger.error(f"Get service statistics error: {str(e)}")
             return {}
     
+
+    async def create_booking(self, booking_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new booking"""
+        try:
+            # Add metadata
+            booking_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["booking"].insert_one(booking_data)
+            
+            return {
+                "success": True,
+                "message": f"Booking created successfully",
+                "data": booking_data,
+                "id": booking_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create booking: {str(e)}"
+            }
+
     def _get_default_service_settings(self) -> Dict[str, Any]:
         """Get default service settings"""
         return {
@@ -738,6 +765,39 @@ class CompleteBookingService:
             # Record notification in database
             db = await self.get_database()
             await db.booking_notifications.insert_one({
+
+    async def update_booking(self, booking_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update booking by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["booking"].update_one(
+                {"id": booking_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Booking not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["booking"].find_one({"id": booking_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Booking updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update booking: {str(e)}"
+            }
+
                 'notification_id': str(uuid.uuid4()),
                 'booking_id': booking_data['booking_id'],
                 'type': notification_type,

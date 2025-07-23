@@ -144,13 +144,13 @@ async def get_website_pages(
 
 @router.post("/ab-tests")
 async def create_ab_test(
-    test_data: ABTestCreate,
+    validated_data: ABTestCreate,
     current_user: dict = Depends(get_current_user),
     db = Depends(get_database)
 ):
     """Create A/B test for marketing pages"""
     service = ComprehensiveMarketingWebsiteService(db)
-    result = await service.create_ab_test(test_data.dict())
+    result = await service.create_ab_test(validated_data.dict())
     
     if "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])

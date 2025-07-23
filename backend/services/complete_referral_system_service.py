@@ -37,6 +37,33 @@ class CompleteReferralService:
     - Advanced reporting and analytics
     """
     
+
+    async def create_referral_system(self, referral_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new referral_system"""
+        try:
+            # Add metadata
+            referral_system_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["referral_system"].insert_one(referral_system_data)
+            
+            return {
+                "success": True,
+                "message": f"Referral_System created successfully",
+                "data": referral_system_data,
+                "id": referral_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create referral_system: {str(e)}"
+            }
+
     def __init__(self):
         self.stripe_secret_key = get_api_key('STRIPE_SECRET_KEY')
         self.base_referral_url = os.getenv('BASE_REFERRAL_URL', 'https://mewayz.com/ref')

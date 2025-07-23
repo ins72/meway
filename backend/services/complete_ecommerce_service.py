@@ -967,6 +967,33 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
         except Exception as e:
             return {"error": str(e)}
 
+
+    async def create_ecommerce(self, ecommerce_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new ecommerce"""
+        try:
+            # Add metadata
+            ecommerce_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["ecommerce"].insert_one(ecommerce_data)
+            
+            return {
+                "success": True,
+                "message": f"Ecommerce created successfully",
+                "data": ecommerce_data,
+                "id": ecommerce_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create ecommerce: {str(e)}"
+            }
+
     def _calculate_average_rating(self, reviews: List[Dict[str, Any]]) -> float:
         """Calculate average rating from reviews"""
         if not reviews:
@@ -993,6 +1020,39 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
     async def create_product_with_stripe(self, product_data: Dict[str, Any], vendor_id: str) -> Dict[str, Any]:
         """
         Create a new product with real Stripe product and price creation
+
+    async def update_ecommerce(self, ecommerce_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update ecommerce by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["ecommerce"].update_one(
+                {"id": ecommerce_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Ecommerce not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["ecommerce"].find_one({"id": ecommerce_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Ecommerce updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update ecommerce: {str(e)}"
+            }
+
         """
         try:
             db = self.db
@@ -1025,6 +1085,29 @@ Write a 2-3 sentence product description that highlights benefits, quality, and 
             product = {
                 'product_id': product_id,
                 'vendor_id': vendor_id,
+
+    async def delete_ecommerce(self, ecommerce_id: str) -> Dict[str, Any]:
+        """Delete ecommerce by ID"""
+        try:
+            result = await self.db["ecommerce"].delete_one({"id": ecommerce_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Ecommerce not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Ecommerce deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete ecommerce: {str(e)}"
+            }
+
                 'stripe_product_id': stripe_product.id,
                 'stripe_price_id': stripe_price.id,
                 'name': product_data['name'],

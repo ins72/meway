@@ -35,6 +35,33 @@ class CompleteCourseService:
     - Real-time collaboration tools
     """
     
+
+    async def create_course_community(self, course_community_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new course_community"""
+        try:
+            # Add metadata
+            course_community_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["course_community"].insert_one(course_community_data)
+            
+            return {
+                "success": True,
+                "message": f"Course_Community created successfully",
+                "data": course_community_data,
+                "id": course_community_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create course_community: {str(e)}"
+            }
+
     def __init__(self):
         self.openai_api_key = get_api_key('OPENAI_API_KEY')
         self.stripe_secret_key = get_api_key('STRIPE_SECRET_KEY')

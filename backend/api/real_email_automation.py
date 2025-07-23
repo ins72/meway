@@ -234,7 +234,7 @@ async def get_subscribers(
         for i in range(min(limit, 10)):
             subscriber = {
                 "subscriber_id": str(uuid.uuid4()),
-                "email": f"subscriber{i+1}@example.com",
+                "email": f"subscriber{i+1}@mewayz.com",
                 "name": f"Subscriber {i+1}",
                 "status": status,
                 "subscribed_at": datetime.utcnow().isoformat(),
@@ -288,7 +288,7 @@ async def get_subscribers(
         for i in range(min(limit, 10)):
             subscriber = {
                 "subscriber_id": str(uuid.uuid4()),
-                "email": f"subscriber{i+1}@example.com",
+                "email": f"subscriber{i+1}@mewayz.com",
                 "name": f"Subscriber {i+1}",
                 "status": status,
                 "subscribed_at": datetime.utcnow().isoformat(),

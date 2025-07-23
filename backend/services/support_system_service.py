@@ -12,6 +12,33 @@ from core.database import get_database
 class SupportSystemService:
     """Service class for Support System"""
     
+
+    async def create_support_system(self, support_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new support_system"""
+        try:
+            # Add metadata
+            support_system_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["support_system"].insert_one(support_system_data)
+            
+            return {
+                "success": True,
+                "message": f"Support_System created successfully",
+                "data": support_system_data,
+                "id": support_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create support_system: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["support_system"]
@@ -38,6 +65,39 @@ class SupportSystemService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_support_system(self, support_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update support_system by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["support_system"].update_one(
+                {"id": support_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Support_System not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["support_system"].find_one({"id": support_system_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Support_System updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update support_system: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class SupportSystemService:
         
         return result.deleted_count > 0
     
+
+    async def delete_support_system(self, support_system_id: str) -> Dict[str, Any]:
+        """Delete support_system by ID"""
+        try:
+            result = await self.db["support_system"].delete_one({"id": support_system_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Support_System not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Support_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete support_system: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

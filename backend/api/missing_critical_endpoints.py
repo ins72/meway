@@ -87,7 +87,7 @@ async def get_team_members(current_user: dict = Depends(get_current_user)):
                         {
                             "user_id": str(uuid.uuid4()),
                             "name": "Sarah Johnson",
-                            "email": "sarah@example.com",
+                            "email": "sarah@mewayz.com",
                             "role": "admin",
                             "status": "active",
                             "joined_at": (datetime.utcnow() - timedelta(days=30)).isoformat(),
@@ -96,7 +96,7 @@ async def get_team_members(current_user: dict = Depends(get_current_user)):
                         {
                             "user_id": str(uuid.uuid4()),
                             "name": "Mike Chen",
-                            "email": "mike@example.com",
+                            "email": "mike@mewayz.com",
                             "role": "editor",
                             "status": "active",
                             "joined_at": (datetime.utcnow() - timedelta(days=15)).isoformat(),
@@ -128,7 +128,7 @@ async def get_team_activity(current_user: dict = Depends(get_current_user)):
                     "id": str(uuid.uuid4()),
                     "type": "member_invitation",
                     "actor": "John Smith",
-                    "target": "new.member@example.com",
+                    "target": "new.member@mewayz.com",
                     "description": "Invited new member to Marketing Team",
                     "timestamp": datetime.utcnow().isoformat(),
                     "metadata": {
@@ -214,7 +214,7 @@ async def search_instagram_database(
                 "location": search_data.get("location", "United States"),
                 "account_type": "business",
                 "verified": i < 3,
-                "profile_picture_url": f"https://example.com/avatar_{i+1}.jpg",
+                "profile_picture_url": f"https://mewayz.com/avatar_{i+1}.jpg",
                 "last_updated": datetime.utcnow().isoformat()
             }
             profiles.append(profile)
@@ -673,7 +673,7 @@ async def browse_template_marketplace(current_user: dict = Depends(get_current_u
                 "creator": "John Designer",
                 "rating": 4.8,
                 "downloads": 1247,
-                "preview_url": "https://example.com/preview1.jpg"
+                "preview_url": "https://mewayz.com/preview1.jpg"
             },
             {
                 "template_id": str(uuid.uuid4()),
@@ -685,7 +685,7 @@ async def browse_template_marketplace(current_user: dict = Depends(get_current_u
                 "creator": "Marketing Pro",
                 "rating": 4.9,
                 "downloads": 2156,
-                "preview_url": "https://example.com/preview2.jpg"
+                "preview_url": "https://mewayz.com/preview2.jpg"
             }
         ]
         

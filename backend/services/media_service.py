@@ -567,6 +567,33 @@ class MediaService:
             return 'other'
     
     @staticmethod
+
+    async def create_media(self, media_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new media"""
+        try:
+            # Add metadata
+            media_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["media"].insert_one(media_data)
+            
+            return {
+                "success": True,
+                "message": f"Media created successfully",
+                "data": media_data,
+                "id": media_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create media: {str(e)}"
+            }
+
     def _format_file_size(size_bytes: int) -> str:
         """Format file size in human readable format"""
         if size_bytes == 0:
@@ -593,6 +620,39 @@ media_service = MediaService()
                 "_id": item_id,
                 "user_id": user_id
             })
+
+    async def update_media(self, media_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update media by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["media"].update_one(
+                {"id": media_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Media not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["media"].find_one({"id": media_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Media updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update media: {str(e)}"
+            }
+
             
             if not item:
                 return {"success": False, "message": "Item not found"}
@@ -625,6 +685,29 @@ media_service = MediaService()
             total_count = await collections['items'].count_documents(query)
             
             return {
+
+    async def delete_media(self, media_id: str) -> Dict[str, Any]:
+        """Delete media by ID"""
+        try:
+            result = await self.db["media"].delete_one({"id": media_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Media not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Media deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete media: {str(e)}"
+            }
+
                 "success": True,
                 "data": {
                     "items": items,

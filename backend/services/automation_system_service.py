@@ -12,6 +12,33 @@ from core.database import get_database
 class AutomationSystemService:
     """Service class for Automation System"""
     
+
+    async def create_automation_system(self, automation_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new automation_system"""
+        try:
+            # Add metadata
+            automation_system_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["automation_system"].insert_one(automation_system_data)
+            
+            return {
+                "success": True,
+                "message": f"Automation_System created successfully",
+                "data": automation_system_data,
+                "id": automation_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create automation_system: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["automation_system"]
@@ -38,6 +65,39 @@ class AutomationSystemService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_automation_system(self, automation_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update automation_system by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["automation_system"].update_one(
+                {"id": automation_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Automation_System not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["automation_system"].find_one({"id": automation_system_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Automation_System updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update automation_system: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class AutomationSystemService:
         
         return result.deleted_count > 0
     
+
+    async def delete_automation_system(self, automation_system_id: str) -> Dict[str, Any]:
+        """Delete automation_system by ID"""
+        try:
+            result = await self.db["automation_system"].delete_one({"id": automation_system_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Automation_System not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Automation_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete automation_system: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

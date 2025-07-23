@@ -193,6 +193,39 @@ class MobilePWAService:
             "cleared_at": datetime.utcnow().isoformat()
         }
 
+
+    async def update_mobile_pwa(self, mobile_pwa_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update mobile_pwa by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["mobile_pwa"].update_one(
+                {"id": mobile_pwa_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Mobile_Pwa not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["mobile_pwa"].find_one({"id": mobile_pwa_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Mobile_Pwa updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update mobile_pwa: {str(e)}"
+            }
+
 def get_mobile_pwa_service():
     """Factory function to get service instance"""
     return MobilePWAService()

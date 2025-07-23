@@ -12,6 +12,33 @@ from core.database import get_database
 class CrmManagementService:
     """Service class for Crm Management"""
     
+
+    async def create_crm_management(self, crm_management_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new crm_management"""
+        try:
+            # Add metadata
+            crm_management_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["crm_management"].insert_one(crm_management_data)
+            
+            return {
+                "success": True,
+                "message": f"Crm_Management created successfully",
+                "data": crm_management_data,
+                "id": crm_management_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create crm_management: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["crm_management"]
@@ -38,6 +65,39 @@ class CrmManagementService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_crm_management(self, crm_management_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update crm_management by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["crm_management"].update_one(
+                {"id": crm_management_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Crm_Management not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["crm_management"].find_one({"id": crm_management_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Crm_Management updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update crm_management: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class CrmManagementService:
         
         return result.deleted_count > 0
     
+
+    async def delete_crm_management(self, crm_management_id: str) -> Dict[str, Any]:
+        """Delete crm_management by ID"""
+        try:
+            result = await self.db["crm_management"].delete_one({"id": crm_management_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Crm_Management not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Crm_Management deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete crm_management: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

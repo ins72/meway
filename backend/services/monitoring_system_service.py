@@ -12,6 +12,33 @@ from core.database import get_database
 class MonitoringSystemService:
     """Service class for Monitoring System"""
     
+
+    async def create_monitoring_system(self, monitoring_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new monitoring_system"""
+        try:
+            # Add metadata
+            monitoring_system_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["monitoring_system"].insert_one(monitoring_system_data)
+            
+            return {
+                "success": True,
+                "message": f"Monitoring_System created successfully",
+                "data": monitoring_system_data,
+                "id": monitoring_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create monitoring_system: {str(e)}"
+            }
+
     def __init__(self):
         self.db = get_database()
         self.collection = self.db["monitoring_system"]
@@ -38,6 +65,39 @@ class MonitoringSystemService:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": user_id,
+
+    async def update_monitoring_system(self, monitoring_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update monitoring_system by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["monitoring_system"].update_one(
+                {"id": monitoring_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Monitoring_System not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["monitoring_system"].find_one({"id": monitoring_system_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Monitoring_System updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update monitoring_system: {str(e)}"
+            }
+
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
             **data
@@ -70,6 +130,29 @@ class MonitoringSystemService:
         
         return result.deleted_count > 0
     
+
+    async def delete_monitoring_system(self, monitoring_system_id: str) -> Dict[str, Any]:
+        """Delete monitoring_system by ID"""
+        try:
+            result = await self.db["monitoring_system"].delete_one({"id": monitoring_system_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Monitoring_System not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Monitoring_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete monitoring_system: {str(e)}"
+            }
+
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
         total = await self.collection.count_documents({"user_id": user_id})

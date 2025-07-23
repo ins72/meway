@@ -112,38 +112,38 @@ class ComprehensiveMarketingWebsiteService:
         except Exception as e:
             return {"error": str(e)}
     
-    async def create_ab_test(self, test_data: Dict) -> Dict:
+    async def create_ab_test(self, validated_data: Dict) -> Dict:
         """Create A/B test for marketing pages"""
         try:
             test_id = str(uuid.uuid4())
             
             ab_test = {
                 "_id": test_id,
-                "name": test_data.get("name"),
-                "page_id": test_data.get("page_id"),
-                "test_type": test_data.get("test_type", "content"),
-                "hypothesis": test_data.get("hypothesis"),
+                "name": validated_data.get("name"),
+                "page_id": validated_data.get("page_id"),
+                "test_type": validated_data.get("test_type", "content"),
+                "hypothesis": validated_data.get("hypothesis"),
                 "variants": [
                     {
                         "id": "control",
                         "name": "Control (Original)",
-                        "content": test_data.get("control_content"),
+                        "content": validated_data.get("control_content"),
                         "traffic_split": 50,
                         "conversions": 0,
                         "visitors": 0
                     },
                     {
                         "id": "variant_a",
-                        "name": test_data.get("variant_name", "Variant A"),
-                        "content": test_data.get("variant_content"),
+                        "name": validated_data.get("variant_name", "Variant A"),
+                        "content": validated_data.get("variant_content"),
                         "traffic_split": 50,
                         "conversions": 0,
                         "visitors": 0
                     }
                 ],
-                "success_metric": test_data.get("success_metric", "conversion_rate"),
-                "confidence_level": test_data.get("confidence_level", 95),
-                "minimum_sample_size": test_data.get("minimum_sample_size", 1000),
+                "success_metric": validated_data.get("success_metric", "conversion_rate"),
+                "confidence_level": validated_data.get("confidence_level", 95),
+                "minimum_sample_size": validated_data.get("minimum_sample_size", 1000),
                 "status": "active",
                 "start_date": datetime.utcnow(),
                 "end_date": None,
@@ -252,6 +252,33 @@ class ComprehensiveMarketingWebsiteService:
             "keyword_usage": True
         }
     
+
+    async def create_comprehensive_marketing_website(self, comprehensive_marketing_website_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new comprehensive_marketing_website"""
+        try:
+            # Add metadata
+            comprehensive_marketing_website_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["comprehensive_marketing_website"].insert_one(comprehensive_marketing_website_data)
+            
+            return {
+                "success": True,
+                "message": f"Comprehensive_Marketing_Website created successfully",
+                "data": comprehensive_marketing_website_data,
+                "id": comprehensive_marketing_website_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create comprehensive_marketing_website: {str(e)}"
+            }
+
     def log(self, message: str):
         """Simple logging method"""
         print(f"[MARKETING] {message}")

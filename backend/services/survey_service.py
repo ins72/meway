@@ -12,6 +12,33 @@ import io
 
 from core.database import get_database
 
+
+    async def create_survey(self, survey_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new survey"""
+        try:
+            # Add metadata
+            survey_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["survey"].insert_one(survey_data)
+            
+            return {
+                "success": True,
+                "message": f"Survey created successfully",
+                "data": survey_data,
+                "id": survey_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create survey: {str(e)}"
+            }
+
 class SurveyService:
     @staticmethod
     async def get_workspace_surveys(user_id: str) -> Dict[str, Any]:
@@ -38,6 +65,39 @@ class SurveyService:
             response_count = await responses_collection.count_documents({"survey_id": survey["_id"]})
             
             # Calculate completion rate and average rating (mock for now)
+
+    async def update_survey(self, survey_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update survey by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.db["survey"].update_one(
+                {"id": survey_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Survey not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.db["survey"].find_one({"id": survey_id})
+            updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Survey updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update survey: {str(e)}"
+            }
+
             completion_rate = min(95.0, max(0.0, (response_count * 3.2)))
             average_rating = 4.2 if response_count > 0 else 0
             
@@ -70,6 +130,29 @@ class SurveyService:
     async def create_survey(
         user_id: str,
         title: str,
+
+    async def delete_survey(self, survey_id: str) -> Dict[str, Any]:
+        """Delete survey by ID"""
+        try:
+            result = await self.db["survey"].delete_one({"id": survey_id})
+            
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Survey not found"
+                }
+            
+            return {
+                "success": True,
+                "message": f"Survey deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete survey: {str(e)}"
+            }
+
         description: str,
         questions: List[Dict[str, Any]],
         settings: Dict[str, Any]
