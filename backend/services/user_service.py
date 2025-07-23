@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class UserService:
     def __init__(self):
         self.service_name = "user"
-        self.collection_name = "user"
+        self.collection_name = "users"  # Changed from "user" to "users"
         self.db = None
         self.collection = None
         
