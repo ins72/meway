@@ -318,7 +318,7 @@ try:
     app.include_router(api_testing_router, prefix="/api/test", tags=["api_testing"])
 
     
-    logger.info(f"✅ Successfully included 130 bulletproof routers")
+    logger.info(f"✅ Successfully included 131 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
