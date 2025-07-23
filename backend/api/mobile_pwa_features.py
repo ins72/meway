@@ -583,3 +583,92 @@ async def get_performance_metrics(
     except Exception as e:
         logger.error(f"Error getting performance metrics: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/manifest/{manifest_id}.json", tags=["PWA Manifest"])
+async def get_pwa_manifest_file(
+    manifest_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get PWA manifest file"""
+    try:
+        result = await mobile_pwa_service.get_manifest_file(
+            manifest_id=manifest_id,
+            user_id=current_user["_id"]
+        )
+        
+        if result.get("success"):
+            return result["manifest"]
+        else:
+            raise HTTPException(status_code=404, detail=result.get("message", "Manifest not found"))
+        
+    except Exception as e:
+        logger.error(f"Error getting PWA manifest: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/manifest/generate", tags=["PWA Manifest"])
+async def generate_pwa_manifest(
+    workspace_id: str = Body(...),
+    customization: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate custom PWA manifest"""
+    try:
+        result = await mobile_pwa_service.generate_pwa_manifest_comprehensive(
+            user_id=current_user["_id"],
+            workspace_id=workspace_id,
+            customization=customization
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "PWA manifest generated successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error generating PWA manifest: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/device/register", tags=["PWA Device Management"])
+async def register_device(
+    device_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Register device for PWA features"""
+    try:
+        result = await mobile_pwa_service.register_device_comprehensive(
+            user_id=current_user["_id"],
+            device_data=device_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Device registered successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error registering device: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/offline/sync", tags=["PWA Offline"])
+async def sync_offline_data(
+    offline_data: List[dict] = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Sync data created while offline"""
+    try:
+        result = await mobile_pwa_service.sync_offline_data_comprehensive(
+            user_id=current_user["_id"],
+            offline_data=offline_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Offline data synced successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error syncing offline data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

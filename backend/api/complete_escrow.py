@@ -540,3 +540,98 @@ async def escrow_service_health_check():
             status_code=500,
             detail=f"Escrow service health check failed: {str(e)}"
         )
+
+@router.post("/transactions/milestone", tags=["Escrow Transactions"])
+async def create_milestone_transaction(
+    seller_id: str = Body(...),
+    transaction_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create milestone-based escrow transaction"""
+    try:
+        result = await escrow_service.create_milestone_escrow_transaction(
+            buyer_id=current_user["_id"],
+            seller_id=seller_id,
+            transaction_data=transaction_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Milestone escrow transaction created successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error creating milestone transaction: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/disputes/initiate", tags=["Escrow Disputes"])
+async def initiate_dispute(
+    transaction_id: str = Body(...),
+    dispute_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Initiate dispute resolution process"""
+    try:
+        result = await escrow_service.initiate_dispute_comprehensive(
+            user_id=current_user["_id"],
+            transaction_id=transaction_id,
+            dispute_data=dispute_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Dispute initiated successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error initiating dispute: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/transactions", tags=["Escrow Transactions"])
+async def get_escrow_transactions(
+    status: str = Query(None),
+    role: str = Query(None),  # buyer or seller
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's escrow transactions"""
+    try:
+        result = await escrow_service.get_user_transactions(
+            user_id=current_user["_id"],
+            status=status,
+            role=role
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Escrow transactions retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting escrow transactions: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/fees/calculate", tags=["Escrow Fees"])
+async def calculate_escrow_fees(
+    amount: float = Body(...),
+    transaction_type: str = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Calculate escrow fees for transaction"""
+    try:
+        result = await escrow_service.calculate_transaction_fees(
+            amount=amount,
+            transaction_type=transaction_type
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Escrow fees calculated successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error calculating escrow fees: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

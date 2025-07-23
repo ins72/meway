@@ -581,3 +581,93 @@ async def social_media_leads_health_check():
         "api_integrations": ["TikTok Business API", "Twitter API v2"],
         "timestamp": datetime.utcnow().isoformat()
     }
+
+@router.post("/instagram/search", tags=["Instagram Database"])
+async def search_instagram_database(
+    search_criteria: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Advanced Instagram database search with comprehensive filtering"""
+    try:
+        result = await social_media_service.search_instagram_profiles_comprehensive(
+            user_id=current_user["_id"],
+            search_criteria=search_criteria
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Instagram search completed successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error searching Instagram database: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/posts/schedule", tags=["Social Media Posting"])
+async def schedule_social_media_post(
+    post_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Schedule posts across multiple social media platforms"""
+    try:
+        result = await social_media_service.schedule_social_media_post_comprehensive(
+            user_id=current_user["_id"],
+            post_data=post_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Social media post scheduled successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error scheduling social media post: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/posts/scheduled", tags=["Social Media Posting"])
+async def get_scheduled_posts(
+    platform: str = Query(None),
+    status: str = Query("scheduled"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's scheduled social media posts"""
+    try:
+        result = await social_media_service.get_scheduled_posts(
+            user_id=current_user["_id"],
+            platform=platform,
+            status=status
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Scheduled posts retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting scheduled posts: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/export", tags=["Data Export"])
+async def export_social_media_data(
+    export_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Export social media data in various formats"""
+    try:
+        result = await social_media_service.export_social_data(
+            user_id=current_user["_id"],
+            export_data=export_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "Data export completed successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error exporting social media data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

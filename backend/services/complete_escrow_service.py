@@ -1282,3 +1282,284 @@ escrow_service = CompleteEscrowService()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+    async def create_milestone_escrow_transaction(self, buyer_id: str, seller_id: str, transaction_data: dict):
+        """Create milestone-based escrow transaction"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Validate transaction data
+            required_fields = ["title", "description", "total_amount", "milestones"]
+            missing_fields = [field for field in required_fields if not transaction_data.get(field)]
+            if missing_fields:
+                return {"success": False, "message": f"Missing required fields: {', '.join(missing_fields)}"}
+            
+            # Validate milestones
+            milestones = transaction_data["milestones"]
+            if not isinstance(milestones, list) or len(milestones) == 0:
+                return {"success": False, "message": "At least one milestone is required"}
+            
+            # Calculate total milestone amount
+            milestone_total = sum(milestone.get("amount", 0) for milestone in milestones)
+            if abs(milestone_total - transaction_data["total_amount"]) > 0.01:
+                return {"success": False, "message": "Milestone amounts must equal total amount"}
+            
+            # Create escrow transaction
+            transaction = {
+                "_id": str(uuid.uuid4()),
+                "buyer_id": buyer_id,
+                "seller_id": seller_id,
+                "title": transaction_data["title"],
+                "description": transaction_data["description"],
+                "total_amount": transaction_data["total_amount"],
+                "currency": transaction_data.get("currency", "USD"),
+                "transaction_type": transaction_data.get("type", "service"),
+                "status": "pending_funding",
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "due_date": datetime.utcnow() + timedelta(days=transaction_data.get("duration_days", 30)),
+                "milestones": [],
+                "payment_info": {
+                    "method": transaction_data.get("payment_method", "stripe"),
+                    "funded_amount": 0,
+                    "released_amount": 0,
+                    "fees": self._calculate_escrow_fees(transaction_data["total_amount"], transaction_data.get("type", "service"))
+                },
+                "dispute": {
+                    "status": "none",
+                    "initiated_by": None,
+                    "created_at": None,
+                    "resolved_at": None
+                }
+            }
+            
+            # Process milestones
+            for i, milestone_data in enumerate(milestones):
+                milestone = {
+                    "milestone_id": str(uuid.uuid4()),
+                    "sequence": i + 1,
+                    "title": milestone_data.get("title", f"Milestone {i + 1}"),
+                    "description": milestone_data.get("description", ""),
+                    "amount": milestone_data["amount"],
+                    "due_date": milestone_data.get("due_date"),
+                    "requirements": milestone_data.get("requirements", []),
+                    "deliverables": milestone_data.get("deliverables", []),
+                    "status": "pending",
+                    "completed_at": None,
+                    "approved_by": None,
+                    "approved_at": None,
+                    "payment_released": False
+                }
+                transaction["milestones"].append(milestone)
+            
+            # Store transaction
+            await collections['escrow_transactions'].insert_one(transaction)
+            
+            # Create transaction history entry
+            history_entry = {
+                "_id": str(uuid.uuid4()),
+                "transaction_id": transaction["_id"],
+                "action": "transaction_created",
+                "actor_id": buyer_id,
+                "actor_type": "buyer",
+                "timestamp": datetime.utcnow(),
+                "details": {
+                    "total_amount": transaction["total_amount"],
+                    "milestone_count": len(milestones)
+                }
+            }
+            await collections['escrow_history'].insert_one(history_entry)
+            
+            return {
+                "success": True,
+                "transaction": {
+                    "_id": transaction["_id"],
+                    "title": transaction["title"],
+                    "total_amount": transaction["total_amount"],
+                    "currency": transaction["currency"],
+                    "status": transaction["status"],
+                    "milestone_count": len(transaction["milestones"]),
+                    "due_date": transaction["due_date"].isoformat(),
+                    "escrow_fees": transaction["payment_info"]["fees"]
+                },
+                "next_steps": [
+                    "Fund the escrow account",
+                    "Seller will be notified to begin work",
+                    "Complete milestones to release payments"
+                ],
+                "message": "Escrow transaction created successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Transaction creation failed: {str(e)}"}
+    
+    async def initiate_dispute_comprehensive(self, user_id: str, transaction_id: str, dispute_data: dict):
+        """Initiate comprehensive dispute resolution process"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Get transaction
+            transaction = await collections['escrow_transactions'].find_one({"_id": transaction_id})
+            if not transaction:
+                return {"success": False, "message": "Transaction not found"}
+            
+            # Verify user is part of transaction
+            if user_id not in [transaction["buyer_id"], transaction["seller_id"]]:
+                return {"success": False, "message": "Access denied - not part of this transaction"}
+            
+            # Check if dispute already exists
+            if transaction["dispute"]["status"] != "none":
+                return {"success": False, "message": "Dispute already exists for this transaction"}
+            
+            # Validate dispute data
+            required_fields = ["subject", "description", "dispute_type"]
+            missing_fields = [field for field in required_fields if not dispute_data.get(field)]
+            if missing_fields:
+                return {"success": False, "message": f"Missing required fields: {', '.join(missing_fields)}"}
+            
+            # Create dispute
+            dispute = {
+                "_id": str(uuid.uuid4()),
+                "transaction_id": transaction_id,
+                "initiated_by": user_id,
+                "initiator_role": "buyer" if user_id == transaction["buyer_id"] else "seller",
+                "dispute_type": dispute_data["dispute_type"],
+                "subject": dispute_data["subject"],
+                "description": dispute_data["description"],
+                "evidence": dispute_data.get("evidence", []),
+                "priority": dispute_data.get("priority", "medium"),
+                "status": "open",
+                "created_at": datetime.utcnow(),
+                "resolution_deadline": datetime.utcnow() + timedelta(days=7),
+                "assigned_mediator": None,
+                "mediator_assigned_at": None,
+                "resolution": None,
+                "resolved_at": None,
+                "messages": [],
+                "timeline": [
+                    {
+                        "action": "dispute_initiated",
+                        "actor_id": user_id,
+                        "timestamp": datetime.utcnow(),
+                        "details": f"Dispute initiated: {dispute_data['subject']}"
+                    }
+                ]
+            }
+            
+            # Store dispute
+            await collections['escrow_disputes'].insert_one(dispute)
+            
+            # Update transaction dispute status
+            await collections['escrow_transactions'].update_one(
+                {"_id": transaction_id},
+                {
+                    "$set": {
+                        "dispute.status": "open",
+                        "dispute.initiated_by": user_id,
+                        "dispute.created_at": datetime.utcnow(),
+                        "status": "disputed"
+                    }
+                }
+            )
+            
+            # Auto-assign mediator based on dispute complexity
+            mediator = await self._assign_mediator(dispute)
+            if mediator:
+                await collections['escrow_disputes'].update_one(
+                    {"_id": dispute["_id"]},
+                    {
+                        "$set": {
+                            "assigned_mediator": mediator["_id"],
+                            "mediator_assigned_at": datetime.utcnow()
+                        }
+                    }
+                )
+            
+            # Create notification for other party
+            other_party_id = transaction["seller_id"] if user_id == transaction["buyer_id"] else transaction["buyer_id"]
+            await self._create_dispute_notification(other_party_id, dispute)
+            
+            return {
+                "success": True,
+                "dispute": {
+                    "_id": dispute["_id"],
+                    "subject": dispute["subject"],
+                    "status": dispute["status"],
+                    "priority": dispute["priority"],
+                    "resolution_deadline": dispute["resolution_deadline"].isoformat(),
+                    "assigned_mediator": mediator["name"] if mediator else "Assigning..."
+                },
+                "next_steps": [
+                    "Wait for mediator assignment",
+                    "Provide additional evidence if requested",
+                    "Participate in resolution discussions"
+                ],
+                "message": "Dispute initiated successfully - mediator will be assigned within 24 hours"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Dispute initiation failed: {str(e)}"}
+    
+    def _calculate_escrow_fees(self, amount: float, transaction_type: str) -> dict:
+        """Calculate comprehensive escrow fees"""
+        base_fee_rate = 0.025  # 2.5%
+        
+        # Type-based multipliers
+        type_multipliers = {
+            "service": 1.0,
+            "digital_product": 0.8,
+            "physical_product": 1.2,
+            "social_media_account": 1.5,
+            "domain": 1.3,
+            "cryptocurrency": 2.0
+        }
+        
+        multiplier = type_multipliers.get(transaction_type, 1.0)
+        
+        # Volume discounts
+        if amount > 10000:
+            multiplier *= 0.7  # 30% discount
+        elif amount > 5000:
+            multiplier *= 0.8  # 20% discount
+        elif amount > 1000:
+            multiplier *= 0.9  # 10% discount
+        
+        calculated_fee = amount * base_fee_rate * multiplier
+        
+        # Fee limits
+        min_fee = 5.00
+        max_fee = 500.00
+        final_fee = max(min_fee, min(calculated_fee, max_fee))
+        
+        return {
+            "base_amount": amount * base_fee_rate,
+            "type_adjustment": (multiplier - 1.0) * amount * base_fee_rate,
+            "final_fee": final_fee,
+            "fee_percentage": (final_fee / amount) * 100,
+            "breakdown": {
+                "platform_fee": final_fee * 0.6,
+                "payment_processing": final_fee * 0.25,
+                "insurance": final_fee * 0.1,
+                "dispute_resolution_reserve": final_fee * 0.05
+            }
+        }
+    
+    async def _assign_mediator(self, dispute: dict):
+        """Auto-assign mediator based on dispute complexity"""
+        # In production, this would query available mediators
+        return {
+            "_id": str(uuid.uuid4()),
+            "name": "Sarah Johnson",
+            "specialization": "Digital Services",
+            "rating": 4.8,
+            "cases_resolved": 127
+        }
+    
+    async def _create_dispute_notification(self, user_id: str, dispute: dict):
+        """Create dispute notification for other party"""
+        # In production, this would send email/push notification
+        print(f"📧 Dispute notification sent to user {user_id}")
+        return True

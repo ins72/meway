@@ -1044,3 +1044,71 @@ async def get_workflow_templates(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get workflow templates: {str(e)}"
         )
+
+@router.post("/workflows/create", tags=["AI Workflows"])
+async def create_ai_workflow(
+    workflow_data: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create AI-powered workflow"""
+    try:
+        result = await ai_service.create_ai_workflow_safe(
+            user_id=current_user["_id"],
+            workflow_data=workflow_data
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "AI workflow created successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error creating AI workflow: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/insights/generate", tags=["AI Insights"])
+async def generate_ai_insights(
+    insight_type: str = Body(...),
+    parameters: dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate AI business insights"""
+    try:
+        result = await ai_service.generate_ai_insights_safe(
+            user_id=current_user["_id"],
+            insight_type=insight_type,
+            parameters=parameters
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "AI insights generated successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error generating AI insights: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/workflows", tags=["AI Workflows"])
+async def get_user_workflows(
+    status: str = Query("active"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's AI workflows"""
+    try:
+        result = await ai_service.get_user_workflows(
+            user_id=current_user["_id"],
+            status=status
+        )
+        
+        return {
+            "success": True,
+            "data": result,
+            "message": "User workflows retrieved successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting workflows: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
