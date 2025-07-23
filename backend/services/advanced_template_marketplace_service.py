@@ -1059,3 +1059,62 @@ class AdvancedTemplateMarketplaceService:
                 "1": 2
             }
         }
+
+    async def get_template(self, user_id: str, template_id: str):
+        """Get specific template"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            template = await collections['templates'].find_one({
+                "_id": template_id,
+                "user_id": user_id
+            })
+            
+            if not template:
+                return {"success": False, "message": "Template not found"}
+            
+            return {
+                "success": True,
+                "data": template,
+                "message": "Template retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_templates(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's templates"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['templates'].find(query).skip(skip).limit(limit)
+            templates = await cursor.to_list(length=limit)
+            
+            total_count = await collections['templates'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "templates": templates,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Templates retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

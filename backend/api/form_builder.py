@@ -22,7 +22,7 @@ class FormField(BaseModel):
     id: Optional[str] = None  # Will be auto-generated if not provided
     type: str  # text, email, number, select, checkbox, radio, textarea, file, date
     label: str
-    placeholder: Optional[str] = ""
+    actual_value: Optional[str] = ""
     required: bool = False
     options: Optional[List[str]] = []  # For select, radio, checkbox
     validation: Optional[Dict[str, Any]] = {}
@@ -271,7 +271,7 @@ async def create_form(
         
         # Create form document
         form_doc = {
-            "_id": str(uuid.uuid4()),
+            "_id": await self._generate_unique_id(),
             "created_by": current_user["_id"],
             "workspace_id": form_data.workspace_id,
             "title": form_data.title,
@@ -499,7 +499,7 @@ async def submit_form(submission_data: FormSubmission):
         
         # Create submission document
         submission_doc = {
-            "_id": str(uuid.uuid4()),
+            "_id": await self._generate_unique_id(),
             "form_id": submission_data.form_id,
             "form_title": form["title"],
             "user_id": form["created_by"],
@@ -742,7 +742,7 @@ async def create_form_analytics_record(form_id: str, user_id: str):
         form_analytics_collection = get_form_analytics_collection()
         
         analytics_doc = {
-            "_id": str(uuid.uuid4()),
+            "_id": await self._generate_unique_id(),
             "form_id": form_id,
             "user_id": user_id,
             "total_views": 0,

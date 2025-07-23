@@ -278,3 +278,107 @@ class EnterpriseSecurityService:
     def log(self, message: str):
         """Simple logging method"""
         print(f"[SECURITY] {message}")
+
+    async def get_item(self, user_id: str, item_id: str):
+        """Get specific item"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            item = await collections['items'].find_one({
+                "_id": item_id,
+                "user_id": user_id
+            })
+            
+            if not item:
+                return {"success": False, "message": "Item not found"}
+            
+            return {
+                "success": True,
+                "data": item,
+                "message": "Item retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def get_item(self, user_id: str, item_id: str):
+        """Get specific item"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            item = await collections['items'].find_one({
+                "_id": item_id,
+                "user_id": user_id
+            })
+            
+            if not item:
+                return {"success": False, "message": "Item not found"}
+            
+            return {
+                "success": True,
+                "data": item,
+                "message": "Item retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def update_item(self, user_id: str, item_id: str, update_data: dict):
+        """Update existing item"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Add updated timestamp
+            update_data["updated_at"] = datetime.utcnow()
+            
+            result = await collections['items'].update_one(
+                {"_id": item_id, "user_id": user_id},
+                {"$set": update_data}
+            )
+            
+            if result.modified_count == 0:
+                return {"success": False, "message": "Item not found or no changes made"}
+            
+            # Get updated item
+            updated_item = await collections['items'].find_one({
+                "_id": item_id,
+                "user_id": user_id
+            })
+            
+            return {
+                "success": True,
+                "data": updated_item,
+                "message": "Item updated successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def delete_item(self, user_id: str, item_id: str):
+        """Delete item"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            result = await collections['items'].delete_one({
+                "_id": item_id,
+                "user_id": user_id
+            })
+            
+            if result.deleted_count == 0:
+                return {"success": False, "message": "Item not found"}
+            
+            return {
+                "success": True,
+                "message": "Item deleted successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

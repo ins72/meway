@@ -82,3 +82,62 @@ class SurveySystemService:
 
 # Service instance
 survey_system_service = SurveySystemService()
+
+    async def get_item(self, user_id: str, item_id: str):
+        """Get specific item"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            item = await collections['items'].find_one({
+                "_id": item_id,
+                "user_id": user_id
+            })
+            
+            if not item:
+                return {"success": False, "message": "Item not found"}
+            
+            return {
+                "success": True,
+                "data": item,
+                "message": "Item retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's items"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['items'].find(query).skip(skip).limit(limit)
+            items = await cursor.to_list(length=limit)
+            
+            total_count = await collections['items'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "items": items,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Items retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

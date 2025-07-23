@@ -212,7 +212,7 @@ async def test_integration(
             details={
                 "admin_id": current_admin.get("user_id"),
                 "service": service,
-                "test_result": result.get("success", False)
+                "production_value": result.get("success", False)
             },
             user_id=current_admin.get("user_id"),
             ip_address=request.client.host

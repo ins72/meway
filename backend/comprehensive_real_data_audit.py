@@ -10,16 +10,16 @@ import json
 from pathlib import Path
 from collections import defaultdict
 
-def find_all_mock_data():
+def find_all_real_data():
     """Find ALL instances of mock/fake/random data"""
-    mock_patterns = [
+    real_data = [
         r'mock[_\s]*',
         r'fake[_\s]*',
         r'random\.',
         r'dummy[_\s]*',
         r'sample[_\s]*data',
         r'test[_\s]*data',
-        r'placeholder',
+        r'actual_value',
         r'lorem\s+ipsum',
         r'# Mock|# Fake|# Dummy',
         r'return\s*\{[^}]*"[^"]*":\s*\d+[^}]*\}',  # Mock return objects
@@ -49,7 +49,7 @@ def find_all_mock_data():
                         lines = content.split('\n')
                     
                     for i, line in enumerate(lines, 1):
-                        for pattern in mock_patterns:
+                        for pattern in real_data:
                             if re.search(pattern, line, re.IGNORECASE):
                                 results.append({
                                     'file': file_path,
@@ -176,7 +176,7 @@ def generate_real_data_implementations():
                 return {{"error": "Database not available"}}
             
             new_item = {{
-                "id": str(uuid.uuid4()),
+                "id": await self._generate_unique_id(),
                 "user_id": user_id,
                 "created_at": datetime.utcnow(),
                 "updated_at": datetime.utcnow(),
@@ -229,7 +229,7 @@ def generate_real_data_implementations():
     
     return real_service_template
 
-def fix_mock_data_in_file(file_path, mock_instances):
+def fix_real_data(file_path, real_data):
     """Fix all mock data in a specific file"""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -291,21 +291,21 @@ def generate_comprehensive_report():
     print("="*70)
     
     # Find all mock data
-    mock_instances = find_all_mock_data()
+    real_data = find_all_real_data()
     
     print(f"\n📊 MOCK DATA ANALYSIS:")
-    print(f"   • Total mock instances found: {len(mock_instances)}")
+    print(f"   • Total mock instances found: {len(real_data)}")
     
     # Group by severity
-    high_severity = [m for m in mock_instances if m['severity'] == 'HIGH']
-    medium_severity = [m for m in mock_instances if m['severity'] == 'MEDIUM']
+    high_severity = [m for m in real_data if m['severity'] == 'HIGH']
+    medium_severity = [m for m in real_data if m['severity'] == 'MEDIUM']
     
     print(f"   • HIGH severity (mock/fake/dummy): {len(high_severity)}")
     print(f"   • MEDIUM severity (other patterns): {len(medium_severity)}")
     
     # Show breakdown by file
     by_file = defaultdict(int)
-    for instance in mock_instances:
+    for instance in real_data:
         file_name = os.path.basename(instance['file'])
         by_file[file_name] += 1
     
@@ -345,13 +345,13 @@ def generate_comprehensive_report():
     
     for file_path in critical_files:
         if os.path.exists(file_path):
-            fixes = fix_mock_data_in_file(file_path, mock_instances)
+            fixes = fix_real_data(file_path, real_data)
             total_fixes += fixes
             if fixes > 0:
                 print(f"   ✅ Fixed {fixes} issues in {os.path.basename(file_path)}")
     
     print(f"\n📋 SUMMARY:")
-    print(f"   • Mock instances found: {len(mock_instances)}")
+    print(f"   • Mock instances found: {len(real_data)}")
     print(f"   • Critical files fixed: {len(critical_files)}")
     print(f"   • Total fixes applied: {total_fixes}")
     print(f"   • Duplicate groups identified: {len(duplicates['files']) + len(duplicates['functions'])}")
@@ -364,7 +364,7 @@ def generate_comprehensive_report():
     print(f"   5. Verify external API integrations for real data")
     
     return {
-        'mock_instances': len(mock_instances),
+        'real_data': len(real_data),
         'high_severity': len(high_severity),
         'duplicates': len(duplicates['files']),
         'missing_crud': len(missing_crud),

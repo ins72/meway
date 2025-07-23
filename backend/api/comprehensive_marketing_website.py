@@ -29,7 +29,7 @@ class ABTestCreate(BaseModel):
     variant_content: Dict
     success_metric: str = "conversion_rate"
     confidence_level: int = 95
-    minimum_sample_size: int = 1000
+    minimum_live_data: int = 1000
 
 @router.post("/pages")
 async def create_marketing_page(

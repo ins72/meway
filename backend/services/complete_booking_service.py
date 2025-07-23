@@ -798,3 +798,85 @@ complete_booking_service = CompleteBookingService()
                 return {"success": False, "message": "Booking not found or not authorized"}
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+    async def get_appointment(self, user_id: str, appointment_id: str):
+        """Get specific appointment"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            appointment = await collections['appointments'].find_one({
+                "_id": appointment_id,
+                "user_id": user_id
+            })
+            
+            if not appointment:
+                return {"success": False, "message": "Appointment not found"}
+            
+            return {
+                "success": True,
+                "data": appointment,
+                "message": "Appointment retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def delete_appointment(self, user_id: str, appointment_id: str):
+        """Delete appointment"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            result = await collections['appointments'].delete_one({
+                "_id": appointment_id,
+                "user_id": user_id
+            })
+            
+            if result.deleted_count == 0:
+                return {"success": False, "message": "Appointment not found"}
+            
+            return {
+                "success": True,
+                "message": "Appointment deleted successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_appointments(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's appointments"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['appointments'].find(query).skip(skip).limit(limit)
+            appointments = await cursor.to_list(length=limit)
+            
+            total_count = await collections['appointments'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "appointments": appointments,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Appointments retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

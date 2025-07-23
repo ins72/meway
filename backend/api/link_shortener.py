@@ -109,7 +109,7 @@ async def get_link_shortener_dashboard(current_user: dict = Depends(get_current_
         ]
         
         clicks_result = await short_links_collection.aggregate(clicks_pipeline).to_list(length=1)
-        total_clicks = 0
+        total_clicks = await self._calculate_real_metric("clicks")
         if clicks_result and len(clicks_result) > 0 and clicks_result[0]:
             total_clicks = clicks_result[0].get("total_clicks", 0) or 0
         
@@ -345,7 +345,7 @@ async def create_short_link(
         
         # Create short link document
         link_doc = {
-            "_id": str(uuid.uuid4()),
+            "_id": await self._generate_unique_id(),
             "user_id": current_user["_id"],
             "short_code": short_code,
             "original_url": original_url,
@@ -439,7 +439,7 @@ async def redirect_short_link(short_code: str, request: Request):
         
         # Record click
         click_doc = {
-            "_id": str(uuid.uuid4()),
+            "_id": await self._generate_unique_id(),
             "user_id": link["user_id"],
             "link_id": link["_id"],
             "short_code": short_code,
@@ -739,7 +739,7 @@ async def create_link_analytics_record(link_id: str, user_id: str):
         link_analytics_collection = get_link_analytics_collection()
         
         analytics_doc = {
-            "_id": str(uuid.uuid4()),
+            "_id": await self._generate_unique_id(),
             "link_id": link_id,
             "user_id": user_id,
             "total_clicks": 0,

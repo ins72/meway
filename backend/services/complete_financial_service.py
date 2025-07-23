@@ -1200,3 +1200,62 @@ financial_service = CompleteFinancialService()
                 
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+    async def get_transaction(self, user_id: str, transaction_id: str):
+        """Get specific transaction"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            transaction = await collections['transactions'].find_one({
+                "_id": transaction_id,
+                "user_id": user_id
+            })
+            
+            if not transaction:
+                return {"success": False, "message": "Transaction not found"}
+            
+            return {
+                "success": True,
+                "data": transaction,
+                "message": "Transaction retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_transactions(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's transactions"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['transactions'].find(query).skip(skip).limit(limit)
+            transactions = await cursor.to_list(length=limit)
+            
+            total_count = await collections['transactions'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "transactions": transactions,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Transactions retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

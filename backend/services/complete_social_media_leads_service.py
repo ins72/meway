@@ -1129,3 +1129,89 @@ complete_social_media_leads_service = CompleteSocialMediaLeadsService()
         
         total_reach = sum(base_reach_per_platform.get(platform, 50) for platform in platforms)
         return total_reach
+
+    async def create_lead(self, user_id: str, lead_data: dict):
+        """Create new lead"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            new_lead = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                **lead_data,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "status": "active"
+            }
+            
+            await collections['leads'].insert_one(new_lead)
+            
+            return {
+                "success": True,
+                "data": new_lead,
+                "message": "Lead created successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def get_lead(self, user_id: str, lead_id: str):
+        """Get specific lead"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            lead = await collections['leads'].find_one({
+                "_id": lead_id,
+                "user_id": user_id
+            })
+            
+            if not lead:
+                return {"success": False, "message": "Lead not found"}
+            
+            return {
+                "success": True,
+                "data": lead,
+                "message": "Lead retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_leads(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's leads"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['leads'].find(query).skip(skip).limit(limit)
+            leads = await cursor.to_list(length=limit)
+            
+            total_count = await collections['leads'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "leads": leads,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Leads retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

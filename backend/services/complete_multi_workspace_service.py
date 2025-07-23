@@ -1098,3 +1098,62 @@ complete_multi_workspace_service = CompleteMultiWorkspaceService()
         except Exception as e:
             print(f"❌ Error sending invitation email: {e}")
             return False
+
+    async def get_workspace(self, user_id: str, workspace_id: str):
+        """Get specific workspace"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            workspace = await collections['workspaces'].find_one({
+                "_id": workspace_id,
+                "user_id": user_id
+            })
+            
+            if not workspace:
+                return {"success": False, "message": "Workspace not found"}
+            
+            return {
+                "success": True,
+                "data": workspace,
+                "message": "Workspace retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_workspaces(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's workspaces"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['workspaces'].find(query).skip(skip).limit(limit)
+            workspaces = await cursor.to_list(length=limit)
+            
+            total_count = await collections['workspaces'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "workspaces": workspaces,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Workspaces retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

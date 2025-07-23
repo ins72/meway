@@ -917,3 +917,85 @@ class CompleteCourseService:
 
 # Global service instance
 course_service = CompleteCourseService()
+
+    async def get_course(self, user_id: str, course_id: str):
+        """Get specific course"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            course = await collections['courses'].find_one({
+                "_id": course_id,
+                "user_id": user_id
+            })
+            
+            if not course:
+                return {"success": False, "message": "Course not found"}
+            
+            return {
+                "success": True,
+                "data": course,
+                "message": "Course retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def delete_course(self, user_id: str, course_id: str):
+        """Delete course"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            result = await collections['courses'].delete_one({
+                "_id": course_id,
+                "user_id": user_id
+            })
+            
+            if result.deleted_count == 0:
+                return {"success": False, "message": "Course not found"}
+            
+            return {
+                "success": True,
+                "message": "Course deleted successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def list_courses(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
+        """List user's courses"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            query = {"user_id": user_id}
+            if filters:
+                query.update(filters)
+            
+            skip = (page - 1) * limit
+            
+            cursor = collections['courses'].find(query).skip(skip).limit(limit)
+            courses = await cursor.to_list(length=limit)
+            
+            total_count = await collections['courses'].count_documents(query)
+            
+            return {
+                "success": True,
+                "data": {
+                    "courses": courses,
+                    "pagination": {
+                        "page": page,
+                        "limit": limit,
+                        "total": total_count,
+                        "pages": (total_count + limit - 1) // limit
+                    }
+                },
+                "message": "Courses retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}

@@ -861,3 +861,50 @@ class EmailMarketingService:
 
 # Global service instance
 email_marketing_service = EmailMarketingService()
+
+    async def get_campaign(self, user_id: str, campaign_id: str):
+        """Get specific campaign"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            campaign = await collections['campaigns'].find_one({
+                "_id": campaign_id,
+                "user_id": user_id
+            })
+            
+            if not campaign:
+                return {"success": False, "message": "Campaign not found"}
+            
+            return {
+                "success": True,
+                "data": campaign,
+                "message": "Campaign retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    async def delete_campaign(self, user_id: str, campaign_id: str):
+        """Delete campaign"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            result = await collections['campaigns'].delete_one({
+                "_id": campaign_id,
+                "user_id": user_id
+            })
+            
+            if result.deleted_count == 0:
+                return {"success": False, "message": "Campaign not found"}
+            
+            return {
+                "success": True,
+                "message": "Campaign deleted successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": str(e)}
