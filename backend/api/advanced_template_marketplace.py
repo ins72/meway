@@ -43,12 +43,22 @@ async def create_template(
 ):
     """Create new template for marketplace"""
     try:
+        # Debug: Check if we have user info
+        if not current_user or not current_user.get("_id"):
+            raise HTTPException(status_code=401, detail="Invalid user authentication")
+        
         # Normalize request data - handle both 'name' and 'title' fields
         data = request.dict()
         if not data.get('title') and data.get('name'):
             data['title'] = data['name']
         elif not data.get('title'):
             data['title'] = "Untitled Template"
+        
+        # Ensure required fields
+        if not data.get('description'):
+            raise HTTPException(status_code=400, detail="Description is required")
+        if not data.get('category'):
+            raise HTTPException(status_code=400, detail="Category is required")
             
         # Set default template_data if not provided
         if not data.get('template_data'):
@@ -72,9 +82,13 @@ async def create_template(
             "message": "Template created successfully"
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating template: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Template creation failed: {str(e)}")
 
 @router.get("/marketplace", tags=["Template Browsing"])
 async def browse_templates(
