@@ -297,10 +297,10 @@ class MewayzBackendTester:
         
         # Test data consistency across multiple calls
         consistency_tests = [
-            ('/admin/dashboard', 'Admin Dashboard'),
-            ('/analytics/overview', 'Analytics Overview'),
-            ('/workspaces', 'Workspaces'),
-            ('/financial/dashboard', 'Financial Dashboard')
+            ('/admin/', 'Admin System'),
+            ('/analytics-system/', 'Analytics System'),
+            ('/complete-multi-workspace/', 'Multi-Workspace System'),
+            ('/financial/', 'Financial System')
         ]
         
         for endpoint, name in consistency_tests:
