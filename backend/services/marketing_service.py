@@ -1,119 +1,138 @@
 """
-Marketing Services Business Logic
-Professional Mewayz Platform
+Marketing Service
+Complete CRUD operations for marketing
 """
 
-from datetime import datetime, timedelta
+import uuid
+from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
 class MarketingService:
-    """Service for marketing operations"""
-    
-    @staticmethod
-    async def get_campaigns(user_id: str):
-        """Get user's marketing campaigns"""
-        db = await get_database()
-        
-        campaigns = await db.marketing_campaigns.find({"user_id": user_id}).sort("created_at", -1).to_list(length=None)
-        return campaigns
-    
-    @staticmethod
-    async def create_campaign(user_id: str, campaign_data: Dict[str, Any]):
-        """Create new marketing campaign"""
-        db = await get_database()
-        
-        campaign = {
-    "_id": str(uuid.uuid4()),
-    "user_id": user_id,
-    "name": campaign_data.get("name"),
-    "type": campaign_data.get("type", "email"),
-    "status": "draft",
-    "target_audience": campaign_data.get("target_audience", {}),
-    "content": campaign_data.get("content", {}),
-    "schedule": campaign_data.get("schedule"),
-    "metrics": {
-    "sent": 0,
-    "delivered": 0,
-    "opened": 0,
-    "clicked": 0
-    },
-    "created_at": datetime.utcnow(),
-    "updated_at": datetime.utcnow()
-    }
-        
-        result = await db.marketing_campaigns.insert_one(campaign)
-        return campaign
-    
-    @staticmethod
-    async def get_campaign_analytics(user_id: str, campaign_id: str):
-        """Get campaign analytics"""
-        db = await get_database()
-        
-        campaign = await db.marketing_campaigns.find_one({
-    "_id": campaign_id,
-    "user_id": user_id
-    })
-        
-        if not campaign:
-            return None
-        
-        # In real implementation, this would aggregate actual metrics
-        analytics = {
-    "campaign_id": campaign_id,
-    "performance": campaign.get("metrics", {}),
-    "timeline": [
-    {
-                    "date": datetime.utcnow() - timedelta(days=i),
-    "opens": 10 + i * 2,
-    "clicks": 3 + i
-    }
-                for i in range(7)
-    ],
-    "top_links": [
-    {"url": "https://mewayz.com", "clicks": 45},
-    {"url": "https://mewayz.com", "clicks": 32}
-    ]
-    }
-        
-        return analytics
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["marketing"]
 
-    async def update_marketing(self, marketing_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Update marketing with real data persistence"""
+    async def create_marketing(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new marketing"""
         try:
-            from datetime import datetime
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
             
+            # Save to database
+            result = await self.collection.insert_one(data)
+            
+            return {
+                "success": True,
+                "message": f"Marketing created successfully",
+                "data": data,
+                "id": data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create marketing: {str(e)}"
+            }
+
+    async def get_marketing(self, item_id: str) -> Dict[str, Any]:
+        """Get marketing by ID"""
+        try:
+            doc = await self.collection.find_one({"id": item_id})
+            
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Marketing not found"
+                }
+            
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get marketing: {str(e)}"
+            }
+
+    async def list_marketings(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List marketings with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list marketings: {str(e)}"
+            }
+
+    async def update_marketing(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update marketing by ID"""
+        try:
+            # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            db = await self.get_database()
-            result = await db["marketing"].update_one(
-                {"id": marketing_id},
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
             if result.matched_count == 0:
-                return {"success": False, "error": f"Marketing not found"}
+                return {
+                    "success": False,
+                    "error": f"Marketing not found"
+                }
             
-            updated = await db["marketing"].find_one({"id": marketing_id})
-            updated.pop('_id', None)
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
                 "message": f"Marketing updated successfully",
-                "data": updated
+                "data": updated_doc
             }
         except Exception as e:
-            return {"success": False, "error": f"Failed to update marketing: {str(e)}"}
+            return {
+                "success": False,
+                "error": f"Failed to update marketing: {str(e)}"
+            }
 
-    async def delete_marketing(self, marketing_id: str) -> Dict[str, Any]:
-        """Delete marketing with real data persistence"""
+    async def delete_marketing(self, item_id: str) -> Dict[str, Any]:
+        """Delete marketing by ID"""
         try:
-            db = await self.get_database()
-            result = await db["marketing"].delete_one({"id": marketing_id})
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "error": f"Marketing not found"}
+                return {
+                    "success": False,
+                    "error": f"Marketing not found"
+                }
             
             return {
                 "success": True,
@@ -121,124 +140,45 @@ class MarketingService:
                 "deleted_count": result.deleted_count
             }
         except Exception as e:
-            return {"success": False, "error": f"Failed to delete marketing: {str(e)}"}
-
-
-
-# Global service instance
-marketing_service = MarketingService()
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
-            
-            if not item:
-                return {"success": False, "message": "Item not found"}
-            
             return {
-                "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "success": False,
+                "error": f"Failed to delete marketing: {str(e)}"
             }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
 
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for marketings"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
-            
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
-                {"$set": update_data}
-            )
-            
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
-            
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
-            
-            return {
-                "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
-            
-            if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
-            
-            return {
-                "success": True,
-                "message": "Item deleted successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "marketing",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get marketing stats: {str(e)}"
+            }
+
+# Service instance
+_marketing_service = None
+
+def get_marketing_service():
+    """Get marketing service instance"""
+    global _marketing_service
+    if _marketing_service is None:
+        _marketing_service = MarketingService()
+    return _marketing_service
+
+# For backward compatibility
+marketing_service = get_marketing_service()

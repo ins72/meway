@@ -1,232 +1,184 @@
 """
-Integration Services Business Logic
-Professional Mewayz Platform
+Integration Service
+Complete CRUD operations for integration
 """
 
+import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
 class IntegrationService:
-    """Service for third-party integration operations"""
-    
-    @staticmethod
-    async def get_available_integrations():
-        """Get list of available integrations"""
-        integrations = {
-    "social_media": [
-    {
-    "name": "TikTok & Twitter/X
-    "description": "Connect your TikTok & Twitter/X
-    "icon": "instagram.png",
-    "status": "available",
-    "features": ["post_scheduling", "analytics", "dm_management"]
-    },
-    {
-    "name": "Twitter",
-    "description": "Connect your Twitter account",
-    "icon": "twitter.png", 
-    "status": "available",
-    "features": ["tweet_scheduling", "analytics", "mentions"]
-    }
-    ],
-    "payment": [
-    {
-    "name": "Stripe",
-    "description": "Process payments with Stripe",
-    "icon": "stripe.png",
-    "status": "available",
-    "features": ["payments", "subscriptions", "analytics"]
-    },
-    {
-    "name": "PayPal",
-    "description": "Accept PayPal payments",
-    "icon": "paypal.png",
-    "status": "available",
-    "features": ["payments", "refunds", "analytics"]
-    }
-    ],
-    "email": [
-    {
-    "name": "SendGrid",
-    "description": "Email delivery service",
-    "icon": "sendgrid.png",
-    "status": "available",
-    "features": ["email_sending", "templates", "analytics"]
-    }
-    ]
-    }
-        return integrations
-    
-    @staticmethod
-    async def get_user_integrations(user_id: str):
-        """Get user's active integrations"""
-        db = await get_database()
-        
-        integrations = await db.user_integrations.find({"user_id": user_id}).to_list(length=None)
-        return integrations
-    
-    @staticmethod
-    async def connect_integration(user_id: str, integration_data: Dict[str, Any]):
-        """Connect a new integration"""
-        db = await get_database()
-        
-        integration = {
-    "_id": str(uuid.uuid4()),
-    "user_id": user_id,
-    "name": integration_data.get("name"),
-    "type": integration_data.get("type"),
-    "credentials": integration_data.get("credentials", {}),
-    "status": "connected",
-    "connected_at": datetime.utcnow(),
-    "last_sync": datetime.utcnow()
-    }
-        
-        result = await db.user_integrations.insert_one(integration)
-        return integration
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["integration"]
 
-# Global service instance
-integration_service = IntegrationService()
-
-    async def create_item(self, user_id: str, item_data: dict):
-        """Create new item"""
+    async def create_integration(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new integration"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            new_item = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                **item_data,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
                 "status": "active"
-            }
-            
-            await collections['items'].insert_one(new_item)
-            
-            return {
-                "success": True,
-                "data": new_item,
-                "message": "Item created successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
             })
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
+            # Save to database
+            result = await self.collection.insert_one(data)
             
             return {
                 "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "message": f"Integration created successfully",
+                "data": data,
+                "id": data["id"]
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to create integration: {str(e)}"
+            }
 
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+    async def get_integration(self, item_id: str) -> Dict[str, Any]:
+        """Get integration by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            doc = await self.collection.find_one({"id": item_id})
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Integration not found"
+                }
             
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get integration: {str(e)}"
+            }
+
+    async def list_integrations(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List integrations with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list integrations: {str(e)}"
+            }
+
+    async def update_integration(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update integration by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Integration not found"
+                }
             
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
+                "message": f"Integration updated successfully",
+                "data": updated_doc
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to update integration: {str(e)}"
+            }
 
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+    async def delete_integration(self, item_id: str) -> Dict[str, Any]:
+        """Delete integration by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {
+                    "success": False,
+                    "error": f"Integration not found"
+                }
             
             return {
                 "success": True,
-                "message": "Item deleted successfully"
+                "message": f"Integration deleted successfully",
+                "deleted_count": result.deleted_count
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to delete integration: {str(e)}"
+            }
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for integrations"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "integration",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get integration stats: {str(e)}"
+            }
+
+# Service instance
+_integration_service = None
+
+def get_integration_service():
+    """Get integration service instance"""
+    global _integration_service
+    if _integration_service is None:
+        _integration_service = IntegrationService()
+    return _integration_service
+
+# For backward compatibility
+integration_service = get_integration_service()

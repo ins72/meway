@@ -1,168 +1,184 @@
 """
-Bio Sites Services Business Logic
-Professional Mewayz Platform
+Bio Sites Service
+Complete CRUD operations for bio_sites
 """
 
+import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
 class BioSitesService:
-    """Service for bio sites operations"""
-    
-    @staticmethod
-    async def get_bio_site(user_id: str):
-        """Get user's bio site"""
-        db = await get_database()
-        
-        bio_site = await db.bio_sites.find_one({"user_id": user_id})
-        if not bio_site:
-            # Create default bio site
-            bio_site = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                "title": "My Bio",
-                "bio": "Welcome to my bio site!",
-                "links": [],
-                "theme": "modern",
-                "is_published": False,
-                "created_at": datetime.utcnow()
-            }
-            await db.bio_sites.insert_one(bio_site)
-        
-        return bio_site
-    
-    @staticmethod
-    async def update_bio_site(user_id: str, site_data: Dict[str, Any]):
-        """Update user's bio site"""
-        db = await get_database()
-        
-        update_data = {
-            "title": site_data.get("title"),
-            "bio": site_data.get("bio"),
-            "links": site_data.get("links", []),
-            "theme": site_data.get("theme", "modern"),
-            "is_published": site_data.get("is_published", False),
-            "updated_at": datetime.utcnow()
-        }
-        
-        result = await db.bio_sites.update_one(
-            {"user_id": user_id},
-            {"$set": update_data},
-            upsert=True
-        )
-        
-        return await db.bio_sites.find_one({"user_id": user_id})
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["biosites"]
 
-# Global service instance
-bio_sites_service = BioSitesService()
-
-    async def create_item(self, user_id: str, item_data: dict):
-        """Create new item"""
+    async def create_bio_sites(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new bio_sites"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            new_item = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                **item_data,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
                 "status": "active"
-            }
+            })
             
-            await collections['items'].insert_one(new_item)
+            # Save to database
+            result = await self.collection.insert_one(data)
             
             return {
                 "success": True,
-                "data": new_item,
-                "message": "Item created successfully"
+                "message": f"Bio Sites created successfully",
+                "data": data,
+                "id": data["id"]
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to create bio_sites: {str(e)}"
+            }
 
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
+    async def get_bio_sites(self, item_id: str) -> Dict[str, Any]:
+        """Get bio_sites by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            doc = await self.collection.find_one({"id": item_id})
             
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Bio Sites not found"
+                }
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get bio_sites: {str(e)}"
+            }
+
+    async def list_bio_sitess(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List bio_sitess with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
             
             return {
                 "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to list bio_sitess: {str(e)}"
+            }
 
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+    async def update_bio_sites(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update bio_sites by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            result = await self.collection.update_one(
+                {"id": item_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Bio Sites not found"
+                }
+            
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Bio Sites updated successfully",
+                "data": updated_doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to update bio_sites: {str(e)}"
+            }
+
+    async def delete_bio_sites(self, item_id: str) -> Dict[str, Any]:
+        """Delete bio_sites by ID"""
+        try:
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {
+                    "success": False,
+                    "error": f"Bio Sites not found"
+                }
             
             return {
                 "success": True,
-                "message": "Item deleted successfully"
+                "message": f"Bio Sites deleted successfully",
+                "deleted_count": result.deleted_count
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to delete bio_sites: {str(e)}"
+            }
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for bio_sitess"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "bio_sites",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get bio_sites stats: {str(e)}"
+            }
+
+# Service instance
+_bio_sites_service = None
+
+def get_bio_sites_service():
+    """Get bio_sites service instance"""
+    global _bio_sites_service
+    if _bio_sites_service is None:
+        _bio_sites_service = BioSitesService()
+    return _bio_sites_service
+
+# For backward compatibility
+bio_sites_service = get_bio_sites_service()

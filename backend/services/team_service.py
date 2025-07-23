@@ -1,198 +1,184 @@
 """
-Team Management Services Business Logic
-Professional Mewayz Platform
+Team Service
+Complete CRUD operations for team
 """
 
+import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
 class TeamService:
-    """Service for team management operations"""
-    
-    @staticmethod
-    async def get_team_members(user_id: str, workspace_id: str = None):
-        """Get team members"""
-        db = await get_database()
-        
-        query = {"owner_id": user_id}
-        if workspace_id:
-            query["workspace_id"] = workspace_id
-        
-        members = await db.team_members.find(query).to_list(length=None)
-        return members
-    
-    @staticmethod
-    async def invite_team_member(user_id: str, invite_data: Dict[str, Any]):
-        """Invite new team member"""
-        db = await get_database()
-        
-        invitation = {
-    "_id": str(uuid.uuid4()),
-    "owner_id": user_id,
-    "workspace_id": invite_data.get("workspace_id"),
-    "email": invite_data.get("email"),
-    "role": invite_data.get("role", "member"),
-    "permissions": invite_data.get("permissions", []),
-    "status": "pending",
-    "invited_at": datetime.utcnow(),
-            "expires_at": datetime.utcnow() + datetime.timedelta(days=7)
-    }
-        
-        result = await db.team_invitations.insert_one(invitation)
-        return invitation
-    
-    @staticmethod
-    async def get_team_projects(user_id: str):
-        """Get team projects"""
-        db = await get_database()
-        
-        projects = await db.team_projects.find({
-    "$or": [
-    {"owner_id": user_id},
-    {"team_members": user_id}
-    ]
-        }).sort("created_at", -1).to_list(length=None)
-        
-        return projects
-    
-    @staticmethod
-    async def create_project(user_id: str, project_data: Dict[str, Any]):
-        """Create new team project"""
-        db = await get_database()
-        
-        project = {
-    "_id": str(uuid.uuid4()),
-    "owner_id": user_id,
-    "name": project_data.get("name"),
-    "description": project_data.get("description", ""),
-    "status": project_data.get("status", "active"),
-    "team_members": project_data.get("team_members", []),
-    "tasks": [],
-    "deadline": project_data.get("deadline"),
-    "priority": project_data.get("priority", "medium"),
-    "created_at": datetime.utcnow(),
-    "updated_at": datetime.utcnow()
-    }
-        
-        result = await db.team_projects.insert_one(project)
-        return project
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["team"]
 
-# Global service instance
-team_service = TeamService()
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
+    async def create_team(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new team"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
             })
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
+            # Save to database
+            result = await self.collection.insert_one(data)
             
             return {
                 "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "message": f"Team created successfully",
+                "data": data,
+                "id": data["id"]
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to create team: {str(e)}"
+            }
 
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+    async def get_team(self, item_id: str) -> Dict[str, Any]:
+        """Get team by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            doc = await self.collection.find_one({"id": item_id})
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Team not found"
+                }
             
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get team: {str(e)}"
+            }
+
+    async def list_teams(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List teams with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list teams: {str(e)}"
+            }
+
+    async def update_team(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update team by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Team not found"
+                }
             
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
+                "message": f"Team updated successfully",
+                "data": updated_doc
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to update team: {str(e)}"
+            }
 
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+    async def delete_team(self, item_id: str) -> Dict[str, Any]:
+        """Delete team by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {
+                    "success": False,
+                    "error": f"Team not found"
+                }
             
             return {
                 "success": True,
-                "message": "Item deleted successfully"
+                "message": f"Team deleted successfully",
+                "deleted_count": result.deleted_count
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to delete team: {str(e)}"
+            }
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for teams"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "team",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get team stats: {str(e)}"
+            }
+
+# Service instance
+_team_service = None
+
+def get_team_service():
+    """Get team service instance"""
+    global _team_service
+    if _team_service is None:
+        _team_service = TeamService()
+    return _team_service
+
+# For backward compatibility
+team_service = get_team_service()

@@ -1,192 +1,184 @@
 """
-AI Services Business Logic
-Professional Mewayz Platform
+Ai Service
+Complete CRUD operations for ai
 """
 
+import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
-class AIService:
-    """Service for AI operations"""
-    
-    @staticmethod
-    async def get_ai_capabilities():
-        """Get available AI capabilities"""
-        capabilities = {
-            "text_generation": {
-                "models": ["gpt-4", "gpt-3.5-turbo", "claude-3"],
-                "features": ["completion", "chat", "summarization"],
-                "max_tokens": 4096
-            },
-            "image_generation": {
-                "models": ["dall-e-3", "midjourney", "stable-diffusion"],
-                "styles": ["photorealistic", "artistic", "cartoon"],
-                "resolutions": ["512x512", "1024x1024", "1792x1024"]
-            },
-            "code_generation": {
-                "languages": ["python", "javascript", "typescript", "java"],
-                "features": ["completion", "debugging", "optimization"],
-                "frameworks": ["fastapi", "react", "nextjs", "django"]
-            },
-            "data_analysis": {
-                "capabilities": ["visualization", "insights", "predictions"],
-                "formats": ["csv", "json", "excel"],
-                "chart_types": ["bar", "line", "pie", "scatter"]
-            }
-        }
-        return capabilities
-    
-    @staticmethod
-    async def create_ai_conversation(user_id: str, prompt: str):
-        """Create new AI conversation"""
-        db = await get_database()
-        
-        conversation = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "created_at": datetime.utcnow(),
-            "messages": [
-                {
-                    "role": "user",
-                    "content": prompt,
-                    "timestamp": datetime.utcnow()
-                }
-            ],
-            "status": "active",
-            "tokens_used": 0,
-            "model": "gpt-4"
-        }
-        
-        await db.ai_conversations.insert_one(conversation)
-        return conversation
-    
-    @staticmethod
-    async def get_user_conversations(user_id: str):
-        """Get user's AI conversations"""
-        db = await get_database()
-        
-        conversations = await db.ai_conversations.find({
-            "user_id": user_id
-        }).sort("created_at", -1).limit(50).to_list(length=None)
-        
-        return conversations
+class AiService:
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["ai"]
 
-# Global service instance
-ai_service = AIService()
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
+    async def create_ai(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new ai"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
             })
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
+            # Save to database
+            result = await self.collection.insert_one(data)
             
             return {
                 "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "message": f"Ai created successfully",
+                "data": data,
+                "id": data["id"]
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to create ai: {str(e)}"
+            }
 
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+    async def get_ai(self, item_id: str) -> Dict[str, Any]:
+        """Get ai by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            doc = await self.collection.find_one({"id": item_id})
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Ai not found"
+                }
             
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get ai: {str(e)}"
+            }
+
+    async def list_ais(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List ais with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list ais: {str(e)}"
+            }
+
+    async def update_ai(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update ai by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Ai not found"
+                }
             
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
+                "message": f"Ai updated successfully",
+                "data": updated_doc
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to update ai: {str(e)}"
+            }
 
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+    async def delete_ai(self, item_id: str) -> Dict[str, Any]:
+        """Delete ai by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {
+                    "success": False,
+                    "error": f"Ai not found"
+                }
             
             return {
                 "success": True,
-                "message": "Item deleted successfully"
+                "message": f"Ai deleted successfully",
+                "deleted_count": result.deleted_count
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to delete ai: {str(e)}"
+            }
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for ais"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "ai",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get ai stats: {str(e)}"
+            }
+
+# Service instance
+_ai_service = None
+
+def get_ai_service():
+    """Get ai service instance"""
+    global _ai_service
+    if _ai_service is None:
+        _ai_service = AiService()
+    return _ai_service
+
+# For backward compatibility
+ai_service = get_ai_service()

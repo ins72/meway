@@ -1,264 +1,184 @@
 """
-AI Token Management Services Business Logic
-Professional Mewayz Platform
+Ai Token Service
+Complete CRUD operations for ai_token
 """
 
-from datetime import datetime, timedelta
+import uuid
+from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
-class AITokenService:
-    """Service for AI token management operations"""
-    
-    @staticmethod
-    async def get_user_token_balance(user_id: str):
-        """Get user's AI token balance"""
-        db = await get_database()
-        
-        user_tokens = await db.user_tokens.find_one({"user_id": user_id})
-        if not user_tokens:
-            # Initialize user tokens
-            user_tokens = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                "balance": 1000,  # Free tier starts with 1000 tokens
-                "total_earned": 1000,
-                "total_spent": 0,
-                "tier": "free",
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()
-            }
-            await db.user_tokens.insert_one(user_tokens)
-        
-        return user_tokens
-    
-    @staticmethod
-    async def deduct_tokens(user_id: str, amount: int, operation: str = "ai_request"):
-        """Deduct tokens from user balance"""
-        db = await get_database()
-        
-        # Get current balance
-        user_tokens = await AITokenService.get_user_token_balance(user_id)
-        
-        if user_tokens["balance"] < amount:
-            return {"success": False, "error": "Insufficient token balance"}
-        
-        # Deduct tokens
-        new_balance = user_tokens["balance"] - amount
-        await db.user_tokens.update_one(
-            {"user_id": user_id},
-            {
-                "$set": {
-                    "balance": new_balance,
-                    "total_spent": user_tokens["total_spent"] + amount,
-                    "updated_at": datetime.utcnow()
-                }
-            }
-        )
-        
-        # Log transaction
-        transaction = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "type": "deduct",
-            "amount": amount,
-            "operation": operation,
-            "balance_after": new_balance,
-            "created_at": datetime.utcnow()
-        }
-        await db.token_transactions.insert_one(transaction)
-        
-        return {"success": True, "new_balance": new_balance}
-    
-    @staticmethod
-    async def add_tokens(user_id: str, amount: int, reason: str = "purchase"):
-        """Add tokens to user balance"""
-        db = await get_database()
-        
-        user_tokens = await AITokenService.get_user_token_balance(user_id)
-        new_balance = user_tokens["balance"] + amount
-        
-        await db.user_tokens.update_one(
-            {"user_id": user_id},
-            {
-                "$set": {
-                    "balance": new_balance,
-                    "total_earned": user_tokens["total_earned"] + amount,
-                    "updated_at": datetime.utcnow()
-                }
-            }
-        )
-        
-        # Log transaction
-        transaction = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "type": "add",
-            "amount": amount,
-            "operation": reason,
-            "balance_after": new_balance,
-            "created_at": datetime.utcnow()
-        }
-        await db.token_transactions.insert_one(transaction)
-        
-        return {"success": True, "new_balance": new_balance}
-    
-    @staticmethod
-    async def get_token_usage_history(user_id: str, days: int = 30):
-        """Get token usage history"""
-        db = await get_database()
-        
-        since_date = datetime.utcnow() - timedelta(days=days)
-        
-        transactions = await db.token_transactions.find({
-            "user_id": user_id,
-            "created_at": {"$gte": since_date}
-        }).sort("created_at", -1).to_list(length=None)
-        
-        return transactions
+class AiTokenService:
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["aitoken"]
 
-# Global service instance
-ai_token_service = AITokenService()
-
-    async def create_item(self, user_id: str, item_data: dict):
-        """Create new item"""
+    async def create_ai_token(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new ai_token"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            new_item = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                **item_data,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
                 "status": "active"
-            }
-            
-            await collections['items'].insert_one(new_item)
-            
-            return {
-                "success": True,
-                "data": new_item,
-                "message": "Item created successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
             })
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
+            # Save to database
+            result = await self.collection.insert_one(data)
             
             return {
                 "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "message": f"Ai Token created successfully",
+                "data": data,
+                "id": data["id"]
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to create ai_token: {str(e)}"
+            }
 
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+    async def get_ai_token(self, item_id: str) -> Dict[str, Any]:
+        """Get ai_token by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            doc = await self.collection.find_one({"id": item_id})
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Ai Token not found"
+                }
             
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get ai_token: {str(e)}"
+            }
+
+    async def list_ai_tokens(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List ai_tokens with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list ai_tokens: {str(e)}"
+            }
+
+    async def update_ai_token(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update ai_token by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Ai Token not found"
+                }
             
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
+                "message": f"Ai Token updated successfully",
+                "data": updated_doc
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to update ai_token: {str(e)}"
+            }
 
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+    async def delete_ai_token(self, item_id: str) -> Dict[str, Any]:
+        """Delete ai_token by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {
+                    "success": False,
+                    "error": f"Ai Token not found"
+                }
             
             return {
                 "success": True,
-                "message": "Item deleted successfully"
+                "message": f"Ai Token deleted successfully",
+                "deleted_count": result.deleted_count
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to delete ai_token: {str(e)}"
+            }
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for ai_tokens"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "ai_token",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get ai_token stats: {str(e)}"
+            }
+
+# Service instance
+_ai_token_service = None
+
+def get_ai_token_service():
+    """Get ai_token service instance"""
+    global _ai_token_service
+    if _ai_token_service is None:
+        _ai_token_service = AiTokenService()
+    return _ai_token_service
+
+# For backward compatibility
+ai_token_service = get_ai_token_service()

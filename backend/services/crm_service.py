@@ -1,22 +1,103 @@
 """
-CRM Management Services Business Logic
-Professional Mewayz Platform
+Crm Service
+Complete CRUD operations for crm
 """
 
+import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
+class CrmService:
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["crm"]
 
-    async def update_crm(self, crm_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def create_crm(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new crm"""
+        try:
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.collection.insert_one(data)
+            
+            return {
+                "success": True,
+                "message": f"Crm created successfully",
+                "data": data,
+                "id": data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create crm: {str(e)}"
+            }
+
+    async def get_crm(self, item_id: str) -> Dict[str, Any]:
+        """Get crm by ID"""
+        try:
+            doc = await self.collection.find_one({"id": item_id})
+            
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Crm not found"
+                }
+            
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get crm: {str(e)}"
+            }
+
+    async def list_crms(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List crms with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list crms: {str(e)}"
+            }
+
+    async def update_crm(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
         """Update crm by ID"""
         try:
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.db["crm"].update_one(
-                {"id": crm_id},
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
@@ -27,8 +108,9 @@ import uuid
                 }
             
             # Get updated document
-            updated_doc = await self.db["crm"].find_one({"id": crm_id})
-            updated_doc.pop('_id', None)
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
@@ -41,43 +123,10 @@ import uuid
                 "error": f"Failed to update crm: {str(e)}"
             }
 
-class CRMService:
-    """Service for CRM operations"""
-    
-    @staticmethod
-    async def get_contacts(user_id: str):
-        """Get user's CRM contacts"""
-        db = await get_database()
-        
-        contacts = await db.crm_contacts.find({"user_id": user_id}).sort("created_at", -1).to_list(length=None)
-        return contacts
-    
-    @staticmethod
-    async def create_contact(user_id: str, contact_data: Dict[str, Any]):
-        """Create new CRM contact"""
-        db = await get_database()
-        
-        contact = {
-    "_id": str(uuid.uuid4()),
-    "user_id": user_id,
-    "name": contact_data.get("name"),
-    "email": contact_data.get("email"),
-    "phone": contact_data.get("phone"),
-    "company": contact_data.get("company"),
-    "position": contact_data.get("position"),
-    "status": contact_data.get("status", "lead"),
-    "tags": contact_data.get("tags", []),
-    "notes": contact_data.get("notes", ""),
-    "last_contact": contact_data.get("last_contact"),
-    "created_at": datetime.utcnow(),
-    "updated_at": datetime.utcnow()
-    }
-        
-
-    async def delete_crm(self, crm_id: str) -> Dict[str, Any]:
+    async def delete_crm(self, item_id: str) -> Dict[str, Any]:
         """Delete crm by ID"""
         try:
-            result = await self.db["crm"].delete_one({"id": crm_id})
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
                 return {
@@ -96,147 +145,40 @@ class CRMService:
                 "error": f"Failed to delete crm: {str(e)}"
             }
 
-        result = await db.crm_contacts.insert_one(contact)
-        return contact
-    
-    @staticmethod
-    async def get_deals(user_id: str):
-        """Get user's CRM deals"""
-        db = await get_database()
-        
-        deals = await db.crm_deals.find({"user_id": user_id}).sort("created_at", -1).to_list(length=None)
-        return deals
-    
-    @staticmethod
-    async def create_deal(user_id: str, deal_data: Dict[str, Any]):
-        """Create new CRM deal"""
-        db = await get_database()
-        
-        deal = {
-    "_id": str(uuid.uuid4()),
-    "user_id": user_id,
-    "contact_id": deal_data.get("contact_id"),
-    "title": deal_data.get("title"),
-    "value": deal_data.get("value", 0),
-    "stage": deal_data.get("stage", "prospect"),
-    "probability": deal_data.get("probability", 0),
-    "expected_close": deal_data.get("expected_close"),
-    "notes": deal_data.get("notes", ""),
-    "created_at": datetime.utcnow(),
-    "updated_at": datetime.utcnow()
-    }
-        
-        result = await db.crm_deals.insert_one(deal)
-        return deal
-
-# Global service instance
-crm_service = CRMService()
-    async def update_contact(self, contact_id: str, user_id: str, updates: dict) -> dict:
-        """Update contact"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for crms"""
         try:
-            db = get_database()
-            if not db:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            # Add update metadata
-            updates["updated_at"] = datetime.utcnow()
-            updates["updated_by"] = user_id
-            
-            result = await db.contacts.update_one(
-                {"_id": contact_id, "user_id": user_id},
-                {"$set": updates}
-            )
-            
-            if result.modified_count > 0:
-                updated_contact = await db.contacts.find_one({"_id": contact_id})
-                return {"success": True, "contact": updated_contact, "message": "Contact updated successfully"}
-            else:
-                return {"success": False, "message": "Contact not found or unauthorized"}
-                
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-    
-    async def delete_contact(self, contact_id: str, user_id: str) -> dict:
-        """Delete contact (soft delete)"""
-        try:
-            db = get_database()
-            if not db:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await db.contacts.update_one(
-                {"_id": contact_id, "user_id": user_id},
-                {
-                    "$set": {
-                        "deleted": True,
-                        "deleted_at": datetime.utcnow(),
-                        "deleted_by": user_id
-                    }
-                }
-            )
-            
-            if result.modified_count > 0:
-                return {"success": True, "message": "Contact deleted successfully"}
-            else:
-                return {"success": False, "message": "Contact not found or unauthorized"}
-                
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
-            
-            if not item:
-                return {"success": False, "message": "Item not found"}
-            
-            return {
-                "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "crm",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get crm stats: {str(e)}"
+            }
+
+# Service instance
+_crm_service = None
+
+def get_crm_service():
+    """Get crm service instance"""
+    global _crm_service
+    if _crm_service is None:
+        _crm_service = CrmService()
+    return _crm_service
+
+# For backward compatibility
+crm_service = get_crm_service()

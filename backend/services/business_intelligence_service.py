@@ -1,258 +1,184 @@
 """
-Business Intelligence Services Business Logic
-Professional Mewayz Platform
+Business Intelligence Service
+Complete CRUD operations for business_intelligence
 """
 
-from datetime import datetime, timedelta
+import uuid
+from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import uuid
 
 class BusinessIntelligenceService:
-    """Service for business intelligence operations"""
-    
-    @staticmethod
-    async def get_business_insights(user_id: str):
-        """Get comprehensive business insights"""
-        db = await get_database()
-        
-        # In a real system, this would analyze actual data
-        insights = {
-            "performance_summary": {
-                "revenue_growth": round(await self._get_kpi_value(5, 25), 1),
-                "user_acquisition": round(await self._get_kpi_value(10, 40), 1),
-                "retention_rate": round(await self._get_kpi_value(70, 95), 1),
-                "conversion_rate": round(await self._get_kpi_value(2, 8), 1)
-            },
-            "key_metrics": {
-                "monthly_revenue": round(await self._get_kpi_value(10000, 50000), 2),
-                "active_users": await self._get_bi_metric(500, 2000),
-                "churn_rate": round(await self._get_kpi_value(2, 8), 1),
-                "avg_order_value": round(await self._get_kpi_value(50, 200), 2)
-            },
-            "trends": [
-                {
-                    "metric": "Revenue",
-                    "current": 45000,
-                    "previous": 38000,
-                    "change": 18.4,
-                    "trend": "up"
-                },
-                {
-                    "metric": "Users",
-                    "current": 1250,
-                    "previous": 1180,
-                    "change": 5.9,
-                    "trend": "up"
-                }
-            ],
-            "recommendations": [
-                "Focus on user retention with loyalty programs",
-                "Optimize conversion funnel for better results",
-                "Expand successful marketing channels"
-            ]
-        }
-        
-        return insights
-    
-    @staticmethod
-    async def generate_report(user_id: str, report_type: str = "monthly"):
-        """Generate business intelligence report"""
-        db = await get_database()
-        
-        report = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "type": report_type,
-            "generated_at": datetime.utcnow(),
-            "data": {
-                "summary": {
-                    "total_revenue": await self._get_bi_metric(20000, 100000),
-                    "total_users": await self._get_bi_metric(800, 3000),
-                    "growth_rate": round(await self._get_kpi_value(5, 30), 1)
-                },
-                "charts": {
-                    "revenue_trend": [
-                        {"month": "Jan", "value": await self._get_bi_metric(8000, 12000)},
-                        {"month": "Feb", "value": await self._get_bi_metric(9000, 13000)},
-                        {"month": "Mar", "value": await self._get_bi_metric(10000, 14000)}
-                    ],
-                    "user_growth": [
-                        {"month": "Jan", "value": await self._get_bi_metric(800, 1200)},
-                        {"month": "Feb", "value": await self._get_bi_metric(900, 1300)},
-                        {"month": "Mar", "value": await self._get_bi_metric(1000, 1400)}
-                    ]
-                }
-            }
-        }
-        
-        await db.bi_reports.insert_one(report)
-        return report
-    
-    async def _get_bi_metric(self, min_val: int, max_val: int):
-        """Get business intelligence metrics from database"""
-        try:
-            db = await self.get_database()
-            result = await db.business_metrics.aggregate([
-                {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
-            ]).to_list(length=1)
-            return int(result[0]["avg"]) if result else (min_val + max_val) // 2
-        except:
-            return (min_val + max_val) // 2
-    
-    async def _get_kpi_value(self, min_val: float, max_val: float):
-        """Get KPI values from database"""
-        try:
-            db = await self.get_database()
-            result = await db.performance_indicators.aggregate([
-                {"$group": {"_id": None, "avg": {"$avg": "$current_value"}}}
-            ]).to_list(length=1)
-            return result[0]["avg"] if result else (min_val + max_val) / 2
-        except:
-            return (min_val + max_val) / 2
+    def __init__(self):
+        self.db = get_database()
+        self.collection = self.db["businessintelligence"]
 
-
-# Global service instance
-business_intelligence_service = BusinessIntelligenceService()
-
-    async def create_item(self, user_id: str, item_data: dict):
-        """Create new item"""
+    async def create_business_intelligence(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new business_intelligence"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            new_item = {
-                "_id": str(uuid.uuid4()),
-                "user_id": user_id,
-                **item_data,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
+            # Add metadata
+            data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
                 "status": "active"
-            }
-            
-            await collections['items'].insert_one(new_item)
-            
-            return {
-                "success": True,
-                "data": new_item,
-                "message": "Item created successfully"
-            }
-            
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
-    async def get_item(self, user_id: str, item_id: str):
-        """Get specific item"""
-        try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
             })
             
-            if not item:
-                return {"success": False, "message": "Item not found"}
+            # Save to database
+            result = await self.collection.insert_one(data)
             
             return {
                 "success": True,
-                "data": item,
-                "message": "Item retrieved successfully"
+                "message": f"Business Intelligence created successfully",
+                "data": data,
+                "id": data["id"]
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to create business_intelligence: {str(e)}"
+            }
 
-    async def update_item(self, user_id: str, item_id: str, update_data: dict):
-        """Update existing item"""
+    async def get_business_intelligence(self, item_id: str) -> Dict[str, Any]:
+        """Get business_intelligence by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            doc = await self.collection.find_one({"id": item_id})
             
-            # Add updated timestamp
-            update_data["updated_at"] = datetime.utcnow()
+            if not doc:
+                return {
+                    "success": False,
+                    "error": f"Business Intelligence not found"
+                }
             
-            result = await collections['items'].update_one(
-                {"_id": item_id, "user_id": user_id},
+            doc.pop('_id', None)
+            return {
+                "success": True,
+                "data": doc
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get business_intelligence: {str(e)}"
+            }
+
+    async def list_business_intelligences(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List business_intelligences with pagination"""
+        try:
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
+            
+            cursor = self.collection.find(query).skip(offset).limit(limit)
+            docs = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id field
+            for doc in docs:
+                doc.pop('_id', None)
+            
+            total_count = await self.collection.count_documents(query)
+            
+            return {
+                "success": True,
+                "data": docs,
+                "total": total_count,
+                "limit": limit,
+                "offset": offset
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to list business_intelligences: {str(e)}"
+            }
+
+    async def update_business_intelligence(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update business_intelligence by ID"""
+        try:
+            # Add update timestamp
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await self.collection.update_one(
+                {"id": item_id},
                 {"$set": update_data}
             )
             
-            if result.modified_count == 0:
-                return {"success": False, "message": "Item not found or no changes made"}
+            if result.matched_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Business Intelligence not found"
+                }
             
-            # Get updated item
-            updated_item = await collections['items'].find_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            # Get updated document
+            updated_doc = await self.collection.find_one({"id": item_id})
+            if updated_doc:
+                updated_doc.pop('_id', None)
             
             return {
                 "success": True,
-                "data": updated_item,
-                "message": "Item updated successfully"
+                "message": f"Business Intelligence updated successfully",
+                "data": updated_doc
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to update business_intelligence: {str(e)}"
+            }
 
-    async def delete_item(self, user_id: str, item_id: str):
-        """Delete item"""
+    async def delete_business_intelligence(self, item_id: str) -> Dict[str, Any]:
+        """Delete business_intelligence by ID"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
-            
-            result = await collections['items'].delete_one({
-                "_id": item_id,
-                "user_id": user_id
-            })
+            result = await self.collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
-                return {"success": False, "message": "Item not found"}
+                return {
+                    "success": False,
+                    "error": f"Business Intelligence not found"
+                }
             
             return {
                 "success": True,
-                "message": "Item deleted successfully"
+                "message": f"Business Intelligence deleted successfully",
+                "deleted_count": result.deleted_count
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to delete business_intelligence: {str(e)}"
+            }
 
-    async def list_items(self, user_id: str, filters: dict = None, page: int = 1, limit: int = 50):
-        """List user's items"""
+    async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
+        """Get statistics for business_intelligences"""
         try:
-            collections = self._get_collections()
-            if not collections:
-                return {"success": False, "message": "Database unavailable"}
+            query = {}
+            if user_id:
+                query["user_id"] = user_id
             
-            query = {"user_id": user_id}
-            if filters:
-                query.update(filters)
-            
-            skip = (page - 1) * limit
-            
-            cursor = collections['items'].find(query).skip(skip).limit(limit)
-            items = await cursor.to_list(length=limit)
-            
-            total_count = await collections['items'].count_documents(query)
+            total_count = await self.collection.count_documents(query)
+            active_count = await self.collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
                 "data": {
-                    "items": items,
-                    "pagination": {
-                        "page": page,
-                        "limit": limit,
-                        "total": total_count,
-                        "pages": (total_count + limit - 1) // limit
-                    }
-                },
-                "message": "Items retrieved successfully"
+                    "total_count": total_count,
+                    "active_count": active_count,
+                    "service": "business_intelligence",
+                    "last_updated": datetime.utcnow().isoformat()
+                }
             }
-            
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to get business_intelligence stats: {str(e)}"
+            }
+
+# Service instance
+_business_intelligence_service = None
+
+def get_business_intelligence_service():
+    """Get business_intelligence service instance"""
+    global _business_intelligence_service
+    if _business_intelligence_service is None:
+        _business_intelligence_service = BusinessIntelligenceService()
+    return _business_intelligence_service
+
+# For backward compatibility
+business_intelligence_service = get_business_intelligence_service()
