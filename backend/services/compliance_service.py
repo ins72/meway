@@ -142,7 +142,8 @@ class ComplianceService:
     async def delete_compliance(self, item_id: str) -> Dict[str, Any]:
         """Delete compliance by ID"""
         try:
-            result = await self.collection.delete_one({"id": item_id})
+            collection = self._get_collection()
+            result = await collection.delete_one({"id": item_id})
             
             if result.deleted_count == 0:
                 return {
