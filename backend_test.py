@@ -13,7 +13,7 @@ from typing import Dict, Any, Optional
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://35b0c12d-8622-4a0d-9b9c-d891d48a2c32.preview.emergentagent.com"
+BACKEND_URL = "https://30f38136-d29a-41ec-aa06-5e02a1d9c8b2.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test credentials
