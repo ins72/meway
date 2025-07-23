@@ -58,7 +58,7 @@ async def list_imports(
 ):
     """LIST endpoint - GUARANTEED to work with real data"""
     try:
-        service = get_import_service()
+        service = get_import_api_service()
         result = await service.list_imports(
             user_id=current_user.get("id"),
             limit=limit,
