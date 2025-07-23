@@ -536,18 +536,30 @@ class MediaService:
     
     @staticmethod
     async def move_files_to_folder(file_ids: List[str], folder_id: str, user_id: str) -> Dict[str, Any]:
-        """Create a new media"""
-        try:
-            # Add metadata
-            media_data.update({
-                "id": str(uuid.uuid4()),
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat(),
-                "status": "active"
-            })
-            
-            # Save to database
-            result = await self.db["media"].insert_one(media_data)
+        """Move multiple files to folder"""
+        database = get_database()
+        
+        # Get user's workspace
+        workspaces_collection = database.workspaces
+        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        
+        if not workspace:
+            raise Exception("Workspace not found")
+        
+        # Update files folder
+        files_collection = database.media_files
+        result = await files_collection.update_many(
+            {
+                "_id": {"$in": file_ids},
+                "workspace_id": str(workspace["_id"])
+            },
+            {"$set": {"folder": folder_id, "updated_at": datetime.utcnow()}}
+        )
+        
+        return {
+            "moved_count": result.modified_count,
+            "requested_count": len(file_ids)
+        }
             
             return {
                 "success": True,
