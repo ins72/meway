@@ -272,7 +272,6 @@ async def get_featured_templates(limit: int = Query(10, ge=1, le=50)):
     except Exception as e:
         logger.error(f"Error getting featured templates: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-)
 
 @router.get("/creator/revenue", tags=["Creator Analytics"])
 async def get_creator_revenue(
@@ -281,10 +280,10 @@ async def get_creator_revenue(
 ):
     """Get creator revenue breakdown"""
     try:
-        revenue_data = await self._get_real_revenue(user_id),
-            "transactions": 23,
-            "avg_transaction": 54.35
-        }
+        revenue_data = await advanced_template_marketplace_service.get_creator_revenue(
+            creator_id=current_user["_id"],
+            period=period
+        )
         
         return {
             "success": True,
@@ -296,49 +295,140 @@ async def get_creator_revenue(
         logger.error(f"Error getting creator revenue: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/my-templates", tags=["Creator Analytics"])
-async def get_my_templates(
-    status: Optional[str] = Query(None),
+# NEW CRUD OPERATIONS - UPDATE AND DELETE
+
+class TemplateUpdateRequest(BaseModel):
+    title: Optional[str] = Field(None, min_length=5, max_length=100)
+    description: Optional[str] = Field(None, min_length=20, max_length=1000)
+    category: Optional[str] = None
+    subcategory: Optional[str] = None
+    price: Optional[float] = Field(None, ge=0)
+    tags: Optional[List[str]] = None
+    template_data: Optional[Dict[str, Any]] = None
+    preview_url: Optional[str] = None
+    preview_images: Optional[List[str]] = None
+    metadata: Optional[Dict[str, Any]] = None
+    status: Optional[str] = None
+
+@router.put("/templates/{template_id}", tags=["Template Management"])
+async def update_template(
+    template_id: str,
+    request: TemplateUpdateRequest,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get creator's own templates"""
+    """Update existing template (creator only)"""
     try:
-        # Real data implementation
-        templates = await self._get_real_templates(user_id)
+        # Verify ownership
+        template = await advanced_template_marketplace_service.get_template_by_id(template_id)
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
         
-        # Filter by status if provided
-        if status:
-            templates = await self._get_real_templates(user_id) == status]
+        if template.get("creator_id") != current_user["_id"]:
+            raise HTTPException(status_code=403, detail="Not authorized to update this template")
+        
+        # Update template
+        updated_template = await advanced_template_marketplace_service.update_template(
+            template_id=template_id,
+            updates=request.dict(exclude_unset=True)
+        )
         
         return {
             "success": True,
-            "templates": templates,
-            "count": len(templates),
+            "template": updated_template,
+            "message": "Template updated successfully"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating template: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Template update failed: {str(e)}")
+
+@router.delete("/templates/{template_id}", tags=["Template Management"])
+async def delete_template(
+    template_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete template (creator only)"""
+    try:
+        # Verify ownership
+        template = await advanced_template_marketplace_service.get_template_by_id(template_id)
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
+        
+        if template.get("creator_id") != current_user["_id"]:
+            raise HTTPException(status_code=403, detail="Not authorized to delete this template")
+        
+        # Delete template
+        result = await advanced_template_marketplace_service.delete_template(template_id)
+        
+        return {
+            "success": True,
+            "message": "Template deleted successfully",
+            "template_id": template_id
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting template: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Template deletion failed: {str(e)}")
+
+@router.get("/templates", tags=["Template Management"])
+async def get_templates(
+    category: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
+    creator_id: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(20, ge=1, le=100)
+):
+    """Get templates with filtering (READ operation)"""
+    try:
+        filters = {}
+        if category:
+            filters["category"] = category
+        if status:
+            filters["status"] = status
+        if creator_id:
+            filters["creator_id"] = creator_id
+            
+        skip = (page - 1) * per_page
+        
+        result = await advanced_template_marketplace_service.get_templates(
+            filters=filters,
+            limit=per_page,
+            skip=skip
+        )
+        
+        return {
+            "success": True,
+            **result,
             "message": "Templates retrieved successfully"
         }
         
     except Exception as e:
-        logger.error(f"Error getting my templates: {str(e)}")
+        logger.error(f"Error getting templates: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/purchases", tags=["Template Usage"])
-async def get_my_purchases(
-    current_user: dict = Depends(get_current_user)
-):
-    """Get user's template purchases"""
+@router.get("/templates/{template_id}", tags=["Template Management"])
+async def get_template_by_id(template_id: str):
+    """Get specific template by ID"""
     try:
-        # Real data implementation
-        purchases = await self._get_real_purchases(user_id)
+        template = await advanced_template_marketplace_service.get_template_by_id(template_id)
+        
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
         
         return {
             "success": True,
-            "purchases": purchases,
-            "count": len(purchases),
-            "message": "Purchases retrieved successfully"
+            "template": template,
+            "message": "Template retrieved successfully"
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error getting purchases: {str(e)}")
+        logger.error(f"Error getting template: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/health", tags=["System"])
