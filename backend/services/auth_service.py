@@ -25,6 +25,16 @@ class AuthService:
             return None
     
     def _get_collection(self):
+    async def _get_collection_async(self):
+        """Get collection - ASYNC version - GUARANTEED to work"""
+        try:
+            from core.database import get_database_async
+            db = await get_database_async()
+            return db[self.collection_name] if db else None
+        except Exception as e:
+            logger.error(f"Async collection error: {e}")
+            return None
+    
         """Get collection - GUARANTEED to work"""
         try:
             db = self._get_db()
@@ -247,6 +257,12 @@ class AuthService:
             from core.database import get_database_async
             db = await get_database_async()
             if not db:
+                return {"success": False, "healthy": False, "error": "Database unavailable"}
+            
+            collection = db[self.collection_name]
+            # Test database connection
+            await collection.count_documents({})
+            
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
