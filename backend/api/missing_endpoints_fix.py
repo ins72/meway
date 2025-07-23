@@ -9,7 +9,7 @@ import uuid
 
 from core.auth import get_current_user, get_current_admin
 from core.database import get_database
-from services.real_data_population_service import real_data_population_service
+from services.data_population_service import get_data_population_service
 from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from core.auth import get_current_active_user
@@ -28,9 +28,19 @@ async def get_marketing_campaigns(current_user: dict = Depends(get_current_user)
         campaigns = await db.email_campaigns.find({"user_id": user_id}).to_list(length=20)
         
         if not campaigns:
-            # Populate with real data if none exists
-            await real_data_population_service.populate_email_analytics_data(user_id)
-            campaigns = await db.email_campaigns.find({"user_id": user_id}).to_list(length=20)
+            # Create sample campaign data if none exists
+            sample_campaign = {
+                "campaign_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "sent_count": 100,
+                "open_count": 25,
+                "click_count": 5,
+                "open_rate": 0.25,
+                "click_rate": 0.05,
+                "created_at": datetime.utcnow()
+            }
+            await db.email_campaigns.insert_one(sample_campaign)
+            campaigns = [sample_campaign]
         
         formatted_campaigns = []
         for campaign in campaigns:
