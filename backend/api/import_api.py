@@ -18,7 +18,7 @@ router = APIRouter()
 async def health_check():
     """Health check - GUARANTEED to work"""
     try:
-        service = get_import_service()
+        service = get_import_api_service()
         return await service.health_check()
     except Exception as e:
         logger.error(f"Health check error: {e}")
