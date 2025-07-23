@@ -100,7 +100,7 @@ class UserService:
         """Get user by ID"""
         try:
             db = self._get_db()
-            if not db:
+            if db is None:
                 return {"success": False, "error": "Database not available"}
             
             collection = db["user"]
@@ -118,7 +118,7 @@ class UserService:
         """List users"""
         try:
             db = self._get_db()
-            if not db:
+            if db is None:
                 return {"success": False, "error": "Database not available"}
             
             collection = db["user"]
@@ -141,7 +141,7 @@ class UserService:
         """Update user"""
         try:
             db = self._get_db()
-            if not db:
+            if db is None:
                 return {"success": False, "error": "Database not available"}
             
             collection = db["user"]
@@ -167,7 +167,7 @@ class UserService:
         """Delete user"""
         try:
             db = self._get_db()
-            if not db:
+            if db is None:
                 return {"success": False, "error": "Database not available"}
             
             collection = db["user"]
