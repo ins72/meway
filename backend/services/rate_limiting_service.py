@@ -327,8 +327,7 @@ class RateLimitingService:
         }
     
     @staticmethod
-    
-    ) -> Dict[str, Any]:
+    async def check_rate_limit(user_id: str) -> Dict[str, Any]:
         """Check if request is within rate limits"""
         database = get_database()
         
