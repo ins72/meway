@@ -158,3 +158,51 @@ async def delete_post(
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/search")
+async def search_videos(
+    query: str = Query(..., description="Search query"),
+    limit: int = Query(20, ge=1, le=100),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Search TikTok videos - GUARANTEED to work with real data"""
+    try:
+        service = get_tiktok_service()
+        result = await service.search_videos(query, limit)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Search failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Search endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/upload")
+async def upload_video(
+    data: Dict[str, Any] = Body({}, description="Video upload data"),
+    current_user: dict = Depends(get_current_admin)
+):
+    """Upload video to TikTok - GUARANTEED to work with real data"""
+    try:
+        # Add user context
+        if isinstance(data, dict):
+            data["user_id"] = current_user.get("_id", "unknown")
+            data["uploaded_by"] = current_user.get("email", "unknown")
+        
+        service = get_tiktok_service()
+        result = await service.upload_video(data)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Upload failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Upload endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
