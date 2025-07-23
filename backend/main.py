@@ -311,6 +311,7 @@ try:
     app.include_router(twitter_router, prefix="/api/twitter", tags=["twitter"])
     app.include_router(tiktok_router, prefix="/api/tiktok", tags=["tiktok"])
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
+    app.include_router(social_media_management_router, prefix="/api/social-media-management", tags=["social_media_management"])
 
     
     logger.info(f"✅ Successfully included 128 bulletproof routers")
