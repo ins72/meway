@@ -148,7 +148,7 @@ async def create_auth(
     try:
         # Add user context
         if isinstance(data, dict):
-            data["user_id"] = current_user.get("id", "unknown")
+            data["user_id"] = current_user.get("_id", "unknown")
             data["created_by"] = current_user.get("email", "unknown")
         
         service = get_auth_service()
