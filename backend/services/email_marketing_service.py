@@ -312,7 +312,7 @@ class EmailMarketingService:
         """Get user's email contacts"""
         
         contacts = []
-        contact_count = await self._calculate_count(user_id))
+        contact_count = await self._calculate_count(user_id)
         
         for i in range(contact_count):
             first_names = ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Iris", "Jack"]
