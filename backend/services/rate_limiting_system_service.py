@@ -3,6 +3,7 @@ Rate_Limiting_System Service - Comprehensive Business Logic
 Generated for complete service/API pairing with full CRUD operations
 """
 
+from bson import ObjectId
 import uuid
 import logging
 logger = logging.getLogger(__name__)
