@@ -1,3 +1,4 @@
+import os
 """
 TikTok API Integration Service
 Real TikTok API integration using provided credentials

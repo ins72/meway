@@ -1,3 +1,4 @@
+import os
 """
 Stripe Payment Integration Service
 Real Stripe API integration using provided credentials
@@ -15,6 +16,10 @@ class StripeIntegrationService:
     
     def __init__(self):
         self.collection_name = "stripe_payments"
+        # Stripe API configuration
+        self.secret_key = os.environ.get('STRIPE_SECRET_KEY')
+        self.public_key = os.environ.get('STRIPE_PUBLIC_KEY')
+        self.api_available = bool(self.secret_key and self.public_key)
         self.service_name = "stripe_integration"
         self.public_key = "pk_test_51RHeZMPTey8qEzxZZ1MyBvDG8Qh2VOoxUroGhxpNmcEMnvgfQCfwcsHihlFvqz35LPjAYyKZ4j5Njm07AKGuXDqw00nAsVfaXv"
         self.secret_key = "sk_test_51RHeZMPTey8qEzxZn2t4XbP6CATdXVbcgbzvSjdVIsijehuscfcSOVQ016bUXsVaBV9MyoI8EThIBTgmXSjDUs6n00ipAjYRXZ"

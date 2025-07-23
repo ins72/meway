@@ -1,3 +1,4 @@
+import os
 """
 Twitter/X API Integration Service
 Real Twitter API integration using provided credentials
@@ -78,234 +79,20 @@ class TwitterService:
             
             # Prepare tweet data
             tweet_data = {
-                "id": str(uuid.uuid4()),
-                "content": data.get("content", ""),
-                "user_id": data.get("user_id", ""),
-                "scheduled_at": data.get("scheduled_at", ""),
-                "status": "posted",
-                "twitter_id": f"tw_{uuid.uuid4().hex[:10]}",
-                "engagement": {
-                    "likes": 0,
-                    "retweets": 0,
-                    "replies": 0
+                "id": f"tw_{item_id}",
+                "text": data.get("text", ""),
+                "user": {
+                    "username": data.get("username", ""),
+                    "display_name": data.get("display_name", ""),
+                    "followers_count": data.get("followers_count", 0)
                 },
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
-            }
-            
-            # Store in database - REAL DATA OPERATION
-            result = await collection.insert_one(tweet_data)
-            
-            if result.inserted_id:
-                return {
-                    "success": True,
-                    "message": "Tweet posted successfully",
-                    "data": tweet_data,
-                    "id": tweet_data["id"]
-                }
-            else:
-                return {"success": False, "error": "Database insert failed"}
-                
-        except Exception as e:
-            logger.error(f"Tweet post error: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def list_tweets(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
-        """List tweets with real data"""
-        try:
-            collection = await self._get_collection_async()
-            if collection is None:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Build query
-            query = {}
-            if user_id:
-                query["user_id"] = user_id
-            
-            # Execute query - REAL DATA OPERATION
-            cursor = collection.find(query).skip(offset).limit(limit)
-            docs = await cursor.to_list(length=limit)
-            
-            # Get total count
-            total = await collection.count_documents(query)
-            
-            return {
-                "success": True,
-                "data": docs,
-                "total": total,
-                "limit": limit,
-                "offset": offset
-            }
-            
-        except Exception as e:
-            logger.error(f"List tweets error: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def get_tweet(self, tweet_id: str) -> dict:
-        """Get single tweet by ID"""
-        try:
-            collection = await self._get_collection_async()
-            if collection is None:
-                return {"success": False, "error": "Database unavailable"}
-            
-            doc = await collection.find_one({"id": tweet_id})
-            
-            if doc:
-                return {
-                    "success": True,
-                    "data": doc
-                }
-            else:
-                return {"success": False, "error": "Tweet not found"}
-                
-        except Exception as e:
-            logger.error(f"Get tweet error: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def update_tweet(self, tweet_id: str, data: dict) -> dict:
-        """Update tweet"""
-        try:
-            collection = await self._get_collection_async()
-            if collection is None:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Update data
-            update_data = {
-                "content": data.get("content"),
-                "updated_at": datetime.utcnow().isoformat()
-            }
-            
-            # Remove None values
-            update_data = {k: v for k, v in update_data.items() if v is not None}
-            
-            result = await collection.update_one(
-                {"id": tweet_id},
-                {"$set": update_data}
-            )
-            
-            if result.modified_count > 0:
-                return {
-                    "success": True,
-                    "message": "Tweet updated successfully",
-                    "id": tweet_id
-                }
-            else:
-                return {"success": False, "error": "Tweet not found or no changes made"}
-                
-        except Exception as e:
-            logger.error(f"Update tweet error: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def delete_tweet(self, tweet_id: str) -> dict:
-        """Delete tweet"""
-        try:
-            collection = await self._get_collection_async()
-            if collection is None:
-                return {"success": False, "error": "Database unavailable"}
-            
-            result = await collection.delete_one({"id": tweet_id})
-            
-            if result.deleted_count > 0:
-                return {
-                    "success": True,
-                    "message": "Tweet deleted successfully",
-                    "id": tweet_id
-                }
-            else:
-                return {"success": False, "error": "Tweet not found"}
-                
-        except Exception as e:
-            logger.error(f"Delete tweet error: {e}")
-            return {"success": False, "error": str(e)}
-
-
-    async def get_profile(self, *args, **kwargs) -> dict:
-        """Get Twitter profile information - GUARANTEED to work with real data"""
-        try:
-            collection = await self._get_collection_async()
-            if collection is None:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Real database operation based on method type
-            if "get_profile" in ["get_profile", "get_analytics", "get_accounts", "get_timeline"]:
-                # READ operation
-                cursor = collection.find({})
-                data = await cursor.to_list(length=None)
-                total = await collection.count_documents({})
-                
-                return {
-                    "success": True,
-                    "data": data,
-                    "total": total,
-                    "method": "get_profile",
-                    "timestamp": datetime.utcnow().isoformat()
-                }
-            
-            elif "get_profile" in ["upload_video", "create_customer", "schedule_post", "process_referral", "publish_website"]:
-                # CREATE operation
-                data = kwargs.get("data", {})
-                item_data = {
-                    "id": str(uuid.uuid4()),
-                    "method": "get_profile",
-                    "data": data,
-                    "status": "completed",
-                    "created_at": datetime.utcnow().isoformat(),
-                    "updated_at": datetime.utcnow().isoformat()
-                }
-                
-                result = await collection.insert_one(item_data)
-                
-                if result.inserted_id:
-                    return {
-                        "success": True,
-                        "message": "Get Twitter profile information completed successfully",
-                        "data": item_data,
-                        "id": item_data["id"]
-                    }
-                else:
-                    return {"success": False, "error": "Database insert failed"}
-            
-            elif "get_profile" in ["search_tweets", "search_videos", "get_payment_methods"]:
-                # SEARCH operation
-                query = kwargs.get("query", {})
-                cursor = collection.find(query)
-                results = await cursor.to_list(length=50)
-                
-                return {
-                    "success": True,
-                    "results": results,
-                    "count": len(results),
-                    "method": "get_profile",
-                    "query": query
-                }
-            
-            else:
-                # Generic operation
-                return {
-                    "success": True,
-                    "message": "Get Twitter profile information executed successfully",
-                    "method": "get_profile",
-                    "timestamp": datetime.utcnow().isoformat()
-                }
-                
-        except Exception as e:
-            logger.error(f"get_profile error: {e}")
-            return {"success": False, "error": str(e)}
-
-
-    async def search_tweets(self, query: str, limit: int = 20) -> dict:
-        """Search for tweets - Real Twitter API search simulation"""
-        try:
-            collection = await self._get_collection_async()
-            if collection is None:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Simulate Twitter search with realistic results
-            search_results = []
-            for i in range(min(limit, 15)):  # Return up to 15 results
-                tweet_data = {
-                    "id": f"tw_search_{uuid.uuid4().hex[:10]}",
-                    "text": f"Sample tweet containing '{query}' - Tweet #{i+1}",
+                "metrics": {
+                    "like_count": 0,
+                    "retweet_count": 0,
+                    "reply_count": 0
+                },
+                "created_at": datetime.utcnow().isoformat()
+            }' - Tweet #{i+1}",
                     "user": {
                         "username": f"user_{i+1}",
                         "display_name": f"Twitter User {i+1}",
