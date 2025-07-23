@@ -20,33 +20,6 @@ from core.external_api_integrator import (
 class RealDataPopulationService:
     """Service to populate database with real external API data"""
     
-
-    async def create_real_data_population(self, real_data_population_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new real_data_population"""
-        try:
-            # Add metadata
-            real_data_population_data.update({
-                "id": str(uuid.uuid4()),
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat(),
-                "status": "active"
-            })
-            
-            # Save to database
-            result = await self.db["real_data_population"].insert_one(real_data_population_data)
-            
-            return {
-                "success": True,
-                "message": f"Real_Data_Population created successfully",
-                "data": real_data_population_data,
-                "id": real_data_population_data["id"]
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Failed to create real_data_population: {str(e)}"
-            }
-
     def __init__(self):
         self.db = None
     
@@ -72,22 +45,75 @@ class RealDataPopulationService:
                         if twitter_data.get("success") and twitter_data.get("data"):
                             await self._store_twitter_data(db, user_id, twitter_data["data"])
                             populated_data["twitter"] = twitter_data["data"]
+                    
+                    elif platform == "instagram":
+                        # Get real Instagram data
+                        instagram_data = await social_media_integrator.get_instagram_data("example_user_id")
+                        if instagram_data.get("success") and instagram_data.get("data"):
+                            await self._store_instagram_data(db, user_id, instagram_data["data"])
+                            populated_data["instagram"] = instagram_data["data"]
+                    
+                    elif platform == "tiktok":
+                        # Get real TikTok data
+                        tiktok_data = await social_media_integrator.get_tiktok_data("example_user_id")
+                        if tiktok_data.get("success") and tiktok_data.get("data"):
+                            await self._store_tiktok_data(db, user_id, tiktok_data["data"])
+                            populated_data["tiktok"] = tiktok_data["data"]
+                            
                 except Exception as e:
-                    print(f"Error populating {platform} data: {str(e)}")
+                    await professional_logger.log(
+                        LogLevel.WARNING, LogCategory.EXTERNAL_API,
+                        f"Failed to populate {platform} data: {str(e)}",
+                        details={"platform": platform, "user_id": user_id},
+                        error=e
+                    )
                     continue
+            
+            await professional_logger.log(
+                LogLevel.INFO, LogCategory.SYSTEM,
+                f"Social media data populated for user {user_id}",
+                details={"platforms": list(populated_data.keys())}
+            )
             
             return {
                 "success": True,
-                "message": "Social media data populated successfully",
+                "populated_platforms": list(populated_data.keys()),
                 "data": populated_data
             }
-        
+            
+        except Exception as e:
+            await professional_logger.log(
+                LogLevel.ERROR, LogCategory.SYSTEM,
+                f"Social media data population failed: {str(e)}",
+                details={"user_id": user_id}, error=e
+            )
+            return {"success": False, "error": str(e)}
+
+    async def create_real_data_population(self, real_data_population_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new real_data_population"""
+        try:
+            # Add metadata
+            real_data_population_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            # Save to database
+            result = await self.db["real_data_population"].insert_one(real_data_population_data)
+            
+            return {
+                "success": True,
+                "message": "Real_data_population created successfully",
+                "data": real_data_population_data,
+                "id": real_data_population_data["id"]
+            }
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Failed to populate social media data: {str(e)}"
+                "error": f"Failed to create real_data_population: {str(e)}"
             }
-
 
     async def update_real_data_population(self, real_data_population_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
         """Update real_data_population by ID"""
@@ -121,39 +147,6 @@ class RealDataPopulationService:
                 "error": f"Failed to update real_data_population: {str(e)}"
             }
 
-                    elif platform == "instagram":
-                        # Get real Instagram data
-                        instagram_data = await social_media_integrator.get_instagram_data("example_user_id")
-                        if instagram_data.get("success") and instagram_data.get("data"):
-                            await self._store_instagram_data(db, user_id, instagram_data["data"])
-                            populated_data["instagram"] = instagram_data["data"]
-                    
-                    elif platform == "tiktok":
-                        # Get real TikTok data
-                        tiktok_data = await social_media_integrator.get_tiktok_data("example_user_id")
-                        if tiktok_data.get("success") and tiktok_data.get("data"):
-                            await self._store_tiktok_data(db, user_id, tiktok_data["data"])
-                            populated_data["tiktok"] = tiktok_data["data"]
-                            
-                except Exception as e:
-                    await professional_logger.log(
-                        LogLevel.WARNING, LogCategory.EXTERNAL_API,
-                        f"Failed to populate {platform} data: {str(e)}",
-                        details={"platform": platform, "user_id": user_id},
-                        error=e
-                    )
-                    continue
-            
-            await professional_logger.log(
-                LogLevel.INFO, LogCategory.SYSTEM,
-                f"Social media data populated for user {user_id}",
-                details={"platforms": list(populated_data.keys())}
-            )
-            
-            return {
-                "success": True,
-                "populated_platforms": list(populated_data.keys()),
-
     async def delete_real_data_population(self, real_data_population_id: str) -> Dict[str, Any]:
         """Delete real_data_population by ID"""
         try:
@@ -175,17 +168,6 @@ class RealDataPopulationService:
                 "success": False,
                 "error": f"Failed to delete real_data_population: {str(e)}"
             }
-
-                "data": populated_data
-            }
-            
-        except Exception as e:
-            await professional_logger.log(
-                LogLevel.ERROR, LogCategory.SYSTEM,
-                f"Social media data population failed: {str(e)}",
-                details={"user_id": user_id}, error=e
-            )
-            return {"success": False, "error": str(e)}
     
     async def _store_twitter_data(self, db, user_id: str, twitter_data: Dict[str, Any]):
         """Store Twitter data in database"""
