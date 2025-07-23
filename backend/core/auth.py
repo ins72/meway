@@ -9,6 +9,7 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional
 import uuid
+import logging
 
 from .config import settings
 from .database import get_users_collection
