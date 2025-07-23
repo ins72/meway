@@ -4,6 +4,8 @@ Generated for complete service/API pairing with full CRUD operations
 """
 
 import uuid
+import logging
+from typing import Dict, List, Optional, Any
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database

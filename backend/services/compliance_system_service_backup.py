@@ -4,6 +4,7 @@ Provides business logic for Compliance System
 """
 
 import os
+import logging
 import uuid
 from datetime import datetime
 from typing import Dict, List, Optional, Any
@@ -45,7 +46,7 @@ class ComplianceSystemService:
     
     async def get_all(self, user_id: str, limit: int = 20, skip: int = 0) -> List[Dict[str, Any]]:
         """Get all records for user"""
-        cursor = self.collection.find(
+        cursor = self.await collection.find(
             {"user_id": user_id},
             limit=limit,
             skip=skip,
@@ -55,7 +56,7 @@ class ComplianceSystemService:
     
     async def get_by_id(self, user_id: str, record_id: str) -> Optional[Dict[str, Any]]:
         """Get record by ID"""
-        return await self.collection.find_one({
+        return await self.await collection.find_one({
             "id": record_id,
             "user_id": user_id
         })
@@ -103,7 +104,7 @@ class ComplianceSystemService:
             **data
         }
         
-        await self.collection.insert_one(record)
+        await self.await collection.insert_one(record)
         return record
     
     async def update(self, user_id: str, record_id: str, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -113,7 +114,7 @@ class ComplianceSystemService:
             "updated_at": datetime.utcnow()
         }
         
-        result = await self.collection.find_one_and_update(
+        result = await self.await collection.find_one_and_update(
             {"id": record_id, "user_id": user_id},
             {"$set": update_data},
             return_document=True
@@ -123,7 +124,7 @@ class ComplianceSystemService:
     
     async def delete(self, user_id: str, record_id: str) -> bool:
         """Delete record"""
-        result = await self.collection.delete_one({
+        result = await self.await collection.delete_one({
             "id": record_id,
             "user_id": user_id
         })
@@ -155,7 +156,7 @@ class ComplianceSystemService:
 
     async def get_stats(self, user_id: str) -> Dict[str, Any]:
         """Get statistics"""
-        total = await self.collection.count_documents({"user_id": user_id})
+        total = await self.await collection.count_documents({"user_id": user_id})
         
         return {
             "total_records": total,

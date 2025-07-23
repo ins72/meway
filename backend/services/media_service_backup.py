@@ -4,6 +4,8 @@ Business logic for media library and file management
 """
 
 import uuid
+import logging
+from typing import Dict, List, Optional, Any
 import os
 import base64
 from datetime import datetime
@@ -20,7 +22,7 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -33,7 +35,7 @@ class MediaService:
         else:
             folders_query["parent_folder"] = {"$in": ["", None]}
             
-        folders_cursor = folders_collection.find(folders_query).limit(20)
+        folders_cursor = folders_await collection.find(folders_query).limit(20)
         folders = await folders_cursor.to_list(length=20)
         
         # Get files
@@ -50,13 +52,13 @@ class MediaService:
                 {"tags": {"$in": [search]}}
             ]
             
-        files_cursor = files_collection.find(files_query).limit(limit)
+        files_cursor = files_await collection.find(files_query).limit(limit)
         files = await files_cursor.to_list(length=limit)
         
         # Format folders
         folder_data = []
         for folder_doc in folders:
-            file_count = await files_collection.count_documents({
+            file_count = await files_await collection.count_documents({
                 "workspace_id": str(workspace["_id"]),
                 "folder": folder_doc.get("path", folder_doc["name"])
             })
@@ -89,7 +91,7 @@ class MediaService:
             })
         
         # Calculate usage stats
-        total_files = await files_collection.count_documents({"workspace_id": str(workspace["_id"])})
+        total_files = await files_await collection.count_documents({"workspace_id": str(workspace["_id"])})
         
         
         # Calculate real total size from database
@@ -97,7 +99,7 @@ class MediaService:
             {"$match": {"user_id": user_id}},
             {"$group": {"_id": None, "total_size": {"$sum": "$size"}}}
         ]
-        result = await self.collection.aggregate(pipeline).to_list(1)
+        result = await self.await collection.aggregate(pipeline).to_list(1)
         total_size = result[0]["total_size"] if result else 0
         
         total_size = sum(f["size"] for f in files) if files else 0
@@ -125,7 +127,7 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -170,7 +172,7 @@ class MediaService:
         
         # Insert file
         files_collection = database.media_files
-        await files_collection.insert_one(file_doc)
+        await files_await collection.insert_one(file_doc)
         
         return {
             "id": file_doc["_id"],
@@ -191,14 +193,14 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             return None
         
         # Get file
         files_collection = database.media_files
-        file_doc = await files_collection.find_one({
+        file_doc = await files_await collection.find_one({
             "_id": file_id,
             "workspace_id": str(workspace["_id"])
         })
@@ -232,7 +234,7 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -241,7 +243,7 @@ class MediaService:
         metadata["updated_at"] = datetime.utcnow()
         
         files_collection = database.media_files
-        result = await files_collection.update_one(
+        result = await files_await collection.update_one(
             {"_id": file_id, "workspace_id": str(workspace["_id"])},
             {"$set": metadata}
         )
@@ -258,14 +260,14 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
         
         # Delete file
         files_collection = database.media_files
-        result = await files_collection.delete_one({
+        result = await files_await collection.delete_one({
             "_id": file_id,
             "workspace_id": str(workspace["_id"])
         })
@@ -279,14 +281,14 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
         
         # Check if folder already exists
         folders_collection = database.media_folders
-        existing = await folders_collection.find_one({
+        existing = await folders_await collection.find_one({
             "workspace_id": str(workspace["_id"]),
             "name": folder_name,
             "parent_folder": parent_folder
@@ -308,7 +310,7 @@ class MediaService:
             "created_at": datetime.utcnow()
         }
         
-        await folders_collection.insert_one(folder_doc)
+        await folders_await collection.insert_one(folder_doc)
         
         return {
             "id": folder_doc["_id"],
@@ -325,7 +327,7 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -340,7 +342,7 @@ class MediaService:
         if not folder_doc:
             raise Exception("Folder not found")
         
-        file_count = await files_collection.count_documents({
+        file_count = await files_await collection.count_documents({
             "workspace_id": str(workspace["_id"]),
             "folder": folder_doc["path"]
         })
@@ -350,7 +352,7 @@ class MediaService:
         
         # Delete folder
         folders_collection = database.media_folders
-        result = await folders_collection.delete_one({
+        result = await folders_await collection.delete_one({
             "_id": folder_id,
             "workspace_id": str(workspace["_id"])
         })
@@ -364,7 +366,7 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -372,7 +374,7 @@ class MediaService:
         files_collection = database.media_files
         
         # Get total file count and size
-        files_cursor = files_collection.find({"workspace_id": str(workspace["_id"])})
+        files_cursor = files_await collection.find({"workspace_id": str(workspace["_id"])})
         files = await files_cursor.to_list(length=None)
         
         total_files = len(files)
@@ -383,7 +385,7 @@ class MediaService:
         for file_doc in files:
             file_type = file_doc.get("file_type", "other")
             if file_type not in type_breakdown:
-                type_breakdown[file_type] = {"count": 0, "size": 0}
+                type_breakdown[file_type] = {"count": await collection.count_documents({}), "size": 0}
             type_breakdown[file_type]["count"] += 1
             type_breakdown[file_type]["size"] += file_doc.get("size", 0)
         
@@ -419,7 +421,7 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -441,7 +443,7 @@ class MediaService:
         
         # Execute search
         files_collection = database.media_files
-        files_cursor = files_collection.find(search_query).limit(limit)
+        files_cursor = files_await collection.find(search_query).limit(limit)
         files = await files_cursor.to_list(length=limit)
         
         # Format results
@@ -474,14 +476,14 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
         
         # Delete files
         files_collection = database.media_files
-        result = await files_collection.delete_many({
+        result = await files_await collection.delete_many({
             "_id": {"$in": file_ids},
             "workspace_id": str(workspace["_id"])
         })
@@ -498,14 +500,14 @@ class MediaService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
         
         # Update files
         files_collection = database.media_files
-        result = await files_collection.update_many(
+        result = await files_await collection.update_many(
             {
                 "_id": {"$in": file_ids},
                 "workspace_id": str(workspace["_id"])

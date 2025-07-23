@@ -4,6 +4,8 @@ Business logic for survey and feedback system
 """
 
 import uuid
+import logging
+from typing import Dict, List, Optional, Any
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 import json
@@ -50,14 +52,14 @@ class SurveyService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
         
         # Get surveys
         surveys_collection = database.surveys
-        surveys_cursor = surveys_collection.find({"workspace_id": str(workspace["_id"])})
+        surveys_cursor = surveys_await collection.find({"workspace_id": str(workspace["_id"])})
         surveys = await surveys_cursor.to_list(length=100)
         
         # Get responses count for each survey
@@ -65,7 +67,7 @@ class SurveyService:
         
         survey_data = []
         for survey in surveys:
-            response_count = await responses_collection.count_documents({"survey_id": survey["_id"]})
+            response_count = await responses_await collection.count_documents({"survey_id": survey["_id"]})
             
             # Calculate completion rate and average rating (mock for now)
 
@@ -165,7 +167,7 @@ class SurveyService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -202,7 +204,7 @@ class SurveyService:
         }
         
         surveys_collection = database.surveys
-        await surveys_collection.insert_one(survey_doc)
+        await surveys_await collection.insert_one(survey_doc)
         
         return {
             "survey_id": survey_doc["_id"],
@@ -220,14 +222,14 @@ class SurveyService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             return None
         
         # Get survey
         surveys_collection = database.surveys
-        survey = await surveys_collection.find_one({
+        survey = await surveys_await collection.find_one({
             "_id": survey_id,
             "workspace_id": str(workspace["_id"])
         })
@@ -237,7 +239,7 @@ class SurveyService:
         
         # Get response count
         responses_collection = database.survey_responses
-        response_count = await responses_collection.count_documents({"survey_id": survey_id})
+        response_count = await responses_await collection.count_documents({"survey_id": survey_id})
         
         return {
             "id": survey["_id"],
@@ -262,7 +264,7 @@ class SurveyService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -271,7 +273,7 @@ class SurveyService:
         updates["updated_at"] = datetime.utcnow()
         
         surveys_collection = database.surveys
-        result = await surveys_collection.update_one(
+        result = await surveys_await collection.update_one(
             {"_id": survey_id, "workspace_id": str(workspace["_id"])},
             {"$set": updates}
         )
@@ -289,7 +291,7 @@ class SurveyService:
         
         # Get user's workspace
         workspaces_collection = database.workspaces
-        workspace = await workspaces_collection.find_one({"owner_id": user_id})
+        workspace = await workspaces_await collection.find_one({"owner_id": user_id})
         
         if not workspace:
             raise Exception("Workspace not found")
@@ -299,10 +301,10 @@ class SurveyService:
         responses_collection = database.survey_responses
         
         # Delete responses first
-        await responses_collection.delete_many({"survey_id": survey_id})
+        await responses_await collection.delete_many({"survey_id": survey_id})
         
         # Delete survey
-        result = await surveys_collection.delete_one({
+        result = await surveys_await collection.delete_one({
             "_id": survey_id,
             "workspace_id": str(workspace["_id"])
         })
@@ -321,7 +323,7 @@ class SurveyService:
         
         # Get survey
         surveys_collection = database.surveys
-        survey = await surveys_collection.find_one({"_id": survey_id})
+        survey = await surveys_await collection.find_one({"_id": survey_id})
         
         if not survey:
             raise Exception("Survey not found")
@@ -333,7 +335,7 @@ class SurveyService:
         responses_collection = database.survey_responses
         
         if not survey["settings"].get("allow_multiple_submissions", False) and respondent_email:
-            existing_response = await responses_collection.find_one({
+            existing_response = await responses_await collection.find_one({
                 "survey_id": survey_id,
                 "respondent_email": respondent_email
             })
@@ -359,7 +361,7 @@ class SurveyService:
             "ip_address": None  # Could be populated from request
         }
         
-        await responses_collection.insert_one(response_doc)
+        await responses_await collection.insert_one(response_doc)
         
         return {
             "response_id": response_doc["_id"],
@@ -379,7 +381,7 @@ class SurveyService:
         
         # Get responses
         responses_collection = database.survey_responses
-        responses_cursor = responses_collection.find({"survey_id": survey_id})
+        responses_cursor = responses_await collection.find({"survey_id": survey_id})
         responses = await responses_cursor.to_list(length=1000)
         
         response_data = []
@@ -411,7 +413,7 @@ class SurveyService:
         
         # Get responses
         responses_collection = database.survey_responses
-        responses_cursor = responses_collection.find({"survey_id": survey_id})
+        responses_cursor = responses_await collection.find({"survey_id": survey_id})
         responses = await responses_cursor.to_list(length=1000)
         
         # Calculate analytics
@@ -600,9 +602,9 @@ class SurveyService:
         return {
             "templates": templates,
             "categories": [
-                {"name": "feedback", "count": 1},
-                {"name": "events", "count": 1},
-                {"name": "product", "count": 1}
+                {"name": "feedback", "count": await collection.count_documents({})},
+                {"name": "events", "count": await collection.count_documents({})},
+                {"name": "product", "count": await collection.count_documents({})}
             ]
         }
 

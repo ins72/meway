@@ -4,6 +4,7 @@ BULLETPROOF service with GUARANTEED working CRUD operations and REAL data
 """
 
 import uuid
+from typing import Dict, List, Optional, Any
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
@@ -139,7 +140,7 @@ class TeamManagementService:
                 query["user_id"] = user_id
             
             # Execute query - REAL DATA OPERATION
-            cursor = collection.find(query).skip(offset).limit(limit)
+            cursor = await collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
             # Sanitize results
@@ -252,7 +253,7 @@ class TeamManagementService:
             return {"success": False, "error": str(e)}
     
     async def health_check(self) -> dict:
-        """HEALTH CHECK - GUARANTEED to work"""
+        """Health check with proper async database connection"""
         try:
             from core.database import get_database_async
             db = await get_database_async()
@@ -260,11 +261,6 @@ class TeamManagementService:
                 return {"success": False, "healthy": False, "error": "Database unavailable"}
             
             collection = db[self.collection_name]
-            # Test database connection
-            await collection.count_documents({})
-            
-                return {"success": False, "healthy": False, "error": "Database unavailable"}
-            
             # Test database connection
             await collection.count_documents({})
             
@@ -276,7 +272,7 @@ class TeamManagementService:
             }
             
         except Exception as e:
-            logger.error(f"HEALTH CHECK error: {e}")
+            logger.error(f"Health check error in {self.service_name}: {e}")
             return {"success": False, "healthy": False, "error": str(e)}
 
 # Service instance
