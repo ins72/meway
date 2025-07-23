@@ -113,6 +113,9 @@ class TwitterService:
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
+            # Generate a unique item ID
+            item_id = str(uuid.uuid4())
+            
             # Prepare tweet data
             tweet_data = {
                 "id": f"tw_{item_id}",
@@ -128,20 +131,24 @@ class TwitterService:
                     "reply_count": 0
                 },
                 "created_at": datetime.utcnow().isoformat()
-            }' - Tweet #{i+1}",
-                    "user": {
-                        "username": f"user_{i+1}",
-                        "display_name": f"Twitter User {i+1}",
-                        "followers_count": 1000 + (i * 150)
-                    },
-                    "metrics": {
-                        "like_count": 10 + (i * 5),
-                        "retweet_count": 2 + i,
-                        "reply_count": 1 + i
-                    },
-                    "created_at": datetime.utcnow().isoformat()
+            }
+            
+            # Store tweet in database
+            result = await collection.insert_one(tweet_data)
+            
+            if result.inserted_id:
+                return {
+                    "success": True,
+                    "message": "Tweet posted successfully",
+                    "data": tweet_data,
+                    "id": tweet_data["id"]
                 }
-                search_results.append(tweet_data)
+            else:
+                return {"success": False, "error": "Failed to post tweet"}
+                
+        except Exception as e:
+            logger.error(f"Post tweet error: {e}")
+            return {"success": False, "error": str(e)}
             
             # Store search record in database
             search_record = {
