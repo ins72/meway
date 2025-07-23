@@ -201,7 +201,7 @@ class ComprehensiveBackendTester:
                 "commission_rate": 0.1
             }
             
-            async with self.session.post(f"{self.api_url}/referral/create", json=referral_data, headers=headers) as response:
+            async with self.session.post(f"{self.api_url}/referral/referrals", json=referral_data, headers=headers) as response:
                 if response.status == 200 or response.status == 201:
                     data = await response.json()
                     results["passed"] += 1
