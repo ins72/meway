@@ -14425,13 +14425,16 @@ backend:
     implemented: true
     working: false
     file: "/api/forms/*"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
         comment: "❌ FORM BUILDER SYSTEM CRITICAL ISSUES (2/8 working): Dashboard working (188 chars), forms list working (149 chars), but create/update endpoints require missing field 'id' parameters in form field definitions, submit endpoint expects 'data' parameter instead of 'responses', and all form operations with sample IDs return 404 'Form not found' errors. System needs schema fixes and proper form ID handling."
+      - working: false
+        agent: "testing"
+        comment: "❌ FORM BUILDER SYSTEM CRITICAL DATABASE ISSUES - JANUARY 2025: Health endpoint working (Status: healthy), but main endpoint failing with HTTP 400 'AsyncIOMotorCursor can't be used in await expression' error. This is a critical MongoDB Motor driver implementation issue affecting database cursor handling. The system architecture exists but database operations are broken due to improper async cursor usage."
 
   - task: "Subscription Management System (First Wave Regression)"
     implemented: true
