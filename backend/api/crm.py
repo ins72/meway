@@ -174,7 +174,7 @@ async def get_crm(
 # Update Operation
 @router.put("/{item_id}", response_model=CrmResponse)
 async def update_crm(
-    item_id: str = Path(..., description="ID of the crm to update"),    item: CrmUpdate, = Body(...),
+    item_id: str = Path(..., description="ID of the crm to update"),    item: CrmUpdate = Body(...),
 
     
     current_user: dict = Depends(get_current_user),

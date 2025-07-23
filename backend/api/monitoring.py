@@ -174,7 +174,7 @@ async def get_monitoring(
 # Update Operation
 @router.put("/{item_id}", response_model=MonitoringResponse)
 async def update_monitoring(
-    item_id: str = Path(..., description="ID of the monitoring to update"),    item: MonitoringUpdate, = Body(...),
+    item_id: str = Path(..., description="ID of the monitoring to update"),    item: MonitoringUpdate = Body(...),
 
     
     current_user: dict = Depends(get_current_user),
