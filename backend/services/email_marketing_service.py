@@ -222,7 +222,7 @@ class EmailMarketingService:
         
         lists = []
         for i in range(await self._get_metric_from_db('count', 5, 15)):
-            subscriber_count = await self._calculate_count(user_id))
+            subscriber_count = await self._calculate_count(user_id)
             lists.append({
                 "id": str(uuid.uuid4()),
                 "name": await self._get_choice_from_db([
