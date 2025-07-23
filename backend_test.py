@@ -506,10 +506,17 @@ class FinalComprehensiveTester:
         # Category Performance
         print(f"\n📂 CATEGORY PERFORMANCE:")
         for category, endpoints in self.endpoint_categories.items():
-            category_working = len([e for e in endpoints if any(r['success'] for r in self.test_results if r.get('endpoint_info', {}).get('path') == e['path'])])
+            category_working = 0
             category_total = len(endpoints)
-            category_success_rate = (category_working / category_total * 100) if category_total > 0 else 0
             
+            for endpoint in endpoints:
+                for result in self.test_results:
+                    endpoint_info = result.get('endpoint_info')
+                    if endpoint_info and endpoint_info.get('path') == endpoint['path'] and result['success']:
+                        category_working += 1
+                        break
+            
+            category_success_rate = (category_working / category_total * 100) if category_total > 0 else 0
             status_icon = "✅" if category_success_rate >= 75 else "⚠️" if category_success_rate >= 50 else "❌"
             print(f"   {status_icon} {category}: {category_working}/{category_total} ({category_success_rate:.1f}%)")
         
