@@ -55,7 +55,7 @@ class ComprehensiveVerificationTester:
         """Authenticate and get JWT token"""
         try:
             login_data = {
-                "username": TEST_EMAIL,
+                "email": TEST_EMAIL,
                 "password": TEST_PASSWORD
             }
             
