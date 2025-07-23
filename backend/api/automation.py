@@ -174,10 +174,9 @@ async def get_automation(
 # Update Operation
 @router.put("/{item_id}", response_model=AutomationResponse)
 async def update_automation(
-    item_id: str = Path(..., description="ID of the automation to update"),    item: AutomationUpdate, = Body(...),
-
-    
-    current_user: dict = Depends(get_current_user),
+    item_id: str = Path(..., description="ID of the automation to update"),
+    item: AutomationUpdate = Body(...),
+    current_user: dict = Depends(get_current_user)
 ):
     """Update automation with comprehensive validation"""
     try:
