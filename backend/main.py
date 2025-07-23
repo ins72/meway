@@ -316,7 +316,7 @@ try:
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
 
     
-    logger.info(f"✅ Successfully included 129 bulletproof routers")
+    logger.info(f"✅ Successfully included 130 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
