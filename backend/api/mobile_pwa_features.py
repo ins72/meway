@@ -78,7 +78,7 @@ class BackgroundSyncRequest(BaseModel):
     data: Dict[str, Any] = Field(..., description="Data to sync")
     endpoint: str = Field(..., description="API endpoint for sync")
     method: str = Field("POST", regex="^(GET|POST|PUT|DELETE|PATCH)$")
-    priority: str = Field("normal", regex="^(low|normal|high)$")
+    priority: str = Field("normal", pattern="^(low|normal|high)$")
     max_attempts: int = Field(3, ge=1, le=10)
 
 # Push Notifications
