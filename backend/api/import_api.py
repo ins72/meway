@@ -83,7 +83,7 @@ async def get_import(
 ):
     """GET endpoint - GUARANTEED to work with real data"""
     try:
-        service = get_import_service()
+        service = get_import_api_service()
         result = await service.get_import(item_id)
         
         if result.get("success"):
