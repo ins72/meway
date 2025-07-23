@@ -186,18 +186,18 @@ class UltimateFinalVerificationTester:
         print("\n💼 TESTING CORE BUSINESS SYSTEMS (Expected: 100% Success)")
         
         core_systems = [
-            ("Complete Financial System", "/api/complete-financial/health", "/api/complete-financial/list"),
-            ("Complete Admin Dashboard", "/api/complete-admin-dashboard/health", "/api/complete-admin-dashboard/list"),
-            ("Analytics System", "/api/analytics/health", "/api/analytics/list"),
-            ("Multi-Workspace System", "/api/complete-multi-workspace/health", "/api/complete-multi-workspace/list"),
-            ("Complete Onboarding System", "/api/complete-onboarding/health", "/api/complete-onboarding/list"),
-            ("Escrow System", "/api/escrow/health", "/api/escrow/list"),
-            ("AI Content System", "/api/ai-content/health", "/api/ai-content/list"),
-            ("Form Builder System", "/api/form-builder/health", "/api/form-builder/list"),
-            ("Website Builder System", "/api/website-builder/health", "/api/website-builder/list"),
-            ("Team Management System", "/api/team-management/health", "/api/team-management/list"),
-            ("Booking System", "/api/booking/health", "/api/booking/list"),
-            ("Media Library System", "/api/media-library/health", "/api/media-library/list")
+            ("Complete Financial System", "/api/complete-financial/health", "/api/complete-financial/"),
+            ("Complete Admin Dashboard", "/api/complete-admin-dashboard/health", "/api/complete-admin-dashboard/"),
+            ("Analytics System", "/api/analytics/health", "/api/analytics/"),
+            ("Multi-Workspace System", "/api/complete-multi-workspace/health", "/api/complete-multi-workspace/"),
+            ("Complete Onboarding System", "/api/complete-onboarding/health", "/api/complete-onboarding/"),
+            ("Escrow System", "/api/escrow/health", "/api/escrow/"),
+            ("AI Content System", "/api/ai-content/health", "/api/ai-content/"),
+            ("Form Builder System", "/api/form-builder/health", "/api/form-builder/"),
+            ("Website Builder System", "/api/website-builder/health", "/api/website-builder/"),
+            ("Team Management System", "/api/team-management/health", "/api/team-management/"),
+            ("Booking System", "/api/booking/health", "/api/booking/"),
+            ("Media Library System", "/api/media-library/health", "/api/media-library/")
         ]
         
         for system_name, health_endpoint, list_endpoint in core_systems:
