@@ -32,7 +32,7 @@ class ChallengeCreateRequest(BaseModel):
 # Unified Analytics Dashboard
 @router.get("/dashboard", tags=["Analytics Dashboard"])
 async def get_unified_dashboard(
-    period: str = Query("month", regex="^(day|week|month|quarter|year)$"),
+    period: str = Query("month", pattern="^(day|week|month|quarter|year)$"),
     current_user: dict = Depends(get_current_user)
 ):
     """Get comprehensive unified analytics dashboard"""
