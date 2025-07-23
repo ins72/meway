@@ -14,6 +14,8 @@ import logging
 from .config import settings
 from .database import get_users_collection
 
+logger = logging.getLogger(__name__)
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
