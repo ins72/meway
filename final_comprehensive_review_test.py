@@ -400,11 +400,11 @@ class MewayzV2ReviewTester:
         
         integration_endpoints = [
             ("/api/referral-system/health", "Referral System"),
-            ("/api/stripe/health", "Stripe Integration"),
+            ("/api/stripe-integration/health", "Stripe Integration"),
             ("/api/twitter/health", "Twitter/X API"),
             ("/api/tiktok/health", "TikTok API"),
             ("/api/google-oauth/health", "Google OAuth"),
-            ("/api/openai/health", "OpenAI Integration")
+            ("/api/ai/health", "OpenAI Integration")
         ]
         
         for endpoint, test_name in integration_endpoints:
