@@ -302,6 +302,8 @@ try:
     app.include_router(export_router, prefix="/api/export", tags=["export"])
     app.include_router(user_router, prefix="/api/user", tags=["user"])
     app.include_router(social_email_router, prefix="/api/social-email", tags=["social_email"])
+    app.include_router(website_builder_router, prefix="/api/website-builder", tags=["website_builder"])
+    app.include_router(referral_router, prefix="/api/referral", tags=["referral"])
 
     
     logger.info(f"✅ Successfully included 123 bulletproof routers")
