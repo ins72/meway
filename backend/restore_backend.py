@@ -50,12 +50,25 @@ from core.database import get_database
 
 class {class_name}Service:
     def __init__(self):
-        self.db = get_database()
-        self.collection = self.db["{collection_name}"]
+        self.db = None
+        self.collection = None
+    
+    def _get_db(self):
+        """Get database connection (lazy initialization)"""
+        if self.db is None:
+            self.db = get_database()
+        return self.db
+    
+    def _get_collection(self):
+        """Get collection (lazy initialization)"""
+        if self.collection is None:
+            self.collection = self._get_db()["{collection_name}"]
+        return self.collection
 
     async def create_{service_name}(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new {service_name}"""
         try:
+            collection = self._get_collection()
             # Add metadata
             data.update({{
                 "id": str(uuid.uuid4()),
@@ -65,7 +78,7 @@ class {class_name}Service:
             }})
             
             # Save to database
-            result = await self.collection.insert_one(data)
+            result = await collection.insert_one(data)
             
             return {{
                 "success": True,
@@ -82,7 +95,8 @@ class {class_name}Service:
     async def get_{service_name}(self, item_id: str) -> Dict[str, Any]:
         """Get {service_name} by ID"""
         try:
-            doc = await self.collection.find_one({{"id": item_id}})
+            collection = self._get_collection()
+            doc = await collection.find_one({{"id": item_id}})
             
             if not doc:
                 return {{
@@ -104,18 +118,19 @@ class {class_name}Service:
     async def list_{service_name}s(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
         """List {service_name}s with pagination"""
         try:
+            collection = self._get_collection()
             query = {{}}
             if user_id:
                 query["user_id"] = user_id
             
-            cursor = self.collection.find(query).skip(offset).limit(limit)
+            cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id field
             for doc in docs:
                 doc.pop('_id', None)
             
-            total_count = await self.collection.count_documents(query)
+            total_count = await collection.count_documents(query)
             
             return {{
                 "success": True,
@@ -133,10 +148,11 @@ class {class_name}Service:
     async def update_{service_name}(self, item_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
         """Update {service_name} by ID"""
         try:
+            collection = self._get_collection()
             # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            result = await self.collection.update_one(
+            result = await collection.update_one(
                 {{"id": item_id}},
                 {{"$set": update_data}}
             )
@@ -148,7 +164,7 @@ class {class_name}Service:
                 }}
             
             # Get updated document
-            updated_doc = await self.collection.find_one({{"id": item_id}})
+            updated_doc = await collection.find_one({{"id": item_id}})
             if updated_doc:
                 updated_doc.pop('_id', None)
             
@@ -166,7 +182,8 @@ class {class_name}Service:
     async def delete_{service_name}(self, item_id: str) -> Dict[str, Any]:
         """Delete {service_name} by ID"""
         try:
-            result = await self.collection.delete_one({{"id": item_id}})
+            collection = self._get_collection()
+            result = await collection.delete_one({{"id": item_id}})
             
             if result.deleted_count == 0:
                 return {{
@@ -188,12 +205,13 @@ class {class_name}Service:
     async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
         """Get statistics for {service_name}s"""
         try:
+            collection = self._get_collection()
             query = {{}}
             if user_id:
                 query["user_id"] = user_id
             
-            total_count = await self.collection.count_documents(query)
-            active_count = await self.collection.count_documents({{**query, "status": "active"}})
+            total_count = await collection.count_documents(query)
+            active_count = await collection.count_documents({{**query, "status": "active"}})
             
             return {{
                 "success": True,
