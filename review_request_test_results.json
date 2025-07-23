@@ -1,0 +1,84 @@
+{
+  "total_tests": 25,
+  "passed_tests": 5,
+  "failed_tests": 20,
+  "test_categories": {
+    "Authentication System": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "details": [
+        "\u2705 JWT Token Generation - Working perfectly",
+        "\u2705 JWT Token Validation - Working perfectly"
+      ]
+    },
+    "Referral System": {
+      "total": 4,
+      "passed": 1,
+      "failed": 3,
+      "details": [
+        "\u2705 Referral Health Check - Working perfectly",
+        "\u274c List Referrals - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c Create Referral - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c Referral Analytics - HTTP 405: {\"detail\":\"Method Not Allowed\"}"
+      ]
+    },
+    "Twitter/X API": {
+      "total": 4,
+      "passed": 1,
+      "failed": 3,
+      "details": [
+        "\u2705 Twitter Health Check - Working perfectly",
+        "\u274c Twitter Search - HTTP 404: {\"detail\":\"Tweet not found\"}",
+        "\u274c Tweet Creation - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c Twitter Analytics - HTTP 404: {\"detail\":\"Tweet not found\"}"
+      ]
+    },
+    "TikTok API": {
+      "total": 4,
+      "passed": 1,
+      "failed": 3,
+      "details": [
+        "\u2705 TikTok Health Check - Working perfectly",
+        "\u274c TikTok Search - HTTP 404: {\"detail\":\"Post not found\"}",
+        "\u274c TikTok Video Upload - HTTP 500: Internal Server Error",
+        "\u274c TikTok Analytics - HTTP 404: {\"detail\":\"Post not found\"}"
+      ]
+    },
+    "Stripe Integration": {
+      "total": 4,
+      "passed": 0,
+      "failed": 4,
+      "details": [
+        "\u274c Stripe Health Check - HTTP 404: {\"detail\":\"Not Found\"}",
+        "\u274c Create Payment Intent - HTTP 404: {\"detail\":\"Not Found\"}",
+        "\u274c Payment Methods - HTTP 404: {\"detail\":\"Not Found\"}",
+        "\u274c Subscription Management - HTTP 404: {\"detail\":\"Not Found\"}"
+      ]
+    },
+    "Core Business Systems": {
+      "total": 4,
+      "passed": 0,
+      "failed": 4,
+      "details": [
+        "\u274c Financial System - HTTP 404: {\"detail\":\"Not found\"}",
+        "\u274c Admin Dashboard - HTTP 404: {\"detail\":\"Not found\"}",
+        "\u274c Analytics System - HTTP 404: {\"detail\":\"Not found\"}",
+        "\u274c Workspace Management - HTTP 404: {\"detail\":\"Not found\"}"
+      ]
+    },
+    "Overall System Health": {
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "details": [
+        "\u274c OpenAPI Specification - HTTP 404: {\"detail\":\"Not Found\"}",
+        "\u274c System Health - HTTP 404: {\"detail\":\"Not Found\"}",
+        "\u274c Database Connectivity - HTTP 404: {\"detail\":\"Not Found\"}"
+      ]
+    }
+  },
+  "critical_issues": [],
+  "improvements": [],
+  "detailed_results": []
+}
