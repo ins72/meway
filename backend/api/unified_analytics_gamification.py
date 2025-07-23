@@ -145,7 +145,7 @@ async def unlock_achievement(
 
 @router.get("/gamification/leaderboard", tags=["Gamification"])
 async def get_leaderboard(
-    category: str = Query("points", regex="^(points|revenue|engagement)$"),
+    category: str = Query("points", pattern="^(points|revenue|engagement)$"),
     limit: int = Query(100, ge=1, le=500),
     current_user: dict = Depends(get_current_user)
 ):
