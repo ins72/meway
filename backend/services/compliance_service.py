@@ -165,12 +165,13 @@ class ComplianceService:
     async def get_stats(self, user_id: str = None) -> Dict[str, Any]:
         """Get statistics for compliances"""
         try:
+            collection = self._get_collection()
             query = {}
             if user_id:
                 query["user_id"] = user_id
             
-            total_count = await self.collection.count_documents(query)
-            active_count = await self.collection.count_documents({**query, "status": "active"})
+            total_count = await collection.count_documents(query)
+            active_count = await collection.count_documents({**query, "status": "active"})
             
             return {
                 "success": True,
