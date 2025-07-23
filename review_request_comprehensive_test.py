@@ -639,7 +639,7 @@ class ComprehensiveBackendTester:
         # Test 3: Database Connectivity
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/health") as response:
+            async with self.session.get(f"{self.base_url}/") as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
