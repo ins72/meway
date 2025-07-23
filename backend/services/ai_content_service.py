@@ -799,8 +799,7 @@ Click below to secure your spot and join the thousands who are already seeing in
             
         except Exception:
             # Safe fallback - return first n items
-            return items[:count] if items else []}}
-                ]).to_list(length=1)
+            return items[:count] if items else []
                 return result[0]["total"] if result else min_val
                 
             elif metric_type == 'count':
