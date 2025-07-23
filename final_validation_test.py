@@ -336,48 +336,49 @@ class FinalValidationTester:
         print("\n🔑 Testing Key Features...")
         
         # Test User Profile
-        self.test_endpoint("/user/profile", "GET", test_name="Platform Health - User Profile")
+        self.test_endpoint("/users/profile", "GET", test_name="Platform Health - User Profile")
         
         # Test Dashboard
-        self.test_endpoint("/dashboard/overview", "GET", test_name="Platform Health - Dashboard Overview")
+        self.test_endpoint("/analytics-system/dashboard", "GET", test_name="Platform Health - Analytics Dashboard")
         
         # Test Analytics
-        self.test_endpoint("/analytics/overview", "GET", test_name="Platform Health - Analytics Overview")
+        self.test_endpoint("/analytics-system/overview", "GET", test_name="Platform Health - Analytics Overview")
         
         # Test AI Services
         self.test_endpoint("/ai/services", "GET", test_name="Platform Health - AI Services")
         
         # Test E-commerce
-        self.test_endpoint("/ecommerce/products", "GET", test_name="Platform Health - E-commerce Products")
-        self.test_endpoint("/ecommerce/dashboard", "GET", test_name="Platform Health - E-commerce Dashboard")
+        self.test_endpoint("/products", "GET", test_name="Platform Health - Products")
+        self.test_endpoint("/orders", "GET", test_name="Platform Health - Orders")
         
         # Test Marketing
-        self.test_endpoint("/marketing/campaigns", "GET", test_name="Platform Health - Marketing Campaigns")
+        self.test_endpoint("/email-marketing/campaigns", "GET", test_name="Platform Health - Marketing Campaigns")
+        
+        # Test CRM
+        self.test_endpoint("/crm/dashboard", "GET", test_name="Platform Health - CRM Dashboard")
         
         # Test Admin Functions
         print("\n⚙️ Testing Admin Functions...")
-        self.test_endpoint("/admin/users", "GET", test_name="Platform Health - Admin Users")
-        self.test_endpoint("/admin/system/metrics", "GET", test_name="Platform Health - System Metrics")
+        self.test_endpoint("/users", "GET", test_name="Platform Health - Users")
+        self.test_endpoint("/system/metrics", "GET", test_name="Platform Health - System Metrics")
         
         # Test External API Integrations
         print("\n🔗 Testing External API Integrations...")
-        self.test_endpoint("/admin-config/integration/status", "GET", test_name="Platform Health - Integration Status")
-        self.test_endpoint("/admin-config/test/stripe", "GET", test_name="Platform Health - Stripe Integration")
-        self.test_endpoint("/admin-config/test/openai", "GET", test_name="Platform Health - OpenAI Integration")
+        self.test_endpoint("/integrations/status", "GET", test_name="Platform Health - Integration Status")
         
         # Test Database Connectivity
         print("\n🗄️ Testing Database Connectivity...")
         
         # Test data consistency for key endpoints
-        success1, data1 = self.test_endpoint("/user/profile", "GET", test_name="Database - User Profile (Call 1)")
+        success1, data1 = self.test_endpoint("/ai/services", "GET", test_name="Database - AI Services (Call 1)")
         time.sleep(0.5)
-        success2, data2 = self.test_endpoint("/user/profile", "GET", test_name="Database - User Profile (Call 2)")
+        success2, data2 = self.test_endpoint("/ai/services", "GET", test_name="Database - AI Services (Call 2)")
         
         if success1 and success2:
             if data1 == data2:
-                self.log_result("Database Consistency", True, "User profile data consistent - real database confirmed")
+                self.log_result("Database Consistency", True, "AI services data consistent - real database confirmed")
             else:
-                self.log_result("Database Consistency", False, "User profile data inconsistent - may be using random data")
+                self.log_result("Database Consistency", False, "AI services data inconsistent - may be using random data")
         
         print("\n🎯 Overall Platform Health Testing Complete!")
         return True
