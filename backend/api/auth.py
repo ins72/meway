@@ -8,6 +8,11 @@ from typing import Dict, Any, List, Optional
 from core.auth import get_current_user
 from services.auth_service import get_auth_service
 import logging
+import uuid
+from pydantic import BaseModel
+from core.auth import create_access_token, verify_password, get_password_hash
+from core.database import get_users_collection
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
