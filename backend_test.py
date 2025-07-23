@@ -162,21 +162,206 @@ class BackendTester:
             self.log_result(test_name, False, f"Request error: {str(e)}")
             return False, None
 
-    def test_newly_implemented_features(self):
-        """Test the newly implemented features from the review request"""
-        print("\n🎯 TESTING NEWLY IMPLEMENTED FEATURES - JANUARY 2025")
+    def test_critical_endpoints_from_review_request(self):
+        """Test all critical endpoints mentioned in the review request"""
+        print("\n🎯 TESTING CRITICAL ENDPOINTS FROM REVIEW REQUEST")
         print("=" * 80)
-        print("Testing the four major new features:")
-        print("1. Template Marketplace (Real Endpoints)")
-        print("2. Team Management (Real Endpoints)") 
-        print("3. Unified Analytics (Real Endpoints)")
-        print("4. Mobile PWA Features (Real Endpoints)")
+        print("Testing the specific endpoints mentioned in the final verification request:")
+        print("SUCCESS CRITERIA: All endpoints should return 200 status codes (not 404)")
         
-        # Test all new features with real endpoints
-        self.test_real_template_marketplace_system()
-        self.test_real_team_management_system()
-        self.test_real_unified_analytics_system()
-        self.test_real_mobile_pwa_system()
+        # Track results for each category
+        results = {
+            "team_management": [],
+            "instagram_database": [],
+            "pwa_features": [],
+            "ai_workflows": [],
+            "social_media_posts": [],
+            "escrow_system": [],
+            "device_offline_sync": [],
+            "dispute_resolution": [],
+            "template_marketplace": []
+        }
+        
+        # 1. Team Management Endpoints
+        print("\n👥 TESTING TEAM MANAGEMENT ENDPOINTS")
+        print("-" * 50)
+        success, data = self.test_endpoint("/team-management/dashboard", "GET", test_name="Team Management - Dashboard")
+        results["team_management"].append(("Dashboard", success))
+        
+        success, data = self.test_endpoint("/team-management/members", "GET", test_name="Team Management - Members")
+        results["team_management"].append(("Members", success))
+        
+        success, data = self.test_endpoint("/team-management/activity", "GET", test_name="Team Management - Activity")
+        results["team_management"].append(("Activity", success))
+        
+        # 2. Instagram Database Endpoints
+        print("\n📸 TESTING INSTAGRAM DATABASE ENDPOINTS")
+        print("-" * 50)
+        instagram_search_data = {
+            "query": "digital marketing influencers",
+            "location": "United States",
+            "follower_range": {"min": 10000, "max": 500000},
+            "engagement_rate": {"min": 2.5}
+        }
+        success, data = self.test_endpoint("/instagram/search", "POST", instagram_search_data, "Instagram - Database Search")
+        results["instagram_database"].append(("Search", success))
+        
+        success, data = self.test_endpoint("/instagram/profiles", "GET", test_name="Instagram - Profiles")
+        results["instagram_database"].append(("Profiles", success))
+        
+        # 3. PWA Features Endpoints
+        print("\n📱 TESTING PWA FEATURES ENDPOINTS")
+        print("-" * 50)
+        manifest_data = {
+            "app_name": "Mewayz Business Platform",
+            "short_name": "Mewayz",
+            "theme_color": "#2563EB",
+            "background_color": "#FFFFFF",
+            "start_url": "/dashboard"
+        }
+        success, data = self.test_endpoint("/pwa/manifest/generate", "POST", manifest_data, "PWA - Generate Manifest")
+        results["pwa_features"].append(("Generate Manifest", success))
+        
+        success, data = self.test_endpoint("/pwa/manifest/current", "GET", test_name="PWA - Current Manifest")
+        results["pwa_features"].append(("Current Manifest", success))
+        
+        # 4. AI Workflows Endpoints
+        print("\n🤖 TESTING AI WORKFLOWS ENDPOINTS")
+        print("-" * 50)
+        success, data = self.test_endpoint("/workflows/list", "GET", test_name="AI Workflows - List")
+        results["ai_workflows"].append(("List Workflows", success))
+        
+        workflow_data = {
+            "name": "Content Creation Workflow",
+            "description": "Automated content generation and posting",
+            "triggers": [{"type": "schedule", "cron": "0 9 * * 1"}],
+            "actions": [{"type": "generate_content", "template": "social_post"}]
+        }
+        success, data = self.test_endpoint("/workflows/create", "POST", workflow_data, "AI Workflows - Create")
+        results["ai_workflows"].append(("Create Workflow", success))
+        
+        # 5. Social Media Posts Endpoints
+        print("\n📅 TESTING SOCIAL MEDIA POSTS ENDPOINTS")
+        print("-" * 50)
+        post_data = {
+            "content": "🚀 Exciting business update! Our platform is transforming how teams collaborate. #Business #Innovation",
+            "platforms": ["twitter", "linkedin"],
+            "scheduled_time": "2025-01-16T15:00:00Z"
+        }
+        success, data = self.test_endpoint("/posts/schedule", "POST", post_data, "Social Media - Schedule Post")
+        results["social_media_posts"].append(("Schedule Post", success))
+        
+        success, data = self.test_endpoint("/posts/scheduled", "GET", test_name="Social Media - Scheduled Posts")
+        results["social_media_posts"].append(("Scheduled Posts", success))
+        
+        # 6. Escrow System Endpoints
+        print("\n💰 TESTING ESCROW SYSTEM ENDPOINTS")
+        print("-" * 50)
+        milestone_data = {
+            "buyer_id": "buyer_12345",
+            "seller_id": "seller_67890",
+            "project_title": "Website Development Project",
+            "total_amount": 3000.00,
+            "milestones": [
+                {"title": "Design Phase", "amount": 1000.00},
+                {"title": "Development Phase", "amount": 2000.00}
+            ]
+        }
+        success, data = self.test_endpoint("/escrow/transactions/milestone", "POST", milestone_data, "Escrow - Milestone Transaction")
+        results["escrow_system"].append(("Milestone Transaction", success))
+        
+        success, data = self.test_endpoint("/escrow/transactions/list", "GET", test_name="Escrow - List Transactions")
+        results["escrow_system"].append(("List Transactions", success))
+        
+        # 7. Device & Offline Sync Endpoints
+        print("\n🔄 TESTING DEVICE & OFFLINE SYNC ENDPOINTS")
+        print("-" * 50)
+        device_data = {
+            "device_id": "device_test_001",
+            "device_type": "mobile",
+            "platform": "ios",
+            "app_version": "2.1.0"
+        }
+        success, data = self.test_endpoint("/device/register", "POST", device_data, "Device - Register")
+        results["device_offline_sync"].append(("Register Device", success))
+        
+        sync_data = {
+            "device_id": "device_test_001",
+            "last_sync": "2025-01-15T10:00:00Z",
+            "data_types": ["contacts", "projects"]
+        }
+        success, data = self.test_endpoint("/device/offline/sync", "POST", sync_data, "Device - Offline Sync")
+        results["device_offline_sync"].append(("Offline Sync", success))
+        
+        # 8. Dispute Resolution Endpoints
+        print("\n⚖️ TESTING DISPUTE RESOLUTION ENDPOINTS")
+        print("-" * 50)
+        dispute_data = {
+            "transaction_id": "trans_12345",
+            "reason": "milestone_not_completed",
+            "description": "Work was not completed according to specifications"
+        }
+        success, data = self.test_endpoint("/disputes/initiate", "POST", dispute_data, "Disputes - Initiate")
+        results["dispute_resolution"].append(("Initiate Dispute", success))
+        
+        success, data = self.test_endpoint("/disputes/list", "GET", test_name="Disputes - List")
+        results["dispute_resolution"].append(("List Disputes", success))
+        
+        # 9. Template Marketplace Endpoints
+        print("\n🛍️ TESTING TEMPLATE MARKETPLACE ENDPOINTS")
+        print("-" * 50)
+        success, data = self.test_endpoint("/template-marketplace/browse", "GET", test_name="Template Marketplace - Browse")
+        results["template_marketplace"].append(("Browse Templates", success))
+        
+        success, data = self.test_endpoint("/template-marketplace/creator-earnings", "GET", test_name="Template Marketplace - Creator Earnings")
+        results["template_marketplace"].append(("Creator Earnings", success))
+        
+        # Print detailed results for each category
+        print("\n" + "=" * 80)
+        print("🎯 CRITICAL ENDPOINTS VERIFICATION RESULTS")
+        print("=" * 80)
+        
+        total_endpoints = 0
+        working_endpoints = 0
+        
+        for category, endpoint_results in results.items():
+            category_name = category.replace("_", " ").title()
+            category_working = sum(1 for _, success in endpoint_results if success)
+            category_total = len(endpoint_results)
+            category_percentage = (category_working / category_total * 100) if category_total > 0 else 0
+            
+            status_icon = "✅" if category_percentage == 100 else "⚠️" if category_percentage >= 50 else "❌"
+            print(f"{status_icon} {category_name}: {category_working}/{category_total} ({category_percentage:.1f}%)")
+            
+            for endpoint_name, success in endpoint_results:
+                endpoint_status = "✅" if success else "❌"
+                print(f"   {endpoint_status} {endpoint_name}")
+            
+            total_endpoints += category_total
+            working_endpoints += category_working
+        
+        overall_percentage = (working_endpoints / total_endpoints * 100) if total_endpoints > 0 else 0
+        
+        print(f"\n📊 OVERALL CRITICAL ENDPOINTS RESULTS:")
+        print(f"   Total Critical Endpoints: {total_endpoints}")
+        print(f"   Working Endpoints: {working_endpoints}")
+        print(f"   Failed Endpoints: {total_endpoints - working_endpoints}")
+        print(f"   Success Rate: {overall_percentage:.1f}%")
+        
+        if overall_percentage == 100:
+            print(f"\n🎉 EXCELLENT SUCCESS: All critical endpoints are working perfectly!")
+            print(f"   ✅ Platform is 100% ready with all requested features implemented")
+        elif overall_percentage >= 75:
+            print(f"\n✅ GOOD SUCCESS: Most critical endpoints are working")
+            print(f"   ⚠️ {total_endpoints - working_endpoints} endpoints need attention")
+        elif overall_percentage >= 50:
+            print(f"\n⚠️ PARTIAL SUCCESS: Some critical endpoints are working")
+            print(f"   ❌ {total_endpoints - working_endpoints} endpoints require implementation")
+        else:
+            print(f"\n❌ CRITICAL ISSUES: Most endpoints are not working")
+            print(f"   🔧 {total_endpoints - working_endpoints} endpoints need immediate implementation")
+        
+        return results
         
     def test_real_template_marketplace_system(self):
         """Test Real Template Marketplace at /api/marketing-website/templates/marketplace"""
