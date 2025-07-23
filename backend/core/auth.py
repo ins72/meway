@@ -55,17 +55,31 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except JWTError:
         raise credentials_exception
     
-    from .database import get_database_async
-    db = await get_database_async()
-    if db is None:
+    # Fix database connection timing issue
+    try:
+        from .database import get_database_async, connect_to_mongo
+        
+        # Ensure database connection is available
+        db = await get_database_async()
+        if db is None:
+            # Try to reinitialize connection if needed
+            await connect_to_mongo()
+            db = await get_database_async()
+            
+        if db is None:
+            logger.error("Database connection not available during authentication")
+            raise credentials_exception
+        
+        users_collection = db.users
+        user = await users_collection.find_one({"email": email})
+        if user is None:
+            raise credentials_exception
+        
+        return user
+        
+    except Exception as e:
+        logger.error(f"Database error during authentication: {e}")
         raise credentials_exception
-    
-    users_collection = db.users
-    user = await users_collection.find_one({"email": email})
-    if user is None:
-        raise credentials_exception
-    
-    return user
 
 async def get_current_active_user(current_user: dict = Depends(get_current_user)):
     """Get current active user"""
