@@ -54,6 +54,10 @@ class AdvancedTemplateMarketplaceService:
     # Template Creation & Management
     async def create_template(self, creator_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create new template for marketplace"""
+        db = self._get_db()
+        if not db:
+            raise RuntimeError("Database not available")
+            
         template = {
             "id": str(uuid.uuid4()),
             "creator_id": creator_id,
