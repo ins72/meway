@@ -19,59 +19,84 @@ class EmailMarketingService:
             self.db = get_database()
         return self.db
     
-    async def get_campaigns(self, user_id: str, status: Optional[str] = None):
-        """Get user's email campaigns"""
-        db = await self.get_database()
-        
-        # Create workspace-based campaigns
-        campaigns = []
-        campaign_count = await self._get_metric_from_db('count', 8, 25)
-        
-        statuses = ["draft", "scheduled", "sending", "sent", "paused"]
-        
-        for i in range(campaign_count):
-            campaign_status = status if status else await self._get_real_choice_from_db(statuses)
-            created_days_ago = await self._get_metric_from_db('count', 1, 90)
-            recipients = await self._get_metric_from_db('general', 500, 5000)
-            opens = await self._get_real_metric_from_db('email_opens', int(recipients * 0.15), int(recipients * 0.45))
-            clicks = await self._get_real_metric_from_db('email_clicks', int(opens * 0.05), int(opens * 0.25))
-            
-            campaign = {
-                "id": str(uuid.uuid4()),
-                "name": f"Campaign {i + 1}: {await self._get_choice_from_db(['Newsletter', 'Promotion', 'Announcement', 'Update', 'Welcome Series'])}",
-                "subject": await self._get_choice_from_db([
-                    "Your weekly industry insights are here",
-                    "🎉 Special offer just for you",
-                    "Important update from our team",
-                    "Don't miss this limited-time deal",
-                    "New features you'll love"
-                ]),
-                "status": campaign_status,
-                "type": await self._get_choice_from_db(["regular", "automation", "a_b_test"]),
-                "recipient_count": recipients,
-                "opened_count": opens if campaign_status == "sent" else 0,
-                "clicked_count": clicks if campaign_status == "sent" else 0,
-                "open_rate": round((opens / recipients) * 100, 1) if campaign_status == "sent" else 0,
-                "click_rate": round((clicks / recipients) * 100, 1) if campaign_status == "sent" else 0,
-                "created_at": (datetime.now() - timedelta(days=created_days_ago)).isoformat(),
-                "scheduled_at": (datetime.now() + timedelta(hours=await self._get_metric_from_db('count', 1, 72))).isoformat() if campaign_status == "scheduled" else None
-            }
-            campaigns.append(campaign)
-        
-        return {
-            "success": True,
-            "data": {
-                "campaigns": sorted(campaigns, key=lambda x: x["created_at"], reverse=True),
-                "total": len(campaigns),
-                "summary": {
-                    "draft": len([c for c in campaigns if c["status"] == "draft"]),
-                    "scheduled": len([c for c in campaigns if c["status"] == "scheduled"]),
-                    "sent": len([c for c in campaigns if c["status"] == "sent"]),
-                    "total_subscribers": sum([c["recipient_count"] for c in campaigns]),
-                    "avg_open_rate": round(sum([c["open_rate"] for c in campaigns if c["status"] == "sent"]) / max(len([c for c in campaigns if c["status"] == "sent"]), 1), 1)
-                }
-            }
-        }
+    async def get_campaigns_count(self, user_id: str):
+        """Get campaigns count for user"""
+        try:
+            db = await self.get_database()
+            if db:
+                count = await db.email_campaigns.count_documents({"user_id": user_id})
+                active = await db.email_campaigns.count_documents({"user_id": user_id, "status": "active"})
+                return {"count": count, "active": active}
+            return {"count": 0, "active": 0}
+        except:
+            return {"count": 0, "active": 0}
+    
+    async def get_subscribers_count(self, user_id: str):
+        """Get subscribers count for user"""
+        try:
+            db = await self.get_database()
+            if db:
+                count = await db.email_subscribers.count_documents({"user_id": user_id})
+                active = await db.email_subscribers.count_documents({"user_id": user_id, "status": "active"})
+                return {"count": count, "active": active}
+            return {"count": 0, "active": 0}
+        except:
+            return {"count": 0, "active": 0}
+    
+    async def get_sent_emails_count(self, user_id: str):
+        """Get sent emails count for user"""
+        try:
+            db = await self.get_database()
+            if db:
+                count = await db.email_sends.count_documents({"user_id": user_id})
+                return {"count": count}
+            return {"count": 0}
+        except:
+            return {"count": 0}
+    
+    async def get_subscriber_growth(self, user_id: str):
+        """Get subscriber growth rate"""
+        try:
+            db = await self.get_database()
+            if db:
+                # Calculate growth over last 30 days
+                thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+                recent_count = await db.email_subscribers.count_documents({
+                    "user_id": user_id, 
+                    "created_at": {"$gte": thirty_days_ago}
+                })
+                total_count = await db.email_subscribers.count_documents({"user_id": user_id})
+                
+                if total_count > 0:
+                    growth_rate = (recent_count / total_count) * 100
+                    return min(growth_rate, 100)  # Cap at 100%
+                return 0
+            return 0
+        except:
+            return 0
+    
+    async def get_performance_metrics(self, user_id: str):
+        """Get performance metrics for user"""
+        try:
+            db = await self.get_database()
+            if db:
+                # Get average open rate
+                pipeline = [
+                    {"$match": {"user_id": user_id}},
+                    {"$group": {"_id": None, "avg_open_rate": {"$avg": "$open_rate"}}}
+                ]
+                result = await db.email_campaigns.aggregate(pipeline).to_list(length=1)
+                
+                if result:
+                    return result[0].get("avg_open_rate", 0)
+                return 0
+            return 0
+        except:
+            return 0
+
+    async def get_metric(self):
+        """Get a basic metric - fallback method"""
+        return 0
     
     async def create_campaign(self, user_id: str, campaign_data: dict):
         """Create new email campaign"""
