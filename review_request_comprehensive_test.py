@@ -429,7 +429,7 @@ class ComprehensiveBackendTester:
         # Test 1: Health Check
         results["total"] += 1
         try:
-            async with self.session.get(f"{self.api_url}/stripe/health") as response:
+            async with self.session.get(f"{self.api_url}/stripe-integration/health") as response:
                 if response.status == 200:
                     data = await response.json()
                     results["passed"] += 1
