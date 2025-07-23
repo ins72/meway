@@ -77,23 +77,30 @@ async def create_website(
 ):
     """CREATE endpoint - GUARANTEED to work with real data"""
     try:
+        logger.info(f"Create website request from user: {current_user.get('email', 'unknown')}")
+        logger.info(f"Request data: {data}")
+        
         # Add user context
         if isinstance(data, dict):
             data["user_id"] = current_user.get("_id", "unknown")
             data["created_by"] = current_user.get("email", "unknown")
         
         service = get_website_builder_service()
+        logger.info("Got website builder service")
+        
         result = await service.create_website(data)
+        logger.info(f"Service result: {result}")
         
         if result.get("success"):
             return result
         else:
+            logger.error(f"Service returned error: {result.get('error')}")
             raise HTTPException(status_code=400, detail=result.get("error", "Creation failed"))
             
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"CREATE endpoint error: {e}")
+        logger.error(f"CREATE endpoint error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
