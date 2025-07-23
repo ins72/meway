@@ -1,301 +1,187 @@
 """
-Rate Limiting System Service
-BULLETPROOF service with GUARANTEED working CRUD operations and REAL data
+Rate_Limiting_System Service - Comprehensive Business Logic
+Generated for complete service/API pairing with full CRUD operations
 """
 
 import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
-import logging
 
-logger = logging.getLogger(__name__)
-
-class RateLimitingSystemService:
+class Rate_Limiting_SystemService:
+    """Comprehensive rate_limiting_system service with full CRUD operations"""
+    
     def __init__(self):
-        self.service_name = "rate_limiting_system"
-        self.collection_name = "ratelimitingsystem"
-        
-    def _get_db(self):
-        """Get database connection - GUARANTEED to work"""
-        try:
-            return get_database()
-        except Exception as e:
-            logger.error(f"Database error: {e}")
-            return None
+        self.db = None
     
-    def _get_collection(self):
-        """Get collection - GUARANTEED to work"""
-        try:
-            db = self._get_db()
-            return db[self.collection_name] if db else None
-        except Exception as e:
-            logger.error(f"Collection error: {e}")
-            return None
+    async def get_database(self):
+        """Get database connection with lazy initialization"""
+        if not self.db:
+            self.db = get_database()
+        return self.db
     
-    async def _get_collection_async(self):
-        """Get collection - ASYNC version - GUARANTEED to work"""
+    async def create_rate_limiting_system(self, rate_limiting_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create rate_limiting_system with real data persistence"""
         try:
-            from core.database import get_database_async
-            db = await get_database_async()
-            return db[self.collection_name] if db else None
-        except Exception as e:
-            logger.error(f"Async collection error: {e}")
-            return None
-    
-        """Get collection - GUARANTEED to work"""
-        try:
-            db = self._get_db()
-            return db[self.collection_name] if db else None
-        except Exception as e:
-            logger.error(f"Collection error: {e}")
-            return None
-    
-    def _prepare_data(self, data: dict) -> dict:
-        """Prepare data for database operations - GUARANTEED to work"""
-        try:
-            prepared = data.copy() if isinstance(data, dict) else {}
-            prepared.update({
+            # Add metadata
+            rate_limiting_system_data.update({
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
-                "status": "active",
-                "service_type": self.service_name
+                "status": rate_limiting_system_data.get("status", "active")
             })
-            return prepared
-        except Exception as e:
-            logger.error(f"Data preparation error: {e}")
-            return {"id": str(uuid.uuid4()), "error": str(e)}
-    
-    def _sanitize_doc(self, doc: dict) -> dict:
-        """Sanitize document - GUARANTEED to work"""
-        try:
-            if not doc:
-                return {}
-            if isinstance(doc, dict):
-                cleaned = {k: v for k, v in doc.items() if k != '_id'}
-                return cleaned
-            return doc
-        except Exception as e:
-            logger.error(f"Sanitization error: {e}")
-            return {"error": str(e)}
-    
-    # BULLETPROOF CRUD OPERATIONS - GUARANTEED TO WORK
-    
-    async def create_rate_limiting_system(self, data: dict) -> dict:
-        """CREATE operation - GUARANTEED to work with real data"""
-        try:
-            collection = self._get_collection()
-            if not collection:
-                return {"success": False, "error": "Database unavailable"}
             
-            # Prepare data
-            prepared_data = self._prepare_data(data)
-            
-            # Insert to database - REAL DATA OPERATION
-            result = await collection.insert_one(prepared_data)
-            
-            if result.inserted_id:
-                return {
-                    "success": True,
-                    "message": f"{self.service_name} created successfully",
-                    "data": self._sanitize_doc(prepared_data),
-                    "id": prepared_data["id"]
-                }
-            else:
-                return {"success": False, "error": "Insert failed"}
-                
-        except Exception as e:
-            logger.error(f"CREATE error: {e}")
-            return {"success": False, "error": str(e)}
-    
-    async def get_rate_limiting_system(self, item_id: str) -> dict:
-        """READ operation - GUARANTEED to work with real data"""
-        try:
-            if not item_id:
-                return {"success": False, "error": "ID required"}
-            
-            collection = self._get_collection()
-            if not collection:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Find document - REAL DATA OPERATION
-            doc = await collection.find_one({"id": item_id})
-            
-            if doc:
-                return {
-                    "success": True,
-                    "data": self._sanitize_doc(doc)
-                }
-            else:
-                return {"success": False, "error": "Not found"}
-                
-        except Exception as e:
-            logger.error(f"READ error: {e}")
-            return {"success": False, "error": str(e)}
-    
-    async def list_rate_limiting_systems(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
-        """LIST operation - GUARANTEED to work with real data"""
-        try:
-            collection = self._get_collection()
-            if not collection:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Build query
-            query = {}
-            if user_id:
-                query["user_id"] = user_id
-            
-            # Execute query - REAL DATA OPERATION
-            cursor = collection.find(query).skip(offset).limit(limit)
-            docs = await cursor.to_list(length=limit)
-            
-            # Sanitize results
-            sanitized_docs = [self._sanitize_doc(doc) for doc in docs]
-            
-            # Get total count
-            total = await collection.count_documents(query)
+            # Save to database
+            db = await self.get_database()
+            result = await db["rate_limiting_system"].insert_one(rate_limiting_system_data)
             
             return {
                 "success": True,
-                "data": sanitized_docs,
-                "total": total,
+                "message": f"Rate_Limiting_System created successfully",
+                "data": rate_limiting_system_data,
+                "id": rate_limiting_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create rate_limiting_system: {str(e)}"
+            }
+    
+    async def get_rate_limiting_system(self, rate_limiting_system_id: str) -> Dict[str, Any]:
+        """Get rate_limiting_system by ID with real data"""
+        try:
+            db = await self.get_database()
+            result = await db["rate_limiting_system"].find_one({"id": rate_limiting_system_id})
+            
+            if not result:
+                return {
+                    "success": False,
+                    "error": f"Rate_Limiting_System not found"
+                }
+            
+            # Remove MongoDB _id
+            result.pop('_id', None)
+            
+            return {
+                "success": True,
+                "data": result
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to get rate_limiting_system: {str(e)}"
+            }
+    
+    async def list_rate_limiting_system(self, limit: int = 10, offset: int = 0) -> Dict[str, Any]:
+        """List all rate_limiting_system with real data"""
+        try:
+            db = await self.get_database()
+            cursor = db["rate_limiting_system"].find({}).skip(offset).limit(limit)
+            results = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id from all results
+            for result in results:
+                result.pop('_id', None)
+            
+            total_count = await db["rate_limiting_system"].count_documents({})
+            
+            return {
+                "success": True,
+                "data": results,
+                "total": total_count,
                 "limit": limit,
                 "offset": offset
             }
-            
         except Exception as e:
-            logger.error(f"LIST error: {e}")
-            return {"success": False, "error": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to list rate_limiting_system: {str(e)}"
+            }
     
-    async def update_rate_limiting_system(self, item_id: str, update_data: dict) -> dict:
-        """UPDATE operation - GUARANTEED to work with real data"""
+    async def update_rate_limiting_system(self, rate_limiting_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update rate_limiting_system with real data persistence"""
         try:
-            if not item_id:
-                return {"success": False, "error": "ID required"}
-            
-            collection = self._get_collection()
-            if not collection:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Prepare update data
-            if not isinstance(update_data, dict):
-                return {"success": False, "error": "Invalid update data"}
-            
-            update_data = update_data.copy()
+            # Add update timestamp
             update_data["updated_at"] = datetime.utcnow().isoformat()
             
-            # Update document - REAL DATA OPERATION
-            result = await collection.update_one(
-                {"id": item_id},
+            db = await self.get_database()
+            result = await db["rate_limiting_system"].update_one(
+                {"id": rate_limiting_system_id},
                 {"$set": update_data}
             )
             
-            if result.matched_count > 0:
-                # Get updated document
-                updated_doc = await collection.find_one({"id": item_id})
+            if result.matched_count == 0:
                 return {
-                    "success": True,
-                    "message": f"{self.service_name} updated successfully",
-                    "data": self._sanitize_doc(updated_doc) if updated_doc else None
+                    "success": False,
+                    "error": f"Rate_Limiting_System not found"
                 }
-            else:
-                return {"success": False, "error": "Not found"}
-                
-        except Exception as e:
-            logger.error(f"UPDATE error: {e}")
-            return {"success": False, "error": str(e)}
-    
-    async def delete_rate_limiting_system(self, item_id: str) -> dict:
-        """DELETE operation - GUARANTEED to work with real data"""
-        try:
-            if not item_id:
-                return {"success": False, "error": "ID required"}
             
-            collection = self._get_collection()
-            if not collection:
-                return {"success": False, "error": "Database unavailable"}
-            
-            # Delete document - REAL DATA OPERATION
-            result = await collection.delete_one({"id": item_id})
-            
-            if result.deleted_count > 0:
-                return {
-                    "success": True,
-                    "message": f"{self.service_name} deleted successfully",
-                    "deleted_count": result.deleted_count
-                }
-            else:
-                return {"success": False, "error": "Not found"}
-                
-        except Exception as e:
-            logger.error(f"DELETE error: {e}")
-            return {"success": False, "error": str(e)}
-    
-    async def get_stats(self, user_id: str = None) -> dict:
-        """STATS operation - GUARANTEED to work with real data"""
-        try:
-            collection = self._get_collection()
-            if not collection:
-                return {"success": False, "error": "Database unavailable"}
-            
-            query = {}
-            if user_id:
-                query["user_id"] = user_id
-            
-            total = await collection.count_documents(query)
-            active = await collection.count_documents({**query, "status": "active"})
+            # Get updated document
+            updated_doc = await db["rate_limiting_system"].find_one({"id": rate_limiting_system_id})
+            updated_doc.pop('_id', None)
             
             return {
                 "success": True,
-                "data": {
-                    "total": total,
-                    "active": active,
-                    "service": self.service_name
-                }
+                "message": f"Rate_Limiting_System updated successfully",
+                "data": updated_doc
             }
-            
         except Exception as e:
-            logger.error(f"STATS error: {e}")
-            return {"success": False, "error": str(e)}
+            return {
+                "success": False,
+                "error": f"Failed to update rate_limiting_system: {str(e)}"
+            }
     
-    async def health_check(self) -> dict:
-        """HEALTH CHECK - GUARANTEED to work"""
+    async def delete_rate_limiting_system(self, rate_limiting_system_id: str) -> Dict[str, Any]:
+        """Delete rate_limiting_system with real data persistence"""
         try:
-            from core.database import get_database_async
-            db = await get_database_async()
-            if not db:
-                return {"success": False, "healthy": False, "error": "Database unavailable"}
+            db = await self.get_database()
+            result = await db["rate_limiting_system"].delete_one({"id": rate_limiting_system_id})
             
-            collection = db[self.collection_name]
-            # Test database connection
-            await collection.count_documents({})
-            
-                return {"success": False, "healthy": False, "error": "Database unavailable"}
-            
-            # Test database connection
-            await collection.count_documents({})
+            if result.deleted_count == 0:
+                return {
+                    "success": False,
+                    "error": f"Rate_Limiting_System not found"
+                }
             
             return {
                 "success": True,
-                "healthy": True,
-                "service": self.service_name,
-                "timestamp": datetime.utcnow().isoformat()
+                "message": f"Rate_Limiting_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to delete rate_limiting_system: {str(e)}"
+            }
+    
+    async def search_rate_limiting_system(self, query: str, limit: int = 10) -> Dict[str, Any]:
+        """Search rate_limiting_system with real data"""
+        try:
+            db = await self.get_database()
+            
+            # Simple text search (can be enhanced with MongoDB text search)
+            search_filter = {
+                "$or": [
+                    {"name": {"$regex": query, "$options": "i"}},
+                    {"description": {"$regex": query, "$options": "i"}}
+                ]
             }
             
+            cursor = db["rate_limiting_system"].find(search_filter).limit(limit)
+            results = await cursor.to_list(length=limit)
+            
+            # Remove MongoDB _id from all results
+            for result in results:
+                result.pop('_id', None)
+            
+            return {
+                "success": True,
+                "data": results,
+                "query": query,
+                "count": len(results)
+            }
         except Exception as e:
-            logger.error(f"HEALTH CHECK error: {e}")
-            return {"success": False, "healthy": False, "error": str(e)}
-
-# Service instance
-_service_instance = None
-
-def get_rate_limiting_system_service():
-    """Get service instance"""
-    global _service_instance
-    if _service_instance is None:
-        _service_instance = RateLimitingSystemService()
-    return _service_instance
-
-# Backward compatibility
-rate_limiting_system_service = get_rate_limiting_system_service()
+            return {
+                "success": False,
+                "error": f"Failed to search rate_limiting_system: {str(e)}"
+            }
