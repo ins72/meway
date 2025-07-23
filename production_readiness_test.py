@@ -271,7 +271,7 @@ class ProductionReadinessTester:
         
         # Calculate CRUD success rates
         total_create = len(self.crud_results['CREATE']['working']) + len(self.crud_results['CREATE']['failing'])
-        total_read = len(self.crud_results['READ']['working']) + len(self.crud_results['read']['failing'])
+        total_read = len(self.crud_results['READ']['working']) + len(self.crud_results['READ']['failing'])
         total_update = len(self.crud_results['UPDATE']['working']) + len(self.crud_results['UPDATE']['failing'])
         
         create_rate = (len(self.crud_results['CREATE']['working']) / total_create * 100) if total_create > 0 else 0
@@ -280,7 +280,7 @@ class ProductionReadinessTester:
         
         print(f"\n📊 CRUD OPERATIONS SUMMARY:")
         print(f"   CREATE Operations: {len(self.crud_results['CREATE']['working'])}/{total_create} ({create_rate:.1f}%)")
-        print(f"   READ Operations: {len(self.crud_results['read']['working'])}/{total_read} ({read_rate:.1f}%)")
+        print(f"   READ Operations: {len(self.crud_results['READ']['working'])}/{total_read} ({read_rate:.1f}%)")
         print(f"   UPDATE Operations: {len(self.crud_results['UPDATE']['working'])}/{total_update} ({update_rate:.1f}%)")
     
     def test_critical_business_services(self):
