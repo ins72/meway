@@ -17,7 +17,7 @@ from .database import get_users_collection
 logger = logging.getLogger(__name__)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)  # Set auto_error=False for better error handling
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify password against hash"""
