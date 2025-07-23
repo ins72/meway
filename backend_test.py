@@ -3262,5 +3262,5 @@ class BackendTester:
 
 if __name__ == "__main__":
     tester = BackendTester()
-    success = tester.run_review_request_comprehensive_test()
+    success = tester.run_review_request_targeted_test()
     sys.exit(0 if success else 1)
