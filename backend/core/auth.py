@@ -115,6 +115,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
             # In production, this should be a proper user registration flow
             user = {
                 "_id": email,
+                "id": email,  # Add both id formats for compatibility
                 "email": email,
                 "is_active": True,
                 "is_admin": email == "tmonnens@outlook.com",  # Make test user admin
