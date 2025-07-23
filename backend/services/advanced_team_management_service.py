@@ -240,3 +240,126 @@ advanced_team_management_service = get_advanced_team_management_service()
             }
         except Exception as e:
             return {"error": str(e)}
+    async def get_team_members_safe(self, user_id: str, team_id: str = None):
+        """Get team members with proper datetime handling"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Query for team members
+            query = {"user_id": user_id}
+            if team_id:
+                query["team_id"] = team_id
+            
+            teams = await collections['teams'].find(query).to_list(length=None)
+            
+            processed_teams = []
+            for team in teams:
+                # Safely handle datetime fields
+                team_data = {
+                    "_id": team.get("_id"),
+                    "name": team.get("name", "Unnamed Team"),
+                    "description": team.get("description", ""),
+                    "owner_id": team.get("owner_id"),
+                    "created_at": team.get("created_at").isoformat() if team.get("created_at") else datetime.utcnow().isoformat(),
+                    "updated_at": team.get("updated_at").isoformat() if team.get("updated_at") else datetime.utcnow().isoformat(),
+                    "member_count": len(team.get("members", [])),
+                    "status": team.get("status", "active"),
+                    "members": []
+                }
+                
+                # Process members with safe datetime handling
+                for member in team.get("members", []):
+                    member_data = {
+                        "user_id": member.get("user_id"),
+                        "name": member.get("name", "Unknown User"),
+                        "email": member.get("email", ""),
+                        "role": member.get("role", "member"),
+                        "status": member.get("status", "active"),
+                        "joined_at": member.get("joined_at").isoformat() if member.get("joined_at") else datetime.utcnow().isoformat(),
+                        "last_active": member.get("last_active").isoformat() if member.get("last_active") else datetime.utcnow().isoformat(),
+                        "permissions": member.get("permissions", [])
+                    }
+                    team_data["members"].append(member_data)
+                
+                processed_teams.append(team_data)
+            
+            return {
+                "success": True,
+                "teams": processed_teams,
+                "total_teams": len(processed_teams),
+                "message": "Team members retrieved successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Error retrieving team members: {str(e)}"}
+    
+    async def send_team_invitation_safe(self, inviter_id: str, invitation_data: dict):
+        """Send team invitation with proper validation"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Validate required fields
+            required_fields = ["email", "team_id", "role"]
+            for field in required_fields:
+                if not invitation_data.get(field):
+                    return {"success": False, "message": f"Missing required field: {field}"}
+            
+            # Validate role
+            valid_roles = ["owner", "admin", "editor", "viewer", "member"]
+            if invitation_data.get("role") not in valid_roles:
+                return {"success": False, "message": f"Invalid role. Must be one of: {', '.join(valid_roles)}"}
+            
+            # Check if team exists
+            team = await collections['teams'].find_one({"_id": invitation_data["team_id"]})
+            if not team:
+                return {"success": False, "message": "Team not found"}
+            
+            # Create invitation with proper datetime handling
+            invitation = {
+                "_id": str(uuid.uuid4()),
+                "team_id": invitation_data["team_id"],
+                "inviter_id": inviter_id,
+                "invited_email": invitation_data["email"],
+                "invited_role": invitation_data["role"],
+                "status": "pending",
+                "invitation_token": str(uuid.uuid4()),
+                "expires_at": datetime.utcnow() + timedelta(days=7),
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "message": invitation_data.get("message", ""),
+                "permissions": self._get_role_permissions_safe(invitation_data["role"])
+            }
+            
+            await collections['team_invitations'].insert_one(invitation)
+            
+            return {
+                "success": True,
+                "invitation": {
+                    "_id": invitation["_id"],
+                    "team_id": invitation["team_id"],
+                    "invited_email": invitation["invited_email"],
+                    "invited_role": invitation["invited_role"],
+                    "status": invitation["status"],
+                    "expires_at": invitation["expires_at"].isoformat(),
+                    "created_at": invitation["created_at"].isoformat()
+                },
+                "message": "Team invitation sent successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Error sending invitation: {str(e)}"}
+    
+    def _get_role_permissions_safe(self, role: str) -> list:
+        """Get permissions for role with safe defaults"""
+        permissions_map = {
+            "owner": ["manage_team", "invite_members", "remove_members", "edit_settings", "view_analytics"],
+            "admin": ["invite_members", "remove_members", "edit_settings", "view_analytics"],
+            "editor": ["edit_content", "view_analytics"],
+            "viewer": ["view_content"],
+            "member": ["view_content", "participate"]
+        }
+        return permissions_map.get(role, ["view_content"])

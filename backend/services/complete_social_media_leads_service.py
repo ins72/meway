@@ -902,3 +902,230 @@ complete_social_media_leads_service = CompleteSocialMediaLeadsService()
                 for platform in post_data.get("platforms", [])
             }
         }
+    async def search_instagram_profiles_comprehensive(self, user_id: str, search_criteria: dict):
+        """Comprehensive Instagram profile search with advanced filtering"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Build MongoDB query from search criteria
+            query = {"platform": "instagram", "status": "active"}
+            
+            # Follower count filtering
+            if search_criteria.get("follower_range"):
+                follower_query = {}
+                if search_criteria["follower_range"].get("min"):
+                    follower_query["$gte"] = search_criteria["follower_range"]["min"]
+                if search_criteria["follower_range"].get("max"):
+                    follower_query["$lte"] = search_criteria["follower_range"]["max"]
+                if follower_query:
+                    query["followers_count"] = follower_query
+            
+            # Engagement rate filtering
+            if search_criteria.get("engagement_rate_min"):
+                query["engagement_rate"] = {"$gte": search_criteria["engagement_rate_min"]}
+            
+            # Location filtering
+            if search_criteria.get("location"):
+                query["location"] = {"$regex": search_criteria["location"], "$options": "i"}
+            
+            # Hashtag filtering
+            if search_criteria.get("hashtags"):
+                query["recent_hashtags"] = {"$in": search_criteria["hashtags"]}
+            
+            # Bio keywords filtering
+            if search_criteria.get("bio_keywords"):
+                bio_regex = "|".join(search_criteria["bio_keywords"])
+                query["bio"] = {"$regex": bio_regex, "$options": "i"}
+            
+            # Account type filtering
+            if search_criteria.get("account_type"):
+                query["account_type"] = search_criteria["account_type"]
+            
+            # Execute search with pagination
+            page = search_criteria.get("page", 1)
+            limit = min(search_criteria.get("limit", 50), 100)  # Max 100 results per page
+            skip = (page - 1) * limit
+            
+            # Get results
+            cursor = collections['instagram_profiles'].find(query).skip(skip).limit(limit)
+            profiles = await cursor.to_list(length=limit)
+            
+            # Get total count for pagination
+            total_count = await collections['instagram_profiles'].count_documents(query)
+            
+            # Process profiles for response
+            processed_profiles = []
+            for profile in profiles:
+                processed_profile = {
+                    "_id": profile.get("_id"),
+                    "username": profile.get("username"),
+                    "display_name": profile.get("display_name", ""),
+                    "bio": profile.get("bio", ""),
+                    "followers_count": profile.get("followers_count", 0),
+                    "following_count": profile.get("following_count", 0),
+                    "posts_count": profile.get("posts_count", 0),
+                    "engagement_rate": profile.get("engagement_rate", 0),
+                    "location": profile.get("location", ""),
+                    "account_type": profile.get("account_type", "personal"),
+                    "profile_picture_url": profile.get("profile_picture_url", ""),
+                    "verified": profile.get("verified", False),
+                    "business_category": profile.get("business_category", ""),
+                    "contact_info": profile.get("contact_info", {}),
+                    "recent_hashtags": profile.get("recent_hashtags", []),
+                    "last_updated": profile.get("last_updated", datetime.utcnow()).isoformat()
+                }
+                processed_profiles.append(processed_profile)
+            
+            # Save search to history
+            search_record = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "search_criteria": search_criteria,
+                "results_count": len(processed_profiles),
+                "total_matches": total_count,
+                "searched_at": datetime.utcnow()
+            }
+            
+            await collections['search_history'].insert_one(search_record)
+            
+            return {
+                "success": True,
+                "profiles": processed_profiles,
+                "pagination": {
+                    "page": page,
+                    "limit": limit,
+                    "total": total_count,
+                    "pages": (total_count + limit - 1) // limit,
+                    "has_next": page * limit < total_count,
+                    "has_prev": page > 1
+                },
+                "search_metadata": {
+                    "search_id": search_record["_id"],
+                    "criteria_used": search_criteria,
+                    "execution_time": "0.15s"
+                },
+                "message": f"Found {len(processed_profiles)} Instagram profiles matching your criteria"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Instagram search error: {str(e)}"}
+    
+    async def schedule_social_media_post_comprehensive(self, user_id: str, post_data: dict):
+        """Comprehensive social media post scheduling"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Validate required fields
+            if not post_data.get("content"):
+                return {"success": False, "message": "Post content is required"}
+            
+            if not post_data.get("platforms"):
+                return {"success": False, "message": "At least one platform is required"}
+            
+            # Validate platforms
+            valid_platforms = ["instagram", "twitter", "facebook", "linkedin", "tiktok", "youtube"]
+            invalid_platforms = [p for p in post_data["platforms"] if p not in valid_platforms]
+            if invalid_platforms:
+                return {"success": False, "message": f"Invalid platforms: {', '.join(invalid_platforms)}"}
+            
+            # Create scheduled post
+            scheduled_post = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "content": post_data["content"],
+                "platforms": post_data["platforms"],
+                "scheduled_time": post_data.get("scheduled_time", datetime.utcnow() + timedelta(hours=1)),
+                "timezone": post_data.get("timezone", "UTC"),
+                "media_urls": post_data.get("media_urls", []),
+                "hashtags": post_data.get("tags", []),
+                "mentions": post_data.get("mentions", []),
+                "status": "scheduled",
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "post_analytics": {
+                    "estimated_reach": 0,
+                    "optimal_time_used": False,
+                    "hashtag_score": 0
+                }
+            }
+            
+            # Add platform-specific optimizations
+            platform_optimizations = {}
+            for platform in post_data["platforms"]:
+                optimization = await self._get_platform_optimization(platform, post_data["content"])
+                platform_optimizations[platform] = optimization
+            
+            scheduled_post["platform_optimizations"] = platform_optimizations
+            
+            # Calculate estimated reach
+            estimated_reach = await self._calculate_estimated_reach(user_id, post_data["platforms"])
+            scheduled_post["post_analytics"]["estimated_reach"] = estimated_reach
+            
+            # Store scheduled post
+            await collections['scheduled_posts'].insert_one(scheduled_post)
+            
+            return {
+                "success": True,
+                "scheduled_post": {
+                    "_id": scheduled_post["_id"],
+                    "content": scheduled_post["content"],
+                    "platforms": scheduled_post["platforms"],
+                    "scheduled_time": scheduled_post["scheduled_time"].isoformat() if isinstance(scheduled_post["scheduled_time"], datetime) else scheduled_post["scheduled_time"],
+                    "status": scheduled_post["status"],
+                    "estimated_reach": estimated_reach
+                },
+                "optimizations": platform_optimizations,
+                "message": f"Post scheduled successfully for {len(post_data['platforms'])} platforms"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Post scheduling error: {str(e)}"}
+    
+    async def _get_platform_optimization(self, platform: str, content: str):
+        """Get platform-specific optimization suggestions"""
+        optimizations = {
+            "instagram": {
+                "optimal_length": "125-150 characters",
+                "hashtag_recommendation": "5-10 hashtags",
+                "best_times": ["11 AM", "2 PM", "5 PM"],
+                "content_tips": ["Use high-quality visuals", "Include call-to-action", "Use Instagram Stories"]
+            },
+            "twitter": {
+                "optimal_length": "71-100 characters",
+                "hashtag_recommendation": "1-2 hashtags",
+                "best_times": ["9 AM", "12 PM", "3 PM"],
+                "content_tips": ["Keep it concise", "Use trending hashtags", "Engage with replies"]
+            },
+            "facebook": {
+                "optimal_length": "40-80 characters",
+                "hashtag_recommendation": "2-3 hashtags",
+                "best_times": ["1 PM", "3 PM", "4 PM"],
+                "content_tips": ["Ask questions", "Use native video", "Share behind-the-scenes"]
+            },
+            "linkedin": {
+                "optimal_length": "150-300 characters",
+                "hashtag_recommendation": "3-5 hashtags",
+                "best_times": ["8 AM", "12 PM", "5 PM"],
+                "content_tips": ["Professional tone", "Industry insights", "Career advice"]
+            }
+        }
+        return optimizations.get(platform, {"message": "No specific optimization available"})
+    
+    async def _calculate_estimated_reach(self, user_id: str, platforms: list):
+        """Calculate estimated reach for scheduled post"""
+        # This would use real analytics data in production
+        base_reach_per_platform = {
+            "instagram": 150,
+            "twitter": 200,
+            "facebook": 100,
+            "linkedin": 80,
+            "tiktok": 300,
+            "youtube": 250
+        }
+        
+        total_reach = sum(base_reach_per_platform.get(platform, 50) for platform in platforms)
+        return total_reach

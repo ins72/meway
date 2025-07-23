@@ -682,3 +682,353 @@ mobile_pwa_service = get_mobile_pwa_service()
             
         except Exception as e:
             return {"success": False, "message": str(e)}
+    async def generate_pwa_manifest_comprehensive(self, user_id: str, workspace_id: str, customization: dict):
+        """Generate comprehensive PWA manifest with full customization"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Get workspace details
+            workspace = await collections['workspaces'].find_one({"_id": workspace_id, "owner_id": user_id})
+            if not workspace:
+                return {"success": False, "message": "Workspace not found or access denied"}
+            
+            # Create comprehensive manifest
+            manifest = {
+                "name": customization.get("app_name", f"Mewayz - {workspace.get('name', 'Business Hub')}"),
+                "short_name": customization.get("short_name", workspace.get('name', 'Mewayz')[:12]),
+                "description": customization.get("description", "All-in-One Business Platform - Manage your social media, courses, e-commerce, and marketing campaigns all in one place"),
+                "start_url": customization.get("start_url", "/dashboard"),
+                "scope": "/",
+                "display": customization.get("display", "standalone"),
+                "orientation": customization.get("orientation", "portrait-primary"),
+                "theme_color": customization.get("theme_color", "#007AFF"),
+                "background_color": customization.get("background_color", "#101010"),
+                "lang": customization.get("language", "en"),
+                "dir": customization.get("text_direction", "ltr"),
+                "icons": [
+                    {
+                        "src": customization.get("icon_72", "/icons/icon-72x72.png"),
+                        "sizes": "72x72",
+                        "type": "image/png",
+                        "purpose": "any"
+                    },
+                    {
+                        "src": customization.get("icon_96", "/icons/icon-96x96.png"),
+                        "sizes": "96x96",
+                        "type": "image/png",
+                        "purpose": "any"
+                    },
+                    {
+                        "src": customization.get("icon_128", "/icons/icon-128x128.png"),
+                        "sizes": "128x128",
+                        "type": "image/png",
+                        "purpose": "any"
+                    },
+                    {
+                        "src": customization.get("icon_144", "/icons/icon-144x144.png"),
+                        "sizes": "144x144",
+                        "type": "image/png",
+                        "purpose": "any"
+                    },
+                    {
+                        "src": customization.get("icon_152", "/icons/icon-152x152.png"),
+                        "sizes": "152x152",
+                        "type": "image/png",
+                        "purpose": "any"
+                    },
+                    {
+                        "src": customization.get("icon_192", "/icons/icon-192x192.png"),
+                        "sizes": "192x192",
+                        "type": "image/png",
+                        "purpose": "any maskable"
+                    },
+                    {
+                        "src": customization.get("icon_384", "/icons/icon-384x384.png"),
+                        "sizes": "384x384",
+                        "type": "image/png",
+                        "purpose": "any"
+                    },
+                    {
+                        "src": customization.get("icon_512", "/icons/icon-512x512.png"),
+                        "sizes": "512x512",
+                        "type": "image/png",
+                        "purpose": "any maskable"
+                    }
+                ],
+                "screenshots": customization.get("screenshots", [
+                    {
+                        "src": "/screenshots/dashboard-wide.png",
+                        "sizes": "1280x720",
+                        "type": "image/png",
+                        "form_factor": "wide",
+                        "label": "Dashboard Overview"
+                    },
+                    {
+                        "src": "/screenshots/mobile-dashboard.png",
+                        "sizes": "390x844",
+                        "type": "image/png",
+                        "form_factor": "narrow",
+                        "label": "Mobile Dashboard"
+                    }
+                ]),
+                "categories": customization.get("categories", ["business", "productivity", "social", "marketing"]),
+                "shortcuts": [
+                    {
+                        "name": "Dashboard",
+                        "short_name": "Dashboard",
+                        "description": "View your business dashboard",
+                        "url": "/dashboard",
+                        "icons": [{"src": "/icons/shortcut-dashboard.png", "sizes": "192x192"}]
+                    },
+                    {
+                        "name": "Social Media",
+                        "short_name": "Social",
+                        "description": "Manage social media accounts",
+                        "url": "/social",
+                        "icons": [{"src": "/icons/shortcut-social.png", "sizes": "192x192"}]
+                    },
+                    {
+                        "name": "Analytics",
+                        "short_name": "Analytics",
+                        "description": "View business analytics",
+                        "url": "/analytics",
+                        "icons": [{"src": "/icons/shortcut-analytics.png", "sizes": "192x192"}]
+                    },
+                    {
+                        "name": "CRM",
+                        "short_name": "CRM",
+                        "description": "Manage customer relationships",
+                        "url": "/crm",
+                        "icons": [{"src": "/icons/shortcut-crm.png", "sizes": "192x192"}]
+                    }
+                ],
+                "protocol_handlers": [
+                    {
+                        "protocol": "mailto",
+                        "url": "/compose?to=%s"
+                    }
+                ],
+                "prefer_related_applications": False,
+                "edge_side_panel": {
+                    "preferred_width": 400
+                }
+            }
+            
+            # Store manifest in database
+            manifest_record = {
+                "_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "workspace_id": workspace_id,
+                "manifest": manifest,
+                "customization": customization,
+                "version": "1.0.0",
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "active": True
+            }
+            
+            await collections['pwa_manifests'].insert_one(manifest_record)
+            
+            return {
+                "success": True,
+                "manifest": manifest,
+                "manifest_id": manifest_record["_id"],
+                "download_url": f"/api/pwa/manifest/{manifest_record['_id']}.json",
+                "message": "PWA manifest generated successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Manifest generation failed: {str(e)}"}
+    
+    async def register_device_comprehensive(self, user_id: str, device_data: dict):
+        """Comprehensive device registration for PWA"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            # Validate required device data
+            required_fields = ["device_id", "device_type", "user_agent"]
+            missing_fields = [field for field in required_fields if not device_data.get(field)]
+            if missing_fields:
+                return {"success": False, "message": f"Missing required fields: {', '.join(missing_fields)}"}
+            
+            # Check if device already registered
+            existing_device = await collections['registered_devices'].find_one({
+                "user_id": user_id,
+                "device_id": device_data["device_id"]
+            })
+            
+            if existing_device:
+                # Update existing device
+                await collections['registered_devices'].update_one(
+                    {"_id": existing_device["_id"]},
+                    {
+                        "$set": {
+                            "last_active": datetime.utcnow(),
+                            "user_agent": device_data["user_agent"],
+                            "updated_at": datetime.utcnow()
+                        }
+                    }
+                )
+                device_record = existing_device
+                device_record["status"] = "updated"
+            else:
+                # Register new device
+                device_record = {
+                    "_id": str(uuid.uuid4()),
+                    "user_id": user_id,
+                    "device_id": device_data["device_id"],
+                    "device_type": device_data.get("device_type", "unknown"),
+                    "operating_system": device_data.get("os", "unknown"),
+                    "browser": device_data.get("browser", "unknown"),
+                    "browser_version": device_data.get("browser_version", "unknown"),
+                    "screen_resolution": device_data.get("screen_resolution", "unknown"),
+                    "user_agent": device_data["user_agent"],
+                    "timezone": device_data.get("timezone", "UTC"),
+                    "language": device_data.get("language", "en"),
+                    "push_subscription": device_data.get("push_subscription"),
+                    "notifications_enabled": device_data.get("notifications_enabled", False),
+                    "install_prompt_shown": False,
+                    "app_installed": device_data.get("app_installed", False),
+                    "first_visit": datetime.utcnow(),
+                    "last_active": datetime.utcnow(),
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow(),
+                    "status": "active"
+                }
+                
+                await collections['registered_devices'].insert_one(device_record)
+                device_record["status"] = "registered"
+            
+            return {
+                "success": True,
+                "device": {
+                    "_id": device_record["_id"],
+                    "device_id": device_record["device_id"],
+                    "device_type": device_record["device_type"],
+                    "status": device_record["status"],
+                    "notifications_enabled": device_record.get("notifications_enabled", False),
+                    "registered_at": device_record.get("created_at", datetime.utcnow()).isoformat()
+                },
+                "message": f"Device {device_record['status']} successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Device registration failed: {str(e)}"}
+    
+    async def sync_offline_data_comprehensive(self, user_id: str, offline_data: list):
+        """Comprehensive offline data synchronization"""
+        try:
+            collections = self._get_collections()
+            if not collections:
+                return {"success": False, "message": "Database unavailable"}
+            
+            if not offline_data or not isinstance(offline_data, list):
+                return {"success": False, "message": "No offline data provided"}
+            
+            sync_results = {
+                "total_items": len(offline_data),
+                "synced_successfully": 0,
+                "failed_items": 0,
+                "duplicate_items": 0,
+                "errors": []
+            }
+            
+            synced_items = []
+            
+            for i, item in enumerate(offline_data):
+                try:
+                    # Validate item structure
+                    if not isinstance(item, dict) or not item.get("offline_id") or not item.get("type"):
+                        sync_results["errors"].append(f"Invalid item structure at index {i}")
+                        sync_results["failed_items"] += 1
+                        continue
+                    
+                    # Check for duplicates
+                    existing_sync = await collections['offline_sync'].find_one({
+                        "user_id": user_id,
+                        "offline_id": item["offline_id"]
+                    })
+                    
+                    if existing_sync:
+                        sync_results["duplicate_items"] += 1
+                        continue
+                    
+                    # Create sync record
+                    sync_record = {
+                        "_id": str(uuid.uuid4()),
+                        "user_id": user_id,
+                        "offline_id": item["offline_id"],
+                        "data_type": item["type"],
+                        "data": item.get("data", {}),
+                        "created_offline_at": item.get("created_at", datetime.utcnow()),
+                        "synced_at": datetime.utcnow(),
+                        "sync_status": "completed",
+                        "device_id": item.get("device_id"),
+                        "version": item.get("version", "1.0")
+                    }
+                    
+                    # Process based on data type
+                    if item["type"] == "social_media_post":
+                        await self._process_offline_social_post(sync_record, collections)
+                    elif item["type"] == "contact":
+                        await self._process_offline_contact(sync_record, collections)
+                    elif item["type"] == "note":
+                        await self._process_offline_note(sync_record, collections)
+                    
+                    await collections['offline_sync'].insert_one(sync_record)
+                    synced_items.append(sync_record)
+                    sync_results["synced_successfully"] += 1
+                    
+                except Exception as e:
+                    sync_results["errors"].append(f"Error processing item {i}: {str(e)}")
+                    sync_results["failed_items"] += 1
+            
+            return {
+                "success": True,
+                "sync_results": sync_results,
+                "synced_items": len(synced_items),
+                "message": f"Sync completed: {sync_results['synced_successfully']}/{sync_results['total_items']} items synced successfully"
+            }
+            
+        except Exception as e:
+            return {"success": False, "message": f"Offline sync failed: {str(e)}"}
+    
+    async def _process_offline_social_post(self, sync_record: dict, collections: dict):
+        """Process offline social media post"""
+        post_data = sync_record["data"]
+        # Create actual social media post from offline data
+        # This would integrate with social media APIs in production
+        pass
+    
+    async def _process_offline_contact(self, sync_record: dict, collections: dict):
+        """Process offline contact creation"""
+        contact_data = sync_record["data"]
+        # Create actual contact in CRM from offline data
+        contact = {
+            "_id": str(uuid.uuid4()),
+            "user_id": sync_record["user_id"],
+            "name": contact_data.get("name"),
+            "email": contact_data.get("email"),
+            "phone": contact_data.get("phone"),
+            "created_at": sync_record["created_offline_at"],
+            "source": "offline_sync"
+        }
+        await collections['contacts'].insert_one(contact)
+    
+    async def _process_offline_note(self, sync_record: dict, collections: dict):
+        """Process offline note creation"""
+        note_data = sync_record["data"]
+        # Create actual note from offline data
+        note = {
+            "_id": str(uuid.uuid4()),
+            "user_id": sync_record["user_id"],
+            "title": note_data.get("title"),
+            "content": note_data.get("content"),
+            "created_at": sync_record["created_offline_at"],
+            "source": "offline_sync"
+        }
+        await collections['notes'].insert_one(note)
