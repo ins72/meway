@@ -94,6 +94,52 @@ class BlogService:
         categories = await db.blog_posts.aggregate(pipeline).to_list(length=None)
         return [{"name": cat["_id"], "count": cat["count"]} for cat in categories]
 
+    async def update_blog(self, blog_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update blog with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["blog"].update_one(
+                {"id": blog_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Blog not found"}
+            
+            updated = await db["blog"].find_one({"id": blog_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Blog updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update blog: {str(e)}"}
+
+    async def delete_blog(self, blog_id: str) -> Dict[str, Any]:
+        """Delete blog with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["blog"].delete_one({"id": blog_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Blog not found"}
+            
+            return {
+                "success": True,
+                "message": f"Blog deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete blog: {str(e)}"}
+
+
+
 # Global service instance
 blog_service = BlogService()
 

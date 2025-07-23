@@ -11,6 +11,81 @@ from core.database import get_database
 
 class AiTokenManagementService:
     """Service class for Ai Token Management"""
+
+    async def create_ai_token_management(self, ai_token_management_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create ai_token_management with real data persistence"""
+        try:
+            import uuid
+            from datetime import datetime
+            
+            ai_token_management_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            db = await self.get_database()
+            result = await db["ai_token_management"].insert_one(ai_token_management_data)
+            
+            return {
+                "success": True,
+                "message": f"Ai_Token_Management created successfully",
+                "data": ai_token_management_data,
+                "id": ai_token_management_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create ai_token_management: {str(e)}"
+            }
+
+    async def delete_ai_token_management(self, ai_token_management_id: str) -> Dict[str, Any]:
+        """Delete ai_token_management with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["ai_token_management"].delete_one({"id": ai_token_management_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Ai_Token_Management not found"}
+            
+            return {
+                "success": True,
+                "message": f"Ai_Token_Management deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete ai_token_management: {str(e)}"}
+
+
+
+    async def update_ai_token_management(self, ai_token_management_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update ai_token_management with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["ai_token_management"].update_one(
+                {"id": ai_token_management_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Ai_Token_Management not found"}
+            
+            updated = await db["ai_token_management"].find_one({"id": ai_token_management_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Ai_Token_Management updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update ai_token_management: {str(e)}"}
+
     
 
     async def create_ai_token_management(self, ai_token_management_data: Dict[str, Any]) -> Dict[str, Any]:

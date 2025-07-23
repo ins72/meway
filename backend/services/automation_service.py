@@ -674,6 +674,81 @@ class AutomationService:
         except:
             return items
 
+    async def create_automation(self, automation_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create automation with real data persistence"""
+        try:
+            import uuid
+            from datetime import datetime
+            
+            automation_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            db = await self.get_database()
+            result = await db["automation"].insert_one(automation_data)
+            
+            return {
+                "success": True,
+                "message": f"Automation created successfully",
+                "data": automation_data,
+                "id": automation_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create automation: {str(e)}"
+            }
+
+    async def update_automation(self, automation_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update automation with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["automation"].update_one(
+                {"id": automation_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Automation not found"}
+            
+            updated = await db["automation"].find_one({"id": automation_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Automation updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update automation: {str(e)}"}
+
+    async def delete_automation(self, automation_id: str) -> Dict[str, Any]:
+        """Delete automation with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["automation"].delete_one({"id": automation_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Automation not found"}
+            
+            return {
+                "success": True,
+                "message": f"Automation deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete automation: {str(e)}"}
+
+
+
+
 
 # Global service instance
 

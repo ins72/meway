@@ -140,3 +140,49 @@ class Escrow_SystemService:
                 "success": False,
                 "error": f"Failed to delete escrow_system: {str(e)}"
             }
+
+    async def update_escrow_system(self, escrow_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update escrow_system with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["escrow_system"].update_one(
+                {"id": escrow_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Escrow_System not found"}
+            
+            updated = await db["escrow_system"].find_one({"id": escrow_system_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Escrow_System updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update escrow_system: {str(e)}"}
+
+    async def delete_escrow_system(self, escrow_system_id: str) -> Dict[str, Any]:
+        """Delete escrow_system with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["escrow_system"].delete_one({"id": escrow_system_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Escrow_System not found"}
+            
+            return {
+                "success": True,
+                "message": f"Escrow_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete escrow_system: {str(e)}"}
+
+

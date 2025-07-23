@@ -89,6 +89,81 @@ class FormBuilderService:
         
         return submission
 
+    async def create_form_builder(self, form_builder_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create form_builder with real data persistence"""
+        try:
+            import uuid
+            from datetime import datetime
+            
+            form_builder_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            db = await self.get_database()
+            result = await db["form_builder"].insert_one(form_builder_data)
+            
+            return {
+                "success": True,
+                "message": f"Form_Builder created successfully",
+                "data": form_builder_data,
+                "id": form_builder_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create form_builder: {str(e)}"
+            }
+
+    async def update_form_builder(self, form_builder_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update form_builder with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["form_builder"].update_one(
+                {"id": form_builder_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Form_Builder not found"}
+            
+            updated = await db["form_builder"].find_one({"id": form_builder_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Form_Builder updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update form_builder: {str(e)}"}
+
+    async def delete_form_builder(self, form_builder_id: str) -> Dict[str, Any]:
+        """Delete form_builder with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["form_builder"].delete_one({"id": form_builder_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Form_Builder not found"}
+            
+            return {
+                "success": True,
+                "message": f"Form_Builder deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete form_builder: {str(e)}"}
+
+
+
+
 # Global service instance
 form_builder_service = FormBuilderService()
 

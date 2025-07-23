@@ -11,6 +11,81 @@ from core.database import get_database
 
 class CrmManagementService:
     """Service class for Crm Management"""
+
+    async def create_crm_management(self, crm_management_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create crm_management with real data persistence"""
+        try:
+            import uuid
+            from datetime import datetime
+            
+            crm_management_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            db = await self.get_database()
+            result = await db["crm_management"].insert_one(crm_management_data)
+            
+            return {
+                "success": True,
+                "message": f"Crm_Management created successfully",
+                "data": crm_management_data,
+                "id": crm_management_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create crm_management: {str(e)}"
+            }
+
+    async def delete_crm_management(self, crm_management_id: str) -> Dict[str, Any]:
+        """Delete crm_management with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["crm_management"].delete_one({"id": crm_management_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Crm_Management not found"}
+            
+            return {
+                "success": True,
+                "message": f"Crm_Management deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete crm_management: {str(e)}"}
+
+
+
+    async def update_crm_management(self, crm_management_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update crm_management with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["crm_management"].update_one(
+                {"id": crm_management_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Crm_Management not found"}
+            
+            updated = await db["crm_management"].find_one({"id": crm_management_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Crm_Management updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update crm_management: {str(e)}"}
+
     
 
     async def create_crm_management(self, crm_management_data: Dict[str, Any]) -> Dict[str, Any]:

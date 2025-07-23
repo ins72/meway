@@ -79,6 +79,52 @@ class MarketingService:
         
         return analytics
 
+    async def update_marketing(self, marketing_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update marketing with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["marketing"].update_one(
+                {"id": marketing_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Marketing not found"}
+            
+            updated = await db["marketing"].find_one({"id": marketing_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Marketing updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update marketing: {str(e)}"}
+
+    async def delete_marketing(self, marketing_id: str) -> Dict[str, Any]:
+        """Delete marketing with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["marketing"].delete_one({"id": marketing_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Marketing not found"}
+            
+            return {
+                "success": True,
+                "message": f"Marketing deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete marketing: {str(e)}"}
+
+
+
 # Global service instance
 marketing_service = MarketingService()
 

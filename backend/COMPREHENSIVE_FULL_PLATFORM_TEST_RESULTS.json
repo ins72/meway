@@ -1,0 +1,3336 @@
+{
+  "timestamp": "2025-07-23T13:53:43.697803",
+  "total_endpoints_discovered": 198,
+  "total_endpoints_tested": 198,
+  "working_endpoints": 128,
+  "failed_endpoints": 70,
+  "endpoint_details": [
+    {
+      "path": "/api/ai/services",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1213,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "AI Services"
+      ],
+      "operation_id": "get_ai_services_api_ai_services_get"
+    },
+    {
+      "path": "/api/ai/conversations",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2019,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "AI Services"
+      ],
+      "operation_id": "get_ai_conversations_api_ai_conversations_get"
+    },
+    {
+      "path": "/api/ai/conversations",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 475,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "AI Services"
+      ],
+      "operation_id": "create_ai_conversation_api_ai_conversations_post"
+    },
+    {
+      "path": "/api/ai/analyze-content",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 395,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "AI Services"
+      ],
+      "operation_id": "analyze_content_api_ai_analyze_content_post"
+    },
+    {
+      "path": "/api/ai-tokens/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2954,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "get_token_dashboard_api_ai_tokens_dashboard_get"
+    },
+    {
+      "path": "/api/ai-tokens/packages",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 931,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "get_token_packages_api_ai_tokens_packages_get"
+    },
+    {
+      "path": "/api/ai-tokens/workspace/{workspace_id}/balance",
+      "method": "GET",
+      "success": false,
+      "status_code": 403,
+      "status_description": "Forbidden - Access denied",
+      "response_size": 116,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "get_workspace_tokens_api_ai_tokens_workspace__workspace_id__balance_get"
+    },
+    {
+      "path": "/api/ai-tokens/purchase",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1233,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "purchase_tokens_api_ai_tokens_purchase_post"
+    },
+    {
+      "path": "/api/ai-tokens/consume",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1226,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "consume_tokens_api_ai_tokens_consume_post"
+    },
+    {
+      "path": "/api/ai-tokens/workspace/{workspace_id}/settings",
+      "method": "PUT",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 109,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "update_workspace_token_settings_api_ai_tokens_workspace__workspace_id__settings_put"
+    },
+    {
+      "path": "/api/ai-tokens/analytics/{workspace_id}",
+      "method": "GET",
+      "success": false,
+      "status_code": 403,
+      "status_description": "Forbidden - Access denied",
+      "response_size": 116,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "AI Token Management"
+      ],
+      "operation_id": "get_token_analytics_api_ai_tokens_analytics__workspace_id__get"
+    },
+    {
+      "path": "/api/analytics-system/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1425,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Analytics System"
+      ],
+      "operation_id": "get_analytics_dashboard_api_analytics_system_dashboard_get"
+    },
+    {
+      "path": "/api/analytics-system/overview",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 158,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Analytics System"
+      ],
+      "operation_id": "get_analytics_overview_api_analytics_system_overview_get"
+    },
+    {
+      "path": "/api/analytics-system/track",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 851,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Analytics System"
+      ],
+      "operation_id": "track_analytics_event_api_analytics_system_track_post"
+    },
+    {
+      "path": "/api/analytics-system/reports",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 130,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Analytics System"
+      ],
+      "operation_id": "get_analytics_reports_api_analytics_system_reports_get"
+    },
+    {
+      "path": "/api/analytics-system/reports/custom",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1221,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Analytics System"
+      ],
+      "operation_id": "create_custom_report_api_analytics_system_reports_custom_post"
+    },
+    {
+      "path": "/api/analytics-system/business-intelligence",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 473,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Analytics System"
+      ],
+      "operation_id": "get_business_intelligence_api_analytics_system_business_intelligence_get"
+    },
+    {
+      "path": "/api/auth/register",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 476,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Authentication"
+      ],
+      "operation_id": "register_user_api_auth_register_post"
+    },
+    {
+      "path": "/api/auth/login",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 369,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Authentication"
+      ],
+      "operation_id": "login_user_api_auth_login_post"
+    },
+    {
+      "path": "/api/auth/verify",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1027,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Authentication"
+      ],
+      "operation_id": "verify_token_api_auth_verify_get"
+    },
+    {
+      "path": "/api/auth/logout",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 52,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Authentication"
+      ],
+      "operation_id": "logout_user_api_auth_logout_post"
+    },
+    {
+      "path": "/api/automation/workflows/advanced",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2706,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_advanced_workflows_api_automation_workflows_advanced_get"
+    },
+    {
+      "path": "/api/automation/workflows/create",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1231,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "create_workflow_api_automation_workflows_create_post"
+    },
+    {
+      "path": "/api/automation/workflows",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 5587,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_user_workflows_api_automation_workflows_get"
+    },
+    {
+      "path": "/api/automation/workflows/{workflow_id}",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1342,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_workflow_details_api_automation_workflows__workflow_id__get"
+    },
+    {
+      "path": "/api/automation/workflows/{workflow_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1231,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "update_workflow_api_automation_workflows__workflow_id__put"
+    },
+    {
+      "path": "/api/automation/workflows/{workflow_id}/execute",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 269,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "execute_workflow_api_automation_workflows__workflow_id__execute_post"
+    },
+    {
+      "path": "/api/automation/triggers/available",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2487,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_available_triggers_api_automation_triggers_available_get"
+    },
+    {
+      "path": "/api/automation/actions/available",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1839,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_available_actions_api_automation_actions_available_get"
+    },
+    {
+      "path": "/api/automation/analytics/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1376,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_automation_analytics_api_automation_analytics_dashboard_get"
+    },
+    {
+      "path": "/api/automation/templates",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1393,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_workflow_templates_api_automation_templates_get"
+    },
+    {
+      "path": "/api/automation/templates/{template_id}/install",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 363,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "install_workflow_template_api_automation_templates__template_id__install_post"
+    },
+    {
+      "path": "/api/automation/executions/history",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 13127,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_execution_history_api_automation_executions_history_get"
+    },
+    {
+      "path": "/api/automation/performance/metrics",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 910,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_performance_metrics_api_automation_performance_metrics_get"
+    },
+    {
+      "path": "/api/automation/rules/create",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1218,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "create_automation_rule_api_automation_rules_create_post"
+    },
+    {
+      "path": "/api/automation/integrations/available",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 923,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation System"
+      ],
+      "operation_id": "get_available_integrations_api_automation_integrations_available_get"
+    },
+    {
+      "path": "/api/blog/posts",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 437,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Blog",
+        "Blog Posts"
+      ],
+      "operation_id": "create_blog_post_api_blog_posts_post"
+    },
+    {
+      "path": "/api/blog/posts",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 8778,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Blog",
+        "Blog Posts"
+      ],
+      "operation_id": "get_blog_posts_api_blog_posts_get"
+    },
+    {
+      "path": "/api/blog/posts/{post_id}",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 115,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Blog"
+      ],
+      "operation_id": "get_blog_post_api_blog_posts__post_id__get"
+    },
+    {
+      "path": "/api/blog/posts/{post_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 116,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "Blog"
+      ],
+      "operation_id": "update_blog_post_api_blog_posts__post_id__put"
+    },
+    {
+      "path": "/api/blog/posts/{post_id}",
+      "method": "DELETE",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 116,
+      "has_real_data": false,
+      "crud_type": "DELETE",
+      "tags": [
+        "Blog"
+      ],
+      "operation_id": "delete_blog_post_api_blog_posts__post_id__delete"
+    },
+    {
+      "path": "/api/blog/posts/slug/{slug}",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 115,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Blog"
+      ],
+      "operation_id": "get_blog_post_by_slug_api_blog_posts_slug__slug__get"
+    },
+    {
+      "path": "/api/blog/analytics",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 547,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Blog",
+        "Blog Analytics"
+      ],
+      "operation_id": "get_blog_analytics_api_blog_analytics_get"
+    },
+    {
+      "path": "/api/content/api/content/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 514,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "get_content_api_content_api_content__get"
+    },
+    {
+      "path": "/api/content/api/content/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 177,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "create_content_api_content_api_content__post"
+    },
+    {
+      "path": "/api/content/api/content/{content_id}",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 201,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "get_content_by_id_api_content_api_content__content_id__get"
+    },
+    {
+      "path": "/api/content/api/content/{content_id}",
+      "method": "PUT",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 127,
+      "has_real_data": true,
+      "crud_type": "UPDATE",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "update_content_api_content_api_content__content_id__put"
+    },
+    {
+      "path": "/api/content/api/content/{content_id}",
+      "method": "DELETE",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 85,
+      "has_real_data": true,
+      "crud_type": "DELETE",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "delete_content_api_content_api_content__content_id__delete"
+    },
+    {
+      "path": "/api/content/api/content/categories/list",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 255,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "get_content_categories_api_content_api_content_categories_list_get"
+    },
+    {
+      "path": "/api/content/api/content/search",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 200,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "search_content_api_content_api_content_search_post"
+    },
+    {
+      "path": "/api/content/api/content/analytics/performance",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 269,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Content",
+        "Content Management"
+      ],
+      "operation_id": "get_content_analytics_api_content_api_content_analytics_performance_get"
+    },
+    {
+      "path": "/api/crm/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 920,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_crm_dashboard_api_crm_dashboard_get"
+    },
+    {
+      "path": "/api/crm/contacts",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1772,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_contacts_api_crm_contacts_get"
+    },
+    {
+      "path": "/api/crm/contacts",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 478,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "create_contact_api_crm_contacts_post"
+    },
+    {
+      "path": "/api/crm/contacts/{contact_id}",
+      "method": "GET",
+      "success": false,
+      "status_code": 0,
+      "status_description": "Request failed: HTTPSConnectionPool(host='d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com', port=443)",
+      "response_size": 0,
+      "has_real_data": false,
+      "crud_type": null,
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_contact_api_crm_contacts__contact_id__get"
+    },
+    {
+      "path": "/api/crm/contacts/{contact_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 0,
+      "status_description": "Request failed: HTTPSConnectionPool(host='d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com', port=443)",
+      "response_size": 0,
+      "has_real_data": false,
+      "crud_type": null,
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "update_contact_api_crm_contacts__contact_id__put"
+    },
+    {
+      "path": "/api/crm/deals",
+      "method": "POST",
+      "success": false,
+      "status_code": 0,
+      "status_description": "Request failed: HTTPSConnectionPool(host='d70b9379-58ef-4e6d-9a10-f0eebb21d382.preview.emergentagent.com', port=443)",
+      "response_size": 0,
+      "has_real_data": false,
+      "crud_type": null,
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "create_deal_api_crm_deals_post"
+    },
+    {
+      "path": "/api/crm/deals",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 66,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_deals_api_crm_deals_get"
+    },
+    {
+      "path": "/api/crm/activities",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 475,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "create_activity_api_crm_activities_post"
+    },
+    {
+      "path": "/api/crm-management/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 920,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_crm_dashboard_api_crm_management_dashboard_get"
+    },
+    {
+      "path": "/api/crm-management/contacts",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1772,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_contacts_api_crm_management_contacts_get"
+    },
+    {
+      "path": "/api/crm-management/contacts",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 478,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "create_contact_api_crm_management_contacts_post"
+    },
+    {
+      "path": "/api/crm-management/contacts/{contact_id}",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 107,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_contact_api_crm_management_contacts__contact_id__get"
+    },
+    {
+      "path": "/api/crm-management/contacts/{contact_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 107,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "update_contact_api_crm_management_contacts__contact_id__put"
+    },
+    {
+      "path": "/api/crm-management/deals",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 846,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "create_deal_api_crm_management_deals_post"
+    },
+    {
+      "path": "/api/crm-management/deals",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 66,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "get_deals_api_crm_management_deals_get"
+    },
+    {
+      "path": "/api/crm-management/activities",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 475,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "CRM Management"
+      ],
+      "operation_id": "create_activity_api_crm_management_activities_post"
+    },
+    {
+      "path": "/api/forms/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 520,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "get_forms_dashboard_api_forms_dashboard_get"
+    },
+    {
+      "path": "/api/forms/forms",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2231,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "get_forms_api_forms_forms_get"
+    },
+    {
+      "path": "/api/forms/create",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 474,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "create_form_api_forms_create_post"
+    },
+    {
+      "path": "/api/forms/forms/{form_id}",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 104,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "get_form_api_forms_forms__form_id__get"
+    },
+    {
+      "path": "/api/forms/forms/{form_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 104,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "update_form_api_forms_forms__form_id__put"
+    },
+    {
+      "path": "/api/forms/forms/{form_id}",
+      "method": "DELETE",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 121,
+      "has_real_data": false,
+      "crud_type": "DELETE",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "delete_form_api_forms_forms__form_id__delete"
+    },
+    {
+      "path": "/api/forms/submit",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 634,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "submit_form_api_forms_submit_post"
+    },
+    {
+      "path": "/api/forms/forms/{form_id}/submissions",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 121,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Form Builder"
+      ],
+      "operation_id": "get_form_submissions_api_forms_forms__form_id__submissions_get"
+    },
+    {
+      "path": "/api/google-oauth/config",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 186,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Google OAuth"
+      ],
+      "operation_id": "get_oauth_config_api_google_oauth_config_get"
+    },
+    {
+      "path": "/api/google-oauth/google/verify",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 478,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Google OAuth"
+      ],
+      "operation_id": "google_verify_token_api_google_oauth_google_verify_post"
+    },
+    {
+      "path": "/api/google-oauth/google/link",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 478,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Google OAuth"
+      ],
+      "operation_id": "link_google_account_api_google_oauth_google_link_post"
+    },
+    {
+      "path": "/api/google-oauth/google/unlink",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "status_description": "Bad Request - Invalid request data",
+      "response_size": 127,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Google OAuth"
+      ],
+      "operation_id": "unlink_google_account_api_google_oauth_google_unlink_post"
+    },
+    {
+      "path": "/api/google-oauth/google/profile",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 114,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Google OAuth"
+      ],
+      "operation_id": "get_google_profile_info_api_google_oauth_google_profile_get"
+    },
+    {
+      "path": "/api/integrations/available",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2420,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "get_available_integrations_api_integrations_available_get"
+    },
+    {
+      "path": "/api/integrations/connected",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 522,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "get_connected_integrations_api_integrations_connected_get"
+    },
+    {
+      "path": "/api/integrations/connect",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 858,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "connect_integration_api_integrations_connect_post"
+    },
+    {
+      "path": "/api/integrations/webhooks",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 58,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "get_webhooks_api_integrations_webhooks_get"
+    },
+    {
+      "path": "/api/integrations/webhooks",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1225,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "create_webhook_api_integrations_webhooks_post"
+    },
+    {
+      "path": "/api/integrations/logs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 362,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "get_integration_logs_api_integrations_logs_get"
+    },
+    {
+      "path": "/api/integrations/{integration_id}",
+      "method": "DELETE",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 111,
+      "has_real_data": false,
+      "crud_type": "DELETE",
+      "tags": [
+        "Integrations"
+      ],
+      "operation_id": "disconnect_integration_api_integrations__integration_id__delete"
+    },
+    {
+      "path": "/api/marketing/campaigns",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 618,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Marketing",
+        "Marketing"
+      ],
+      "operation_id": "get_marketing_campaigns_api_marketing_campaigns_get"
+    },
+    {
+      "path": "/api/marketing/campaigns",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 359,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Marketing"
+      ],
+      "operation_id": "create_email_campaign_api_marketing_campaigns_post"
+    },
+    {
+      "path": "/api/marketing/contacts",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 487,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Marketing",
+        "Marketing"
+      ],
+      "operation_id": "get_marketing_contacts_api_marketing_contacts_get"
+    },
+    {
+      "path": "/api/marketing/contacts",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 347,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Marketing"
+      ],
+      "operation_id": "create_contact_api_marketing_contacts_post"
+    },
+    {
+      "path": "/api/marketing/lists",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1244,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Marketing"
+      ],
+      "operation_id": "get_contact_lists_api_marketing_lists_get"
+    },
+    {
+      "path": "/api/marketing/lists",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 316,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Marketing"
+      ],
+      "operation_id": "create_contact_list_api_marketing_lists_post"
+    },
+    {
+      "path": "/api/marketing/analytics",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 736,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Marketing",
+        "Marketing"
+      ],
+      "operation_id": "get_marketing_analytics_endpoint_api_marketing_analytics_get"
+    },
+    {
+      "path": "/api/promotions/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 222,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "get_promotions_dashboard_api_promotions_dashboard_get"
+    },
+    {
+      "path": "/api/promotions/discount-codes",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1397,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "get_discount_codes_api_promotions_discount_codes_get"
+    },
+    {
+      "path": "/api/promotions/discount-codes",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 473,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "create_discount_code_api_promotions_discount_codes_post"
+    },
+    {
+      "path": "/api/promotions/discount-codes/{code}/validate",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 245,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "validate_discount_code_api_promotions_discount_codes__code__validate_post"
+    },
+    {
+      "path": "/api/promotions/referral-programs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1244,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "get_referral_programs_api_promotions_referral_programs_get"
+    },
+    {
+      "path": "/api/promotions/referral-programs",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 872,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "create_referral_program_api_promotions_referral_programs_post"
+    },
+    {
+      "path": "/api/promotions/referral-codes",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 478,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Promotions & Referrals"
+      ],
+      "operation_id": "generate_referral_code_api_promotions_referral_codes_post"
+    },
+    {
+      "path": "/api/notifications/api/notifications/send",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 634,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "send_notification_api_notifications_api_notifications_send_post"
+    },
+    {
+      "path": "/api/notifications/api/notifications/send-bulk",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 1005,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "send_bulk_notification_api_notifications_api_notifications_send_bulk_post"
+    },
+    {
+      "path": "/api/notifications/api/notifications/history",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2025,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "get_notification_history_api_notifications_api_notifications_history_get"
+    },
+    {
+      "path": "/api/notifications/api/notifications/mark-read/{notification_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 128,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "mark_notification_read_api_notifications_api_notifications_mark_read__notification_id__put"
+    },
+    {
+      "path": "/api/notifications/api/notifications/mark-all-read",
+      "method": "PUT",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 127,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "mark_all_notifications_read_api_notifications_api_notifications_mark_all_read_put"
+    },
+    {
+      "path": "/api/notifications/api/notifications/stats",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 358,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "get_notification_stats_api_notifications_api_notifications_stats_get"
+    },
+    {
+      "path": "/api/notifications/api/notifications/connection-status",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 228,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Real-time Notifications",
+        "Real-time Notifications"
+      ],
+      "operation_id": "get_connection_status_api_notifications_api_notifications_connection_status_get"
+    },
+    {
+      "path": "/api/teams/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 2735,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "get_team_dashboard_api_teams_dashboard_get"
+    },
+    {
+      "path": "/api/teams/members",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 184,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "get_team_members_api_teams_members_get"
+    },
+    {
+      "path": "/api/teams/invite",
+      "method": "POST",
+      "success": false,
+      "status_code": 409,
+      "status_description": "Status 409",
+      "response_size": 138,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "invite_team_member_api_teams_invite_post"
+    },
+    {
+      "path": "/api/teams/accept-invitation",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 246,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "accept_team_invitation_api_teams_accept_invitation_post"
+    },
+    {
+      "path": "/api/teams/members/{member_id}",
+      "method": "PUT",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 111,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "update_team_member_api_teams_members__member_id__put"
+    },
+    {
+      "path": "/api/teams/members/{member_id}",
+      "method": "DELETE",
+      "success": false,
+      "status_code": 404,
+      "status_description": "Not Found - Endpoint not implemented",
+      "response_size": 111,
+      "has_real_data": false,
+      "crud_type": "DELETE",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "remove_team_member_api_teams_members__member_id__delete"
+    },
+    {
+      "path": "/api/teams/activity",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1934,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "get_team_activity_api_teams_activity_get"
+    },
+    {
+      "path": "/api/team-management/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 790,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "get_team_dashboard_api_team_management_dashboard_get"
+    },
+    {
+      "path": "/api/team-management/members",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 710,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "get_team_members_api_team_management_members_get"
+    },
+    {
+      "path": "/api/team-management/activity",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 634,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "get_team_activity_api_team_management_activity_get"
+    },
+    {
+      "path": "/api/team-management/teams",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 397,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Team Management"
+      ],
+      "operation_id": "create_team_api_team_management_teams_post"
+    },
+    {
+      "path": "/api/user/api/user/profile",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 4,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "get_user_profile_api_user_api_user_profile_get"
+    },
+    {
+      "path": "/api/user/api/user/profile",
+      "method": "PUT",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "update_user_profile_api_user_api_user_profile_put"
+    },
+    {
+      "path": "/api/user/api/user/preferences",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "get_user_preferences_api_user_api_user_preferences_get"
+    },
+    {
+      "path": "/api/user/api/user/preferences",
+      "method": "PUT",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "update_user_preferences_api_user_api_user_preferences_put"
+    },
+    {
+      "path": "/api/user/api/user/avatar",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "upload_user_avatar_api_user_api_user_avatar_post"
+    },
+    {
+      "path": "/api/user/api/user/activity",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 353,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "get_user_activity_api_user_api_user_activity_get"
+    },
+    {
+      "path": "/api/user/api/user/deactivate",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "deactivate_account_api_user_api_user_deactivate_post"
+    },
+    {
+      "path": "/api/user/api/user/password/change",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "change_password_api_user_api_user_password_change_post"
+    },
+    {
+      "path": "/api/user/api/user/notifications/settings",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "get_notification_settings_api_user_api_user_notifications_settings_get"
+    },
+    {
+      "path": "/api/user/api/user/notifications/settings",
+      "method": "PUT",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 188,
+      "has_real_data": false,
+      "crud_type": "UPDATE",
+      "tags": [
+        "User Profile",
+        "User Management"
+      ],
+      "operation_id": "update_notification_settings_api_user_api_user_notifications_settings_put"
+    },
+    {
+      "path": "/api/workspaces",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 465,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Workspaces",
+        "Workspaces"
+      ],
+      "operation_id": "get_workspaces_api_workspaces_get"
+    },
+    {
+      "path": "/api/integration/available",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1719,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "External Integrations",
+        "External Integrations"
+      ],
+      "operation_id": "get_available_integrations_api_integration_available_get"
+    },
+    {
+      "path": "/api/integration/connected",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 26,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "External Integrations",
+        "External Integrations"
+      ],
+      "operation_id": "get_connected_integrations_api_integration_connected_get"
+    },
+    {
+      "path": "/api/integration/status",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 113,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "External Integrations",
+        "External Integrations"
+      ],
+      "operation_id": "get_integration_status_api_integration_status_get"
+    },
+    {
+      "path": "/api/automation/status",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 121,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Automation",
+        "Automation"
+      ],
+      "operation_id": "get_automation_status_api_automation_status_get"
+    },
+    {
+      "path": "/api/instagram/search",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 10020,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Instagram Database"
+      ],
+      "operation_id": "search_instagram_database_api_instagram_search_post"
+    },
+    {
+      "path": "/api/instagram/profiles",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 4015,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Instagram Database"
+      ],
+      "operation_id": "get_instagram_profiles_api_instagram_profiles_get"
+    },
+    {
+      "path": "/api/pwa/manifest/generate",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 637,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "PWA Features"
+      ],
+      "operation_id": "generate_pwa_manifest_api_pwa_manifest_generate_post"
+    },
+    {
+      "path": "/api/pwa/manifest/current",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 206,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "PWA Features"
+      ],
+      "operation_id": "get_current_manifest_api_pwa_manifest_current_get"
+    },
+    {
+      "path": "/api/workflows/list",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 698,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "AI Workflows"
+      ],
+      "operation_id": "list_workflows_api_workflows_list_get"
+    },
+    {
+      "path": "/api/workflows/create",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 355,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "AI Workflows"
+      ],
+      "operation_id": "create_workflow_api_workflows_create_post"
+    },
+    {
+      "path": "/api/escrow/transactions/milestone",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 423,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Escrow System"
+      ],
+      "operation_id": "create_milestone_transaction_api_escrow_transactions_milestone_post"
+    },
+    {
+      "path": "/api/escrow/transactions/list",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 364,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Escrow System"
+      ],
+      "operation_id": "list_escrow_transactions_api_escrow_transactions_list_get"
+    },
+    {
+      "path": "/api/posts/schedule",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 377,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Social Media Posts"
+      ],
+      "operation_id": "schedule_social_media_post_api_posts_schedule_post"
+    },
+    {
+      "path": "/api/posts/scheduled",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 613,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Social Media Posts"
+      ],
+      "operation_id": "get_scheduled_posts_api_posts_scheduled_get"
+    },
+    {
+      "path": "/api/device/register",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 290,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Device Management"
+      ],
+      "operation_id": "register_device_api_device_register_post"
+    },
+    {
+      "path": "/api/device/offline/sync",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 328,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Device Management"
+      ],
+      "operation_id": "sync_offline_data_api_device_offline_sync_post"
+    },
+    {
+      "path": "/api/disputes/initiate",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 488,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Dispute Resolution"
+      ],
+      "operation_id": "initiate_dispute_api_disputes_initiate_post"
+    },
+    {
+      "path": "/api/disputes/list",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 331,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Dispute Resolution"
+      ],
+      "operation_id": "list_disputes_api_disputes_list_get"
+    },
+    {
+      "path": "/api/template-marketplace/browse",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 824,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Template Marketplace"
+      ],
+      "operation_id": "browse_template_marketplace_api_template_marketplace_browse_get"
+    },
+    {
+      "path": "/api/template-marketplace/creator-earnings",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 435,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Template Marketplace"
+      ],
+      "operation_id": "get_creator_earnings_api_template_marketplace_creator_earnings_get"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/send-email",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 369,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Sending"
+      ],
+      "operation_id": "send_single_email_api_email_automation_api_email_automation_send_email_post"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/campaigns",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1978,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Campaigns"
+      ],
+      "operation_id": "get_email_campaigns_api_email_automation_api_email_automation_campaigns_get"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/campaigns/{campaign_id}/statistics",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 247,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_campaign_statistics_api_email_automation_api_email_automation_campaigns__campaign_id__statistics_get"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/automation-sequence",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 437,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "create_automation_sequence_api_email_automation_api_email_automation_automation_sequence_post"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/subscribers",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 3878,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Subscribers"
+      ],
+      "operation_id": "get_subscribers_api_email_automation_api_email_automation_subscribers_get"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/email-logs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1117,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_email_logs_api_email_automation_api_email_automation_email_logs_get"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/bulk-email",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 436,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "send_bulk_email_api_email_automation_api_email_automation_bulk_email_post"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/analytics/overview",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1731,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_email_analytics_overview_api_email_automation_api_email_automation_analytics_overview_get"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/templates",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 116,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "create_email_template_api_email_automation_api_email_automation_templates_post"
+    },
+    {
+      "path": "/api/email-automation/api/email-automation/templates",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 507,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_email_templates_api_email_automation_api_email_automation_templates_get"
+    },
+    {
+      "path": "/api/email-automation/send-email",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 369,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Sending"
+      ],
+      "operation_id": "send_single_email_api_email_automation_send_email_post"
+    },
+    {
+      "path": "/api/email-automation/campaigns",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1978,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Campaigns"
+      ],
+      "operation_id": "get_email_campaigns_api_email_automation_campaigns_get"
+    },
+    {
+      "path": "/api/email-automation/campaigns/{campaign_id}/statistics",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 247,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_campaign_statistics_api_email_automation_campaigns__campaign_id__statistics_get"
+    },
+    {
+      "path": "/api/email-automation/automation-sequence",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 437,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "create_automation_sequence_api_email_automation_automation_sequence_post"
+    },
+    {
+      "path": "/api/email-automation/subscribers",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 3878,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Subscribers"
+      ],
+      "operation_id": "get_subscribers_api_email_automation_subscribers_get"
+    },
+    {
+      "path": "/api/email-automation/email-logs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1117,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_email_logs_api_email_automation_email_logs_get"
+    },
+    {
+      "path": "/api/email-automation/bulk-email",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 436,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "send_bulk_email_api_email_automation_bulk_email_post"
+    },
+    {
+      "path": "/api/email-automation/analytics/overview",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1731,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_email_analytics_overview_api_email_automation_analytics_overview_get"
+    },
+    {
+      "path": "/api/email-automation/templates",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "status_description": "Internal Server Error - Server-side error",
+      "response_size": 116,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "create_email_template_api_email_automation_templates_post"
+    },
+    {
+      "path": "/api/email-automation/templates",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 507,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Email Automation",
+        "Email Automation"
+      ],
+      "operation_id": "get_email_templates_api_email_automation_templates_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/compliance/frameworks",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 860,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "implement_compliance_framework_api_enterprise_security_api_enterprise_security_compliance_frameworks_post"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/compliance/frameworks",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 78,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "list_compliance_frameworks_api_enterprise_security_api_enterprise_security_compliance_frameworks_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/threat-detection/setup",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 243,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Threat Detection"
+      ],
+      "operation_id": "setup_threat_detection_api_enterprise_security_api_enterprise_security_threat_detection_setup_post"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/threat-detection/alerts",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 562,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "get_threat_alerts_api_enterprise_security_api_enterprise_security_threat_detection_alerts_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/audit/log",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 3654,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Audit Logging"
+      ],
+      "operation_id": "get_audit_log_api_enterprise_security_api_enterprise_security_audit_log_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/audit/logs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 5741,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Audit Logging"
+      ],
+      "operation_id": "get_audit_logs_api_enterprise_security_api_enterprise_security_audit_logs_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/vulnerability-assessment",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1577,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "perform_vulnerability_assessment_api_enterprise_security_api_enterprise_security_vulnerability_assessment_post"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/vulnerability-assessments",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 12153,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "list_vulnerability_assessments_api_enterprise_security_api_enterprise_security_vulnerability_assessments_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/compliance/report",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 495,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Compliance"
+      ],
+      "operation_id": "get_compliance_report_api_enterprise_security_api_enterprise_security_compliance_report_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/compliance/reports",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 75,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "list_compliance_reports_api_enterprise_security_api_enterprise_security_compliance_reports_get"
+    },
+    {
+      "path": "/api/enterprise-security/api/enterprise-security/security/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 623,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "get_security_dashboard_api_enterprise_security_api_enterprise_security_security_dashboard_get"
+    },
+    {
+      "path": "/api/enterprise-security/compliance/frameworks",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 860,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "implement_compliance_framework_api_enterprise_security_compliance_frameworks_post"
+    },
+    {
+      "path": "/api/enterprise-security/compliance/frameworks",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 78,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "list_compliance_frameworks_api_enterprise_security_compliance_frameworks_get"
+    },
+    {
+      "path": "/api/enterprise-security/threat-detection/setup",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "status_description": "Status 422",
+      "response_size": 243,
+      "has_real_data": false,
+      "crud_type": "CREATE",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Threat Detection"
+      ],
+      "operation_id": "setup_threat_detection_api_enterprise_security_threat_detection_setup_post"
+    },
+    {
+      "path": "/api/enterprise-security/threat-detection/alerts",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 562,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "get_threat_alerts_api_enterprise_security_threat_detection_alerts_get"
+    },
+    {
+      "path": "/api/enterprise-security/audit/log",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 3654,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Audit Logging"
+      ],
+      "operation_id": "get_audit_log_api_enterprise_security_audit_log_get"
+    },
+    {
+      "path": "/api/enterprise-security/audit/logs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 5741,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Audit Logging"
+      ],
+      "operation_id": "get_audit_logs_api_enterprise_security_audit_logs_get"
+    },
+    {
+      "path": "/api/enterprise-security/vulnerability-assessment",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1577,
+      "has_real_data": true,
+      "crud_type": "CREATE",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "perform_vulnerability_assessment_api_enterprise_security_vulnerability_assessment_post"
+    },
+    {
+      "path": "/api/enterprise-security/vulnerability-assessments",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 13662,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "list_vulnerability_assessments_api_enterprise_security_vulnerability_assessments_get"
+    },
+    {
+      "path": "/api/enterprise-security/compliance/report",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 495,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security",
+        "Compliance"
+      ],
+      "operation_id": "get_compliance_report_api_enterprise_security_compliance_report_get"
+    },
+    {
+      "path": "/api/enterprise-security/compliance/reports",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 75,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "list_compliance_reports_api_enterprise_security_compliance_reports_get"
+    },
+    {
+      "path": "/api/enterprise-security/security/dashboard",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 623,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "Enterprise Security",
+        "Enterprise Security"
+      ],
+      "operation_id": "get_security_dashboard_api_enterprise_security_security_dashboard_get"
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1140,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "System"
+      ],
+      "operation_id": "root__get"
+    },
+    {
+      "path": "/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 510,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "System"
+      ],
+      "operation_id": "health_check_health_get"
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 104,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "System"
+      ],
+      "operation_id": "api_health_check_api_health_get"
+    },
+    {
+      "path": "/healthz",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 15,
+      "has_real_data": false,
+      "crud_type": "READ",
+      "tags": [
+        "System"
+      ],
+      "operation_id": "kubernetes_health_check_healthz_get"
+    },
+    {
+      "path": "/ready",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 41,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "System"
+      ],
+      "operation_id": "readiness_check_ready_get"
+    },
+    {
+      "path": "/metrics",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "status_description": "OK - Working perfectly",
+      "response_size": 1670,
+      "has_real_data": true,
+      "crud_type": "READ",
+      "tags": [
+        "System"
+      ],
+      "operation_id": "system_metrics_metrics_get"
+    }
+  ],
+  "crud_audit_results": [
+    {
+      "service": "AI Services",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "AI Token Management",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Analytics System",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Authentication",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Automation System",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Blog",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Blog Posts",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Blog Analytics",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "CRM Management",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Form Builder",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Google OAuth",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Integrations",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Marketing",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Promotions & Referrals",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Real-time Notifications",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Team Management",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "User Profile",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "User Management",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Workspaces",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "External Integrations",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Automation",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Instagram Database",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "PWA Features",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "AI Workflows",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Escrow System",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Social Media Posts",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Device Management",
+      "missing_operations": [
+        "READ",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE"
+      ]
+    },
+    {
+      "service": "Dispute Resolution",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Template Marketplace",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Email Automation",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Email Campaigns",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Subscribers",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Enterprise Security",
+      "missing_operations": [
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "CREATE",
+        "READ"
+      ]
+    },
+    {
+      "service": "Audit Logging",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "Compliance",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    },
+    {
+      "service": "System",
+      "missing_operations": [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ],
+      "has_operations": [
+        "READ"
+      ]
+    }
+  ],
+  "mock_data_audit_results": [],
+  "duplicate_files_audit_results": [],
+  "service_api_pairs_audit_results": [
+    {
+      "type": "created_service",
+      "api": "team_management",
+      "service_created": "team_management_service"
+    },
+    {
+      "type": "created_service",
+      "api": "media_library",
+      "service_created": "media_library_service"
+    },
+    {
+      "type": "created_service",
+      "api": "integrations",
+      "service_created": "integrations_service"
+    },
+    {
+      "type": "created_service",
+      "api": "integration_tests",
+      "service_created": "integration_tests_service"
+    },
+    {
+      "type": "created_service",
+      "api": "workflow_automation",
+      "service_created": "workflow_automation_service"
+    },
+    {
+      "type": "created_service",
+      "api": "real_ai_automation",
+      "service_created": "real_ai_automation_service"
+    },
+    {
+      "type": "created_service",
+      "api": "notification_system",
+      "service_created": "notification_system_service"
+    },
+    {
+      "type": "created_service",
+      "api": "ai_content_generation",
+      "service_created": "ai_content_generation_service"
+    },
+    {
+      "type": "created_service",
+      "api": "mobile_pwa_features",
+      "service_created": "mobile_pwa_features_service"
+    },
+    {
+      "type": "created_service",
+      "api": "rate_limiting_system",
+      "service_created": "rate_limiting_system_service"
+    }
+  ],
+  "fixes_applied": {
+    "crud_operations_added": 31,
+    "mock_data_fixed": 0,
+    "duplicate_files_handled": 0,
+    "service_api_pairs_created": 10,
+    "total_fixes": 0
+  }
+}

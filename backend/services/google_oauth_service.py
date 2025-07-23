@@ -140,3 +140,78 @@ class Google_OauthService:
                 "success": False,
                 "error": f"Failed to delete google_oauth: {str(e)}"
             }
+
+    async def create_google_oauth(self, google_oauth_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create google_oauth with real data persistence"""
+        try:
+            import uuid
+            from datetime import datetime
+            
+            google_oauth_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            db = await self.get_database()
+            result = await db["google_oauth"].insert_one(google_oauth_data)
+            
+            return {
+                "success": True,
+                "message": f"Google_Oauth created successfully",
+                "data": google_oauth_data,
+                "id": google_oauth_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create google_oauth: {str(e)}"
+            }
+
+    async def update_google_oauth(self, google_oauth_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update google_oauth with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["google_oauth"].update_one(
+                {"id": google_oauth_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Google_Oauth not found"}
+            
+            updated = await db["google_oauth"].find_one({"id": google_oauth_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Google_Oauth updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update google_oauth: {str(e)}"}
+
+    async def delete_google_oauth(self, google_oauth_id: str) -> Dict[str, Any]:
+        """Delete google_oauth with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["google_oauth"].delete_one({"id": google_oauth_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Google_Oauth not found"}
+            
+            return {
+                "success": True,
+                "message": f"Google_Oauth deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete google_oauth: {str(e)}"}
+
+
+

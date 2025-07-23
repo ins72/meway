@@ -140,3 +140,78 @@ class Analytics_SystemService:
                 "success": False,
                 "error": f"Failed to delete analytics_system: {str(e)}"
             }
+
+    async def create_analytics_system(self, analytics_system_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create analytics_system with real data persistence"""
+        try:
+            import uuid
+            from datetime import datetime
+            
+            analytics_system_data.update({
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "status": "active"
+            })
+            
+            db = await self.get_database()
+            result = await db["analytics_system"].insert_one(analytics_system_data)
+            
+            return {
+                "success": True,
+                "message": f"Analytics_System created successfully",
+                "data": analytics_system_data,
+                "id": analytics_system_data["id"]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to create analytics_system: {str(e)}"
+            }
+
+    async def update_analytics_system(self, analytics_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update analytics_system with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["analytics_system"].update_one(
+                {"id": analytics_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Analytics_System not found"}
+            
+            updated = await db["analytics_system"].find_one({"id": analytics_system_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Analytics_System updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update analytics_system: {str(e)}"}
+
+    async def delete_analytics_system(self, analytics_system_id: str) -> Dict[str, Any]:
+        """Delete analytics_system with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["analytics_system"].delete_one({"id": analytics_system_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Analytics_System not found"}
+            
+            return {
+                "success": True,
+                "message": f"Analytics_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete analytics_system: {str(e)}"}
+
+
+

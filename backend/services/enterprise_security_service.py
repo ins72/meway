@@ -274,6 +274,52 @@ class EnterpriseSecurityService:
             
         except Exception as e:
             return {"error": str(e)}
+
+    async def update_enterprise_security(self, enterprise_security_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update enterprise_security with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["enterprise_security"].update_one(
+                {"id": enterprise_security_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Enterprise_Security not found"}
+            
+            updated = await db["enterprise_security"].find_one({"id": enterprise_security_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Enterprise_Security updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update enterprise_security: {str(e)}"}
+
+
+    async def delete_enterprise_security(self, enterprise_security_id: str) -> Dict[str, Any]:
+        """Delete enterprise_security with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["enterprise_security"].delete_one({"id": enterprise_security_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Enterprise_Security not found"}
+            
+            return {
+                "success": True,
+                "message": f"Enterprise_Security deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete enterprise_security: {str(e)}"}
+
     
 
     async def create_enterprise_security(self, enterprise_security_data: Dict[str, Any]) -> Dict[str, Any]:

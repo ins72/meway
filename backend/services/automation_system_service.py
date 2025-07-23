@@ -11,6 +11,52 @@ from core.database import get_database
 
 class AutomationSystemService:
     """Service class for Automation System"""
+
+    async def update_automation_system(self, automation_system_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update automation_system with real data persistence"""
+        try:
+            from datetime import datetime
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            db = await self.get_database()
+            result = await db["automation_system"].update_one(
+                {"id": automation_system_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count == 0:
+                return {"success": False, "error": f"Automation_System not found"}
+            
+            updated = await db["automation_system"].find_one({"id": automation_system_id})
+            updated.pop('_id', None)
+            
+            return {
+                "success": True,
+                "message": f"Automation_System updated successfully",
+                "data": updated
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to update automation_system: {str(e)}"}
+
+
+    async def delete_automation_system(self, automation_system_id: str) -> Dict[str, Any]:
+        """Delete automation_system with real data persistence"""
+        try:
+            db = await self.get_database()
+            result = await db["automation_system"].delete_one({"id": automation_system_id})
+            
+            if result.deleted_count == 0:
+                return {"success": False, "error": f"Automation_System not found"}
+            
+            return {
+                "success": True,
+                "message": f"Automation_System deleted successfully",
+                "deleted_count": result.deleted_count
+            }
+        except Exception as e:
+            return {"success": False, "error": f"Failed to delete automation_system: {str(e)}"}
+
     
 
     async def create_automation_system(self, automation_system_data: Dict[str, Any]) -> Dict[str, Any]:
