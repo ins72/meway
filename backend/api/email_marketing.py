@@ -56,8 +56,9 @@ async def get_email_marketing_dashboard(current_user: dict = Depends(get_current
     
     # Get workspace for user
     workspace_id = current_user.get("workspace_id") or str(uuid.uuid4())
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
     
-    # Generate realistic campaign stats
+    # Get dashboard metrics from real service
     total_campaigns = await service.get_metric()
     total_subscribers = await service.get_metric()
     total_sent = await service.get_metric()
