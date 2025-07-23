@@ -1,5 +1,488 @@
 #!/usr/bin/env python3
 """
+FOCUSED REVIEW REQUEST BACKEND TESTING - JANUARY 2025
+Testing specific areas mentioned in the review request:
+1. Twitter API Integration - Test health, search, and CRUD operations with real Twitter API v2 Bearer token authentication
+2. Referral System - Test all endpoints to verify they're working after ObjectId serialization fixes
+3. TikTok API - Test endpoints to see if they're operational
+4. Stripe Integration - Test endpoints for real payment processing
+5. Authentication System - Verify JWT token validation is still working properly
+
+Admin credentials: tmonnens@outlook.com/Voetballen5
+"""
+
+import requests
+import json
+import time
+from datetime import datetime
+import sys
+import os
+
+# Configuration
+BACKEND_URL = "https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com"
+API_BASE = f"{BACKEND_URL}/api"
+
+# Admin credentials from review request
+ADMIN_EMAIL = "tmonnens@outlook.com"
+ADMIN_PASSWORD = "Voetballen5"
+
+class FocusedReviewTester:
+    def __init__(self):
+        self.session = requests.Session()
+        self.auth_token = None
+        self.test_results = []
+        self.total_tests = 0
+        self.passed_tests = 0
+        
+    def log_result(self, test_name, status, response_data=None, error=None):
+        """Log test result"""
+        self.total_tests += 1
+        if status == "PASS":
+            self.passed_tests += 1
+            
+        result = {
+            "test": test_name,
+            "status": status,
+            "timestamp": datetime.now().isoformat(),
+            "response_length": len(str(response_data)) if response_data else 0,
+            "error": error
+        }
+        self.test_results.append(result)
+        
+        status_emoji = "✅" if status == "PASS" else "❌"
+        print(f"{status_emoji} {test_name}: {status}")
+        if error:
+            print(f"   Error: {error}")
+        if response_data and len(str(response_data)) > 0:
+            print(f"   Response: {len(str(response_data))} chars")
+            
+    def authenticate(self):
+        """Authenticate with admin credentials"""
+        try:
+            print(f"\n🔐 AUTHENTICATING with {ADMIN_EMAIL}...")
+            
+            login_data = {
+                "email": ADMIN_EMAIL,
+                "password": ADMIN_PASSWORD
+            }
+            
+            response = self.session.post(
+                f"{API_BASE}/auth/login",
+                json=login_data,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.auth_token = data.get("access_token")
+                if self.auth_token:
+                    self.session.headers.update({
+                        "Authorization": f"Bearer {self.auth_token}"
+                    })
+                    self.log_result("Authentication", "PASS", data)
+                    print(f"✅ Authentication successful - Token: {len(self.auth_token)} chars")
+                    return True
+                else:
+                    self.log_result("Authentication", "FAIL", data, "No access token in response")
+                    return False
+            else:
+                self.log_result("Authentication", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_result("Authentication", "FAIL", None, str(e))
+            return False
+    
+    def test_twitter_api_integration(self):
+        """Test Twitter API Integration - Focus on real API integration"""
+        print(f"\n🐦 TESTING TWITTER API INTEGRATION...")
+        
+        # Test 1: Health Check
+        try:
+            response = self.session.get(f"{API_BASE}/twitter/health", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Twitter Health Check", "PASS", data)
+            else:
+                self.log_result("Twitter Health Check", "FAIL", None, f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_result("Twitter Health Check", "FAIL", None, str(e))
+        
+        # Test 2: Search Functionality (Real Twitter API v2)
+        try:
+            response = self.session.get(
+                f"{API_BASE}/twitter/search",
+                params={"query": "python programming", "limit": 10},
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Twitter Search", "PASS", data)
+            else:
+                self.log_result("Twitter Search", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Twitter Search", "FAIL", None, str(e))
+        
+        # Test 3: Tweet Creation (CRUD Operation)
+        try:
+            tweet_data = {
+                "text": "Test tweet from Mewayz platform API integration",
+                "hashtags": ["#MewayzTest", "#APIIntegration"]
+            }
+            response = self.session.post(
+                f"{API_BASE}/twitter/",
+                json=tweet_data,
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Twitter Tweet Creation", "PASS", data)
+            else:
+                self.log_result("Twitter Tweet Creation", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Twitter Tweet Creation", "FAIL", None, str(e))
+        
+        # Test 4: Analytics/Stats
+        try:
+            response = self.session.get(f"{API_BASE}/twitter/stats", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Twitter Analytics", "PASS", data)
+            else:
+                self.log_result("Twitter Analytics", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Twitter Analytics", "FAIL", None, str(e))
+    
+    def test_referral_system(self):
+        """Test Referral System - Focus on ObjectId serialization fixes"""
+        print(f"\n🎯 TESTING REFERRAL SYSTEM...")
+        
+        # Test 1: Health Check
+        try:
+            response = self.session.get(f"{API_BASE}/referral-system/health", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Referral System Health Check", "PASS", data)
+            else:
+                self.log_result("Referral System Health Check", "FAIL", None, f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_result("Referral System Health Check", "FAIL", None, str(e))
+        
+        # Test 2: List Referral Programs
+        try:
+            response = self.session.get(
+                f"{API_BASE}/referral-system/",
+                params={"limit": 20, "offset": 0},
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Referral System List Programs", "PASS", data)
+            else:
+                self.log_result("Referral System List Programs", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Referral System List Programs", "FAIL", None, str(e))
+        
+        # Test 3: Create Referral Program (Test ObjectId serialization)
+        try:
+            program_data = {
+                "name": "Test Referral Program",
+                "description": "Testing ObjectId serialization fixes",
+                "reward_type": "percentage",
+                "reward_value": 10.0,
+                "max_referrals": 100,
+                "active": True
+            }
+            response = self.session.post(
+                f"{API_BASE}/referral-system/",
+                json=program_data,
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Referral System Create Program", "PASS", data)
+                return data.get("id")  # Return ID for further testing
+            else:
+                self.log_result("Referral System Create Program", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+                return None
+        except Exception as e:
+            self.log_result("Referral System Create Program", "FAIL", None, str(e))
+            return None
+        
+        # Test 4: Analytics
+        try:
+            response = self.session.get(f"{API_BASE}/referral-system/stats", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Referral System Analytics", "PASS", data)
+            else:
+                self.log_result("Referral System Analytics", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Referral System Analytics", "FAIL", None, str(e))
+    
+    def test_tiktok_api(self):
+        """Test TikTok API - Check if endpoints are operational"""
+        print(f"\n🎵 TESTING TIKTOK API...")
+        
+        # Test 1: Health Check
+        try:
+            response = self.session.get(f"{API_BASE}/tiktok/health", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("TikTok Health Check", "PASS", data)
+            else:
+                self.log_result("TikTok Health Check", "FAIL", None, f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_result("TikTok Health Check", "FAIL", None, str(e))
+        
+        # Test 2: Search Functionality
+        try:
+            response = self.session.get(
+                f"{API_BASE}/tiktok/search",
+                params={"query": "programming tutorial", "limit": 10},
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("TikTok Search", "PASS", data)
+            else:
+                self.log_result("TikTok Search", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("TikTok Search", "FAIL", None, str(e))
+        
+        # Test 3: Video Upload
+        try:
+            upload_data = {
+                "title": "Test Video Upload",
+                "description": "Testing TikTok API integration",
+                "video_url": "https://example.com/test-video.mp4",
+                "hashtags": ["#test", "#api"]
+            }
+            response = self.session.post(
+                f"{API_BASE}/tiktok/upload",
+                json=upload_data,
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("TikTok Video Upload", "PASS", data)
+            else:
+                self.log_result("TikTok Video Upload", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("TikTok Video Upload", "FAIL", None, str(e))
+        
+        # Test 4: Analytics
+        try:
+            response = self.session.get(f"{API_BASE}/tiktok/stats", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("TikTok Analytics", "PASS", data)
+            else:
+                self.log_result("TikTok Analytics", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("TikTok Analytics", "FAIL", None, str(e))
+    
+    def test_stripe_integration(self):
+        """Test Stripe Integration - Real payment processing"""
+        print(f"\n💳 TESTING STRIPE INTEGRATION...")
+        
+        # Test 1: Health Check
+        try:
+            response = self.session.get(f"{API_BASE}/stripe-integration/health", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Stripe Health Check", "PASS", data)
+            else:
+                self.log_result("Stripe Health Check", "FAIL", None, f"HTTP {response.status_code}")
+        except Exception as e:
+            self.log_result("Stripe Health Check", "FAIL", None, str(e))
+        
+        # Test 2: Create Payment Intent
+        try:
+            payment_data = {
+                "amount": 2000,  # $20.00 in cents
+                "currency": "usd",
+                "description": "Test payment for Mewayz platform",
+                "customer_email": ADMIN_EMAIL
+            }
+            response = self.session.post(
+                f"{API_BASE}/stripe-integration/",
+                json=payment_data,
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Stripe Create Payment Intent", "PASS", data)
+                return data.get("id")  # Return payment ID for further testing
+            else:
+                self.log_result("Stripe Create Payment Intent", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+                return None
+        except Exception as e:
+            self.log_result("Stripe Create Payment Intent", "FAIL", None, str(e))
+            return None
+        
+        # Test 3: Payment Methods
+        try:
+            response = self.session.get(
+                f"{API_BASE}/stripe-integration/payment-methods",
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Stripe Payment Methods", "PASS", data)
+            else:
+                self.log_result("Stripe Payment Methods", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Stripe Payment Methods", "FAIL", None, str(e))
+        
+        # Test 4: Create Customer
+        try:
+            customer_data = {
+                "email": ADMIN_EMAIL,
+                "name": "Test Customer",
+                "description": "Test customer for Mewayz platform"
+            }
+            response = self.session.post(
+                f"{API_BASE}/stripe-integration/customers",
+                json=customer_data,
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Stripe Create Customer", "PASS", data)
+            else:
+                self.log_result("Stripe Create Customer", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Stripe Create Customer", "FAIL", None, str(e))
+    
+    def test_authentication_system(self):
+        """Test Authentication System - JWT token validation"""
+        print(f"\n🔐 TESTING AUTHENTICATION SYSTEM...")
+        
+        # Test 1: Token Validation (Get Current User)
+        try:
+            response = self.session.get(f"{API_BASE}/auth/me", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("JWT Token Validation", "PASS", data)
+            else:
+                self.log_result("JWT Token Validation", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("JWT Token Validation", "FAIL", None, str(e))
+        
+        # Test 2: Profile Access
+        try:
+            response = self.session.get(f"{API_BASE}/auth/profile", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Authentication Profile Access", "PASS", data)
+            else:
+                self.log_result("Authentication Profile Access", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Authentication Profile Access", "FAIL", None, str(e))
+        
+        # Test 3: Admin Access (List Auth Records)
+        try:
+            response = self.session.get(
+                f"{API_BASE}/auth/",
+                params={"limit": 10, "offset": 0},
+                timeout=30
+            )
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("Authentication Admin Access", "PASS", data)
+            else:
+                self.log_result("Authentication Admin Access", "FAIL", None, f"HTTP {response.status_code}: {response.text}")
+        except Exception as e:
+            self.log_result("Authentication Admin Access", "FAIL", None, str(e))
+    
+    def run_focused_tests(self):
+        """Run all focused tests from review request"""
+        print("🎯 FOCUSED REVIEW REQUEST BACKEND TESTING - JANUARY 2025")
+        print("=" * 80)
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Admin Credentials: {ADMIN_EMAIL}")
+        print("=" * 80)
+        
+        # Step 1: Authenticate
+        if not self.authenticate():
+            print("❌ Authentication failed - cannot proceed with tests")
+            return
+        
+        # Step 2: Test specific areas from review request
+        self.test_authentication_system()
+        self.test_twitter_api_integration()
+        self.test_referral_system()
+        self.test_tiktok_api()
+        self.test_stripe_integration()
+        
+        # Step 3: Generate summary
+        self.generate_summary()
+    
+    def generate_summary(self):
+        """Generate comprehensive test summary"""
+        print("\n" + "=" * 80)
+        print("🎯 FOCUSED REVIEW REQUEST TESTING SUMMARY")
+        print("=" * 80)
+        
+        success_rate = (self.passed_tests / self.total_tests * 100) if self.total_tests > 0 else 0
+        
+        print(f"📊 OVERALL RESULTS:")
+        print(f"   • Total Tests: {self.total_tests}")
+        print(f"   • Passed: {self.passed_tests}")
+        print(f"   • Failed: {self.total_tests - self.passed_tests}")
+        print(f"   • Success Rate: {success_rate:.1f}%")
+        
+        # Categorize results by system
+        systems = {
+            "Authentication System": [r for r in self.test_results if "Authentication" in r["test"] or "JWT" in r["test"]],
+            "Twitter API Integration": [r for r in self.test_results if "Twitter" in r["test"]],
+            "Referral System": [r for r in self.test_results if "Referral" in r["test"]],
+            "TikTok API": [r for r in self.test_results if "TikTok" in r["test"]],
+            "Stripe Integration": [r for r in self.test_results if "Stripe" in r["test"]]
+        }
+        
+        print(f"\n📋 SYSTEM-BY-SYSTEM RESULTS:")
+        for system_name, results in systems.items():
+            if results:
+                passed = len([r for r in results if r["status"] == "PASS"])
+                total = len(results)
+                rate = (passed / total * 100) if total > 0 else 0
+                status_emoji = "✅" if rate >= 75 else "⚠️" if rate >= 50 else "❌"
+                print(f"   {status_emoji} {system_name}: {rate:.1f}% ({passed}/{total} tests passed)")
+        
+        # Improvement analysis
+        print(f"\n📈 IMPROVEMENT ANALYSIS:")
+        if success_rate >= 95:
+            print("   🎉 EXCELLENT - Platform ready for production deployment")
+        elif success_rate >= 75:
+            print("   ✅ GOOD - Platform meets production readiness criteria")
+        elif success_rate >= 50:
+            print("   ⚠️ MIXED RESULTS - Some improvements needed")
+        else:
+            print("   ❌ CRITICAL ISSUES - Major fixes required")
+        
+        # Critical issues
+        failed_tests = [r for r in self.test_results if r["status"] == "FAIL"]
+        if failed_tests:
+            print(f"\n🔴 CRITICAL ISSUES REQUIRING ATTENTION:")
+            for test in failed_tests:
+                print(f"   • {test['test']}: {test['error']}")
+        
+        print(f"\n🎯 REVIEW REQUEST ASSESSMENT:")
+        print(f"   • Previous Success Rate: 48% (mentioned in review request)")
+        print(f"   • Current Success Rate: {success_rate:.1f}%")
+        if success_rate > 48:
+            print(f"   • Improvement: +{success_rate - 48:.1f}% ✅")
+        else:
+            print(f"   • Regression: {success_rate - 48:.1f}% ❌")
+        
+        print("=" * 80)
+
+if __name__ == "__main__":
+    tester = FocusedReviewTester()
+    tester.run_focused_tests()
+"""
 Focused Backend Testing for Review Request - January 2025
 Testing specific systems mentioned in the review request:
 1. Authentication - JWT token generation and validation
