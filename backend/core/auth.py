@@ -52,7 +52,12 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except JWTError:
         raise credentials_exception
     
-    users_collection = get_users_collection()
+    from .database import get_database_async
+    db = await get_database_async()
+    if db is None:
+        raise credentials_exception
+    
+    users_collection = db.users
     user = await users_collection.find_one({"email": email})
     if user is None:
         raise credentials_exception
