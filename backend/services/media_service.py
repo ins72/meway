@@ -535,8 +535,7 @@ class MediaService:
             return 'other'
     
     @staticmethod
-
-    async def create_media(self, media_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def move_files_to_folder(file_ids: List[str], folder_id: str, user_id: str) -> Dict[str, Any]:
         """Create a new media"""
         try:
             # Add metadata
