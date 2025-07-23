@@ -262,24 +262,24 @@ async def get_email_analytics(
         "success": True,
         "data": {
             "performance_metrics": {
-                "total_sent": await service.get_metric(),
-                "total_delivered": await service.get_metric(),
-                "total_opens": await service.get_metric(),
-                "total_clicks": await service.get_metric(),
-                "total_bounces": await service.get_metric(),
-                "total_unsubscribes": await service.get_metric(),
-                "delivery_rate": round(await service.get_metric(), 1),
-                "open_rate": round(await service.get_metric(), 1),
-                "click_rate": round(await service.get_metric(), 1),
-                "bounce_rate": round(await service.get_metric(), 1),
-                "unsubscribe_rate": round(await service.get_metric(), 1)
+                "total_sent": await email_service.get_metric(),
+                "total_delivered": await email_service.get_metric(),
+                "total_opens": await email_service.get_metric(),
+                "total_clicks": await email_service.get_metric(),
+                "total_bounces": await email_service.get_metric(),
+                "total_unsubscribes": await email_service.get_metric(),
+                "delivery_rate": round(await email_service.get_metric(), 1),
+                "open_rate": round(await email_service.get_metric(), 1),
+                "click_rate": round(await email_service.get_metric(), 1),
+                "bounce_rate": round(await email_service.get_metric(), 1),
+                "unsubscribe_rate": round(await email_service.get_metric(), 1)
             },
             "engagement_trends": [
                 {
                     "date": (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d"),
-                    "opens": await service.get_metric(),
-                    "clicks": await service.get_metric(),
-                    "sent": await service.get_metric()
+                    "opens": await email_service.get_metric(),
+                    "clicks": await email_service.get_metric(),
+                    "sent": await email_service.get_metric()
                 } for i in range(days, 0, -1)
             ],
             "top_performing_content": [
