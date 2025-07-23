@@ -83,6 +83,15 @@ async def discover_tiktok_creators(
         logger.error(f"Discover TikTok creators error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# Alternative endpoint for backward compatibility
+@router.post("/tiktok/search", tags=["Social Media Leads"])
+async def search_tiktok_creators(
+    search_request: TikTokSearchRequest,
+    user = Depends(get_current_user)
+):
+    """Search TikTok creators (alternative endpoint)"""
+    return await discover_tiktok_creators(search_request, user)
+
 # Twitter Lead Discovery Endpoints
 @router.post("/discover/twitter", tags=["Social Media Leads"])
 async def discover_twitter_users(
@@ -112,6 +121,15 @@ async def discover_twitter_users(
     except Exception as e:
         logger.error(f"Discover Twitter users error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+# Alternative endpoint for backward compatibility  
+@router.post("/twitter/search", tags=["Social Media Leads"])
+async def search_twitter_users(
+    search_request: TwitterSearchRequest,
+    user = Depends(get_current_user)
+):
+    """Search Twitter users (alternative endpoint)"""
+    return await discover_twitter_users(search_request, user)
 
 # Lead Management Endpoints
 @router.get("/leads", tags=["Social Media Leads"])
