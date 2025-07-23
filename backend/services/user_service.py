@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
+from core.auth import verify_password, get_password_hash
 
 class UserService:
     def __init__(self):
