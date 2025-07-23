@@ -78,18 +78,19 @@ class ComplianceService:
     async def list_compliances(self, user_id: str = None, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
         """List compliances with pagination"""
         try:
+            collection = self._get_collection()
             query = {}
             if user_id:
                 query["user_id"] = user_id
             
-            cursor = self.collection.find(query).skip(offset).limit(limit)
+            cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
             
             # Remove MongoDB _id field
             for doc in docs:
                 doc.pop('_id', None)
             
-            total_count = await self.collection.count_documents(query)
+            total_count = await collection.count_documents(query)
             
             return {
                 "success": True,
