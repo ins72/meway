@@ -8,6 +8,7 @@ from typing import Dict, Any, List, Optional
 from core.auth import get_current_user, get_current_admin
 from services.complete_website_builder_service import get_complete_website_builder_service
 import logging
+from bson import ObjectId
 
 logger = logging.getLogger(__name__)
 

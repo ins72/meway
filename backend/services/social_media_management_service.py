@@ -458,6 +458,7 @@ class SocialMediaManagementService:
             
             # Get recent activity (last 30 days)
             from datetime import datetime, timedelta
+from bson import ObjectId
             thirty_days_ago = (datetime.utcnow() - timedelta(days=30)).isoformat()
             recent_query = query.copy()
             recent_query["created_at"] = {"$gte": thirty_days_ago}

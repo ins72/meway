@@ -94,6 +94,7 @@ async def register(register_data: RegisterRequest):
     """Register endpoint - Creates new user"""
     try:
         from core.database import get_database_async
+from bson import ObjectId
         db = await get_database_async()
         if db is None:
             raise HTTPException(status_code=500, detail="Database unavailable")
