@@ -100,7 +100,7 @@ class ReferralSystemService:
                 return {
                     "success": True,
                     "message": "Referral program created successfully",
-                    "data": program_data,
+                    "data": serialize_objectid(program_data),
                     "id": program_data["id"]
                 }
             else:
@@ -125,6 +125,7 @@ class ReferralSystemService:
             # Execute query - REAL DATA OPERATION
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Convert ObjectIds to strings for JSON serialization
             docs = safe_documents_return(docs)
@@ -152,6 +153,8 @@ class ReferralSystemService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": program_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 # Convert ObjectId to string for JSON serialization
@@ -267,7 +270,7 @@ class ReferralSystemService:
                     return {
                         "success": True,
                         "message": "Get referral analytics completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -341,7 +344,7 @@ class ReferralSystemService:
                     return {
                         "success": True,
                         "message": "Process new referral completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -415,7 +418,7 @@ class ReferralSystemService:
                     return {
                         "success": True,
                         "message": "Calculate referral rewards completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -525,7 +528,7 @@ class ReferralSystemService:
                 return {
                     "success": True,
                     "message": "referralsystem created successfully",
-                    "data": item_data,
+                    "data": serialize_objectid(item_data),
                     "id": item_data["id"]
                 }
             else:
@@ -549,6 +552,7 @@ class ReferralSystemService:
             # Execute query
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -572,6 +576,8 @@ class ReferralSystemService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": item_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 return {

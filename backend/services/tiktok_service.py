@@ -101,7 +101,7 @@ class TiktokService:
                 return {
                     "success": True,
                     "message": "TikTok post created successfully",
-                    "data": post_data,
+                    "data": serialize_objectid(post_data),
                     "id": post_data["id"]
                 }
             else:
@@ -126,6 +126,7 @@ class TiktokService:
             # Execute query - REAL DATA OPERATION
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -150,6 +151,8 @@ class TiktokService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": post_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 return {
@@ -262,7 +265,7 @@ class TiktokService:
                     return {
                         "success": True,
                         "message": "Get TikTok profile information completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -336,7 +339,7 @@ class TiktokService:
                     return {
                         "success": True,
                         "message": "Search for videos completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -410,7 +413,7 @@ class TiktokService:
                     return {
                         "success": True,
                         "message": "Upload video to TikTok completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -461,6 +464,7 @@ class TiktokService:
             
             # Get recent activity (last 30 days)
             from datetime import datetime, timedelta
+from core.objectid_serializer import safe_document_return, safe_documents_return, serialize_objectid
             thirty_days_ago = (datetime.utcnow() - timedelta(days=30)).isoformat()
             recent_query = query.copy()
             recent_query["created_at"] = {"$gte": thirty_days_ago}
@@ -601,7 +605,7 @@ class TiktokService:
                 return {
                     "success": True,
                     "message": "tiktok created successfully",
-                    "data": item_data,
+                    "data": serialize_objectid(item_data),
                     "id": item_data["id"]
                 }
             else:
@@ -625,6 +629,7 @@ class TiktokService:
             # Execute query
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -648,6 +653,8 @@ class TiktokService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": item_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 return {

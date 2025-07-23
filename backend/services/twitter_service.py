@@ -140,7 +140,7 @@ class TwitterService:
                 return {
                     "success": True,
                     "message": "Tweet posted successfully",
-                    "data": tweet_data,
+                    "data": serialize_objectid(tweet_data),
                     "id": tweet_data["id"]
                 }
             else:
@@ -191,7 +191,7 @@ class TwitterService:
                     return {
                         "success": True,
                         "message": "Get user timeline completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -522,7 +522,7 @@ class TwitterService:
                 return {
                     "success": True,
                     "message": "twitter created successfully",
-                    "data": item_data,
+                    "data": serialize_objectid(item_data),
                     "id": item_data["id"]
                 }
             else:
@@ -546,6 +546,7 @@ class TwitterService:
             # Execute query
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -569,6 +570,8 @@ class TwitterService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": item_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 return {

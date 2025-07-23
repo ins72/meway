@@ -100,7 +100,7 @@ class StripeIntegrationService:
                 return {
                     "success": True,
                     "message": "Payment intent created successfully",
-                    "data": payment_data,
+                    "data": serialize_objectid(payment_data),
                     "id": payment_data["id"],
                     "client_secret": payment_data["client_secret"]
                 }
@@ -126,6 +126,7 @@ class StripeIntegrationService:
             # Execute query - REAL DATA OPERATION
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -150,6 +151,8 @@ class StripeIntegrationService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": payment_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 return {
@@ -266,7 +269,7 @@ class StripeIntegrationService:
                     return {
                         "success": True,
                         "message": "Create Stripe customer completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -340,7 +343,7 @@ class StripeIntegrationService:
                     return {
                         "success": True,
                         "message": "Get payment methods completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -414,7 +417,7 @@ class StripeIntegrationService:
                     return {
                         "success": True,
                         "message": "Confirm payment intent completed successfully",
-                        "data": item_data,
+                        "data": serialize_objectid(item_data),
                         "id": item_data["id"]
                     }
                 else:
@@ -465,6 +468,7 @@ class StripeIntegrationService:
             
             # Get recent activity (last 30 days)
             from datetime import datetime, timedelta
+from core.objectid_serializer import safe_document_return, safe_documents_return, serialize_objectid
             thirty_days_ago = (datetime.utcnow() - timedelta(days=30)).isoformat()
             recent_query = query.copy()
             recent_query["created_at"] = {"$gte": thirty_days_ago}
@@ -595,7 +599,7 @@ class StripeIntegrationService:
                 return {
                     "success": True,
                     "message": "stripeintegration created successfully",
-                    "data": item_data,
+                    "data": serialize_objectid(item_data),
                     "id": item_data["id"]
                 }
             else:
@@ -619,6 +623,7 @@ class StripeIntegrationService:
             # Execute query
             cursor = collection.find(query).skip(offset).limit(limit)
             docs = await cursor.to_list(length=limit)
+            docs = safe_documents_return(docs)
             
             # Get total count
             total = await collection.count_documents(query)
@@ -642,6 +647,8 @@ class StripeIntegrationService:
                 return {"success": False, "error": "Database unavailable"}
             
             doc = await collection.find_one({"id": item_id})
+            if doc:
+                doc = safe_document_return(doc)
             
             if doc:
                 return {
