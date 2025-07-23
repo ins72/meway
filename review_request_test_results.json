@@ -1,7 +1,7 @@
 {
   "total_tests": 25,
-  "passed_tests": 6,
-  "failed_tests": 19,
+  "passed_tests": 12,
+  "failed_tests": 13,
   "test_categories": {
     "Authentication System": {
       "total": 2,
@@ -18,8 +18,8 @@
       "failed": 3,
       "details": [
         "\u2705 Referral Health Check - Working perfectly",
-        "\u274c List Referrals - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
-        "\u274c Create Referral - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c List Referrals - HTTP 500: Internal Server Error",
+        "\u274c Create Referral - HTTP 500: Internal Server Error",
         "\u274c Referral Analytics - HTTP 405: {\"detail\":\"Method Not Allowed\"}"
       ]
     },
@@ -29,8 +29,8 @@
       "failed": 3,
       "details": [
         "\u2705 Twitter Health Check - Working perfectly",
-        "\u274c Twitter Search - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c Tweet Creation - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c Twitter Search - HTTP 404: {\"detail\":\"Tweet not found\"}",
+        "\u274c Tweet Creation - HTTP 500: Internal Server Error",
         "\u274c Twitter Analytics - HTTP 404: {\"detail\":\"Tweet not found\"}"
       ]
     },
@@ -40,8 +40,8 @@
       "failed": 3,
       "details": [
         "\u2705 TikTok Health Check - Working perfectly",
-        "\u274c TikTok Search - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c TikTok Video Upload - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c TikTok Search - HTTP 404: {\"detail\":\"Post not found\"}",
+        "\u274c TikTok Video Upload - HTTP 500: Internal Server Error",
         "\u274c TikTok Analytics - HTTP 404: {\"detail\":\"Post not found\"}"
       ]
     },
@@ -51,30 +51,30 @@
       "failed": 3,
       "details": [
         "\u2705 Stripe Health Check - Working perfectly",
-        "\u274c Create Payment Intent - HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "\u274c Create Payment Intent - HTTP 500: Internal Server Error",
         "\u274c Payment Methods - HTTP 404: {\"detail\":\"Payment not found\"}",
         "\u274c Subscription Management - HTTP 404: {\"detail\":\"Payment not found\"}"
       ]
     },
     "Core Business Systems": {
       "total": 4,
-      "passed": 0,
-      "failed": 4,
+      "passed": 4,
+      "failed": 0,
       "details": [
-        "\u274c Financial System - HTTP 404: {\"detail\":\"Not found\"}",
-        "\u274c Admin Dashboard - HTTP 404: {\"detail\":\"Not found\"}",
-        "\u274c Analytics System - HTTP 404: {\"detail\":\"Not found\"}",
-        "\u274c Workspace Management - HTTP 404: {\"detail\":\"Not found\"}"
+        "\u2705 Financial System - Working perfectly",
+        "\u2705 Admin Dashboard - Working perfectly",
+        "\u2705 Analytics System - Working perfectly",
+        "\u2705 Workspace Management - Working perfectly"
       ]
     },
     "Overall System Health": {
       "total": 3,
-      "passed": 0,
-      "failed": 3,
+      "passed": 2,
+      "failed": 1,
       "details": [
-        "\u274c OpenAPI Specification - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c System Health - HTTP 404: {\"detail\":\"Not Found\"}",
-        "\u274c Database Connectivity - HTTP 404: {\"detail\":\"Not Found\"}"
+        "\u2705 OpenAPI Specification - 542 endpoints available",
+        "\u2705 System Health - Working perfectly",
+        "\u274c Database Connectivity - Exception: 200, message='Attempt to decode JSON with unexpected mimetype: text/html; charset=utf-8', url='https://d55219c2-be62-4fb2-bebf-b616faedf109.preview.emergentagent.com/'"
       ]
     }
   },
