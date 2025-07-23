@@ -97,10 +97,13 @@ class ReferralSystemService:
             result = await collection.insert_one(program_data)
             
             if result.inserted_id:
+                # Add the inserted_id to program_data for proper serialization
+                program_data["_id"] = result.inserted_id
+                
                 return {
                     "success": True,
                     "message": "Referral program created successfully",
-                    "data": serialize_objectid(program_data),
+                    "data": safe_document_return(program_data),
                     "id": program_data["id"]
                 }
             else:
