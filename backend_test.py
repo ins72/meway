@@ -3703,16 +3703,60 @@ class BackendTester:
         return True
 
     def run_review_request_targeted_test(self):
-        """Run targeted testing based on actually available endpoints for the 6 key areas"""
-        print("🎯 TARGETED BACKEND TESTING FOR MEWAYZ V2 PLATFORM - AVAILABLE ENDPOINTS")
-        print("Testing available endpoints related to the 6 key areas from the review request:")
-        print("1. 👥 User Invitation System - Testing available team/workspace endpoints")
-        print("2. 📱 Enhanced Social Media Management - Testing available social media endpoints")
-        print("3. 🛍️ Template Marketplace - Testing available template/marketplace endpoints")
-        print("4. 📱 Mobile PWA Features - Testing available PWA/mobile endpoints")
-        print("5. 🤖 AI Automation - Testing available AI automation endpoints")
-        print("6. 💰 Escrow System - Testing available payment/escrow endpoints")
+        """Run comprehensive test focusing on review request areas"""
+        print("🎯 FINAL COMPREHENSIVE BACKEND VERIFICATION TEST - MEWAYZ V2 PLATFORM")
+        print("=" * 80)
+        print("Testing newly implemented and fixed features as requested in review:")
+        print("1. Fixed Critical Issues")
+        print("2. New Feature Implementations") 
+        print("3. API Endpoint Coverage")
+        print("4. Validation & Error Handling")
+        print("5. Performance & Integration")
         print(f"Backend URL: {BACKEND_URL}")
+        print("=" * 80)
+        
+        # Step 1: Health check
+        if not self.test_health_check():
+            print("❌ Backend health check failed. Aborting tests.")
+            return False
+        
+        # Step 2: Authentication
+        if not self.test_authentication():
+            print("❌ Authentication failed. Aborting tests.")
+            return False
+        
+        print(f"\n✅ Authentication successful. Token: {self.access_token[:20]}...")
+        
+        # Step 3: Test the specific areas mentioned in review request
+        try:
+            # PRIORITY TEST AREAS from review request
+            print("\n" + "="*80)
+            print("🎯 PRIORITY TEST AREAS - REVIEW REQUEST FOCUS")
+            print("="*80)
+            
+            # 1. Fixed Critical Issues
+            self.test_fixed_critical_issues()
+            
+            # 2. New Feature Implementations  
+            self.test_new_feature_implementations()
+            
+            # 3. API Endpoint Coverage
+            self.test_api_endpoint_coverage()
+            
+            # 4. Validation & Error Handling
+            self.test_validation_error_handling()
+            
+            # 5. Performance & Integration
+            self.test_performance_integration()
+            
+        except Exception as e:
+            print(f"❌ Error during testing: {str(e)}")
+            import traceback
+            traceback.print_exc()
+        
+        # Generate final report
+        self.generate_final_report()
+        return True
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
         
