@@ -74,7 +74,7 @@ class DuplicateCleanupReviewTester:
         # Test 1: JWT Token Generation
         try:
             login_data = {
-                "username": TEST_EMAIL,
+                "email": TEST_EMAIL,
                 "password": TEST_PASSWORD
             }
             response = self.session.post(f"{API_BASE}/auth/login", json=login_data)
