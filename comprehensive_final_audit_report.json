@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-07-23T12:55:28.149901",
+  "timestamp": "2025-07-23T12:58:35.193090",
   "missing_crud_operations": [
     {
       "service": "media_service",
@@ -1286,13 +1286,13 @@
           "match_text": "test_type"
         },
         {
-          "line_number": 81,
+          "line_number": 147,
           "line_content": "test_data: ABTestCreate,",
           "pattern_matched": "test_\\w+",
           "match_text": "test_data"
         },
         {
-          "line_number": 87,
+          "line_number": 153,
           "line_content": "result = await service.create_ab_test(test_data.dict())",
           "pattern_matched": "test_\\w+",
           "match_text": "test_data"
@@ -2453,8 +2453,8 @@
         {
           "path": "/app/backend/api/enterprise_security_compliance.py",
           "relative_path": "api/enterprise_security_compliance.py",
-          "size": 11443,
-          "lines": 354,
+          "size": 13306,
+          "lines": 404,
           "functions": 11,
           "classes": 5,
           "async_functions": 11
@@ -2469,7 +2469,7 @@
           "async_functions": 21
         }
       ],
-      "similarity_score": 0.4639640729449921
+      "similarity_score": 0.4997474717760797
     },
     {
       "normalized_name": "ai_token_management",
@@ -2807,8 +2807,8 @@
         {
           "path": "/app/backend/api/comprehensive_marketing_website.py",
           "relative_path": "api/comprehensive_marketing_website.py",
-          "size": 5821,
-          "lines": 184,
+          "size": 8508,
+          "lines": 250,
           "functions": 7,
           "classes": 2,
           "async_functions": 7
@@ -2823,7 +2823,7 @@
           "async_functions": 15
         }
       ],
-      "similarity_score": 0.4117910114335574
+      "similarity_score": 0.4744501465396843
     },
     {
       "normalized_name": "escrow",
@@ -2927,8 +2927,8 @@
         {
           "path": "/app/backend/api/blog.py",
           "relative_path": "api/blog.py",
-          "size": 9491,
-          "lines": 296,
+          "size": 10111,
+          "lines": 315,
           "functions": 7,
           "classes": 2,
           "async_functions": 7
@@ -2943,7 +2943,7 @@
           "async_functions": 8
         }
       ],
-      "similarity_score": 0.7240898996140804
+      "similarity_score": 0.7062347545420437
     },
     {
       "normalized_name": "multi_workspace",
@@ -3656,8 +3656,8 @@
         {
           "path": "/app/backend/api/real_email_automation.py",
           "relative_path": "api/real_email_automation.py",
-          "size": 16855,
-          "lines": 495,
+          "size": 17865,
+          "lines": 531,
           "functions": 12,
           "classes": 0,
           "async_functions": 12
@@ -3672,15 +3672,25 @@
           "async_functions": 9
         }
       ],
-      "similarity_score": 0.6864540442381789
+      "similarity_score": 0.6861984613755705
     }
   ],
   "missing_pairs": {
     "services_without_apis": [
       {
-        "service_name": "content_creation_suite",
-        "service_file": "/app/backend/services/content_creation_suite_service.py",
-        "relative_path": "services/content_creation_suite_service.py"
+        "service_name": "complete_subscription",
+        "service_file": "/app/backend/services/complete_subscription_service.py",
+        "relative_path": "services/complete_subscription_service.py"
+      },
+      {
+        "service_name": "social_email",
+        "service_file": "/app/backend/services/social_email_integration_service.py",
+        "relative_path": "services/social_email_integration_service.py"
+      },
+      {
+        "service_name": "monitoring",
+        "service_file": "/app/backend/services/monitoring_system_service.py",
+        "relative_path": "services/monitoring_system_service.py"
       },
       {
         "service_name": "multi_vendor_marketplace",
@@ -3688,19 +3698,29 @@
         "relative_path": "services/multi_vendor_marketplace_service.py"
       },
       {
-        "service_name": "ai_token",
-        "service_file": "/app/backend/services/ai_token_service.py",
-        "relative_path": "services/ai_token_service.py"
-      },
-      {
         "service_name": "i18n",
         "service_file": "/app/backend/services/i18n_service.py",
         "relative_path": "services/i18n_service.py"
       },
       {
-        "service_name": "social_email",
-        "service_file": "/app/backend/services/social_email_integration_service.py",
-        "relative_path": "services/social_email_integration_service.py"
+        "service_name": "ai_token",
+        "service_file": "/app/backend/services/ai_token_service.py",
+        "relative_path": "services/ai_token_service.py"
+      },
+      {
+        "service_name": "complete_website_builder",
+        "service_file": "/app/backend/services/complete_website_builder_service.py",
+        "relative_path": "services/complete_website_builder_service.py"
+      },
+      {
+        "service_name": "content_creation_suite",
+        "service_file": "/app/backend/services/content_creation_suite_service.py",
+        "relative_path": "services/content_creation_suite_service.py"
+      },
+      {
+        "service_name": "crm",
+        "service_file": "/app/backend/services/crm_management_service.py",
+        "relative_path": "services/crm_management_service.py"
       },
       {
         "service_name": "customer_experience_suite",
@@ -3713,14 +3733,9 @@
         "relative_path": "services/team_service.py"
       },
       {
-        "service_name": "complete_subscription",
-        "service_file": "/app/backend/services/complete_subscription_service.py",
-        "relative_path": "services/complete_subscription_service.py"
-      },
-      {
-        "service_name": "enterprise_security",
-        "service_file": "/app/backend/services/enterprise_security_service.py",
-        "relative_path": "services/enterprise_security_service.py"
+        "service_name": "complete_link_in_bio",
+        "service_file": "/app/backend/services/complete_link_in_bio_service.py",
+        "relative_path": "services/complete_link_in_bio_service.py"
       },
       {
         "service_name": "complete_onboarding",
@@ -3728,41 +3743,26 @@
         "relative_path": "services/complete_onboarding_service.py"
       },
       {
-        "service_name": "crm",
-        "service_file": "/app/backend/services/crm_management_service.py",
-        "relative_path": "services/crm_management_service.py"
-      },
-      {
-        "service_name": "monitoring",
-        "service_file": "/app/backend/services/monitoring_system_service.py",
-        "relative_path": "services/monitoring_system_service.py"
-      },
-      {
-        "service_name": "complete_link_in_bio",
-        "service_file": "/app/backend/services/complete_link_in_bio_service.py",
-        "relative_path": "services/complete_link_in_bio_service.py"
-      },
-      {
-        "service_name": "complete_website_builder",
-        "service_file": "/app/backend/services/complete_website_builder_service.py",
-        "relative_path": "services/complete_website_builder_service.py"
+        "service_name": "enterprise_security",
+        "service_file": "/app/backend/services/enterprise_security_service.py",
+        "relative_path": "services/enterprise_security_service.py"
       }
     ],
     "apis_without_services": [
       {
-        "api_name": "missing_endpoints_fix",
-        "api_file": "/app/backend/api/missing_endpoints_fix.py",
-        "relative_path": "api/missing_endpoints_fix.py"
+        "api_name": "analytics",
+        "api_file": "/app/backend/api/unified_analytics_gamification.py",
+        "relative_path": "api/unified_analytics_gamification.py"
       },
       {
-        "api_name": "google_oauth",
-        "api_file": "/app/backend/api/google_oauth.py",
-        "relative_path": "api/google_oauth.py"
+        "api_name": "workflow_automation",
+        "api_file": "/app/backend/api/workflow_automation.py",
+        "relative_path": "api/workflow_automation.py"
       },
       {
-        "api_name": "enhanced_features",
-        "api_file": "/app/backend/api/enhanced_features.py",
-        "relative_path": "api/enhanced_features.py"
+        "api_name": "templates",
+        "api_file": "/app/backend/api/templates.py",
+        "relative_path": "api/templates.py"
       },
       {
         "api_name": "rate_limiting_system",
@@ -3770,19 +3770,24 @@
         "relative_path": "api/rate_limiting_system.py"
       },
       {
-        "api_name": "missing_critical_endpoints",
-        "api_file": "/app/backend/api/missing_critical_endpoints.py",
-        "relative_path": "api/missing_critical_endpoints.py"
+        "api_name": "content_creation",
+        "api_file": "/app/backend/api/content_creation.py",
+        "relative_path": "api/content_creation.py"
       },
       {
-        "api_name": "integration_tests",
-        "api_file": "/app/backend/api/integration_tests.py",
-        "relative_path": "api/integration_tests.py"
+        "api_name": "team_management",
+        "api_file": "/app/backend/api/team_management.py",
+        "relative_path": "api/team_management.py"
       },
       {
-        "api_name": "media_library",
-        "api_file": "/app/backend/api/media_library.py",
-        "relative_path": "api/media_library.py"
+        "api_name": "google_oauth",
+        "api_file": "/app/backend/api/google_oauth.py",
+        "relative_path": "api/google_oauth.py"
+      },
+      {
+        "api_name": "escrow_system",
+        "api_file": "/app/backend/api/escrow_system.py",
+        "relative_path": "api/escrow_system.py"
       },
       {
         "api_name": "unified_analytics_gamification",
@@ -3795,34 +3800,19 @@
         "relative_path": "api/real_ai_automation.py"
       },
       {
-        "api_name": "team_management",
-        "api_file": "/app/backend/api/team_management.py",
-        "relative_path": "api/team_management.py"
+        "api_name": "media_library",
+        "api_file": "/app/backend/api/media_library.py",
+        "relative_path": "api/media_library.py"
       },
       {
-        "api_name": "workflow_automation",
-        "api_file": "/app/backend/api/workflow_automation.py",
-        "relative_path": "api/workflow_automation.py"
+        "api_name": "analytics_system",
+        "api_file": "/app/backend/api/analytics_system.py",
+        "relative_path": "api/analytics_system.py"
       },
       {
-        "api_name": "analytics",
-        "api_file": "/app/backend/api/unified_analytics_gamification.py",
-        "relative_path": "api/unified_analytics_gamification.py"
-      },
-      {
-        "api_name": "content_creation",
-        "api_file": "/app/backend/api/content_creation.py",
-        "relative_path": "api/content_creation.py"
-      },
-      {
-        "api_name": "templates",
-        "api_file": "/app/backend/api/templates.py",
-        "relative_path": "api/templates.py"
-      },
-      {
-        "api_name": "escrow_system",
-        "api_file": "/app/backend/api/escrow_system.py",
-        "relative_path": "api/escrow_system.py"
+        "api_name": "missing_critical_endpoints",
+        "api_file": "/app/backend/api/missing_critical_endpoints.py",
+        "relative_path": "api/missing_critical_endpoints.py"
       },
       {
         "api_name": "ai_content_generation",
@@ -3830,14 +3820,9 @@
         "relative_path": "api/ai_content_generation.py"
       },
       {
-        "api_name": "mobile_pwa_features",
-        "api_file": "/app/backend/api/mobile_pwa_features.py",
-        "relative_path": "api/mobile_pwa_features.py"
-      },
-      {
-        "api_name": "auth",
-        "api_file": "/app/backend/api/auth.py",
-        "relative_path": "api/auth.py"
+        "api_name": "enhanced_features",
+        "api_file": "/app/backend/api/enhanced_features.py",
+        "relative_path": "api/enhanced_features.py"
       },
       {
         "api_name": "integrations",
@@ -3845,14 +3830,29 @@
         "relative_path": "api/integrations.py"
       },
       {
+        "api_name": "auth",
+        "api_file": "/app/backend/api/auth.py",
+        "relative_path": "api/auth.py"
+      },
+      {
+        "api_name": "integration_tests",
+        "api_file": "/app/backend/api/integration_tests.py",
+        "relative_path": "api/integration_tests.py"
+      },
+      {
         "api_name": "notification_system",
         "api_file": "/app/backend/api/notification_system.py",
         "relative_path": "api/notification_system.py"
       },
       {
-        "api_name": "analytics_system",
-        "api_file": "/app/backend/api/analytics_system.py",
-        "relative_path": "api/analytics_system.py"
+        "api_name": "mobile_pwa_features",
+        "api_file": "/app/backend/api/mobile_pwa_features.py",
+        "relative_path": "api/mobile_pwa_features.py"
+      },
+      {
+        "api_name": "missing_endpoints_fix",
+        "api_file": "/app/backend/api/missing_endpoints_fix.py",
+        "relative_path": "api/missing_endpoints_fix.py"
       }
     ]
   },
