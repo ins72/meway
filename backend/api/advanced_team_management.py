@@ -23,10 +23,13 @@ router = APIRouter()
 class TeamCreateRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     description: Optional[str] = Field(None, max_length=500)
+    team_type: Optional[str] = Field("general", description="Type of team")
     allow_member_invites: bool = Field(False)
     require_2fa: bool = Field(False)
     default_role: str = Field(TeamRole.MEMBER.value)
     max_members: int = Field(50, ge=5, le=500)
+    settings: Optional[Dict[str, Any]] = None
+    permissions: Optional[Dict[str, Any]] = None
 
 class InvitationRequest(BaseModel):
     email: EmailStr
