@@ -497,6 +497,39 @@ try:
 except Exception as e:
     print(f"  ❌ Failed to include Social Media Leads router: {str(e)}")
 
+# Include new advanced feature routers
+try:
+    from api.advanced_template_marketplace import router as template_marketplace_router
+    app.include_router(template_marketplace_router, prefix="/api/template-marketplace", tags=["Template Marketplace"])
+    included_count += 1
+    print("  ✅ Included Advanced Template Marketplace router")
+except Exception as e:
+    print(f"  ❌ Failed to include Template Marketplace router: {str(e)}")
+
+try:
+    from api.advanced_team_management import router as team_management_router
+    app.include_router(team_management_router, prefix="/api/team-management", tags=["Team Management"])
+    included_count += 1
+    print("  ✅ Included Advanced Team Management router")
+except Exception as e:
+    print(f"  ❌ Failed to include Team Management router: {str(e)}")
+
+try:
+    from api.unified_analytics_gamification import router as analytics_gamification_router
+    app.include_router(analytics_gamification_router, prefix="/api/unified-analytics", tags=["Unified Analytics"])
+    included_count += 1
+    print("  ✅ Included Unified Analytics with Gamification router")
+except Exception as e:
+    print(f"  ❌ Failed to include Unified Analytics router: {str(e)}")
+
+try:
+    from api.mobile_pwa_features import router as mobile_pwa_router
+    app.include_router(mobile_pwa_router, prefix="/api/mobile-pwa", tags=["Mobile PWA"])
+    included_count += 1
+    print("  ✅ Included Mobile PWA Features router")
+except Exception as e:
+    print(f"  ❌ Failed to include Mobile PWA router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
