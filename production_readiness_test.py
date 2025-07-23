@@ -471,11 +471,11 @@ class ProductionReadinessTester:
         
         # CRUD Summary
         total_create = len(self.crud_results['CREATE']['working']) + len(self.crud_results['CREATE']['failing'])
-        total_read = len(self.crud_results['read']['working']) + len(self.crud_results['read']['failing'])
+        total_read = len(self.crud_results['READ']['working']) + len(self.crud_results['READ']['failing'])
         total_update = len(self.crud_results['UPDATE']['working']) + len(self.crud_results['UPDATE']['failing'])
         
         create_rate = (len(self.crud_results['CREATE']['working']) / total_create * 100) if total_create > 0 else 0
-        read_rate = (len(self.crud_results['read']['working']) / total_read * 100) if total_read > 0 else 0
+        read_rate = (len(self.crud_results['READ']['working']) / total_read * 100) if total_read > 0 else 0
         update_rate = (len(self.crud_results['UPDATE']['working']) / total_update * 100) if total_update > 0 else 0
         
         print(f"\n📝 CRUD OPERATIONS PERFORMANCE:")
