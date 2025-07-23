@@ -14509,6 +14509,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ MULTI-WORKSPACE SYSTEM CRITICAL DATABASE ISSUES - JANUARY 2025: Health endpoint working (Status: healthy), but main endpoint failing with HTTP 400 'AsyncIOMotorCursor can't be used in await expression' error. This is a critical MongoDB Motor driver implementation issue affecting database cursor handling across the entire multi-workspace system. The system architecture exists but all database operations are broken due to improper async cursor usage."
+      - working: false
+        agent: "testing"
+        comment: "❌ MULTI-WORKSPACE SYSTEM AUTHENTICATION ISSUES - JANUARY 2025: Health endpoint working perfectly (Status: healthy), but main endpoint failing with HTTP 403 'Not authenticated' error despite valid JWT token being provided. Authentication system generates tokens successfully but endpoints are not properly validating or accepting the JWT tokens. This indicates an authentication middleware or token validation issue rather than database problems."
 
   - task: "Website Builder Templates Server Error Fix"
     implemented: false
