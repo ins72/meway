@@ -262,99 +262,102 @@ class BackendTester:
         print("\n👥 Real Team Management System Testing Complete!")
         return True
         
-    def test_unified_analytics_system(self):
-        """Test Unified Analytics with Gamification at /api/unified-analytics/*"""
-        print("\n📊 TESTING UNIFIED ANALYTICS WITH GAMIFICATION")
+    def test_real_unified_analytics_system(self):
+        """Test Real Unified Analytics at /api/analytics-system/*"""
+        print("\n📊 TESTING REAL UNIFIED ANALYTICS")
         print("=" * 60)
         
-        # 1. Test Health Check
-        print("\n🏥 Testing Health Check...")
-        self.test_endpoint("/unified-analytics/health", "GET", test_name="Unified Analytics - Health Check")
-        
-        # 2. Test Analytics Dashboard
+        # 1. Test Analytics Dashboard
         print("\n📈 Testing Analytics Dashboard...")
-        self.test_endpoint("/unified-analytics/dashboard", "GET", test_name="Unified Analytics - Dashboard Overview")
-        self.test_endpoint("/unified-analytics/dashboard?period=week", "GET", test_name="Unified Analytics - Dashboard Weekly")
-        self.test_endpoint("/unified-analytics/dashboard?period=month", "GET", test_name="Unified Analytics - Dashboard Monthly")
-        self.test_endpoint("/unified-analytics/dashboard?period=quarter", "GET", test_name="Unified Analytics - Dashboard Quarterly")
+        success, dashboard_data = self.test_endpoint("/analytics-system/dashboard", "GET", test_name="Unified Analytics - Dashboard")
         
-        # 3. Test Gamification Profile
-        print("\n🎮 Testing Gamification Profile...")
-        self.test_endpoint("/unified-analytics/gamification/profile", "GET", test_name="Unified Analytics - Gamification Profile")
+        if success and dashboard_data:
+            # Check for mock data patterns
+            data_str = str(dashboard_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower() or "1250.00" in data_str:
+                self.log_result("Analytics Dashboard - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data or hardcoded values")
+            else:
+                self.log_result("Analytics Dashboard - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # 4. Test Points System
-        print("\n⭐ Testing Points System...")
-        add_points_data = {
-            "action": "template_created",
-            "points": 50,
-            "description": "Created a new template in the marketplace"
-        }
-        self.test_endpoint("/unified-analytics/gamification/points/add", "POST", add_points_data, "Unified Analytics - Add Points")
+        # 2. Test Analytics Overview
+        print("\n🔍 Testing Analytics Overview...")
+        success, overview_data = self.test_endpoint("/analytics-system/overview", "GET", test_name="Unified Analytics - Overview")
         
-        # Add more points for different actions
-        point_actions = [
-            {"action": "team_invitation_sent", "points": 25, "description": "Invited a new team member"},
-            {"action": "analytics_viewed", "points": 10, "description": "Viewed analytics dashboard"},
-            {"action": "template_purchased", "points": 75, "description": "Purchased a premium template"}
-        ]
+        if success and overview_data:
+            # Check for mock data patterns
+            data_str = str(overview_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Analytics Overview - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Analytics Overview - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        for action_data in point_actions:
-            self.test_endpoint("/unified-analytics/gamification/points/add", "POST", action_data, f"Unified Analytics - Add Points ({action_data['action']})")
+        # 3. Test Analytics Reports
+        print("\n📋 Testing Analytics Reports...")
+        success, reports_data = self.test_endpoint("/analytics-system/reports", "GET", test_name="Unified Analytics - Reports")
         
-        # 5. Test Achievements System
-        print("\n🏆 Testing Achievements System...")
-        self.test_endpoint("/unified-analytics/gamification/achievements", "GET", test_name="Unified Analytics - Get Achievements")
+        if success and reports_data:
+            # Check for mock data patterns
+            data_str = str(reports_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Analytics Reports - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Analytics Reports - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
         
-        # Unlock achievement
-        achievement_data = {
-            "achievement_id": "first_template_creator",
-            "description": "Created your first template"
-        }
-        self.test_endpoint("/unified-analytics/gamification/achievements/unlock", "POST", achievement_data, "Unified Analytics - Unlock Achievement")
-        
-        # 6. Test Leaderboard
-        print("\n🥇 Testing Leaderboard...")
-        self.test_endpoint("/unified-analytics/gamification/leaderboard", "GET", test_name="Unified Analytics - Global Leaderboard")
-        self.test_endpoint("/unified-analytics/gamification/leaderboard?period=month", "GET", test_name="Unified Analytics - Monthly Leaderboard")
-        self.test_endpoint("/unified-analytics/gamification/leaderboard?category=templates", "GET", test_name="Unified Analytics - Template Creator Leaderboard")
-        
-        # 7. Test AI-powered Insights
-        print("\n🤖 Testing AI-powered Insights...")
-        self.test_endpoint("/unified-analytics/insights/ai", "GET", test_name="Unified Analytics - AI Insights")
-        
-        # Generate custom insights
-        insights_data = {
-            "data_sources": ["user_activity", "team_performance", "template_usage"],
-            "time_range": "30_days",
-            "insight_type": "performance_optimization"
-        }
-        self.test_endpoint("/unified-analytics/insights/generate", "POST", insights_data, "Unified Analytics - Generate AI Insights")
-        
-        # 8. Test Predictive Analytics
-        print("\n🔮 Testing Predictive Analytics...")
-        prediction_data = {
-            "metric": "user_engagement",
-            "forecast_period": "next_30_days",
-            "confidence_level": 0.85
-        }
-        self.test_endpoint("/unified-analytics/predictive/forecast", "POST", prediction_data, "Unified Analytics - Predictive Forecast")
-        
-        # 9. Test Custom Reports
-        print("\n📋 Testing Custom Reports...")
-        report_data = {
-            "report_name": "Team Performance Summary",
-            "metrics": ["team_activity", "template_creation", "collaboration_score"],
+        # 4. Test Custom Reports
+        print("\n📊 Testing Custom Reports...")
+        custom_report_data = {
+            "report_name": "User Engagement Analysis",
+            "metrics": ["user_activity", "page_views", "session_duration"],
             "time_period": "last_30_days",
-            "format": "pdf"
+            "format": "json"
         }
-        self.test_endpoint("/unified-analytics/reports/custom", "POST", report_data, "Unified Analytics - Generate Custom Report")
         
-        # 10. Test Real-time Data
-        print("\n⚡ Testing Real-time Data...")
-        self.test_endpoint("/unified-analytics/realtime/activity", "GET", test_name="Unified Analytics - Real-time Activity")
-        self.test_endpoint("/unified-analytics/realtime/metrics", "GET", test_name="Unified Analytics - Real-time Metrics")
+        success, custom_report = self.test_endpoint("/analytics-system/reports/custom", "POST", custom_report_data, "Unified Analytics - Custom Report")
         
-        print("\n📊 Unified Analytics System Testing Complete!")
+        if success and custom_report:
+            # Check for mock data patterns
+            data_str = str(custom_report)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Custom Reports - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Custom Reports - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 5. Test Business Intelligence
+        print("\n🧠 Testing Business Intelligence...")
+        success, bi_data = self.test_endpoint("/analytics-system/business-intelligence", "GET", test_name="Unified Analytics - Business Intelligence")
+        
+        if success and bi_data:
+            # Check for mock data patterns
+            data_str = str(bi_data)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Business Intelligence - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Business Intelligence - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        # 6. Test Analytics Event Tracking
+        print("\n📝 Testing Analytics Event Tracking...")
+        event_data = {
+            "event_type": "page_view",
+            "event_name": "dashboard_viewed",
+            "user_id": "user_12345",
+            "properties": {
+                "page": "/dashboard",
+                "source": "direct",
+                "device": "desktop"
+            }
+        }
+        
+        success, track_response = self.test_endpoint("/analytics-system/track", "POST", event_data, "Unified Analytics - Track Event")
+        
+        if success and track_response:
+            # Check for mock data patterns
+            data_str = str(track_response)
+            if "sample" in data_str.lower() or "mock" in data_str.lower():
+                self.log_result("Event Tracking - Mock Data Check", False, "MOCK DATA DETECTED: Response contains sample/mock data")
+            else:
+                self.log_result("Event Tracking - Mock Data Check", True, "NO MOCK DATA: Response appears to use real data")
+        
+        print("\n📊 Real Unified Analytics System Testing Complete!")
         return True
         
     def test_mobile_pwa_system(self):
