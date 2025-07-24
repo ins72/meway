@@ -1,0 +1,126 @@
+{
+  "summary": {
+    "total_tests": 12,
+    "passed_tests": 7,
+    "failed_tests": 5,
+    "success_rate": 58.333333333333336
+  },
+  "test_results": [
+    {
+      "endpoint": "/api/plan-change-impact/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Service healthy: True",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.339496"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-pricing-change",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Pricing analysis: 1 subscriptions",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.363881"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-limit-change",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Limit analysis: 1 subscriptions",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.390317"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/affected-subscriptions/creator",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Affected subscriptions: 1 found",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.416882"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/create-migration-plan",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Migration plan created: cd55676e-ced0-4d10-a67e-540c1a37d7d3",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.451386"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/impact-history",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Impact history: 12 records",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.480834"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/risk-assessment/creator",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Risk assessment: low risk",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.503465"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-feature-change",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Feature analysis failed: Unknown error",
+      "response_data": {
+        "detail": "Plan 'business' not found"
+      },
+      "timestamp": "2025-07-24T17:04:04.524611"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-plan-disable",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Plan disable analysis failed: Unknown error",
+      "response_data": {
+        "detail": "Plan 'education' not found"
+      },
+      "timestamp": "2025-07-24T17:04:04.551236"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/simulate-change",
+      "method": "POST",
+      "success": false,
+      "status_code": 0,
+      "details": "Expecting value: line 1 column 1 (char 0)",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:04:04.581768"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/execute-migration-plan/550e8400-e29b-41d4-a716-446655440000",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Migration execution failed: Unknown error",
+      "response_data": {
+        "detail": "Migration plan 550e8400-e29b-41d4-a716-446655440000 not found"
+      },
+      "timestamp": "2025-07-24T17:04:04.605037"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/rollback-plan-change",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Plan rollback failed: Unknown error",
+      "response_data": {
+        "detail": "Version 1.0 not found for plan creator"
+      },
+      "timestamp": "2025-07-24T17:04:04.631391"
+    }
+  ]
+}
