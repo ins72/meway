@@ -960,6 +960,104 @@ class AITokenPurchaseService:
         except Exception as e:
             logger.error(f"Error logging token transaction: {e}")
 
+    async def _get_usage_breakdown(self, workspace_id: str) -> Dict[str, Any]:
+        """Get usage breakdown by category"""
+        try:
+            collection = self.db.ai_token_usage
+            pipeline = [
+                {"$match": {"workspace_id": workspace_id}},
+                {"$group": {
+                    "_id": "$category",
+                    "total_tokens": {"$sum": "$tokens_used"},
+                    "usage_count": {"$sum": 1}
+                }}
+            ]
+            
+            cursor = collection.aggregate(pipeline)
+            breakdown = {}
+            async for result in cursor:
+                category = result["_id"] or "general"
+                breakdown[category] = {
+                    "tokens_used": result["total_tokens"],
+                    "usage_count": result["usage_count"]
+                }
+            
+            return breakdown
+            
+        except Exception as e:
+            logger.error(f"Error getting usage breakdown: {e}")
+            return {}
+
+    def _calculate_period_dates(self, period: str) -> tuple:
+        """Calculate start and end dates for period"""
+        now = datetime.utcnow()
+        
+        if period == "week":
+            start = now - timedelta(days=7)
+        elif period == "month":
+            start = now - timedelta(days=30)
+        elif period == "quarter":
+            start = now - timedelta(days=90)
+        else:
+            start = now - timedelta(days=30)  # Default to month
+        
+        return start, now
+
+    async def _workspace_exists(self, workspace_id: str) -> bool:
+        """Check if workspace exists"""
+        try:
+            collection = self.db.workspaces
+            workspace = await collection.find_one({"_id": workspace_id})
+            return workspace is not None
+        except Exception as e:
+            logger.error(f"Error checking workspace existence: {e}")
+            return False
+
+    async def _get_usage_analytics(self, workspace_id: str) -> Dict[str, Any]:
+        """Get usage analytics for workspace"""
+        try:
+            collection = self.db.ai_token_usage
+            
+            # Get usage for last 30 days
+            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+            
+            pipeline = [
+                {"$match": {
+                    "workspace_id": workspace_id,
+                    "used_at": {"$gte": thirty_days_ago}
+                }},
+                {"$group": {
+                    "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$used_at"}},
+                    "daily_usage": {"$sum": "$tokens_used"}
+                }},
+                {"$sort": {"_id": 1}}
+            ]
+            
+            cursor = collection.aggregate(pipeline)
+            daily_usage = []
+            async for result in cursor:
+                daily_usage.append({
+                    "date": result["_id"],
+                    "tokens_used": result["daily_usage"]
+                })
+            
+            return {
+                "daily_usage": daily_usage,
+                "total_usage_30_days": sum(day["tokens_used"] for day in daily_usage)
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting usage analytics: {e}")
+            return {"daily_usage": [], "total_usage_30_days": 0}
+
+    def _get_next_month_start(self) -> datetime:
+        """Get start of next month"""
+        now = datetime.utcnow()
+        if now.month == 12:
+            return datetime(now.year + 1, 1, 1)
+        else:
+            return datetime(now.year, now.month + 1, 1)
+
 
 # Service instance
 _ai_token_purchase_service = None
