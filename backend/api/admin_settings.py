@@ -21,8 +21,8 @@ async def get_payment_methods_settings():
         if not db:
             raise HTTPException(status_code=500, detail="Database unavailable")
         
-        # Get payment methods settings
-        setting = await db['admin_settings'].find_one({'setting_key': 'payment_methods'})
+        # Get payment methods settings (sync operation)
+        setting = db['admin_settings'].find_one({'setting_key': 'payment_methods'})
         
         if setting:
             return {
