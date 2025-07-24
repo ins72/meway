@@ -455,7 +455,7 @@ const OnboardingWizard = () => {
         {/* Header */}
         <div className="wizard-header">
           <div className="logo">
-            <span className="gradient-text">Mewayz</span>
+            <span className="gradient-text">MEWAYZ</span>
           </div>
           <div className="progress-info">
             <h1 className="wizard-title">Welcome to Mewayz</h1>
