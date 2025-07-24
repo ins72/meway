@@ -282,28 +282,6 @@
   padding: 0.5rem;
 }
 
-/* Mobile only: Show hamburger, hide nav links */
-@media screen and (max-width: 767px) {
-  .mobile-menu-toggle {
-    display: block;
-  }
-  
-  .nav-links {
-    display: none;
-  }
-}
-
-/* Ensure nav links are visible on larger screens */
-@media screen and (min-width: 768px) {
-  .nav-links {
-    display: flex;
-  }
-  
-  .mobile-menu-toggle {
-    display: none;
-  }
-}
-
 /* Mobile Menu */
 .mobile-menu {
   position: fixed;
