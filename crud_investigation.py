@@ -9,7 +9,7 @@ import aiohttp
 import json
 from datetime import datetime
 
-BACKEND_URL = "https://bd15977c-5d37-4fb8-991c-847ae2409f32.preview.emergentagent.com"
+BACKEND_URL = "https://70437ee3-8310-47da-a8a9-4b9a2db36bda.preview.emergentagent.com"
 TEST_CREDENTIALS = {
     "email": "tmonnens@outlook.com",
     "password": "Voetballen5"

@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://bd15977c-5d37-4fb8-991c-847ae2409f32.preview.emergentagent.com"
+BACKEND_URL = "https://70437ee3-8310-47da-a8a9-4b9a2db36bda.preview.emergentagent.com"
 
 def test_create_without_auth():
     """Test CREATE endpoint without authentication to isolate the issue"""
