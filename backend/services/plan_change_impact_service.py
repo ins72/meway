@@ -468,7 +468,11 @@ class PlanChangeImpactService:
             simulation_results["recommendations"] = combined_recommendations
             
             # Store simulation
-            await self.db.plan_change_simulations.insert_one(simulation_results)
+            try:
+                await self.db.plan_change_simulations.insert_one(simulation_results)
+            except Exception as e:
+                logger.warning(f"Failed to store simulation results: {e}")
+                # Continue without storing if there's a DB issue
             
             return {
                 "success": True,
