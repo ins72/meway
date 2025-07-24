@@ -18,13 +18,17 @@ class StripeIntegrationService:
     
     def __init__(self):
         self.collection_name = "stripe_payments"
-        # Stripe API configuration - these are test keys
-        self.public_key = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51RHeZMPTey8qEzxZZ1MyBvDG8Qh2VOoxUroGhxpNmcEMnvgfQCfwcsHihlFvqz35LPjAYyKZ4j5Njm07AKGuXDqw00nAsVfaXv')
-        self.secret_key = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_51RHeZMPTey8qEzxZn2t4XbP6CATdXVbcgbzvSjdVIsijehuscfcSOVQ016bUXsVaBV9MyoI8EThIBTgmXSjDUs6n00ipAjYRXZ')
+        # Stripe API configuration - LIVE KEYS (PRODUCTION)
+        self.public_key = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+        self.secret_key = os.environ.get('STRIPE_SECRET_KEY')
+        
+        if not self.secret_key or not self.public_key:
+            raise ValueError("STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY must be set in environment variables")
+            
         self.api_available = bool(self.secret_key and self.public_key)
         self.service_name = "stripe_integration"
         
-        # Initialize Stripe
+        # Initialize Stripe with LIVE keys
         stripe.api_key = self.secret_key
         
         # Bundle pricing mapping (in cents for Stripe)
