@@ -1080,14 +1080,6 @@
 }
 
 @media (max-width: 768px) {
-  .mobile-menu-toggle {
-    display: block;
-  }
-  
-  .nav-links {
-    display: none;
-  }
-
   .nav {
     padding: 1rem;
   }
