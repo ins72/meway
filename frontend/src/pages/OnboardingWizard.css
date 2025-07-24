@@ -939,6 +939,15 @@
     padding: 1.25rem;
   }
   
+  .payment-setup {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .trial-benefits {
+    grid-template-columns: 1fr;
+  }
+  
   .pricing-plans {
     grid-template-columns: 1fr;
     gap: 1rem;
