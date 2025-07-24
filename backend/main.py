@@ -28,30 +28,36 @@ async def lifespan(app: FastAPI):
         for attempt in range(max_retries):
             try:
                 await connect_to_mongo()
-                logger.info("✅ Database connection initialized")
+                logger.info("✅ Database connection initialized successfully")
                 break
             except Exception as e:
                 logger.warning(f"⚠️ Database connection attempt {attempt + 1}/{max_retries} failed: {e}")
                 if attempt == max_retries - 1:
                     logger.error("❌ Failed to connect to database after all retries")
-                    # Don't crash the app, just log the error
-                    logger.error("🚨 Application starting without database connection")
+                    # Don't crash the app, continue without database
+                    logger.error("🚨 Application starting WITHOUT database connection")
+                    logger.error("   This may cause API errors but the app will still serve static content")
                 else:
                     await asyncio.sleep(retry_delay)
                     retry_delay *= 2  # Exponential backoff
         
+        # Application is starting - log success
+        logger.info("🚀 Application startup completed")
+        
         yield
         
     except Exception as e:
-        logger.error(f"❌ Lifespan error: {e}")
+        logger.error(f"❌ Critical lifespan error: {e}")
         logger.info("🔄 Application continuing despite lifespan error")
-        yield  # Don't crash the app
+        # Don't crash - let the app try to start anyway
+        yield  
     finally:
         try:
             await close_mongo_connection()
-            logger.info("✅ Database connection closed")
+            logger.info("✅ Database connection closed gracefully")
         except Exception as e:
             logger.warning(f"⚠️ Error closing database connection: {e}")
+            # Don't crash on cleanup errors
 
 # Create FastAPI app
 app = FastAPI(
