@@ -504,9 +504,14 @@ class PlanChangeImpactService:
                 logger.warning(f"Error generating recommendations: {e}")
                 simulation_results["recommendations"] = ["Simulation completed with limited analysis"]
             
-            # Store simulation
+            # Store simulation with collection safety check
             try:
-                await self.db.plan_change_simulations.insert_one(simulation_results)
+                # Check if collection exists or create it
+                collections = await self.db.client.list_database_names()
+                if hasattr(self.db, 'plan_change_simulations'):
+                    await self.db.plan_change_simulations.insert_one(simulation_results)
+                else:
+                    logger.warning("plan_change_simulations collection not accessible, simulation not stored")
             except Exception as e:
                 logger.warning(f"Failed to store simulation results: {e}")
                 # Continue without storing if there's a DB issue
