@@ -147,7 +147,7 @@ const EnhancedStripePayment = ({
           bundles,
           workspace_name: workspaceName,
           save_payment_method: true
-        });
+        });;
 
         const response = await fetch(url, {
           method: 'POST',
