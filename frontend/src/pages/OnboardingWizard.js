@@ -661,9 +661,11 @@ const OnboardingWizard = () => {
                           key={goal.id} 
                           className={`goal-card ${formData.selectedGoals.includes(goal.id) ? 'selected' : ''}`}
                           onClick={() => {
+                            console.log('Goal clicked:', goal.id);
                             const newGoals = formData.selectedGoals.includes(goal.id)
                               ? formData.selectedGoals.filter(g => g !== goal.id)
                               : [...formData.selectedGoals, goal.id];
+                            console.log('New goals:', newGoals);
                             setFormData({...formData, selectedGoals: newGoals});
                           }}
                         >
