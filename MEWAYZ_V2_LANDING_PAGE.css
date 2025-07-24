@@ -250,6 +250,7 @@
   border-color: var(--border-light);
 }
 
+/* Desktop: Hide hamburger menu */
 .mobile-menu-toggle {
   display: none;
   background: none;
@@ -260,12 +261,24 @@
   padding: 0.5rem;
 }
 
-@media (max-width: 768px) {
+/* Mobile only: Show hamburger, hide nav links */
+@media screen and (max-width: 767px) {
   .mobile-menu-toggle {
     display: block;
   }
   
   .nav-links {
+    display: none;
+  }
+}
+
+/* Ensure nav links are visible on larger screens */
+@media screen and (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+  
+  .mobile-menu-toggle {
     display: none;
   }
 }
