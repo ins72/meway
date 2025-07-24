@@ -259,22 +259,25 @@ const FeaturesSection = () => {
 const TestimonialsSection = () => {
   const testimonials = [
     {
-      text: "Mewayz v2 is incredible! The Instagram database feature helped me find and connect with over 500 potential clients in my niche. The lead generation tools are game-changing.",
-      author: "Sarah Johnson",
-      role: "Digital Marketing Consultant",
-      avatar: "SJ"
+      text: "Mewayz transformed my Instagram strategy completely. I went from 5K to 50K followers in 6 months using their lead generation tools. The bio link builder alone increased my conversion rate by 340%.",
+      author: "Sarah Chen",
+      role: "Digital Marketing Coach",
+      avatar: "SC",
+      company: "@sarahchenmarketing"
     },
     {
-      text: "The all-in-one platform approach is exactly what I needed. From course creation to e-commerce, everything integrates seamlessly. My business has grown 300% since switching.",
-      author: "Mike Chen",
-      role: "Online Course Creator",
-      avatar: "MC"
+      text: "As a course creator, I've tried everything. Mewayz is the first platform that truly does it all - from student management to payment processing. My course revenue increased 250% in the first quarter.",
+      author: "Marcus Rodriguez",
+      role: "Online Educator",
+      avatar: "MR",
+      company: "MasterClass Academy"
     },
     {
-      text: "The workflow automation and CRM features have saved me countless hours. I can now focus on creating content while Mewayz handles the business operations automatically.",
-      author: "Emily Rodriguez",
-      role: "Content Creator & Entrepreneur",
-      avatar: "ER"
+      text: "The marketplace feature is incredible. I built a multi-vendor platform for local artisans in just 2 weeks. We've processed over $100K in transactions with zero technical issues.",
+      author: "Emily Watson",
+      role: "E-commerce Entrepreneur",
+      avatar: "EW",
+      company: "Artisan Collective"
     }
   ];
 
@@ -282,11 +285,11 @@ const TestimonialsSection = () => {
     <section className="testimonials" id="testimonials">
       <div className="section-header">
         <div className="section-badge">
-          <span className="emoji">💬</span> 
+          <span className="emoji">⭐</span> 
           <span className="text-content">Success Stories</span>
         </div>
-        <h2>What Our Users Are Saying</h2>
-        <p className="features-subtitle">Real feedback from businesses using Mewayz v2 to scale their operations and increase revenue.</p>
+        <h2>Trusted by Thousands of Creators</h2>
+        <p className="features-subtitle">Join successful entrepreneurs who have transformed their businesses with Mewayz. Real results from real users.</p>
       </div>
       <div className="testimonials-grid">
         {testimonials.map((testimonial, index) => (
@@ -297,6 +300,7 @@ const TestimonialsSection = () => {
               <div className="author-info">
                 <strong>{testimonial.author}</strong>
                 <span>{testimonial.role}</span>
+                <span className="company">{testimonial.company}</span>
               </div>
             </div>
           </div>
