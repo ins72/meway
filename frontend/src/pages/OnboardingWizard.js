@@ -419,7 +419,7 @@ const OnboardingWizard = () => {
   };
 
   const handleStripePaymentSuccess = (paymentData) => {
-    console.log('Stripe payment successful:', paymentData);
+    // console.log('Stripe payment successful:', paymentData);
     handlePaymentSetup(paymentData);
   };
 
@@ -435,7 +435,7 @@ const OnboardingWizard = () => {
       const hasFreePlanOnly = formData.selectedBundles.length === 1 && formData.selectedBundles.includes('free');
       
       if (hasFreePlanOnly) {
-        console.log('Free plan selected - skipping payment setup');
+        // console.log('Free plan selected - skipping payment setup');
         setCurrentStep(currentStep + 1);
         return;
       }
@@ -446,14 +446,14 @@ const OnboardingWizard = () => {
         return;
       }
       
-      console.log('Setting up payment with method:', formData.selectedPaymentType);
-      console.log('Selected bundles:', formData.selectedBundles);
-      console.log('Total amount:', calculateTotalPrice().discountedPrice);
+      // console.log('Setting up payment with method:', formData.selectedPaymentType);
+      // console.log('Selected bundles:', formData.selectedBundles);
+      // console.log('Total amount:', calculateTotalPrice().discountedPrice);
       
       if (formData.selectedPaymentType === 'credit_card') {
         // Handle Stripe payment
         if (stripePaymentData) {
-          console.log('Processing Stripe payment method:', stripePaymentData.paymentMethodId);
+          // console.log('Processing Stripe payment method:', stripePaymentData.paymentMethodId);
           
           // TODO: Send payment method to backend to create subscription
           // For now, simulate successful payment setup
@@ -465,7 +465,7 @@ const OnboardingWizard = () => {
         }
       } else if (formData.selectedPaymentType === 'paypal') {
         // Simulate PayPal integration (PayPal would be handled differently)
-        console.log('Processing PayPal payment...');
+        // console.log('Processing PayPal payment...');
         await new Promise(resolve => setTimeout(resolve, 2000));
         alert('✅ PayPal payment method verified!\nYour subscription will begin after the 14-day free trial.');
       }
@@ -493,7 +493,7 @@ const OnboardingWizard = () => {
         payment_method: formData.paymentMethod
       };
 
-      console.log('Creating workspace:', workspaceData);
+      // console.log('Creating workspace:', workspaceData);
       
       // Create workspace
       const workspaceResponse = await onboardingAPI.createWorkspace(workspaceData);
@@ -524,12 +524,12 @@ const OnboardingWizard = () => {
         completed_at: new Date().toISOString()
       };
 
-      console.log('Completing onboarding:', onboardingData);
+      // console.log('Completing onboarding:', onboardingData);
       
       // Complete onboarding
       await onboardingAPI.completeOnboarding(onboardingData);
       
-      console.log('✅ Onboarding completed successfully');
+      // console.log('✅ Onboarding completed successfully');
       
       // Navigate to dashboard
       navigate('/dashboard');
