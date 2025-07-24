@@ -344,49 +344,271 @@ class AdvancedUIService:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    async def get_component_config(self, component_type: str) -> Dict[str, Any]:
-        """Get component configuration"""
+    async def get_wizard_session(self, session_id: str, user_id: str) -> Dict[str, Any]:
+        """Get wizard session by ID"""
         try:
-            configs = {
-                "data_table": {
-                    "columns": ["id", "name", "status", "created_at", "actions"],
-                    "sorting": {"enabled": True, "default": "created_at"},
-                    "filtering": {"enabled": True, "fields": ["name", "status"]},
-                    "pagination": {"enabled": True, "page_size": 25},
-                    "actions": ["view", "edit", "delete"],
-                    "export": {"enabled": True, "formats": ["csv", "xlsx", "pdf"]}
-                },
-                "chart": {
-                    "types": ["line", "bar", "pie", "doughnut", "area", "scatter"],
-                    "data_sources": ["api", "static", "real_time"],
-                    "customization": {"colors": True, "labels": True, "legend": True},
-                    "interactivity": {"zoom": True, "hover": True, "click": True}
-                },
-                "form": {
-                    "field_types": ["text", "email", "password", "number", "select", "multi_select", "checkbox", "radio", "textarea", "file", "date", "time", "color"],
-                    "validation": {"client_side": True, "server_side": True},
-                    "layout": {"columns": [1, 2, 3, 4], "responsive": True},
-                    "submission": {"ajax": True, "redirect": True, "callback": True}
-                },
-                "calendar": {
-                    "views": ["month", "week", "day", "agenda"],
-                    "events": {"create": True, "edit": True, "delete": True, "drag_drop": True},
-                    "integrations": ["google_calendar", "outlook", "ical"],
-                    "notifications": {"email": True, "push": True, "sms": True}
-                }
-            }
+            collection = await self._get_collection(self.wizard_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
             
-            if component_type in configs:
+            session = await collection.find_one({"id": session_id, "user_id": user_id})
+            
+            if session:
                 return {
                     "success": True,
-                    "data": configs[component_type],
-                    "component_type": component_type
+                    "data": {k: v for k, v in session.items() if k != '_id'}
                 }
             else:
-                return {"success": False, "error": "Component type not found"}
+                return {"success": False, "error": "Wizard session not found"}
                 
         except Exception as e:
             return {"success": False, "error": str(e)}
+    
+    async def delete_wizard_session(self, session_id: str, user_id: str) -> Dict[str, Any]:
+        """Delete wizard session"""
+        try:
+            collection = await self._get_collection(self.wizard_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"id": session_id, "user_id": user_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "Wizard session deleted successfully",
+                    "deleted_count": result.deleted_count
+                }
+            else:
+                return {"success": False, "error": "Wizard session not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def list_wizard_sessions(self, user_id: str, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List wizard sessions for user"""
+        try:
+            collection = await self._get_collection(self.wizard_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            cursor = collection.find({"user_id": user_id}).skip(offset).limit(limit).sort("created_at", -1)
+            sessions = await cursor.to_list(length=limit)
+            
+            sanitized_sessions = [{k: v for k, v in session.items() if k != '_id'} for session in sessions]
+            
+            total = await collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": sanitized_sessions,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_user_goals(self, user_id: str) -> Dict[str, Any]:
+        """Get user goals"""
+        try:
+            collection = await self._get_collection(self.goals_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            goals = await collection.find_one({"user_id": user_id})
+            
+            if goals:
+                return {
+                    "success": True,
+                    "data": {k: v for k, v in goals.items() if k != '_id'}
+                }
+            else:
+                return {"success": False, "error": "Goals not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def update_user_goals(self, goals_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Update user goals"""
+        try:
+            collection = await self._get_collection(self.goals_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            goals_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await collection.update_one(
+                {"user_id": user_id},
+                {"$set": goals_data}
+            )
+            
+            if result.matched_count > 0:
+                updated_goals = await collection.find_one({"user_id": user_id})
+                return {
+                    "success": True,
+                    "message": "Goals updated successfully",
+                    "data": {k: v for k, v in updated_goals.items() if k != '_id'} if updated_goals else None
+                }
+            else:
+                return {"success": False, "error": "Goals not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def delete_user_goals(self, user_id: str) -> Dict[str, Any]:
+        """Delete user goals"""
+        try:
+            collection = await self._get_collection(self.goals_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"user_id": user_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "Goals deleted successfully",
+                    "deleted_count": result.deleted_count
+                }
+            else:
+                return {"success": False, "error": "Goals not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def update_ui_state(self, component_id: str, state_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Update UI component state"""
+        try:
+            collection = await self._get_collection(self.ui_state_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            state_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await collection.update_one(
+                {"user_id": user_id, "component_id": component_id},
+                {"$set": {"state_data": state_data.get("state_data", {}), "updated_at": datetime.utcnow().isoformat()}}
+            )
+            
+            if result.matched_count > 0:
+                updated_state = await collection.find_one({"user_id": user_id, "component_id": component_id})
+                return {
+                    "success": True,
+                    "message": "UI state updated successfully",
+                    "data": {k: v for k, v in updated_state.items() if k != '_id'} if updated_state else None
+                }
+            else:
+                return {"success": False, "error": "UI state not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def delete_ui_state(self, component_id: str, user_id: str) -> Dict[str, Any]:
+        """Delete UI component state"""
+        try:
+            collection = await self._get_collection(self.ui_state_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"user_id": user_id, "component_id": component_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "UI state deleted successfully",
+                    "deleted_count": result.deleted_count
+                }
+            else:
+                return {"success": False, "error": "UI state not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def list_ui_states(self, user_id: str, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List UI component states for user"""
+        try:
+            collection = await self._get_collection(self.ui_state_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            cursor = collection.find({"user_id": user_id}).skip(offset).limit(limit).sort("updated_at", -1)
+            states = await cursor.to_list(length=limit)
+            
+            sanitized_states = [{k: v for k, v in state.items() if k != '_id'} for state in states]
+            
+            total = await collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": sanitized_states,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_ui_stats(self, user_id: str) -> Dict[str, Any]:
+        """Get UI statistics"""
+        try:
+            wizard_collection = await self._get_collection(self.wizard_collection)
+            goals_collection = await self._get_collection(self.goals_collection)
+            ui_state_collection = await self._get_collection(self.ui_state_collection)
+            
+            if not all([wizard_collection, goals_collection, ui_state_collection]):
+                return {"success": False, "error": "Database unavailable"}
+            
+            total_wizards = await wizard_collection.count_documents({"user_id": user_id})
+            completed_wizards = await wizard_collection.count_documents({"user_id": user_id, "completion_status": "completed"})
+            has_goals = await goals_collection.count_documents({"user_id": user_id}) > 0
+            total_ui_states = await ui_state_collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": {
+                    "total_wizard_sessions": total_wizards,
+                    "completed_wizard_sessions": completed_wizards,
+                    "has_goals_configured": has_goals,
+                    "total_ui_states": total_ui_states,
+                    "user_id": user_id
+                }
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def health_check(self) -> Dict[str, Any]:
+        """Health check with database verification"""
+        try:
+            db = await get_database_async()
+            if db is None:
+                return {"success": False, "healthy": False, "error": "Database unavailable"}
+            
+            # Test database connection
+            collection = db[self.wizard_collection]
+            await collection.count_documents({})
+            
+            return {
+                "success": True,
+                "healthy": True,
+                "service": "Advanced UI Components",
+                "features": {
+                    "wizard_sessions": True,
+                    "goal_selection": True,
+                    "ui_state_management": True,
+                    "component_configs": True,
+                    "interactive_interfaces": True,
+                    "real_database_storage": True
+                },
+                "database_status": "connected",
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            return {"success": False, "healthy": False, "error": str(e)}
 
 # Service instance
 advanced_ui_service = AdvancedUIService()
