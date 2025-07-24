@@ -688,8 +688,24 @@ class PlanChangeImpactService:
             rolled_back_by = data.get("rolled_back_by")
             reason = data.get("reason", "Admin rollback")
             
-            if not plan_name or not rollback_to_version:
-                return {"success": False, "error": "Plan name and rollback version are required"}
+            # Enhanced validation
+            if not plan_name:
+                return {"success": False, "error": "Plan name is required"}
+            
+            if not rollback_to_version:
+                return {"success": False, "error": "Rollback version is required"}
+            
+            if not rolled_back_by:
+                return {"success": False, "error": "Rolled back by user ID is required"}
+            
+            # Validate rollback_to_version format
+            if not isinstance(rollback_to_version, (int, str)):
+                return {"success": False, "error": "Rollback version must be a number or string"}
+            
+            # Verify plan exists
+            current_plan = await self._get_current_plan(plan_name)
+            if not current_plan:
+                return {"success": False, "error": f"Plan '{plan_name}' not found"}
             
             # Get plan change history
             change_history = await self._get_plan_change_history(plan_name)
