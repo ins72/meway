@@ -82,11 +82,24 @@ const LandingPage = () => {
       {/* Mobile Menu */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
         <button className="mobile-menu-close" onClick={toggleMobileMenu}>×</button>
-        <a href="#features" onClick={() => scrollToSection('features')}>Features</a>
-        <a href="#pricing" onClick={() => scrollToSection('pricing')}>Pricing</a>
-        <a href="#testimonials" onClick={() => scrollToSection('testimonials')}>Reviews</a>
-        <a href="/help" target="_blank">Help</a>
-        <a href="/contact">Contact</a>
+        <div className="mobile-menu-content">
+          <div className="mobile-nav-links">
+            <a href="#features" onClick={() => scrollToSection('features')}>Features</a>
+            <a href="#pricing" onClick={() => scrollToSection('pricing')}>Pricing</a>
+            <a href="#testimonials" onClick={() => scrollToSection('testimonials')}>Reviews</a>
+            <a href="/help" target="_blank">Help</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div className="mobile-auth-actions">
+            <a href="/login" className="mobile-login-btn">Login</a>
+            <a href="/register" className="mobile-signup-btn">
+              Start Free Trial
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Header */}
