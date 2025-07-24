@@ -104,17 +104,27 @@ const RegisterPage = () => {
           localStorage.setItem('authToken', access_token);
           localStorage.setItem('user', JSON.stringify(user));
           
-          // Show appropriate success message based on user status
+          // Show appropriate success message and redirect based on user status
           if (is_existing_user) {
-            alert(`ℹ️ ${message}\nHi ${user.name}, you already have an account with us. Logging you in instead.`);
-            navigate('/dashboard');
+            alert(`ℹ️ ${message}\nHi ${user.name}, you already have an account with us.`);
+            
+            // Check onboarding status for redirect
+            if (user.onboarding_completed) {
+              navigate('/dashboard');
+            } else {
+              navigate('/onboarding');
+            }
           } else if (is_new_user) {
             alert(`✅ ${message}\nWelcome to MEWAYZ, ${user.name}!\n\nLet's complete your setup.`);
             navigate('/onboarding');
           } else {
-            // Fallback to redirect_to
+            // Fallback based on redirect_to and onboarding status
             alert(`✅ ${message}\nWelcome, ${user.name}!`);
-            navigate(redirect_to === "onboarding" ? '/onboarding' : '/dashboard');
+            if (redirect_to === "onboarding" || !user.onboarding_completed) {
+              navigate('/onboarding');
+            } else {
+              navigate('/dashboard');
+            }
           }
         } else {
           throw new Error(response.data.message || 'Registration failed');
