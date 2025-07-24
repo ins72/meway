@@ -158,6 +158,7 @@ try:
     from api.visual_builder import router as visual_builder_router
     from api.native_mobile import router as native_mobile_router
     from api.advanced_ui import router as advanced_ui_router
+    from api.workspace_subscription import router as workspace_subscription_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
