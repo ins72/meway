@@ -20,8 +20,9 @@ const OnboardingWizard = () => {
   const steps = [
     { id: 1, title: 'Workspace Setup', description: 'Set up your workspace' },
     { id: 2, title: 'Business Details', description: 'Tell us about your business' },
-    { id: 3, title: 'Choose Your Plan', description: 'Select the perfect plan' },
-    { id: 4, title: 'Complete Setup', description: 'Finalize your workspace' }
+    { id: 3, title: 'Choose Bundles', description: 'Select your features' },
+    { id: 4, title: 'Payment Setup', description: 'Complete subscription' },
+    { id: 5, title: 'Complete Setup', description: 'Finalize your workspace' }
   ];
 
   const pricingBundles = [
