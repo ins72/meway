@@ -19,7 +19,7 @@ class StripeIntegrationService:
     def __init__(self):
         self.collection_name = "stripe_payments"
         # Stripe API configuration - these are test keys
-        self.public_key = "pk_test_51RHeZMPTey8qEzxZZ1MyBvDG8Qh2VOoxUroGhxpNmcEMnvgfQCfwcsHihlFvqz35LPjAYyKZ4j5Njm07AKGuXDqw00nAsVfaXv"
+        self.public_key = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51RHeZMPTey8qEzxZZ1MyBvDG8Qh2VOoxUroGhxpNmcEMnvgfQCfwcsHihlFvqz35LPjAYyKZ4j5Njm07AKGuXDqw00nAsVfaXv')
         self.secret_key = "sk_test_51RHeZMPTey8qEzxZn2t4XbP6CATdXVbcgbzvSjdVIsijehuscfcSOVQ016bUXsVaBV9MyoI8EThIBTmSjDUs6n00ipAjYRXZ"
         self.api_available = bool(self.secret_key and self.public_key)
         self.service_name = "stripe_integration"
