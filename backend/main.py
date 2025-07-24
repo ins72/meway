@@ -113,8 +113,22 @@ if not MINIMAL_MODE:
         
         # Try to load additional routers with individual error handling
         additional_routers = [
+            # Core business systems that were 100% working
             ("api.admin_plan_management", "/api/admin-plan-management", "admin"),
             ("api.plan_change_impact", "/api/plan-change-impact", "plan_impact"),
+            ("api.admin_workspace_management", "/api/admin-workspace-management", "admin_workspace"),
+            ("api.customer_notification", "/api/customer-notification", "notifications"),
+            ("api.workspace_subscription", "/api/workspace-subscription", "subscription"),
+            ("api.usage_tracking", "/api/usage-tracking", "usage"),
+            ("api.enterprise_revenue", "/api/enterprise-revenue", "revenue"),
+            ("api.stripe_integration", "/api/stripe-integration", "stripe"),
+            ("api.booking", "/api/booking", "booking"),
+            ("api.escrow", "/api/escrow", "escrow"),
+            ("api.template_marketplace", "/api/template-marketplace", "marketplace"),
+            ("api.financial", "/api/financial", "financial"),
+            ("api.workspace", "/api/workspace", "workspace"),
+            ("api.analytics", "/api/analytics", "analytics"),
+            ("api.settings", "/api/settings", "settings"),
         ]
         
         loaded_routers = 2  # auth and user already loaded
