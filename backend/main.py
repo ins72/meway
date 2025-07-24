@@ -192,6 +192,7 @@ try:
     from api.admin_plan_management import router as admin_plan_management_router
     from api.plan_change_impact import router as plan_change_impact_router
     from api.admin_workspace_management import router as admin_workspace_management_router
+    from api.customer_notification import router as customer_notification_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
