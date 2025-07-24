@@ -405,7 +405,7 @@ backend:
     implemented: true
     working: false
     file: "/app/frontend/src/pages/OnboardingWizard.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high" 
     needs_retesting: false
     status_history:
@@ -421,6 +421,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ CRITICAL BACKEND STRIPE INTEGRATION ISSUE IDENTIFIED - User confirms frontend Stripe form works and shows 'successful' but BACKEND INTEGRATION IS BROKEN. ISSUE DETAILS: 1) ✅ Frontend Stripe form accepts test card data and shows success, 2) ❌ Payment does NOT appear in Stripe sandbox dashboard (no actual processing), 3) ❌ Final onboarding completion fails with error: 'There was an error completing your setup. Please try again.'. ROOT CAUSE ANALYSIS: Frontend StripePaymentForm creates payment method but doesn't connect to backend Stripe integration. Backend has /api/stripe-integration endpoints but frontend doesn't use them. Missing: 1) Backend endpoint to create Stripe checkout sessions, 2) Frontend integration with backend Stripe API, 3) Proper subscription creation after payment success, 4) Webhook handling for payment confirmation. CURRENT STATE: Frontend UI works perfectly, Stripe form functional, but no actual payment processing or subscription creation occurs. URGENT FIX NEEDED: Connect frontend Stripe integration to backend /api/stripe-integration endpoints and implement proper checkout session creation."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL 422 VALIDATION ERROR IDENTIFIED IN BACKEND STRIPE INTEGRATION - Main agent has implemented comprehensive backend Stripe integration with real API endpoints, but there's a critical data format mismatch causing 422 validation errors. ROOT CAUSE: Frontend StripePaymentForm.js line 76 sends `payment_method: paymentMethod` (Stripe PaymentMethod object) but backend CheckoutSessionRequest expects `payment_method: 'monthly'` (billing frequency string). BACKEND IMPLEMENTATION VERIFIED: ✅ /api/stripe-integration/create-checkout-session endpoint exists, ✅ /api/stripe-integration/confirm-payment endpoint exists, ✅ Real Stripe API integration with test keys (sk_test_51RHeZM...), ✅ Bundle pricing and multi-bundle discounts implemented, ✅ Checkout session creation with real Stripe API calls. FRONTEND INTEGRATION VERIFIED: ✅ stripeAPI service calls backend endpoints, ✅ StripePaymentForm uses real Stripe Elements, ✅ Payment method creation working. CRITICAL FIX NEEDED: Update StripePaymentForm.js to send correct payment_method format - should pass billing frequency ('monthly'/'yearly') from onboarding form, not the Stripe PaymentMethod object. Backend integration is 95% complete, just needs frontend data format fix."
 
 frontend:
   - task: "Frontend Integration"
