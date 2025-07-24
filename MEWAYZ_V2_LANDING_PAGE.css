@@ -200,6 +200,10 @@
     display: none !important;
   }
   
+  .nav .nav-actions {
+    display: none !important;
+  }
+  
   .nav .mobile-menu-toggle {
     display: block !important;
   }
@@ -207,6 +211,10 @@
 
 @media screen and (min-width: 768px) {
   .nav .nav-links {
+    display: flex !important;
+  }
+  
+  .nav .nav-actions {
     display: flex !important;
   }
   
