@@ -11,7 +11,7 @@ from datetime import datetime
 import uuid
 
 # Configuration
-BACKEND_URL = "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com"
+BACKEND_URL = "https://eff6f53c-47df-43a1-9962-4d20b26f6dc5.preview.emergentagent.com"
 BASE_URL = f"{BACKEND_URL}/api"
 
 # Test credentials for admin access

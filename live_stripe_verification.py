@@ -20,7 +20,7 @@ def test_live_stripe_integration():
         # Test backend health check
         print("🏥 Testing backend health check...")
         health_response = requests.get(
-            "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/stripe-integration/health",
+            "https://eff6f53c-47df-43a1-9962-4d20b26f6dc5.preview.emergentagent.com/api/stripe-integration/health",
             timeout=10
         )
         
@@ -37,7 +37,7 @@ def test_live_stripe_integration():
         # Test login to get authentication token
         print("\n🔐 Testing authentication...")
         login_response = requests.post(
-            "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/auth/login",
+            "https://eff6f53c-47df-43a1-9962-4d20b26f6dc5.preview.emergentagent.com/api/auth/login",
             json={
                 "email": "tmonnens@outlook.com",
                 "password": "Voetballen5"
@@ -55,7 +55,7 @@ def test_live_stripe_integration():
         # Test checkout session creation (but don't complete payment)
         print("\n💳 Testing checkout session creation...")
         checkout_response = requests.post(
-            "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/stripe-integration/create-checkout-session",
+            "https://eff6f53c-47df-43a1-9962-4d20b26f6dc5.preview.emergentagent.com/api/stripe-integration/create-checkout-session",
             json={
                 "bundles": ["creator"],
                 "workspace_name": "Live Keys Test Workspace",
