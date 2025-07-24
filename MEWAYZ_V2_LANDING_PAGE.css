@@ -1047,25 +1047,8 @@
   transform: translateY(0);
 }
 
-/* Responsive Classes */
-.desktop-only {
-  display: initial;
-}
-
-.mobile-tablet-only {
-  display: none;
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .desktop-only {
-    display: none;
-  }
-  
-  .mobile-tablet-only {
-    display: initial;
-  }
-  
   .footer-grid {
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
