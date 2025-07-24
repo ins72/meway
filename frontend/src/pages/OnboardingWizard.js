@@ -803,11 +803,11 @@ const OnboardingWizard = () => {
           <div className="nav-right">
             {currentStep < steps.length ? (
               <button 
-                onClick={handleNext} 
+                onClick={currentStep === 4 ? handlePaymentSetup : handleNext} 
                 disabled={!canProceed()}
                 className="btn btn-primary"
               >
-                Continue
+                {currentStep === 4 ? 'Start Free Trial' : 'Continue'}
               </button>
             ) : (
               <button 
