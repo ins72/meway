@@ -10,7 +10,8 @@ from contextlib import asynccontextmanager
 import uvicorn
 import logging
 import asyncio
-from core.database import connect_to_mongo, close_mongo_connection
+from datetime import datetime
+from core.database import connect_to_mongo, close_mongo_connection, db
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
