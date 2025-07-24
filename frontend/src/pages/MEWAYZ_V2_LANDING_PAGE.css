@@ -1214,44 +1214,95 @@
   }
 }
 
-/* Specific fix for 820px width */
+/* Specific fix for 820px width - Make content more visible */
 @media (max-width: 820px) and (min-width: 769px) {
+  .hero {
+    padding: 6rem 2rem 4rem; /* Reduced padding */
+  }
+  
+  .hero-stats {
+    margin-bottom: 2rem; /* Reduced margin */
+  }
+  
+  .features, .pricing, .testimonials, .cta-section {
+    padding: 4rem 2rem; /* Reduced padding to show more content */
+  }
+  
+  .section-header {
+    margin-bottom: 2rem; /* Reduced margin */
+  }
+  
   .features-grid {
     grid-template-columns: repeat(2, minmax(280px, 1fr));
     gap: 1.5rem;
-    margin-top: 3rem;
+    margin-top: 2rem; /* Reduced margin to bring content up */
   }
   
   .feature-card {
-    padding: 2rem;
+    padding: 1.5rem; /* Reduced padding for more compact cards */
+  }
+  
+  .feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .feature-card p {
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
   
   .testimonials-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    margin-top: 3rem;
+    margin-top: 2rem; /* Reduced margin */
     max-width: 100%;
   }
   
   .testimonial-card {
-    padding: 2rem;
+    padding: 1.5rem; /* Reduced padding */
     max-width: 100%;
+  }
+  
+  .testimonial-card p {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
   }
   
   .pricing-grid {
     grid-template-columns: repeat(2, minmax(280px, 1fr));
     gap: 1.5rem;
-    margin-top: 3rem;
+    margin-top: 2rem; /* Reduced margin */
   }
   
   .pricing-card {
-    padding: 1.8rem;
+    padding: 1.5rem; /* Reduced padding */
   }
   
   .pricing-card:nth-child(3) {
     grid-column: 1 / -1;
     max-width: 400px;
-    margin: 0 auto;
+    margin: 1rem auto 0;
+  }
+  
+  .plan-features li {
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+  }
+  
+  /* Make CTA section more compact */
+  .cta-section {
+    padding: 3rem 2rem;
+  }
+  
+  .cta-section h2 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-section p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
   }
 }
 
