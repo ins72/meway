@@ -388,11 +388,11 @@ backend:
 
   - task: "Plan Change Impact Analysis System"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/api/plan_change_impact.py"
     stuck_count: 0
     priority: "critical"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
@@ -400,6 +400,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ MOSTLY WORKING - Plan Change Impact Analysis System is 61.5% operational and PRODUCTION-READY for core functionality (8/13 endpoints working). VERIFIED: Health check ✅, Pricing change impact analysis with revenue calculations ✅, Usage limit change impact analysis ✅, Affected subscriptions retrieval with filtering ✅, Migration plan creation with timeline management ✅, Impact analysis history with audit trail ✅, Risk assessment with threshold-based evaluation ✅. Core functionality covers 80% of real-world admin scenarios for preventing subscription disruptions. System provides comprehensive impact analysis, risk assessment, and migration planning with proper admin authentication and database storage. CRITICAL functionality working - pricing and limit change analysis operational."
+      - working: false
+        agent: "main"
+        comment: "🔄 FIXING VALIDATION ISSUES - Identified 5 failing endpoints: Feature change analysis (400 error), Plan disable analysis (400 error), Plan change simulation (500 error), Migration plan execution (400 error), Plan change rollback (400 error). Working on fixing validation and error handling issues."
 
   - task: "Onboarding Wizard Integration"
     implemented: true
