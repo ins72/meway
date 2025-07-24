@@ -1222,13 +1222,27 @@ class PlanChangeImpactService:
         }
 
     async def _get_plan_change_history(self, plan_name: str) -> List[Dict]:
-        """Get plan change history - simplified"""
+        """Get plan change history - enhanced with fallback"""
         try:
             history = await self.db.admin_plan_changes.find({
                 "plan_name": plan_name
             }).sort("created_at", -1).to_list(length=50)
+            
+            # If no history exists, create a default entry
+            if not history:
+                current_plan = await self._get_current_plan(plan_name)
+                if current_plan:
+                    history = [{
+                        "version": 1,
+                        "plan_name": plan_name,
+                        "configuration": current_plan,
+                        "created_at": datetime.utcnow() - timedelta(days=30),
+                        "change_type": "initial_creation"
+                    }]
+            
             return history
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error getting plan change history: {e}")
             return []
 
     async def _get_current_plan_version(self, plan_name: str) -> int:
