@@ -315,7 +315,7 @@ try:
     app.include_router(admin_workspace_management_router, prefix="/api/admin-workspace-management", tags=["admin_workspace_management"])
 
     
-    logger.info(f"✅ Successfully included 146 bulletproof routers")
+    logger.info(f"✅ Successfully included 147 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
