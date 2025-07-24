@@ -386,9 +386,19 @@ const OnboardingWizard = () => {
     };
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
+      try {
+        // Save current step progress before moving to next step
+        const nextStep = currentStep + 1;
+        await onboardingAPI.saveProgress(nextStep, formData);
+        
+        setCurrentStep(nextStep);
+      } catch (error) {
+        console.error('Failed to save onboarding progress:', error);
+        // Continue anyway - don't block user progress
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 
