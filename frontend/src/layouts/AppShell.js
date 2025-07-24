@@ -110,7 +110,10 @@ const AppShell = () => {
 
       {/* Mobile Sidebar Overlay */}
       {isMobile && isSidebarOpen && (
-        <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />
+        <div 
+          className="sidebar-overlay show" 
+          onClick={() => setIsSidebarOpen(false)} 
+        />
       )}
 
       {/* Sidebar */}
