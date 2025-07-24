@@ -21,11 +21,26 @@ export const AuthProvider = ({ children }) => {
   const [currentWorkspace, setCurrentWorkspace] = useState(null);
 
   useEffect(() => {
-    if (token) {
-      fetchUser();
-    } else {
+    console.log('AuthContext: useEffect triggered, token:', token);
+    
+    // Add timeout to prevent infinite loading 
+    const timeout = setTimeout(() => {
+      console.log('AuthContext: Timeout reached, setting loading to false');
       setLoading(false);
+    }, 5000);
+
+    if (token) {
+      console.log('AuthContext: Token exists, fetching user');
+      fetchUser().finally(() => {
+        clearTimeout(timeout);
+      });
+    } else {
+      console.log('AuthContext: No token, setting loading to false');
+      setLoading(false);
+      clearTimeout(timeout);
     }
+
+    return () => clearTimeout(timeout);
   }, [token]);
 
   const fetchUser = async () => {
