@@ -12,7 +12,8 @@ const OnboardingWizard = () => {
     teamSize: '',
     selectedGoals: [], // Changed to support multiple goals
     selectedBundles: [], // Changed to support multiple bundles
-    paymentMethod: 'monthly'
+    paymentMethod: 'monthly',
+    selectedPaymentType: null // Add payment type selection (credit_card, paypal)
   });
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
