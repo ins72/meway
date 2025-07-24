@@ -79,7 +79,10 @@ async def login(login_data: LoginRequest):
                 "id": str(user["_id"]),
                 "email": user["email"],
                 "full_name": user.get("full_name", ""),
-                "is_active": user.get("is_active", True)
+                "is_active": user.get("is_active", True),
+                "onboarding_completed": user.get("onboarding_completed", False),
+                "onboarding_step": user.get("onboarding_step", 1),
+                "has_workspace": user.get("has_workspace", False)
             }
         }
         
