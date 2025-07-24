@@ -294,7 +294,7 @@ async def health():
     """Health check endpoint"""
     return {
         "status": "healthy",
-        "services": 124,
+        "services": 126,
         "timestamp": "{datetime.utcnow().isoformat()}"
     }
 
