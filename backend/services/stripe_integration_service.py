@@ -699,7 +699,7 @@ class StripeIntegrationService:
             }
             
             collection = await self._get_collection_async()
-            if collection:
+            if collection is not None:
                 await collection.insert_one(session_data)
                 
             logger.info(f"Created checkout session: {session.id}")
