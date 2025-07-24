@@ -374,8 +374,8 @@ async def root():
         "health": "/health"
     }
 
-@app.get("/api/system/status")
-async def system_status():
+@app.get("/health")
+async def health():
     """Comprehensive system status for deployment monitoring"""
     try:
         import psutil
