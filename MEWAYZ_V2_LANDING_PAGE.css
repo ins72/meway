@@ -194,6 +194,27 @@
   list-style: none;
 }
 
+/* Mobile-first responsive navigation */
+@media screen and (max-width: 767px) {
+  .nav .nav-links {
+    display: none !important;
+  }
+  
+  .nav .mobile-menu-toggle {
+    display: block !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .nav .nav-links {
+    display: flex !important;
+  }
+  
+  .nav .mobile-menu-toggle {
+    display: none !important;
+  }
+}
+
 .nav-links a {
   color: var(--text-secondary);
   text-decoration: none;
