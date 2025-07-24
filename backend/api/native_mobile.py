@@ -553,19 +553,130 @@ async def create_app_config(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/config")
-async def get_app_config(
+@router.get("/config/{config_id}")
+async def get_app_config_by_id(
+    config_id: str,
     current_user: dict = Depends(get_current_admin)
 ):
-    """Get mobile app configuration"""
+    """Get mobile app configuration by ID"""
     try:
         user_id = current_user.get("id") or current_user.get("email")
-        result = await native_mobile_service.get_app_config(user_id)
+        result = await native_mobile_service.get_app_config_by_id(config_id, user_id)
         
         if result.get("success"):
             return result
         else:
             raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/config/{config_id}")
+async def update_app_config(
+    config_id: str,
+    update_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Update mobile app configuration"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await native_mobile_service.update_app_config(config_id, update_data, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/config/{config_id}")
+async def delete_app_config(
+    config_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete mobile app configuration"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await native_mobile_service.delete_app_config(config_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/config")
+async def list_app_configs(
+    limit: int = 50,
+    offset: int = 0,
+    current_user: dict = Depends(get_current_admin)
+):
+    """List mobile app configurations"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await native_mobile_service.list_app_configs(user_id, limit, offset)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/push/tokens")
+async def get_push_tokens(
+    limit: int = 50,
+    offset: int = 0,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get push tokens for user"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await native_mobile_service.get_push_tokens(user_id, limit, offset)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/push/tokens/{token_id}")
+async def delete_push_token(
+    token_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete push token"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await native_mobile_service.delete_push_token(token_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/stats")
+async def get_app_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get mobile app statistics"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await native_mobile_service.get_app_stats(user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -653,24 +764,12 @@ async def handle_deep_link(
 async def health_check():
     """Health check endpoint"""
     try:
-        return {
-            "success": True,
-            "healthy": True,
-            "service": "Native Mobile Backend",
-            "features": {
-                "push_notifications": True,
-                "offline_sync": True,
-                "deep_linking": True,
-                "app_configuration": True,
-                "biometric_auth": True,
-                "file_upload": True
-            },
-            "supported_platforms": ["ios", "android"],
-            "timestamp": datetime.utcnow().isoformat()
-        }
+        result = await native_mobile_service.health_check()
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
     except Exception as e:
-        return {
-            "success": False,
-            "healthy": False,
-            "error": str(e)
-        }
+        raise HTTPException(status_code=500, detail=str(e))
