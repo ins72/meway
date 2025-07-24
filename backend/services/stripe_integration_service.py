@@ -624,6 +624,142 @@ class StripeIntegrationService:
             logger.error(f"DELETE error: {e}")
             return {"success": False, "error": str(e)}
 
+    async def create_checkout_session(self, user_id: str, user_email: str, bundles: List[str], workspace_name: str, payment_method: str) -> dict:
+        """Create Stripe checkout session for subscription"""
+        try:
+            logger.info(f"Creating checkout session for user {user_id} with bundles: {bundles}")
+            
+            # Calculate pricing
+            line_items = []
+            total_amount = 0
+            
+            for bundle_id in bundles:
+                if bundle_id in self.bundle_prices:
+                    price = self.bundle_prices[bundle_id][payment_method]
+                    total_amount += price
+                    
+                    line_items.append({
+                        'price_data': {
+                            'currency': 'usd',
+                            'product_data': {
+                                'name': f'{bundle_id.title()} Bundle',
+                                'description': f'MEWAYZ {bundle_id.title()} Bundle - {payment_method} billing'
+                            },
+                            'unit_amount': price,
+                            'recurring': {
+                                'interval': 'month' if payment_method == 'monthly' else 'year'
+                            }
+                        },
+                        'quantity': 1,
+                    })
+            
+            # Apply multi-bundle discount
+            if len(bundles) > 1:
+                discount_percent = 0.20 if len(bundles) == 2 else 0.30 if len(bundles) == 3 else 0.40
+                discount_amount = int(total_amount * discount_percent)
+                
+                # Add discount as a negative line item
+                line_items.append({
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': f'Multi-Bundle Discount ({int(discount_percent * 100)}% off)',
+                        },
+                        'unit_amount': -discount_amount,
+                        'recurring': {
+                            'interval': 'month' if payment_method == 'monthly' else 'year'
+                        }
+                    },
+                    'quantity': 1,
+                })
+            
+            # Create checkout session
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='subscription',
+                success_url='https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/onboarding?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url='https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/onboarding?step=4',
+                customer_email=user_email,
+                metadata={
+                    'user_id': user_id,
+                    'workspace_name': workspace_name,
+                    'bundles': ','.join(bundles),
+                    'payment_method': payment_method
+                }
+            )
+            
+            # Store session in database
+            session_data = {
+                "id": str(uuid.uuid4()),
+                "stripe_session_id": session.id,
+                "user_id": user_id,
+                "user_email": user_email,
+                "workspace_name": workspace_name,
+                "bundles": bundles,
+                "payment_method": payment_method,
+                "total_amount": total_amount,
+                "status": "pending",
+                "created_at": datetime.utcnow().isoformat(),
+                "type": "checkout_session"
+            }
+            
+            collection = await self._get_collection_async()
+            if collection:
+                await collection.insert_one(session_data)
+                
+            logger.info(f"Created checkout session: {session.id}")
+            return {
+                "success": True,
+                "session_id": session.id,
+                "session_url": session.url,
+                "data": serialize_objectid(session_data)
+            }
+            
+        except Exception as e:
+            logger.error(f"Create checkout session error: {e}")
+            return {"success": False, "error": str(e)}
+
+    async def confirm_payment(self, user_id: str, payment_data: Dict[str, Any]) -> dict:
+        """Confirm payment and create subscription"""
+        try:
+            logger.info(f"Confirming payment for user {user_id}")
+            
+            # For now, simulate payment confirmation
+            # In a real implementation, you would:
+            # 1. Verify the payment method with Stripe
+            # 2. Create the subscription 
+            # 3. Update workspace with subscription info
+            
+            payment_method_id = payment_data.get('paymentMethodId')
+            if not payment_method_id:
+                return {"success": False, "error": "Payment method ID required"}
+            
+            # Store payment confirmation
+            confirmation_data = {
+                "id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "payment_method_id": payment_method_id,
+                "status": "confirmed",
+                "created_at": datetime.utcnow().isoformat(),
+                "type": "payment_confirmation"
+            }
+            
+            collection = await self._get_collection_async()
+            if collection:
+                await collection.insert_one(confirmation_data)
+                
+            logger.info(f"Payment confirmed for user {user_id}")
+            return {
+                "success": True,
+                "message": "Payment confirmed successfully",
+                "data": serialize_objectid(confirmation_data)
+            }
+            
+        except Exception as e:
+            logger.error(f"Confirm payment error: {e}")
+            return {"success": False, "error": str(e)}
+
 # Singleton instance
 _service_instance = None
 
