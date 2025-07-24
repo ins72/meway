@@ -260,14 +260,13 @@
   padding: 0.5rem;
 }
 
-/* Show mobile menu toggle only on screens 768px and smaller */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
-    display: block !important;
+    display: block;
   }
   
   .nav-links {
-    display: none !important;
+    display: none;
   }
 }
 
