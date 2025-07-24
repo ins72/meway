@@ -135,7 +135,7 @@ const Header = ({ theme, toggleTheme, toggleMobileMenu, scrollToSection }) => {
   return (
     <header className="header">
       <nav className="nav">
-        <div className="logo">Mewayz</div>
+        <div className="logo">MEWAYZ</div>
         <ul className="nav-links desktop-only">
           <li><a href="#features" onClick={() => scrollToSection('features')}>Features</a></li>
           <li><a href="#pricing" onClick={() => scrollToSection('pricing')}>Pricing</a></li>
