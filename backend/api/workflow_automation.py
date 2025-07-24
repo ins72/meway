@@ -23,6 +23,26 @@ async def health_check():
         logger.error(f"Health check error: {e}")
         return {"success": False, "healthy": False, "error": str(e)}
 
+@router.get("/stats")
+async def get_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """STATS endpoint - GUARANTEED to work with real data"""
+    try:
+        service = get_workflow_automation_service()
+        result = await service.get_stats(user_id=current_user.get("id"))
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Stats failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"STATS endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/")
 async def create_workflow_automation(
     data: Dict[str, Any] = Body({}, description="Data for creating workflow_automation"),
@@ -141,24 +161,4 @@ async def delete_workflow_automation(
         raise
     except Exception as e:
         logger.error(f"DELETE endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/stats")
-async def get_stats(
-    current_user: dict = Depends(get_current_admin)
-):
-    """STATS endpoint - GUARANTEED to work with real data"""
-    try:
-        service = get_workflow_automation_service()
-        result = await service.get_stats(user_id=current_user.get("id"))
-        
-        if result.get("success"):
-            return result
-        else:
-            raise HTTPException(status_code=400, detail=result.get("error", "Stats failed"))
-            
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"STATS endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
