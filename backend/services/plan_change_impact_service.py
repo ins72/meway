@@ -843,23 +843,29 @@ class PlanChangeImpactService:
     async def _get_current_plan(self, plan_name: str) -> Dict[str, Any]:
         """Get current plan configuration"""
         try:
+            if not plan_name:
+                return None
+                
             plan = await self.db.admin_plans.find_one({"name": plan_name, "deleted": {"$ne": True}})
             return plan
         except Exception as e:
-            logger.error(f"Error getting current plan: {e}")
+            logger.error(f"Error getting current plan {plan_name}: {e}")
             return None
 
     async def _get_plan_subscriptions(self, plan_name: str, limit: int = None) -> List[Dict[str, Any]]:
         """Get subscriptions using this plan"""
         try:
+            if not plan_name:
+                return []
+                
             query = {"bundles": {"$in": [plan_name]}, "status": "active"}
             cursor = self.db.workspace_subscriptions.find(query)
             if limit:
                 cursor = cursor.limit(limit)
             subscriptions = await cursor.to_list(length=limit or 1000)
-            return subscriptions
+            return subscriptions or []
         except Exception as e:
-            logger.error(f"Error getting plan subscriptions: {e}")
+            logger.error(f"Error getting plan subscriptions for {plan_name}: {e}")
             return []
 
     async def _calculate_pricing_impact(self, current_plan: Dict, pricing_changes: Dict, subscriptions: List) -> Dict[str, Any]:
