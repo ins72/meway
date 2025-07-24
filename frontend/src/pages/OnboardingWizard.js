@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { onboardingAPI, adminSettingsAPI } from '../services/api';
 import SimpleStripePayment from '../components/SimpleStripePayment';
+import EnvironmentDebug from '../components/EnvironmentDebug';
 import '../components/SimpleStripePayment.css';
 import './OnboardingWizard.css';
 
