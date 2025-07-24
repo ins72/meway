@@ -383,7 +383,7 @@ if __name__ == "__main__":
 
 # Catch-all handler for unmatched routes (helpful for debugging)
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
-async def catch_all(request, path: str):
+async def catch_all(request: Request, path: str):
     """Catch-all handler for debugging deployment issues"""
     return {
         "message": "Route not found",
