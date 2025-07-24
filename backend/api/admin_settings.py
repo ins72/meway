@@ -59,7 +59,7 @@ async def update_payment_methods_settings(
         if not db:
             raise HTTPException(status_code=500, detail="Database unavailable")
         
-        # Update payment methods settings
+        # Update payment methods settings (sync operation)
         from datetime import datetime
         
         admin_settings = {
@@ -71,7 +71,7 @@ async def update_payment_methods_settings(
             'updated_by': current_user.get('email', 'admin')
         }
         
-        result = await db['admin_settings'].update_one(
+        result = db['admin_settings'].update_one(
             {'setting_key': 'payment_methods'}, 
             {'$set': admin_settings}, 
             upsert=True
