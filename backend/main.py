@@ -82,6 +82,26 @@ async def lifespan(app: FastAPI):
             logger.warning(f"⚠️ Error closing database connection: {e}")
             # Don't crash on cleanup errors
 
+# Production startup verification
+logger.info("🔍 Running production startup checks...")
+try:
+    # Verify critical imports are working
+    from core.config import settings
+    from core.database import get_database
+    logger.info("✅ Core imports verified")
+    
+    # Verify app configuration
+    if hasattr(settings, 'MONGO_URL') and settings.MONGO_URL:
+        logger.info("✅ Database configuration verified")
+    else:
+        logger.warning("⚠️ Database configuration not found - using defaults")
+    
+    logger.info("✅ Production startup checks completed")
+    
+except Exception as e:
+    logger.warning(f"⚠️ Startup check warning: {e}")
+    logger.info("🔄 Continuing with application startup anyway...")
+
 # Create FastAPI app
 app = FastAPI(
     title="Mewayz Professional Platform - BULLETPROOF",
