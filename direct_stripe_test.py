@@ -33,20 +33,12 @@ def create_direct_payment():
         )
         print(f"✅ Customer created: {customer.id}")
         
-        # Create payment method with provided card details
-        print("💳 Creating payment method...")
+        # Create payment method using test token (safer than raw card data)
+        print("💳 Creating payment method with test token...")
         payment_method = stripe.PaymentMethod.create(
             type="card",
             card={
-                "number": "4242424242424242",
-                "exp_month": 2,
-                "exp_year": 2029,
-                "cvc": "336",
-            },
-            billing_details={
-                "address": {
-                    "postal_code": "12345"
-                }
+                "token": "tok_visa"  # Stripe test token for 4242424242424242
             }
         )
         print(f"✅ Payment method created: {payment_method.id}")
