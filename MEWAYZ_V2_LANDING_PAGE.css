@@ -197,27 +197,32 @@
   list-style: none;
 }
 
-/* Mobile screens only: Show hamburger, hide nav links */
-@media screen and (max-width: 767px) {
-  .mobile-menu-toggle {
-    display: block !important;
-  }
-  
-  .nav-links,
-  .nav-actions {
-    display: none !important;
-  }
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
-/* Desktop screens: Ensure hamburger is hidden */
-@media screen and (min-width: 768px) {
-  .mobile-menu-toggle {
-    display: none !important;
-  }
-  
+/* Desktop: Hide hamburger menu by default */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
   .nav-links,
   .nav-actions {
-    display: flex !important;
+    display: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
   }
 }
 
