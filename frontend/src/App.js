@@ -81,10 +81,6 @@ function App() {
               <Route path="ecommerce" element={<EcommercePage />} />
               <Route path="settings" element={<SettingsPage />} />
               
-              {/* Login and Register routes */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              
               {/* Temporary placeholder routes - will be rebuilt */}
               <Route path="*" element={<div className="p-8 text-center">
                 <h2 className="text-2xl font-bold mb-4">🚧 Under Construction</h2>
