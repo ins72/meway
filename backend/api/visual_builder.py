@@ -11,7 +11,7 @@ from datetime import datetime
 from core.auth import get_current_admin
 from core.database import get_database_async
 
-router = APIRouter(prefix="/visual-builder", tags=["visual_builder"])
+router = APIRouter(tags=["visual_builder"])
 
 class VisualBuilderService:
     """Visual Builder service for managing drag & drop components"""
