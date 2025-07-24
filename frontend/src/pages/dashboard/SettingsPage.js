@@ -446,7 +446,12 @@ const SettingsPage = () => {
               <div className="card settings-card">
                 <div className="card-content">
                   <div className="billing-placeholder">
-                    <span className="billing-icon">💳</span>
+                    <span className="billing-icon">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                      </svg>
+                    </span>
                     <h3>Billing Management</h3>
                     <p>View and manage your subscription, payment methods, and billing history</p>
                     <button className="btn btn-primary">Manage Billing</button>
