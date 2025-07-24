@@ -39,6 +39,19 @@ class PlanChangeImpactTester:
                 self.token = data.get("access_token")
                 self.headers["Authorization"] = f"Bearer {self.token}"
                 print(f"✅ Authentication successful")
+                
+                # Check if user has admin privileges
+                try:
+                    me_response = requests.get(f"{self.base_url}/api/auth/me", headers=self.headers, timeout=30)
+                    if me_response.status_code == 200:
+                        user_data = me_response.json()
+                        is_admin = user_data.get("is_admin", False)
+                        print(f"   User admin status: {is_admin}")
+                        if not is_admin:
+                            print(f"   ⚠️  Note: User is not admin - may get 403 errors on admin endpoints")
+                except Exception as e:
+                    print(f"   ⚠️  Could not check admin status: {e}")
+                
                 return True
             else:
                 print(f"❌ Authentication failed: {response.status_code}")
