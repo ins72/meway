@@ -229,7 +229,17 @@ const EnhancedStripePayment = ({
       <div className="enhanced-payment-error">
         <div className="error-icon">⚠️</div>
         <h3>Payment Not Available</h3>
-        <p>Unable to initialize payment. Please try again.</p>
+        <p>Unable to initialize payment. Please check your configuration.</p>
+      </div>
+    );
+  }
+
+  if (!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
+    return (
+      <div className="enhanced-payment-error">
+        <div className="error-icon">🔧</div>
+        <h3>Payment Configuration Missing</h3>
+        <p>Stripe is not configured. Please contact support.</p>
       </div>
     );
   }
