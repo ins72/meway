@@ -250,8 +250,9 @@
   border-color: var(--border-light);
 }
 
+/* Mobile menu toggle - Hidden by default on all screens */
 .mobile-menu-toggle {
-  display: none;
+  display: none !important;
   background: none;
   border: none;
   color: var(--text-primary);
@@ -260,14 +261,14 @@
   padding: 0.5rem;
 }
 
-/* Show only on mobile devices (768px and below) */
+/* Show mobile menu toggle only on screens 768px and smaller */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
-    display: block;
+    display: block !important;
   }
   
   .nav-links {
-    display: none;
+    display: none !important;
   }
 }
 
