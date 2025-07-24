@@ -180,6 +180,10 @@ body {
   box-shadow: var(--shadow-glow);
 }
 
+.dark .btn-primary {
+  color: white;
+}
+
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 60px rgba(102, 126, 234, 0.25);
