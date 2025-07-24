@@ -54,12 +54,7 @@ def create_direct_payment():
             currency='usd',
             customer=customer.id,
             payment_method=payment_method.id,
-            confirmation_method='manual',
             confirm=True,
-            automatic_payment_methods={
-                'enabled': True,
-                'allow_redirects': 'never'
-            },
             description="MEWAYZ Platform Test Payment - Direct Integration Test",
             metadata={
                 "workspace_name": "Test Workspace",
