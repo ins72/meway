@@ -253,9 +253,10 @@ try:
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
     app.include_router(production_monitoring_router, prefix="/api", tags=["production"])
+    app.include_router(pwa_management_router, prefix="/api/pwa", tags=["pwa"])
 
     
-    logger.info(f"✅ Successfully included 131 bulletproof routers")
+    logger.info(f"✅ Successfully included 132 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
