@@ -47,31 +47,31 @@ const LoginPage = () => {
           throw new Error('No access token received from Google');
         }
         
-        // Get user info from Google
-        const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${credentialResponse.access_token}`,
-            Accept: 'application/json'
-          }
+        // Send token to backend for verification and login
+        const response = await googleAuthAPI.verifyToken({
+          access_token: credentialResponse.access_token
         });
         
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user info: ${response.status}`);
+        if (response.data.success) {
+          const { user, access_token } = response.data;
+          
+          // Store authentication data
+          localStorage.setItem('authToken', access_token);
+          localStorage.setItem('user', JSON.stringify(user));
+          
+          // Show success message
+          alert(`✅ Login successful!\nWelcome back, ${user.name}!`);
+          
+          // Navigate to dashboard
+          navigate('/dashboard');
+        } else {
+          throw new Error(response.data.message || 'Login failed');
         }
-        
-        const userInfo = await response.json();
-        console.log('✅ Google user info:', userInfo);
-        
-        // TODO: Send Google user info to backend for authentication
-        // For now, show success message and redirect
-        alert(`✅ Google login successful!\nWelcome ${userInfo.name} (${userInfo.email})\n\n⚠️ Backend integration pending - you'll be redirected to dashboard.`);
-        
-        // Simulate successful authentication
-        navigate('/dashboard');
         
       } catch (error) {
         console.error('❌ Google login error:', error);
-        alert(`❌ Google login failed: ${error.message}\n\nPlease try again or use email/password login.`);
+        const errorMessage = error.response?.data?.detail || error.message || 'Google login failed';
+        alert(`❌ Login failed: ${errorMessage}\n\nPlease try again or use email/password login.`);
       }
     },
     onError: (error) => {
