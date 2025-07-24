@@ -6,7 +6,7 @@ BULLETPROOF API for admin settings management
 from fastapi import APIRouter, HTTPException, Depends, Body, Path
 from typing import Dict, Any, List, Optional
 from core.auth import get_current_user, get_current_admin
-from core.database import get_database
+from core.database import get_database, get_database_async
 import logging
 
 logger = logging.getLogger(__name__)
