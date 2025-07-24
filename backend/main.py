@@ -331,12 +331,48 @@ async def root():
 
 @app.get("/health")
 async def health():
-    """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "services": 132,
-        "timestamp": "{datetime.utcnow().isoformat()}"
-    }
+    """Enhanced health check endpoint that works even without database"""
+    try:
+        # Try to get database status
+        database_status = "unknown"
+        collections_count = 0
+        
+        try:
+            if db.database is not None:
+                # Test database connection
+                await asyncio.wait_for(
+                    db.client.admin.command('ping'), 
+                    timeout=5.0
+                )
+                database_status = "connected"
+                collections = await db.database.list_collection_names()
+                collections_count = len(collections)
+            else:
+                database_status = "not_initialized"
+        except asyncio.TimeoutError:
+            database_status = "timeout"
+        except Exception as e:
+            database_status = f"error: {str(e)[:50]}"
+        
+        return {
+            "status": "healthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "services": {
+                "api": "operational",
+                "database": database_status,
+                "collections": collections_count
+            },
+            "version": "2.0.0"
+        }
+        
+    except Exception as e:
+        # Even if there's an error, return a basic health status
+        return {
+            "status": "healthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "error": str(e),
+            "message": "API is operational despite errors"
+        }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8001)
