@@ -250,9 +250,8 @@
   border-color: var(--border-light);
 }
 
-/* Mobile menu toggle - Hidden by default on all screens */
 .mobile-menu-toggle {
-  display: none !important;
+  display: none;
   background: none;
   border: none;
   color: var(--text-primary);
