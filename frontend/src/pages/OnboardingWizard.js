@@ -24,77 +24,175 @@ const OnboardingWizard = () => {
     { id: 4, title: 'Complete Setup', description: 'Finalize your workspace' }
   ];
 
-  const pricingPlans = [
+  const pricingBundles = [
     {
-      id: 'starter',
-      name: 'Starter',
-      description: 'Perfect for individuals and small projects',
+      id: 'free',
+      name: 'Free Starter',
+      description: 'Perfect for testing the platform, personal use',
+      monthlyPrice: 0,
+      yearlyPrice: 0,
+      features: [
+        '1 Bio Link Page (with 5 external links)',
+        'Basic Form Builder (1 form, 50 submissions/month)',
+        'Simple Analytics (7 days data retention)',
+        'Template Marketplace: Buy templates only',
+        'Community support only'
+      ],
+      limits: {
+        bioLinks: 1,
+        forms: 1,
+        submissions: 50,
+        analytics: '7 days',
+        branding: 'Mewayz Required'
+      },
+      badge: null,
+      launchSpecial: null
+    },
+    {
+      id: 'creator',
+      name: 'Creator Bundle',
+      description: 'Advanced Bio Link Builder, Website Builder, AI Content Creation',
+      monthlyPrice: 19,
+      yearlyPrice: 190,
+      features: [
+        'Advanced Bio Link Builder (unlimited links, custom domain)',
+        'Professional Website Builder (10 pages, custom domain)',
+        'SEO Optimization Suite (basic SEO tools)',
+        'AI Content Creation (500 credits/month)',
+        'Template Marketplace: Buy & sell templates',
+        'Remove Mewayz Branding',
+        'Email Support'
+      ],
+      limits: {
+        bioLinks: 'Unlimited',
+        websitePages: 10,
+        aiCredits: 500,
+        customDomain: true,
+        templateSelling: true
+      },
+      badge: null,
+      launchSpecial: 'First 1000 users get 3 months for $9/month'
+    },
+    {
+      id: 'ecommerce',
+      name: 'E-commerce Bundle',
+      description: 'Complete E-commerce Store, Multi-vendor Marketplace',
+      monthlyPrice: 24,
+      yearlyPrice: 240,
+      features: [
+        'Complete E-commerce Store (unlimited products)',
+        'Multi-vendor Marketplace (up to 10 vendors)',
+        'Advanced Promotions (coupons, discounts, referrals)',
+        'Payment Processing (Stripe/PayPal integration)',
+        'Inventory Management',
+        'Basic Analytics',
+        'Priority Email Support'
+      ],
+      limits: {
+        products: 'Unlimited',
+        vendors: 10,
+        promotions: true,
+        paymentProcessing: true,
+        analytics: 'Basic'
+      },
+      badge: null,
+      launchSpecial: 'First 500 users get 2 months free'
+    },
+    {
+      id: 'social_media',
+      name: 'Social Media Bundle',
+      description: 'Instagram Lead Database, Social Media Management',
       monthlyPrice: 29,
       yearlyPrice: 290,
       features: [
-        'Up to 3 social media accounts',
-        '1,000 AI-generated posts per month',
-        'Basic analytics dashboard',
-        'Email support',
-        '5GB storage',
-        'Basic templates'
+        'Instagram Lead Database (1000 searches/month)',
+        'Social Media Scheduling (all major platforms)',
+        'Twitter/TikTok Tools (advanced features)',
+        'Social Analytics (detailed insights)',
+        'Hashtag Research (trending hashtags)',
+        'Priority Support'
       ],
       limits: {
-        socialAccounts: 3,
-        aiPosts: 1000,
-        storage: '5GB',
-        users: 1
+        instagramSearches: 1000,
+        platforms: 'All Major',
+        socialAnalytics: 'Detailed',
+        hashtagResearch: true
       },
-      badge: null
+      badge: null,
+      launchSpecial: 'First 2 weeks free trial'
     },
     {
-      id: 'professional',
-      name: 'Professional',
-      description: 'Ideal for growing businesses and teams',
-      monthlyPrice: 79,
-      yearlyPrice: 790,
+      id: 'education',
+      name: 'Education Bundle',
+      description: 'Complete Course Platform, Student Management',
+      monthlyPrice: 29,
+      yearlyPrice: 290,
       features: [
-        'Up to 10 social media accounts',
-        '5,000 AI-generated posts per month',
-        'Advanced analytics & reporting',
-        'Priority support',
-        '50GB storage',
-        'Premium templates',
-        'Team collaboration (up to 5 users)',
-        'Custom branding'
+        'Complete Course Platform (unlimited students)',
+        'Template Marketplace (create & sell course templates)',
+        'Student Management (progress tracking, certificates)',
+        'Live Streaming (basic streaming capabilities)',
+        'Community Features (student discussions)',
+        'Priority Support'
       ],
       limits: {
-        socialAccounts: 10,
-        aiPosts: 5000,
-        storage: '50GB',
-        users: 5
+        students: 'Unlimited',
+        courses: 'Unlimited',
+        liveStreaming: 'Basic',
+        community: true,
+        certificates: true
       },
-      badge: 'Most Popular'
+      badge: null,
+      launchSpecial: 'First month free'
     },
     {
-      id: 'enterprise',
-      name: 'Enterprise',
-      description: 'For large organizations with advanced needs',
-      monthlyPrice: 199,
-      yearlyPrice: 1990,
+      id: 'business',
+      name: 'Business Bundle',
+      description: 'Advanced CRM System, Email Marketing, Lead Management',
+      monthlyPrice: 39,
+      yearlyPrice: 390,
       features: [
-        'Unlimited social media accounts',
-        'Unlimited AI-generated posts',
-        'Enterprise analytics & insights',
-        'Dedicated account manager',
-        '500GB storage',
-        'White-label solution',
-        'Unlimited team members',
-        'Advanced integrations',
-        'Custom workflows'
+        'Advanced CRM System (unlimited contacts)',
+        'Email Marketing (10,000 emails/month)',
+        'Lead Management (advanced scoring & tracking)',
+        'Workflow Automation (10 workflows)',
+        'Campaign Management (multi-channel campaigns)',
+        'Business Analytics (detailed reporting)',
+        'Phone + Email Support'
       ],
       limits: {
-        socialAccounts: 'Unlimited',
-        aiPosts: 'Unlimited',
-        storage: '500GB',
-        users: 'Unlimited'
+        contacts: 'Unlimited',
+        emails: 10000,
+        workflows: 10,
+        campaigns: 'Multi-channel',
+        analytics: 'Business'
       },
-      badge: 'Best Value'
+      badge: 'Most Popular',
+      launchSpecial: '50% off first 3 months'
+    },
+    {
+      id: 'operations',
+      name: 'Operations Bundle',
+      description: 'Booking & Appointments, Financial Management',
+      monthlyPrice: 24,
+      yearlyPrice: 240,
+      features: [
+        'Booking & Appointments (unlimited bookings)',
+        'Financial Management (invoicing, expenses)',
+        'Advanced Form Builder (unlimited forms)',
+        'Survey & Feedback Tools (advanced surveys)',
+        'Basic Reporting',
+        'Email Support'
+      ],
+      limits: {
+        bookings: 'Unlimited',
+        invoicing: true,
+        forms: 'Unlimited',
+        surveys: 'Advanced',
+        reporting: 'Basic'
+      },
+      badge: null,
+      launchSpecial: 'First month free'
     }
   ];
 
