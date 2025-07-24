@@ -655,7 +655,7 @@ const OnboardingWizard = () => {
               </div>
 
               <div className="pricing-plans">
-                {pricingBundles.map((bundle) => (
+                {getFilteredBundles().map((bundle) => (
                   <div 
                     key={bundle.id}
                     onClick={() => handleBundleSelect(bundle.id)}
