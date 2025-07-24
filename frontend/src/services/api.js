@@ -55,7 +55,6 @@ export const onboardingAPI = {
   completeOnboarding: (data) => api.post('/complete_onboarding', data),
   createWorkspace: (data) => api.post('/workspace', data),
 };
-};
 
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
