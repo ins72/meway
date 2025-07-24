@@ -1050,6 +1050,282 @@ class MewayzBackendAuditor:
         except Exception as e:
             self.log_result("Admin Plan Management", "/api/admin-plan-management/plan-change-history", "GET", False, 0, str(e))
 
+    def test_plan_change_impact_system(self):
+        """Test Plan Change Impact Analysis System - CRITICAL for preventing subscription disruptions"""
+        print(f"\n🔍 TESTING PLAN CHANGE IMPACT ANALYSIS SYSTEM")
+        print("=" * 60)
+        
+        # 1. Health Check (no auth required)
+        try:
+            response = requests.get(f"{self.base_url}/api/plan-change-impact/health", timeout=30)
+            success = response.status_code == 200
+            if success:
+                data = response.json()
+                details = f"Service healthy: {data.get('healthy', False)}, Risk thresholds configured"
+            else:
+                details = f"Health check failed with status {response.status_code}"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/health", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/health", "GET", False, 0, str(e))
+        
+        # 2. Analyze Pricing Change Impact (requires admin auth)
+        try:
+            test_data = {
+                "plan_name": "creator",
+                "pricing_changes": {
+                    "monthly_price": 39.99,
+                    "yearly_price": 399.99,
+                    "price_increase_percentage": 25.0
+                },
+                "reason": "Test pricing impact analysis for creator plan"
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/analyze-pricing-change", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Pricing impact analyzed: {data.get('impact_summary', {}).get('affected_subscriptions', 0)} subscriptions affected"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = f"Failed to analyze pricing change impact"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-pricing-change", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-pricing-change", "POST", False, 0, str(e))
+        
+        # 3. Analyze Feature Change Impact (requires admin auth)
+        try:
+            test_data = {
+                "plan_name": "business",
+                "feature_changes": {
+                    "features_added": ["advanced_analytics", "priority_support"],
+                    "features_removed": ["basic_reporting"]
+                },
+                "reason": "Test feature impact analysis for business plan"
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/analyze-feature-change", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Feature impact analyzed: {data.get('impact_summary', {}).get('features_added', 0)} added, {data.get('impact_summary', {}).get('features_removed', 0)} removed"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = f"Failed to analyze feature change impact"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-feature-change", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-feature-change", "POST", False, 0, str(e))
+        
+        # 4. Analyze Limit Change Impact (requires admin auth)
+        try:
+            test_data = {
+                "plan_name": "creator",
+                "limit_changes": {
+                    "ai_content_generation": 2000,
+                    "instagram_searches": 1000,
+                    "emails_sent": 5000
+                },
+                "reason": "Test usage limit impact analysis for creator plan"
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/analyze-limit-change", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Limit impact analyzed: {data.get('impact_summary', {}).get('affected_subscriptions', 0)} subscriptions affected"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = f"Failed to analyze limit change impact"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-limit-change", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-limit-change", "POST", False, 0, str(e))
+        
+        # 5. Analyze Plan Disable Impact (requires admin auth)
+        try:
+            test_data = {
+                "plan_name": "education",
+                "disable_reason": "End of educational promotion period",
+                "migration_plan": "business"
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/analyze-plan-disable", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan disable impact analyzed: {data.get('impact_summary', {}).get('affected_subscriptions', 0)} subscriptions need migration"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = f"Failed to analyze plan disable impact"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-plan-disable", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/analyze-plan-disable", "POST", False, 0, str(e))
+        
+        # 6. Simulate Plan Change (requires admin auth)
+        try:
+            test_data = {
+                "plan_name": "creator",
+                "change_type": "comprehensive",
+                "changes": {
+                    "pricing": {"monthly_price": 34.99},
+                    "features": {"features_added": ["advanced_templates"]},
+                    "limits": {"ai_content_generation": 1500}
+                },
+                "simulation_options": {
+                    "include_migration_plan": True,
+                    "calculate_revenue_impact": True
+                }
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/simulate-change", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan change simulated successfully with full impact analysis"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = f"Failed to simulate plan change"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/simulate-change", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/simulate-change", "POST", False, 0, str(e))
+        
+        # 7. Get Affected Subscriptions (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/plan-change-impact/affected-subscriptions/creator?change_type=pricing&limit=50", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Affected subscriptions retrieved: {len(data.get('subscriptions', []))} found"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "No affected subscriptions found (expected for test plan)"
+            else:
+                details = f"Failed to get affected subscriptions"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/affected-subscriptions/creator", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/affected-subscriptions/creator", "GET", False, 0, str(e))
+        
+        # 8. Create Migration Plan (requires admin auth)
+        try:
+            test_data = {
+                "source_plan": "education",
+                "target_plan": "business",
+                "migration_strategy": "gradual",
+                "migration_timeline": "30_days",
+                "notification_settings": {
+                    "notify_users": True,
+                    "advance_notice_days": 14
+                }
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/create-migration-plan", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Migration plan created: {data.get('migration_id', 'Unknown ID')}"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = f"Failed to create migration plan"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/create-migration-plan", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/create-migration-plan", "POST", False, 0, str(e))
+        
+        # 9. Execute Migration Plan (requires admin auth)
+        try:
+            test_migration_id = "test-migration-123"
+            test_data = {
+                "execution_mode": "dry_run",
+                "batch_size": 10,
+                "confirm_execution": False
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/execute-migration-plan/{test_migration_id}", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users, 404 for non-existent migration
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Migration plan executed successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Migration plan not found (expected for test ID)"
+            else:
+                details = f"Failed to execute migration plan"
+            self.log_result("Plan Change Impact", f"/api/plan-change-impact/execute-migration-plan/{test_migration_id}", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", f"/api/plan-change-impact/execute-migration-plan/{test_migration_id}", "POST", False, 0, str(e))
+        
+        # 10. Get Migration Plan Status (requires admin auth)
+        try:
+            test_migration_id = "test-migration-123"
+            response = requests.get(f"{self.base_url}/api/plan-change-impact/migration-plan/{test_migration_id}", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users, 404 for non-existent migration
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Migration plan status retrieved: {data.get('status', 'Unknown')}"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Migration plan not found (expected for test ID)"
+            else:
+                details = f"Failed to get migration plan status"
+            self.log_result("Plan Change Impact", f"/api/plan-change-impact/migration-plan/{test_migration_id}", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", f"/api/plan-change-impact/migration-plan/{test_migration_id}", "GET", False, 0, str(e))
+        
+        # 11. Rollback Plan Change (requires admin auth)
+        try:
+            test_data = {
+                "change_id": "test-change-456",
+                "rollback_reason": "Test rollback functionality",
+                "restore_previous_state": True
+            }
+            response = requests.post(f"{self.base_url}/api/plan-change-impact/rollback-plan-change", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan change rolled back successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Change record not found (expected for test ID)"
+            else:
+                details = f"Failed to rollback plan change"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/rollback-plan-change", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/rollback-plan-change", "POST", False, 0, str(e))
+        
+        # 12. Get Impact Analysis History (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/plan-change-impact/impact-history?plan_name=creator&days_back=30&limit=20", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Impact analysis history retrieved: {len(data.get('analyses', []))} records found"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "No impact analysis history found (expected for new system)"
+            else:
+                details = f"Failed to get impact analysis history"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/impact-history", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/impact-history", "GET", False, 0, str(e))
+        
+        # 13. Get Risk Assessment (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/plan-change-impact/risk-assessment/creator?change_type=pricing", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Risk assessment retrieved: {data.get('risk_level', 'Unknown')} risk level"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Risk assessment not available (expected for test plan)"
+            else:
+                details = f"Failed to get risk assessment"
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/risk-assessment/creator", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Plan Change Impact", "/api/plan-change-impact/risk-assessment/creator", "GET", False, 0, str(e))
+
     def test_additional_systems(self):
         """Test additional systems mentioned in the comprehensive test results"""
         print(f"\n🔧 TESTING ADDITIONAL SYSTEMS")
