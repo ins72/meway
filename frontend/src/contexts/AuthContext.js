@@ -51,10 +51,21 @@ export const AuthProvider = ({ children }) => {
   const fetchUser = async () => {
     console.log('AuthContext: fetchUser called');
     try {
-      console.log('AuthContext: Making API call to getProfile');
+      // Check if token exists in localStorage again (in case it was set after initial load)
+      const currentToken = localStorage.getItem('auth_token');
+      if (!currentToken || currentToken === 'null' || currentToken === 'undefined') {
+        console.log('AuthContext: No valid token in localStorage during fetchUser');
+        setToken(null);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      console.log('AuthContext: Making API call to getProfile with token:', currentToken.substring(0, 20) + '...');
       const response = await authAPI.getProfile();
       console.log('AuthContext: API call successful', response.data);
       setUser(response.data.user);
+      setToken(currentToken); // Ensure token state is in sync
     } catch (error) {
       console.error('AuthContext: Failed to fetch user:', error);
       // Clear invalid token and reset state
