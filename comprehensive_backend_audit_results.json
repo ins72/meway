@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-07-24T05:05:27.395232",
+  "timestamp": "2025-07-24T17:02:44.669655",
   "summary": {
     "total_tests": 126,
     "passed_tests": 63,
@@ -189,7 +189,7 @@
       "success": true,
       "status_code": 200,
       "details": "Root endpoint working",
-      "timestamp": "2025-07-24T05:05:24.198935"
+      "timestamp": "2025-07-24T17:02:41.537151"
     },
     {
       "system": "Health",
@@ -198,7 +198,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health endpoint working",
-      "timestamp": "2025-07-24T05:05:24.236280"
+      "timestamp": "2025-07-24T17:02:41.578893"
     },
     {
       "system": "Authentication",
@@ -207,7 +207,7 @@
       "success": true,
       "status_code": 200,
       "details": "Login successful",
-      "timestamp": "2025-07-24T05:05:24.517653"
+      "timestamp": "2025-07-24T17:02:41.884763"
     },
     {
       "system": "Booking System",
@@ -216,7 +216,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:24.543987"
+      "timestamp": "2025-07-24T17:02:41.906494"
     },
     {
       "system": "Booking System",
@@ -225,7 +225,7 @@
       "success": true,
       "status_code": 200,
       "details": "List bookings",
-      "timestamp": "2025-07-24T05:05:24.570404"
+      "timestamp": "2025-07-24T17:02:41.928602"
     },
     {
       "system": "Booking System",
@@ -234,7 +234,7 @@
       "success": true,
       "status_code": 200,
       "details": "Create booking",
-      "timestamp": "2025-07-24T05:05:24.598458"
+      "timestamp": "2025-07-24T17:02:41.957146"
     },
     {
       "system": "Booking System",
@@ -243,7 +243,7 @@
       "success": false,
       "status_code": 404,
       "details": "Get booking stats",
-      "timestamp": "2025-07-24T05:05:24.624184"
+      "timestamp": "2025-07-24T17:02:41.977773"
     },
     {
       "system": "Escrow System",
@@ -252,7 +252,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:24.646421"
+      "timestamp": "2025-07-24T17:02:42.009470"
     },
     {
       "system": "Escrow System",
@@ -261,7 +261,7 @@
       "success": true,
       "status_code": 200,
       "details": "List escrow transactions",
-      "timestamp": "2025-07-24T05:05:24.673301"
+      "timestamp": "2025-07-24T17:02:42.047523"
     },
     {
       "system": "Escrow System",
@@ -270,7 +270,7 @@
       "success": true,
       "status_code": 200,
       "details": "Create escrow transaction",
-      "timestamp": "2025-07-24T05:05:24.693713"
+      "timestamp": "2025-07-24T17:02:42.076616"
     },
     {
       "system": "Escrow System",
@@ -279,25 +279,25 @@
       "success": false,
       "status_code": 404,
       "details": "Get escrow stats",
-      "timestamp": "2025-07-24T05:05:24.714332"
+      "timestamp": "2025-07-24T17:02:42.095509"
     },
     {
       "system": "Escrow System",
       "endpoint": "/api/escrow/transactions/milestone",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Create milestone transaction",
-      "timestamp": "2025-07-24T05:05:24.739332"
+      "timestamp": "2025-07-24T17:02:42.113354"
     },
     {
       "system": "Escrow System",
       "endpoint": "/api/escrow/transactions/list",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "List escrow transactions",
-      "timestamp": "2025-07-24T05:05:24.759931"
+      "timestamp": "2025-07-24T17:02:42.135240"
     },
     {
       "system": "Website Builder",
@@ -306,7 +306,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:24.783855"
+      "timestamp": "2025-07-24T17:02:42.161103"
     },
     {
       "system": "Website Builder",
@@ -315,7 +315,7 @@
       "success": true,
       "status_code": 200,
       "details": "List websites",
-      "timestamp": "2025-07-24T05:05:24.811925"
+      "timestamp": "2025-07-24T17:02:42.182074"
     },
     {
       "system": "Website Builder",
@@ -324,7 +324,7 @@
       "success": true,
       "status_code": 200,
       "details": "List templates",
-      "timestamp": "2025-07-24T05:05:24.836664"
+      "timestamp": "2025-07-24T17:02:42.204399"
     },
     {
       "system": "Website Builder",
@@ -333,7 +333,7 @@
       "success": false,
       "status_code": 500,
       "details": "Create website",
-      "timestamp": "2025-07-24T05:05:24.861707"
+      "timestamp": "2025-07-24T17:02:42.237224"
     },
     {
       "system": "Website Builder",
@@ -342,7 +342,7 @@
       "success": true,
       "status_code": 200,
       "details": "Get website stats",
-      "timestamp": "2025-07-24T05:05:24.886486"
+      "timestamp": "2025-07-24T17:02:42.268255"
     },
     {
       "system": "Template Marketplace",
@@ -351,7 +351,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:24.907967"
+      "timestamp": "2025-07-24T17:02:42.305193"
     },
     {
       "system": "Template Marketplace",
@@ -360,7 +360,7 @@
       "success": true,
       "status_code": 200,
       "details": "List templates",
-      "timestamp": "2025-07-24T05:05:24.930047"
+      "timestamp": "2025-07-24T17:02:42.329313"
     },
     {
       "system": "Template Marketplace",
@@ -369,7 +369,7 @@
       "success": true,
       "status_code": 200,
       "details": "Create template",
-      "timestamp": "2025-07-24T05:05:24.951842"
+      "timestamp": "2025-07-24T17:02:42.350808"
     },
     {
       "system": "Template Marketplace",
@@ -378,7 +378,7 @@
       "success": false,
       "status_code": 404,
       "details": "Get marketplace stats",
-      "timestamp": "2025-07-24T05:05:24.974718"
+      "timestamp": "2025-07-24T17:02:42.378287"
     },
     {
       "system": "Template Marketplace",
@@ -387,7 +387,7 @@
       "success": false,
       "status_code": 404,
       "details": "Browse templates",
-      "timestamp": "2025-07-24T05:05:25.005163"
+      "timestamp": "2025-07-24T17:02:42.399757"
     },
     {
       "system": "Template Marketplace",
@@ -396,7 +396,7 @@
       "success": false,
       "status_code": 404,
       "details": "Get creator earnings",
-      "timestamp": "2025-07-24T05:05:25.030170"
+      "timestamp": "2025-07-24T17:02:42.418054"
     },
     {
       "system": "Link in Bio System",
@@ -405,7 +405,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:25.050637"
+      "timestamp": "2025-07-24T17:02:42.443663"
     },
     {
       "system": "Link in Bio System",
@@ -414,7 +414,7 @@
       "success": true,
       "status_code": 200,
       "details": "List link in bio pages",
-      "timestamp": "2025-07-24T05:05:25.072739"
+      "timestamp": "2025-07-24T17:02:42.466891"
     },
     {
       "system": "Link in Bio System",
@@ -423,7 +423,7 @@
       "success": true,
       "status_code": 200,
       "details": "Create link in bio page",
-      "timestamp": "2025-07-24T05:05:25.094808"
+      "timestamp": "2025-07-24T17:02:42.488030"
     },
     {
       "system": "Link in Bio System",
@@ -432,7 +432,7 @@
       "success": false,
       "status_code": 404,
       "details": "Get link in bio stats",
-      "timestamp": "2025-07-24T05:05:25.115952"
+      "timestamp": "2025-07-24T17:02:42.509499"
     },
     {
       "system": "Course & Community",
@@ -441,7 +441,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:25.135529"
+      "timestamp": "2025-07-24T17:02:42.534232"
     },
     {
       "system": "Course & Community",
@@ -450,7 +450,7 @@
       "success": true,
       "status_code": 200,
       "details": "List courses and communities",
-      "timestamp": "2025-07-24T05:05:25.161394"
+      "timestamp": "2025-07-24T17:02:42.552015"
     },
     {
       "system": "Course & Community",
@@ -459,7 +459,7 @@
       "success": true,
       "status_code": 200,
       "details": "Create course/community",
-      "timestamp": "2025-07-24T05:05:25.181091"
+      "timestamp": "2025-07-24T17:02:42.572701"
     },
     {
       "system": "Course & Community",
@@ -468,7 +468,7 @@
       "success": false,
       "status_code": 404,
       "details": "Get course stats",
-      "timestamp": "2025-07-24T05:05:25.201927"
+      "timestamp": "2025-07-24T17:02:42.593719"
     },
     {
       "system": "Multi-Vendor Marketplace",
@@ -477,7 +477,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check",
-      "timestamp": "2025-07-24T05:05:25.222734"
+      "timestamp": "2025-07-24T17:02:42.615343"
     },
     {
       "system": "Multi-Vendor Marketplace",
@@ -486,7 +486,7 @@
       "success": true,
       "status_code": 200,
       "details": "List marketplace items",
-      "timestamp": "2025-07-24T05:05:25.245036"
+      "timestamp": "2025-07-24T17:02:42.636138"
     },
     {
       "system": "Multi-Vendor Marketplace",
@@ -495,7 +495,7 @@
       "success": true,
       "status_code": 200,
       "details": "Create marketplace item",
-      "timestamp": "2025-07-24T05:05:25.265323"
+      "timestamp": "2025-07-24T17:02:42.661658"
     },
     {
       "system": "Multi-Vendor Marketplace",
@@ -504,7 +504,7 @@
       "success": false,
       "status_code": 404,
       "details": "Get marketplace stats",
-      "timestamp": "2025-07-24T05:05:25.282851"
+      "timestamp": "2025-07-24T17:02:42.686514"
     },
     {
       "system": "Launch Pricing",
@@ -513,7 +513,7 @@
       "success": true,
       "status_code": 200,
       "details": "Health check & service initialization",
-      "timestamp": "2025-07-24T05:05:25.303255"
+      "timestamp": "2025-07-24T17:02:42.706083"
     },
     {
       "system": "Launch Pricing",
@@ -522,7 +522,7 @@
       "success": true,
       "status_code": 200,
       "details": "Found 2/6 expected bundle specials",
-      "timestamp": "2025-07-24T05:05:25.321573"
+      "timestamp": "2025-07-24T17:02:42.730719"
     },
     {
       "system": "Launch Pricing",
@@ -531,7 +531,7 @@
       "success": false,
       "status_code": 404,
       "details": "Failed to get creator special",
-      "timestamp": "2025-07-24T05:05:25.341682"
+      "timestamp": "2025-07-24T17:02:42.751768"
     },
     {
       "system": "Launch Pricing",
@@ -540,7 +540,7 @@
       "success": false,
       "status_code": 404,
       "details": "Failed to get ecommerce special",
-      "timestamp": "2025-07-24T05:05:25.362240"
+      "timestamp": "2025-07-24T17:02:42.769726"
     },
     {
       "system": "Launch Pricing",
@@ -549,7 +549,7 @@
       "success": false,
       "status_code": 404,
       "details": "Failed to get social_media special",
-      "timestamp": "2025-07-24T05:05:25.385325"
+      "timestamp": "2025-07-24T17:02:42.788098"
     },
     {
       "system": "Launch Pricing",
@@ -558,7 +558,7 @@
       "success": true,
       "status_code": 200,
       "details": "education special - $29.0 savings",
-      "timestamp": "2025-07-24T05:05:25.408805"
+      "timestamp": "2025-07-24T17:02:42.808550"
     },
     {
       "system": "Launch Pricing",
@@ -567,7 +567,7 @@
       "success": false,
       "status_code": 404,
       "details": "Failed to get business special",
-      "timestamp": "2025-07-24T05:05:25.430057"
+      "timestamp": "2025-07-24T17:02:42.829946"
     },
     {
       "system": "Launch Pricing",
@@ -576,7 +576,7 @@
       "success": true,
       "status_code": 200,
       "details": "operations special - $24.0 savings",
-      "timestamp": "2025-07-24T05:05:25.451970"
+      "timestamp": "2025-07-24T17:02:42.852514"
     },
     {
       "system": "Launch Pricing",
@@ -585,7 +585,7 @@
       "success": true,
       "status_code": 200,
       "details": "Eligibility check - Eligible: False",
-      "timestamp": "2025-07-24T05:05:25.477234"
+      "timestamp": "2025-07-24T17:02:42.879930"
     },
     {
       "system": "Launch Pricing",
@@ -594,7 +594,7 @@
       "success": true,
       "status_code": 400,
       "details": "Claim attempt - Success: False",
-      "timestamp": "2025-07-24T05:05:25.497758"
+      "timestamp": "2025-07-24T17:02:42.896805"
     },
     {
       "system": "Launch Pricing",
@@ -603,7 +603,7 @@
       "success": true,
       "status_code": 200,
       "details": "Claimed specials tracking - 0 claims found",
-      "timestamp": "2025-07-24T05:05:25.519872"
+      "timestamp": "2025-07-24T17:02:42.921359"
     },
     {
       "system": "Launch Pricing",
@@ -612,7 +612,7 @@
       "success": true,
       "status_code": 200,
       "details": "Analytics accessible",
-      "timestamp": "2025-07-24T05:05:25.543092"
+      "timestamp": "2025-07-24T17:02:42.939720"
     },
     {
       "system": "Launch Pricing",
@@ -621,7 +621,7 @@
       "success": false,
       "status_code": 400,
       "details": "Promo code generated",
-      "timestamp": "2025-07-24T05:05:25.564937"
+      "timestamp": "2025-07-24T17:02:42.965724"
     },
     {
       "system": "Launch Pricing",
@@ -630,7 +630,7 @@
       "success": true,
       "status_code": 200,
       "details": "Special extended",
-      "timestamp": "2025-07-24T05:05:25.584320"
+      "timestamp": "2025-07-24T17:02:42.990097"
     },
     {
       "system": "Launch Pricing",
@@ -639,7 +639,7 @@
       "success": true,
       "status_code": 404,
       "details": "Referral tracking - System responding correctly",
-      "timestamp": "2025-07-24T05:05:25.609531"
+      "timestamp": "2025-07-24T17:02:43.011727"
     },
     {
       "system": "Admin Pricing",
@@ -648,7 +648,7 @@
       "success": true,
       "status_code": 200,
       "details": "Service healthy: True, Templates: 3",
-      "timestamp": "2025-07-24T05:05:25.632683"
+      "timestamp": "2025-07-24T17:02:43.034091"
     },
     {
       "system": "Admin Pricing",
@@ -657,7 +657,7 @@
       "success": true,
       "status_code": 200,
       "details": "Retrieved pricing for 6 bundles with 6 overrides",
-      "timestamp": "2025-07-24T05:05:25.655311"
+      "timestamp": "2025-07-24T17:02:43.063991"
     },
     {
       "system": "Admin Pricing",
@@ -666,7 +666,7 @@
       "success": true,
       "status_code": 200,
       "details": "Bundle pricing updated successfully with impact on 1 subscriptions",
-      "timestamp": "2025-07-24T05:05:25.681047"
+      "timestamp": "2025-07-24T17:02:43.097329"
     },
     {
       "system": "Admin Pricing",
@@ -675,7 +675,7 @@
       "success": true,
       "status_code": 200,
       "details": "Bundle features updated, notification required: True",
-      "timestamp": "2025-07-24T05:05:25.703552"
+      "timestamp": "2025-07-24T17:02:43.121727"
     },
     {
       "system": "Admin Pricing",
@@ -684,7 +684,7 @@
       "success": true,
       "status_code": 200,
       "details": "Bundle disabled with 1 existing subscriptions",
-      "timestamp": "2025-07-24T05:05:25.728890"
+      "timestamp": "2025-07-24T17:02:43.145528"
     },
     {
       "system": "Admin Pricing",
@@ -693,7 +693,7 @@
       "success": true,
       "status_code": 200,
       "details": "Bulk update: 2/2 successful (100.0%)",
-      "timestamp": "2025-07-24T05:05:25.765659"
+      "timestamp": "2025-07-24T17:02:43.188750"
     },
     {
       "system": "Admin Pricing",
@@ -701,8 +701,8 @@
       "method": "GET",
       "success": true,
       "status_code": 200,
-      "details": "Analytics: 1 active subscriptions, 27 recent changes",
-      "timestamp": "2025-07-24T05:05:25.792113"
+      "details": "Analytics: 1 active subscriptions, 38 recent changes",
+      "timestamp": "2025-07-24T17:02:43.218577"
     },
     {
       "system": "Admin Pricing",
@@ -711,7 +711,7 @@
       "success": true,
       "status_code": 200,
       "details": "Pricing test: creator bundle, risk level: medium",
-      "timestamp": "2025-07-24T05:05:25.818943"
+      "timestamp": "2025-07-24T17:02:43.242610"
     },
     {
       "system": "Admin Pricing",
@@ -720,7 +720,7 @@
       "success": true,
       "status_code": 200,
       "details": "Pricing history: 10 changes for creator bundle",
-      "timestamp": "2025-07-24T05:05:25.841886"
+      "timestamp": "2025-07-24T17:02:43.263588"
     },
     {
       "system": "Admin Pricing",
@@ -729,7 +729,7 @@
       "success": true,
       "status_code": 200,
       "details": "Template applied: 6 bundles updated",
-      "timestamp": "2025-07-24T05:05:25.882712"
+      "timestamp": "2025-07-24T17:02:43.311715"
     },
     {
       "system": "Admin Plan Management",
@@ -738,7 +738,7 @@
       "success": true,
       "status_code": 200,
       "details": "Service healthy: True, Features available: 17",
-      "timestamp": "2025-07-24T05:05:25.903790"
+      "timestamp": "2025-07-24T17:02:43.333058"
     },
     {
       "system": "Admin Plan Management",
@@ -747,7 +747,7 @@
       "success": true,
       "status_code": 200,
       "details": "Retrieved 1 plans with analytics",
-      "timestamp": "2025-07-24T05:05:25.935394"
+      "timestamp": "2025-07-24T17:02:43.355411"
     },
     {
       "system": "Admin Plan Management",
@@ -756,7 +756,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan details retrieved: Creator Plan plan",
-      "timestamp": "2025-07-24T05:05:25.961501"
+      "timestamp": "2025-07-24T17:02:43.380703"
     },
     {
       "system": "Admin Plan Management",
@@ -765,7 +765,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan pricing updated successfully with impact analysis",
-      "timestamp": "2025-07-24T05:05:25.984986"
+      "timestamp": "2025-07-24T17:02:43.406626"
     },
     {
       "system": "Admin Plan Management",
@@ -774,7 +774,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan features updated successfully",
-      "timestamp": "2025-07-24T05:05:26.011486"
+      "timestamp": "2025-07-24T17:02:43.429476"
     },
     {
       "system": "Admin Plan Management",
@@ -783,7 +783,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan limits updated successfully",
-      "timestamp": "2025-07-24T05:05:26.040519"
+      "timestamp": "2025-07-24T17:02:43.451933"
     },
     {
       "system": "Admin Plan Management",
@@ -792,7 +792,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan status updated successfully",
-      "timestamp": "2025-07-24T05:05:26.067981"
+      "timestamp": "2025-07-24T17:02:43.476056"
     },
     {
       "system": "Admin Plan Management",
@@ -801,7 +801,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to update launch pricing",
-      "timestamp": "2025-07-24T05:05:26.090789"
+      "timestamp": "2025-07-24T17:02:43.499318"
     },
     {
       "system": "Admin Plan Management",
@@ -810,7 +810,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to create new plan",
-      "timestamp": "2025-07-24T05:05:26.112185"
+      "timestamp": "2025-07-24T17:02:43.521014"
     },
     {
       "system": "Admin Plan Management",
@@ -819,7 +819,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to perform bulk update",
-      "timestamp": "2025-07-24T05:05:26.137274"
+      "timestamp": "2025-07-24T17:02:43.544859"
     },
     {
       "system": "Admin Plan Management",
@@ -828,7 +828,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan analytics retrieved successfully",
-      "timestamp": "2025-07-24T05:05:26.160600"
+      "timestamp": "2025-07-24T17:02:43.569701"
     },
     {
       "system": "Admin Plan Management",
@@ -837,7 +837,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan subscriptions retrieved successfully",
-      "timestamp": "2025-07-24T05:05:26.185189"
+      "timestamp": "2025-07-24T17:02:43.594547"
     },
     {
       "system": "Admin Plan Management",
@@ -846,7 +846,7 @@
       "success": true,
       "status_code": 200,
       "details": "Plan change history retrieved successfully",
-      "timestamp": "2025-07-24T05:05:26.208304"
+      "timestamp": "2025-07-24T17:02:43.616896"
     },
     {
       "system": "Plan Change Impact",
@@ -855,7 +855,7 @@
       "success": true,
       "status_code": 200,
       "details": "Service healthy: True, Risk thresholds configured",
-      "timestamp": "2025-07-24T05:05:26.229941"
+      "timestamp": "2025-07-24T17:02:43.637495"
     },
     {
       "system": "Plan Change Impact",
@@ -864,7 +864,7 @@
       "success": true,
       "status_code": 200,
       "details": "Pricing impact analyzed: 1 subscriptions affected",
-      "timestamp": "2025-07-24T05:05:26.273629"
+      "timestamp": "2025-07-24T17:02:43.661664"
     },
     {
       "system": "Plan Change Impact",
@@ -873,7 +873,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to analyze feature change impact",
-      "timestamp": "2025-07-24T05:05:26.293675"
+      "timestamp": "2025-07-24T17:02:43.682459"
     },
     {
       "system": "Plan Change Impact",
@@ -882,7 +882,7 @@
       "success": true,
       "status_code": 200,
       "details": "Limit impact analyzed: 1 subscriptions affected",
-      "timestamp": "2025-07-24T05:05:26.322154"
+      "timestamp": "2025-07-24T17:02:43.712740"
     },
     {
       "system": "Plan Change Impact",
@@ -891,7 +891,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to analyze plan disable impact",
-      "timestamp": "2025-07-24T05:05:26.340435"
+      "timestamp": "2025-07-24T17:02:43.746522"
     },
     {
       "system": "Plan Change Impact",
@@ -900,7 +900,7 @@
       "success": false,
       "status_code": 500,
       "details": "Failed to simulate plan change",
-      "timestamp": "2025-07-24T05:05:26.385200"
+      "timestamp": "2025-07-24T17:02:43.780702"
     },
     {
       "system": "Plan Change Impact",
@@ -909,7 +909,7 @@
       "success": true,
       "status_code": 200,
       "details": "Affected subscriptions retrieved: 0 found",
-      "timestamp": "2025-07-24T05:05:26.415181"
+      "timestamp": "2025-07-24T17:02:43.801721"
     },
     {
       "system": "Plan Change Impact",
@@ -918,7 +918,7 @@
       "success": true,
       "status_code": 200,
       "details": "Migration plan created: Unknown ID",
-      "timestamp": "2025-07-24T05:05:26.448577"
+      "timestamp": "2025-07-24T17:02:43.825963"
     },
     {
       "system": "Plan Change Impact",
@@ -927,7 +927,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to execute migration plan",
-      "timestamp": "2025-07-24T05:05:26.470491"
+      "timestamp": "2025-07-24T17:02:43.847166"
     },
     {
       "system": "Plan Change Impact",
@@ -936,7 +936,7 @@
       "success": true,
       "status_code": 404,
       "details": "Migration plan not found (expected for test ID)",
-      "timestamp": "2025-07-24T05:05:26.493858"
+      "timestamp": "2025-07-24T17:02:43.871395"
     },
     {
       "system": "Plan Change Impact",
@@ -945,7 +945,7 @@
       "success": false,
       "status_code": 400,
       "details": "Failed to rollback plan change",
-      "timestamp": "2025-07-24T05:05:26.514571"
+      "timestamp": "2025-07-24T17:02:43.894103"
     },
     {
       "system": "Plan Change Impact",
@@ -954,7 +954,7 @@
       "success": true,
       "status_code": 200,
       "details": "Impact analysis history retrieved: 0 records found",
-      "timestamp": "2025-07-24T05:05:26.538846"
+      "timestamp": "2025-07-24T17:02:43.916367"
     },
     {
       "system": "Plan Change Impact",
@@ -963,7 +963,7 @@
       "success": true,
       "status_code": 200,
       "details": "Risk assessment retrieved: Unknown risk level",
-      "timestamp": "2025-07-24T05:05:26.562842"
+      "timestamp": "2025-07-24T17:02:43.937102"
     },
     {
       "system": "AI",
@@ -972,7 +972,7 @@
       "success": false,
       "status_code": 404,
       "details": "AI Services",
-      "timestamp": "2025-07-24T05:05:26.583319"
+      "timestamp": "2025-07-24T17:02:43.953603"
     },
     {
       "system": "AI",
@@ -981,43 +981,43 @@
       "success": false,
       "status_code": 404,
       "details": "AI Conversations",
-      "timestamp": "2025-07-24T05:05:26.602937"
+      "timestamp": "2025-07-24T17:02:43.972412"
     },
     {
       "system": "AI",
       "endpoint": "/api/ai/analyze-content",
       "method": "POST",
       "success": false,
-      "status_code": 405,
+      "status_code": 422,
       "details": "AI Content Analysis",
-      "timestamp": "2025-07-24T05:05:26.623330"
+      "timestamp": "2025-07-24T17:02:43.989622"
     },
     {
       "system": "Analytics",
       "endpoint": "/api/analytics-system/dashboard",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Analytics Dashboard",
-      "timestamp": "2025-07-24T05:05:26.643706"
+      "timestamp": "2025-07-24T17:02:44.008748"
     },
     {
       "system": "Analytics",
       "endpoint": "/api/analytics-system/overview",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Analytics Overview",
-      "timestamp": "2025-07-24T05:05:26.664116"
+      "timestamp": "2025-07-24T17:02:44.025786"
     },
     {
       "system": "Analytics",
       "endpoint": "/api/analytics-system/reports",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Analytics Reports",
-      "timestamp": "2025-07-24T05:05:26.686077"
+      "timestamp": "2025-07-24T17:02:44.046164"
     },
     {
       "system": "Automation",
@@ -1026,34 +1026,34 @@
       "success": false,
       "status_code": 404,
       "details": "Automation Workflows",
-      "timestamp": "2025-07-24T05:05:26.708110"
+      "timestamp": "2025-07-24T17:02:44.063049"
     },
     {
       "system": "Advanced",
       "endpoint": "/api/automation/workflows/advanced",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Advanced Workflows",
-      "timestamp": "2025-07-24T05:05:26.731631"
+      "timestamp": "2025-07-24T17:02:44.080031"
     },
     {
       "system": "Available",
       "endpoint": "/api/automation/triggers/available",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Available Triggers",
-      "timestamp": "2025-07-24T05:05:26.750405"
+      "timestamp": "2025-07-24T17:02:44.096425"
     },
     {
       "system": "Available",
       "endpoint": "/api/automation/actions/available",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Available Actions",
-      "timestamp": "2025-07-24T05:05:26.770086"
+      "timestamp": "2025-07-24T17:02:44.116034"
     },
     {
       "system": "Blog",
@@ -1062,16 +1062,16 @@
       "success": false,
       "status_code": 404,
       "details": "Blog Posts",
-      "timestamp": "2025-07-24T05:05:26.790533"
+      "timestamp": "2025-07-24T17:02:44.133620"
     },
     {
       "system": "Create",
       "endpoint": "/api/blog/posts",
       "method": "POST",
       "success": false,
-      "status_code": 405,
+      "status_code": 422,
       "details": "Create Blog Post",
-      "timestamp": "2025-07-24T05:05:26.810402"
+      "timestamp": "2025-07-24T17:02:44.151665"
     },
     {
       "system": "Blog",
@@ -1080,7 +1080,7 @@
       "success": false,
       "status_code": 404,
       "details": "Blog Analytics",
-      "timestamp": "2025-07-24T05:05:26.833324"
+      "timestamp": "2025-07-24T17:02:44.170837"
     },
     {
       "system": "CRM",
@@ -1089,7 +1089,7 @@
       "success": false,
       "status_code": 404,
       "details": "CRM Dashboard",
-      "timestamp": "2025-07-24T05:05:26.858234"
+      "timestamp": "2025-07-24T17:02:44.191301"
     },
     {
       "system": "CRM",
@@ -1098,7 +1098,7 @@
       "success": false,
       "status_code": 404,
       "details": "CRM Contacts",
-      "timestamp": "2025-07-24T05:05:26.881949"
+      "timestamp": "2025-07-24T17:02:44.215616"
     },
     {
       "system": "CRM",
@@ -1107,25 +1107,25 @@
       "success": false,
       "status_code": 404,
       "details": "CRM Deals",
-      "timestamp": "2025-07-24T05:05:26.904483"
+      "timestamp": "2025-07-24T17:02:44.235891"
     },
     {
       "system": "Forms",
       "endpoint": "/api/forms/dashboard",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Forms Dashboard",
-      "timestamp": "2025-07-24T05:05:26.925439"
+      "timestamp": "2025-07-24T17:02:44.256113"
     },
     {
       "system": "List",
       "endpoint": "/api/forms/forms",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "List Forms",
-      "timestamp": "2025-07-24T05:05:26.944682"
+      "timestamp": "2025-07-24T17:02:44.273887"
     },
     {
       "system": "Available",
@@ -1134,7 +1134,7 @@
       "success": false,
       "status_code": 404,
       "details": "Available Integrations",
-      "timestamp": "2025-07-24T05:05:26.962175"
+      "timestamp": "2025-07-24T17:02:44.301763"
     },
     {
       "system": "Connected",
@@ -1143,7 +1143,7 @@
       "success": false,
       "status_code": 404,
       "details": "Connected Integrations",
-      "timestamp": "2025-07-24T05:05:26.983668"
+      "timestamp": "2025-07-24T17:02:44.321980"
     },
     {
       "system": "Integration",
@@ -1152,7 +1152,7 @@
       "success": false,
       "status_code": 404,
       "details": "Integration Logs",
-      "timestamp": "2025-07-24T05:05:27.016470"
+      "timestamp": "2025-07-24T17:02:44.343055"
     },
     {
       "system": "Team",
@@ -1161,7 +1161,7 @@
       "success": false,
       "status_code": 404,
       "details": "Team Dashboard",
-      "timestamp": "2025-07-24T05:05:27.036915"
+      "timestamp": "2025-07-24T17:02:44.364422"
     },
     {
       "system": "Team",
@@ -1170,7 +1170,7 @@
       "success": false,
       "status_code": 404,
       "details": "Team Members",
-      "timestamp": "2025-07-24T05:05:27.058288"
+      "timestamp": "2025-07-24T17:02:44.384539"
     },
     {
       "system": "Team",
@@ -1179,142 +1179,142 @@
       "success": false,
       "status_code": 404,
       "details": "Team Activity",
-      "timestamp": "2025-07-24T05:05:27.079744"
+      "timestamp": "2025-07-24T17:02:44.400453"
     },
     {
       "system": "Instagram",
       "endpoint": "/api/instagram/search",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Instagram Search",
-      "timestamp": "2025-07-24T05:05:27.099185"
+      "timestamp": "2025-07-24T17:02:44.418875"
     },
     {
       "system": "Instagram",
       "endpoint": "/api/instagram/profiles",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Instagram Profiles",
-      "timestamp": "2025-07-24T05:05:27.118970"
+      "timestamp": "2025-07-24T17:02:44.441483"
     },
     {
       "system": "Schedule",
       "endpoint": "/api/posts/schedule",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Schedule Social Media Post",
-      "timestamp": "2025-07-24T05:05:27.138439"
+      "timestamp": "2025-07-24T17:02:44.459368"
     },
     {
       "system": "Get",
       "endpoint": "/api/posts/scheduled",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Get Scheduled Posts",
-      "timestamp": "2025-07-24T05:05:27.160567"
+      "timestamp": "2025-07-24T17:02:44.477694"
     },
     {
       "system": "Generate",
       "endpoint": "/api/pwa/manifest/generate",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Generate PWA Manifest",
-      "timestamp": "2025-07-24T05:05:27.182418"
+      "timestamp": "2025-07-24T17:02:44.497650"
     },
     {
       "system": "Get",
       "endpoint": "/api/pwa/manifest/current",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Get Current Manifest",
-      "timestamp": "2025-07-24T05:05:27.203762"
+      "timestamp": "2025-07-24T17:02:44.515901"
     },
     {
       "system": "List",
       "endpoint": "/api/workflows/list",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "List AI Workflows",
-      "timestamp": "2025-07-24T05:05:27.222705"
+      "timestamp": "2025-07-24T17:02:44.535233"
     },
     {
       "system": "Create",
       "endpoint": "/api/workflows/create",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Create AI Workflow",
-      "timestamp": "2025-07-24T05:05:27.243492"
+      "timestamp": "2025-07-24T17:02:44.554074"
     },
     {
       "system": "Register",
       "endpoint": "/api/device/register",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Register Device",
-      "timestamp": "2025-07-24T05:05:27.264200"
+      "timestamp": "2025-07-24T17:02:44.571547"
     },
     {
       "system": "Sync",
       "endpoint": "/api/device/offline/sync",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Sync Offline Data",
-      "timestamp": "2025-07-24T05:05:27.285526"
+      "timestamp": "2025-07-24T17:02:44.587904"
     },
     {
       "system": "Initiate",
       "endpoint": "/api/disputes/initiate",
       "method": "POST",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Initiate Dispute",
-      "timestamp": "2025-07-24T05:05:27.306907"
+      "timestamp": "2025-07-24T17:02:44.605152"
     },
     {
       "system": "List",
       "endpoint": "/api/disputes/list",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "List Disputes",
-      "timestamp": "2025-07-24T05:05:27.327193"
+      "timestamp": "2025-07-24T17:02:44.621238"
     },
     {
       "system": "Email",
       "endpoint": "/api/email-automation/api/email-automation/campaigns",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Email Campaigns",
-      "timestamp": "2025-07-24T05:05:27.352936"
+      "timestamp": "2025-07-24T17:02:44.636408"
     },
     {
       "system": "Email",
       "endpoint": "/api/email-automation/api/email-automation/subscribers",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Email Subscribers",
-      "timestamp": "2025-07-24T05:05:27.373419"
+      "timestamp": "2025-07-24T17:02:44.652091"
     },
     {
       "system": "Email",
       "endpoint": "/api/email-automation/api/email-automation/email-logs",
       "method": "GET",
       "success": false,
-      "status_code": 404,
+      "status_code": 422,
       "details": "Email Logs",
-      "timestamp": "2025-07-24T05:05:27.394565"
+      "timestamp": "2025-07-24T17:02:44.668984"
     }
   ]
 }
