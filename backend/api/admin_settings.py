@@ -18,7 +18,7 @@ async def get_payment_methods_settings():
     """Get payment methods configuration - PUBLIC endpoint for frontend"""
     try:
         db = get_database()
-        if not db:
+        if db is None:
             raise HTTPException(status_code=500, detail="Database unavailable")
         
         # Get payment methods settings (sync operation)
