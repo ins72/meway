@@ -252,45 +252,203 @@ class PWAManifestService:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    async def get_service_worker_config(self) -> Dict[str, Any]:
-        """Get service worker configuration"""
+    async def get_service_worker_config(self, config_id: str, user_id: str) -> Dict[str, Any]:
+        """Get service worker configuration from stored data"""
         try:
-            config = {
-                "cache_name": "mewayz-v2-cache",
-                "version": "2.0.0",
-                "offline_pages": [
-                    "/",
-                    "/dashboard",
-                    "/offline",
-                    "/login"
-                ],
-                "cache_strategies": {
-                    "api": "network_first",
-                    "assets": "cache_first", 
-                    "pages": "stale_while_revalidate",
-                    "images": "cache_first"
-                },
-                "background_sync": {
-                    "enabled": True,
-                    "tag": "mewayz-sync"
-                },
-                "push_notifications": {
-                    "enabled": True,
-                    "vapid_public_key": os.getenv("VAPID_PUBLIC_KEY", ""),
-                    "subscription_endpoint": "/api/notifications/subscribe"
-                }
-            }
+            config_result = await self.get_pwa_config(config_id, user_id)
+            if not config_result.get("success"):
+                return config_result
+            
+            config_data = config_result["data"]
+            service_worker_config = config_data.get("service_worker_config", {})
             
             return {
                 "success": True,
-                "config": config
+                "config": service_worker_config,
+                "config_id": config_id
             }
             
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e)
+            return {"success": False, "error": str(e)}
+    
+    async def track_installation(self, install_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Track PWA installation with real database storage"""
+        try:
+            collection = await self._get_collection(self.install_tracking_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            install_record = {
+                "id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "config_id": install_data.get("config_id"),
+                "platform": install_data.get("platform"),
+                "user_agent": install_data.get("user_agent"),
+                "device_info": install_data.get("device_info", {}),
+                "install_source": install_data.get("install_source", "web"),
+                "install_timestamp": datetime.utcnow().isoformat(),
+                "created_at": datetime.utcnow().isoformat()
             }
+            
+            result = await collection.insert_one(install_record)
+            
+            if result.inserted_id:
+                return {
+                    "success": True,
+                    "message": "PWA installation tracked successfully",
+                    "data": {k: v for k, v in install_record.items() if k != '_id'},
+                    "id": install_record["id"]
+                }
+            else:
+                return {"success": False, "error": "Failed to track installation"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_installation_stats(self, user_id: str) -> Dict[str, Any]:
+        """Get PWA installation statistics"""
+        try:
+            collection = await self._get_collection(self.install_tracking_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            total_installs = await collection.count_documents({"user_id": user_id})
+            
+            # Get platform breakdown
+            platform_stats = {}
+            cursor = collection.find({"user_id": user_id})
+            async for install in cursor:
+                platform = install.get("platform", "unknown")
+                platform_stats[platform] = platform_stats.get(platform, 0) + 1
+            
+            return {
+                "success": True,
+                "data": {
+                    "total_installs": total_installs,
+                    "platform_breakdown": platform_stats,
+                    "user_id": user_id
+                }
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def handle_offline_sync(self, sync_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Handle offline data synchronization with real database storage"""
+        try:
+            collection = await self._get_collection(self.sync_data_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            synced_items = []
+            errors = []
+            
+            for item in sync_data.get("items", []):
+                try:
+                    sync_record = {
+                        "id": str(uuid.uuid4()),
+                        "user_id": user_id,
+                        "item_id": item.get("id"),
+                        "item_type": item.get("type"),
+                        "item_data": item.get("data"),
+                        "sync_direction": sync_data.get("sync_direction", "upload"),
+                        "sync_timestamp": datetime.utcnow().isoformat(),
+                        "device_id": sync_data.get("device_id"),
+                        "status": "synced",
+                        "created_at": datetime.utcnow().isoformat()
+                    }
+                    
+                    # Store sync record
+                    result = await collection.insert_one(sync_record)
+                    
+                    if result.inserted_id:
+                        synced_items.append({
+                            "id": sync_record["id"],
+                            "item_id": item.get("id"),
+                            "type": item.get("type"),
+                            "status": "synced"
+                        })
+                    else:
+                        errors.append({
+                            "item_id": item.get("id"),
+                            "error": "Failed to store sync record"
+                        })
+                        
+                except Exception as item_error:
+                    errors.append({
+                        "item_id": item.get("id"),
+                        "error": str(item_error)
+                    })
+            
+            return {
+                "success": True,
+                "message": f"Synchronized {len(synced_items)} items",
+                "data": {
+                    "synced_count": len(synced_items),
+                    "error_count": len(errors),
+                    "synced_items": synced_items,
+                    "errors": errors,
+                    "sync_timestamp": datetime.utcnow().isoformat()
+                }
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_sync_history(self, user_id: str, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """Get synchronization history"""
+        try:
+            collection = await self._get_collection(self.sync_data_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            cursor = collection.find({"user_id": user_id}).skip(offset).limit(limit).sort("created_at", -1)
+            sync_records = await cursor.to_list(length=limit)
+            
+            sanitized_records = [{k: v for k, v in record.items() if k != '_id'} for record in sync_records]
+            
+            total = await collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": sanitized_records,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def health_check(self) -> Dict[str, Any]:
+        """Health check with database verification"""
+        try:
+            db = await get_database_async()
+            if db is None:
+                return {"success": False, "healthy": False, "error": "Database unavailable"}
+            
+            # Test database connection
+            collection = db[self.collection_name]
+            await collection.count_documents({})
+            
+            return {
+                "success": True,
+                "healthy": True,
+                "service": "PWA Management",
+                "features": {
+                    "manifest_generation": True,
+                    "service_worker_support": True,
+                    "offline_sync": True,
+                    "installation_tracking": True,
+                    "configuration_management": True,
+                    "real_database_storage": True
+                },
+                "database_status": "connected",
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            return {"success": False, "healthy": False, "error": str(e)}
 
 # Service instance
 pwa_service = PWAManifestService()
