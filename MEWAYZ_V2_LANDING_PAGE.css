@@ -274,7 +274,7 @@
   border-color: var(--border-light);
 }
 
-/* Desktop: Hide hamburger menu */
+/* Desktop: Hide hamburger menu by default */
 .mobile-menu-toggle {
   display: none;
   background: none;
