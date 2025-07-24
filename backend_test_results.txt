@@ -1,7 +1,7 @@
 🎯 FINAL VERIFICATION TEST FOR MEWAYZ V2 PLATFORM - JANUARY 2025
 ================================================================================
 Testing all newly implemented critical endpoints as requested in review
-Backend URL: https://72c4cfb8-834d-427f-b182-685a764bee4b.preview.emergentagent.com
+Backend URL: https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com
 ================================================================================
 ✅ PASS: Health Check - Backend is operational with 168 API endpoints
    Response size: 20 chars
