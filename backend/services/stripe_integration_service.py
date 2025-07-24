@@ -6,6 +6,7 @@ Real Stripe API integration using provided credentials
 
 import uuid
 import logging
+import stripe
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from core.objectid_serializer import safe_document_return, safe_documents_return, serialize_objectid
