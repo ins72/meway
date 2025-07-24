@@ -63,8 +63,8 @@ const LoginPage = () => {
           // Show appropriate success message
           alert(`✅ ${message}\nWelcome ${is_new_user ? 'to MEWAYZ' : 'back'}, ${user.name}!`);
           
-          // Navigate based on backend recommendation
-          if (redirect_to === "onboarding") {
+          // Navigate based on backend recommendation and onboarding status
+          if (redirect_to === "onboarding" || !user.onboarding_completed) {
             navigate('/onboarding');
           } else {
             navigate('/dashboard');
