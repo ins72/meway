@@ -79,6 +79,11 @@ function App() {
               <Route index element={<DashboardHome />} />
               <Route path="social-media" element={<SocialMediaPage />} />
               <Route path="ecommerce" element={<EcommercePage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              
+              {/* Login and Register routes */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
               
               {/* Temporary placeholder routes - will be rebuilt */}
               <Route path="*" element={<div className="p-8 text-center">
