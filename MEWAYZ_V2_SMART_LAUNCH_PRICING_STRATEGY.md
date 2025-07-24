@@ -128,19 +128,38 @@
 ## 🏢 ENTERPRISE PLAN
 
 ### **MEWAYZ ENTERPRISE**
-**Price:** $99/month ($990/year - save $198)**  
-**Launch Special:** First 100 enterprise customers get 6 months at $49/month
+**Price:** 15% of all revenue generated through the platform  
+**Minimum:** $99/month (for workspaces generating less than $660/month)  
+**Launch Special:** First 50 enterprise customers get 10% revenue share for first 6 months
+
+**Why This Model Works:**
+- **Aligned incentives:** We succeed when you succeed
+- **Scalable for large businesses:** Pay based on actual usage/revenue
+- **Lower barrier:** Small agencies pay less, big agencies pay proportionally
+- **Performance-based:** Incentivizes us to help you make more money
+
+**Revenue Share Examples:**
+- Workspace makes $1,000/month → Pay $150/month
+- Workspace makes $5,000/month → Pay $750/month  
+- Workspace makes $20,000/month → Pay $3,000/month
+- **Our incentive:** Help you reach $100k/month = $15k/month for us
 
 **Includes:**
 - **All bundles included**
-- **White-label solution** (your branding)
+- **White-label solution** (your branding everywhere)
 - **Dedicated support** (email + chat priority)
-- **API access** (basic integrations)
+- **API access** (advanced integrations)
+- **Custom domain management**
 - **Advanced analytics** (custom reports)
+- **Revenue tracking integration** (automatic calculation)
 - **SLA:** 99% uptime guarantee
 - **Onboarding assistance**
 
-**Note:** Dedicated account manager and custom development added later when we scale
+**Enterprise Revenue Tracking:**
+- **Automatic calculation** based on transactions processed
+- **Monthly billing** based on previous month's revenue
+- **Transparent reporting** - you see exactly what we see
+- **Revenue includes:** E-commerce sales, course sales, booking revenue, template sales, any monetization through the platform
 
 ---
 
