@@ -1,0 +1,25 @@
+{
+  "name": "mewayz-v2-landing-page",
+  "version": "1.0.0",
+  "description": "Modern, responsive React landing page component for Mewayz v2 platform",
+  "main": "MEWAYZ_V2_REACT_LANDING_PAGE.jsx",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "author": "Mewayz Team",
+  "license": "MIT",
+  "keywords": [
+    "landing-page",
+    "react",
+    "mewayz",
+    "business-platform",
+    "responsive",
+    "modern-ui"
+  ],
+  "files": [
+    "MEWAYZ_V2_REACT_LANDING_PAGE.jsx",
+    "MEWAYZ_V2_LANDING_PAGE.css",
+    "README.md"
+  ]
+}
