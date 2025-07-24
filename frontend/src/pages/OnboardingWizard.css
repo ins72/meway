@@ -705,6 +705,15 @@
     grid-template-columns: 1fr;
   }
   
+  .business-goals-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .goal-card {
+    padding: 1.25rem;
+  }
+  
   .pricing-plans {
     grid-template-columns: 1fr;
     gap: 1rem;
