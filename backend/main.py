@@ -376,3 +376,21 @@ async def health():
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8001)
+
+# Catch-all handler for unmatched routes (helpful for debugging)
+@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def catch_all(request, path: str):
+    """Catch-all handler for debugging deployment issues"""
+    return {
+        "message": "Route not found",
+        "path": path,
+        "method": request.method,
+        "available_routes": [
+            "/health",
+            "/api/auth/login",
+            "/api/auth/register", 
+            "/api/payments/webhook",
+            "/docs"
+        ],
+        "timestamp": datetime.utcnow().isoformat()
+    }
