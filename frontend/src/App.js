@@ -37,13 +37,18 @@ function App() {
   const { theme } = useTheme();
   const { loading } = useAuth();
 
+  console.log('App: loading state:', loading);
+
   if (loading) {
+    console.log('App: Showing loading spinner');
     return (
       <div className="min-h-screen bg-app flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );
   }
+
+  console.log('App: Rendering main app');
 
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
