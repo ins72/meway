@@ -78,7 +78,13 @@ class UserService:
                 "created_at": datetime.utcnow().isoformat(),
                 "updated_at": datetime.utcnow().isoformat(),
                 "status": "active",
-                "service_type": self.service_name
+                "service_type": self.service_name,
+                # Add onboarding state tracking
+                "onboarding_completed": False,
+                "onboarding_step": 1,
+                "onboarding_data": {},
+                "has_workspace": False,
+                "workspace_invites": []
             })
             return prepared
         except Exception as e:
