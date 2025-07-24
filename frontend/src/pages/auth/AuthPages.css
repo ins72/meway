@@ -233,7 +233,7 @@
   transition: width 0.3s var(--animation-smooth);
 }
 
-/* Form Styles */
+/* Form Styles - External Icons */
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -243,42 +243,39 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
+}
+
+.form-label-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.label-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: all var(--animation-speed) var(--animation-smooth);
 }
 
 .form-label {
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
+  margin: 0;
 }
 
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 1.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color var(--animation-speed) var(--animation-smooth);
-  pointer-events: none;
-}
-
-.input-wrapper:focus-within .input-icon {
-  color: var(--text-secondary);
-}
-
-.form-input {
+.form-input-clean {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3.5rem;
+  padding: 0.875rem 1rem;
   background: var(--bg-glass);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
@@ -288,37 +285,55 @@
   transition: all var(--animation-speed) var(--animation-smooth);
 }
 
-.form-input:focus {
+.form-input-clean:focus {
   outline: none;
   border-color: var(--border-light);
   background: var(--bg-card);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.form-input::placeholder {
+.form-input-clean:focus + .label-icon,
+.form-group:focus-within .label-icon {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+.form-input-clean::placeholder {
   color: var(--text-muted);
 }
 
-.password-toggle {
+/* Password Container */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle-external {
   position: absolute;
-  right: 1rem;
+  right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
-  border: none;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.375rem;
-  border-radius: 0.375rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
   transition: all var(--animation-speed) var(--animation-smooth);
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 32px;
 }
 
-.password-toggle:hover {
+.password-toggle-external:hover {
   color: var(--text-primary);
-  background: var(--bg-glass);
+  background: var(--bg-card);
+  border-color: var(--border-light);
+  transform: translateY(-50%) scale(1.05);
 }
 
 /* Password Strength */
