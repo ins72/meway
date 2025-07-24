@@ -48,6 +48,8 @@ const OnboardingWizard = () => {
       return formData.selectedGoals.some(goal => bundleGoals.includes(goal));
     });
   };
+
+  const pricingBundles = [
     {
       id: 'free',
       name: 'Free Starter',
