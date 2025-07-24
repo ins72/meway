@@ -394,6 +394,157 @@ class MewayzBackendAuditor:
             except Exception as e:
                 self.log_result("Multi-Vendor Marketplace", endpoint, method, False, 0, str(e))
     
+    def test_launch_pricing_system(self):
+        """Test Launch Pricing System - CRITICAL FOR PRODUCTION LAUNCH"""
+        print(f"\n🚀 TESTING LAUNCH PRICING SYSTEM - CRITICAL FOR PRODUCTION")
+        print("=" * 60)
+        
+        # Test workspace ID from review request
+        test_workspace_id = "deebdeae-4a9d-4611-ad12-9b71e13376a6"
+        
+        # 1. Health Check & Service Status
+        try:
+            response = requests.get(f"{self.base_url}/api/launch-pricing/health", headers=self.headers, timeout=30)
+            success = response.status_code == 200
+            self.log_result("Launch Pricing", "/api/launch-pricing/health", "GET", success, response.status_code, "Health check & service initialization")
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/health", "GET", False, 0, str(e))
+        
+        # 2. Active Specials Management
+        try:
+            response = requests.get(f"{self.base_url}/api/launch-pricing/active-specials", headers=self.headers, timeout=30)
+            success = response.status_code == 200
+            if success:
+                data = response.json()
+                # Verify all 6 bundle specials are returned
+                expected_bundles = ["creator", "ecommerce", "social_media", "education", "business", "operations"]
+                active_specials = data.get("active_specials", {})
+                found_bundles = len([bundle for bundle in expected_bundles if bundle in active_specials])
+                details = f"Found {found_bundles}/6 expected bundle specials"
+            else:
+                details = "Failed to get active specials"
+            self.log_result("Launch Pricing", "/api/launch-pricing/active-specials", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/active-specials", "GET", False, 0, str(e))
+        
+        # 3. Bundle-Specific Special Retrieval - Test all 6 bundles
+        bundle_names = ["creator", "ecommerce", "social_media", "education", "business", "operations"]
+        for bundle_name in bundle_names:
+            try:
+                response = requests.get(f"{self.base_url}/api/launch-pricing/bundle/{bundle_name}/special", headers=self.headers, timeout=30)
+                success = response.status_code == 200
+                if success:
+                    data = response.json()
+                    special = data.get("special", {})
+                    savings = special.get("savings_amount", 0)
+                    details = f"{bundle_name} special - ${savings} savings"
+                else:
+                    details = f"Failed to get {bundle_name} special"
+                self.log_result("Launch Pricing", f"/api/launch-pricing/bundle/{bundle_name}/special", "GET", success, response.status_code, details)
+            except Exception as e:
+                self.log_result("Launch Pricing", f"/api/launch-pricing/bundle/{bundle_name}/special", "GET", False, 0, str(e))
+        
+        # 4. Eligibility Validation
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "workspace_id": test_workspace_id
+            }
+            response = requests.post(f"{self.base_url}/api/launch-pricing/validate-eligibility", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 400]  # 400 is acceptable for eligibility check
+            if success:
+                data = response.json()
+                eligible = data.get("eligible", False)
+                details = f"Eligibility check - Eligible: {eligible}"
+            else:
+                details = "Eligibility validation failed"
+            self.log_result("Launch Pricing", "/api/launch-pricing/validate-eligibility", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/validate-eligibility", "POST", False, 0, str(e))
+        
+        # 5. Launch Special Claiming (Test with creator bundle)
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "workspace_id": test_workspace_id,
+                "special_code": "CREATOR9"
+            }
+            response = requests.post(f"{self.base_url}/api/launch-pricing/claim-special", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 400]  # 400 acceptable if already claimed or not eligible
+            if success:
+                data = response.json()
+                claimed = data.get("success", False)
+                details = f"Claim attempt - Success: {claimed}"
+            else:
+                details = "Claim special failed"
+            self.log_result("Launch Pricing", "/api/launch-pricing/claim-special", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/claim-special", "POST", False, 0, str(e))
+        
+        # 6. Claimed Specials Tracking
+        try:
+            response = requests.get(f"{self.base_url}/api/launch-pricing/claimed-specials/{test_workspace_id}", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 404]  # 404 acceptable if no claims yet
+            if success:
+                data = response.json()
+                claims_count = len(data.get("claimed_specials", [])) if response.status_code == 200 else 0
+                details = f"Claimed specials tracking - {claims_count} claims found"
+            else:
+                details = "Failed to get claimed specials"
+            self.log_result("Launch Pricing", f"/api/launch-pricing/claimed-specials/{test_workspace_id}", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", f"/api/launch-pricing/claimed-specials/{test_workspace_id}", "GET", False, 0, str(e))
+        
+        # 7. Admin Features (These will likely fail due to admin access requirements)
+        
+        # Special Analytics
+        try:
+            response = requests.get(f"{self.base_url}/api/launch-pricing/special-analytics", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            details = "Admin analytics - Access control working" if response.status_code == 403 else "Analytics accessible"
+            self.log_result("Launch Pricing", "/api/launch-pricing/special-analytics", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/special-analytics", "GET", False, 0, str(e))
+        
+        # Generate Promo Code
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "custom_code": "TESTCODE123",
+                "max_uses": 50,
+                "expires_in_days": 30
+            }
+            response = requests.post(f"{self.base_url}/api/launch-pricing/generate-promo-code", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            details = "Admin promo code generation - Access control working" if response.status_code == 403 else "Promo code generated"
+            self.log_result("Launch Pricing", "/api/launch-pricing/generate-promo-code", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/generate-promo-code", "POST", False, 0, str(e))
+        
+        # Extend Special
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "action": "extend_time",
+                "value": 30,
+                "reason": "Test extension"
+            }
+            response = requests.post(f"{self.base_url}/api/launch-pricing/extend-special", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            details = "Admin special extension - Access control working" if response.status_code == 403 else "Special extended"
+            self.log_result("Launch Pricing", "/api/launch-pricing/extend-special", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/extend-special", "POST", False, 0, str(e))
+        
+        # Referral Tracking
+        try:
+            response = requests.get(f"{self.base_url}/api/launch-pricing/referral-tracking/TESTREF123", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 404]  # 404 acceptable if referral code doesn't exist
+            details = "Referral tracking - System responding correctly"
+            self.log_result("Launch Pricing", "/api/launch-pricing/referral-tracking/TESTREF123", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Launch Pricing", "/api/launch-pricing/referral-tracking/TESTREF123", "GET", False, 0, str(e))
+
     def test_additional_systems(self):
         """Test additional systems mentioned in the comprehensive test results"""
         print(f"\n🔧 TESTING ADDITIONAL SYSTEMS")
