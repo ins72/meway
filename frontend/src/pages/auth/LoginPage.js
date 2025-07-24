@@ -57,7 +57,7 @@ const LoginPage = () => {
           const { user, access_token, message, redirect_to, is_new_user } = response.data;
           
           // Store authentication data
-          localStorage.setItem('authToken', access_token);
+          localStorage.setItem('auth_token', access_token);
           localStorage.setItem('user', JSON.stringify(user));
           
           // Show appropriate success message
