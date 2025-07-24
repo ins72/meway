@@ -887,8 +887,8 @@
   color: var(--text-secondary);
 }
 
-/* Stripe Payment Section */
-.stripe-payment-section,
+/* Enhanced Payment Section */
+.enhanced-payment-section,
 .paypal-payment-section {
   margin-top: 32px;
   padding: 24px;
@@ -897,7 +897,7 @@
   border: 1px solid var(--border-color);
 }
 
-.stripe-payment-section h3,
+.enhanced-payment-section h3,
 .paypal-payment-section h3 {
   margin: 0 0 20px 0;
   font-size: 18px;
