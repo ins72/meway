@@ -293,7 +293,7 @@ async def root():
     return {
         "message": "Mewayz Professional Platform - BULLETPROOF VERSION",
         "status": "operational",
-        "services": 129,
+        "services": 130,
         "version": "2.0.0"
     }
 
