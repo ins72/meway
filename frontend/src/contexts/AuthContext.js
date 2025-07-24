@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authAPI.login(credentials);
       console.log('AuthContext: Login response:', response);
       
-      const { token: newToken, user: userData } = response.data;
+      const { access_token: newToken, user: userData } = response.data;
       
       setToken(newToken);
       setUser(userData);
