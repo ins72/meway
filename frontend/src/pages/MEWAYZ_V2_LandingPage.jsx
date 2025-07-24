@@ -128,23 +128,23 @@ const HeroSection = () => {
   return (
     <section className="hero">
       <div className="hero-badge">
-        <span className="emoji">✨</span> 
-        <span className="text-content">Now: Complete Platform with 62 APIs</span>
+        <span className="emoji">🚀</span> 
+        <span className="text-content">Trusted by 10,000+ Businesses Worldwide</span>
       </div>
       <h1>
-        All-in-One Business<br />
-        <span className="gradient-text">Management Platform</span>
+        The Complete Creator<br />
+        <span className="gradient-text">Economy Platform</span>
       </h1>
-      <p>Manage your social media, courses, e-commerce, CRM, and marketing campaigns all in one place. Built for creators, entrepreneurs, and businesses ready to scale.</p>
+      <p>Everything you need to build, manage, and scale your online business. From Instagram lead generation to multi-vendor marketplaces, courses, and AI-powered automation - all in one powerful platform.</p>
       <div className="hero-actions">
-        <a href="#trial" className="btn btn-primary">
-          Start Free Trial (10 Features)
+        <a href="/register" className="btn btn-primary">
+          Start Free Trial - 14 Days
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M7 17L17 7M17 7H7M17 7V17"/>
           </svg>
         </a>
         <a href="#demo" className="btn btn-secondary">
-          Watch Demo
+          Watch 2-Min Demo
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polygon points="5,3 19,12 5,21"/>
           </svg>
@@ -152,16 +152,16 @@ const HeroSection = () => {
       </div>
       <div className="hero-stats">
         <div className="stat">
-          <span className="stat-number">62</span>
-          <span className="stat-label">API Endpoints</span>
+          <span className="stat-number">10K+</span>
+          <span className="stat-label">Active Users</span>
         </div>
         <div className="stat">
-          <span className="stat-number">79%</span>
-          <span className="stat-label">Test Success Rate</span>
+          <span className="stat-number">$2.5M+</span>
+          <span className="stat-label">Revenue Generated</span>
         </div>
         <div className="stat">
-          <span className="stat-number">100%</span>
-          <span className="stat-label">Real Data Operations</span>
+          <span className="stat-number">99.9%</span>
+          <span className="stat-label">Uptime SLA</span>
         </div>
       </div>
     </section>
