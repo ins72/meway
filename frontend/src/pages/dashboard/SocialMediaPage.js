@@ -164,7 +164,7 @@ const SocialMediaPage = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`tab ${activeTab === tab.id ? 'active' : ''}`}
             >
-              <span className="tab-icon">{tab.icon}</span>
+              <span className="tab-icon-professional">{tab.icon}</span>
               <span className="tab-label">{tab.label}</span>
             </button>
           ))}
