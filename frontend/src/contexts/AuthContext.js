@@ -32,21 +32,21 @@ export const AuthProvider = ({ children }) => {
     const timeout = setTimeout(() => {
       console.log('AuthContext: Timeout reached, setting loading to false');
       setLoading(false);
-    }, 5000);
+    }, 10000); // Increased timeout to 10 seconds
 
-    if (token) {
-      console.log('AuthContext: Token exists, fetching user');
+    if (token && token !== 'null' && token !== 'undefined') {
+      console.log('AuthContext: Valid token exists, fetching user');
       fetchUser().finally(() => {
         clearTimeout(timeout);
       });
     } else {
-      console.log('AuthContext: No token, setting loading to false');
+      console.log('AuthContext: No valid token, setting loading to false');
       setLoading(false);
       clearTimeout(timeout);
     }
 
     return () => clearTimeout(timeout);
-  }, [token]);
+  }, []);
 
   const fetchUser = async () => {
     console.log('AuthContext: fetchUser called');
