@@ -637,6 +637,8 @@
   gap: 2.5rem;
   max-width: 1200px;
   margin: 5rem auto 0;
+  width: 100%;
+  min-height: 200px; /* Ensure minimum height */
 }
 
 .testimonial-card {
