@@ -1,635 +1,526 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../../contexts/AuthContext';
-import {
-  ChartBarIcon,
-  GlobeAltIcon,
-  AcademicCapIcon,
-  ShoppingBagIcon,
-  UsersIcon,
-  BoltIcon,
-  CheckIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  SparklesIcon
-} from '@heroicons/react/24/outline';
+import { useAuth } from '../contexts/AuthContext';
+import './OnboardingWizard.css';
 
 const OnboardingWizard = () => {
-  // const { user } = useAuth();
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [selectedGoals, setSelectedGoals] = useState([]);
-  const [workspaceData, setWorkspaceData] = useState({
-    name: '',
-    description: '',
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    workspaceName: '',
     industry: '',
-    team_size: '',
-    goals: [],
-    features: []
+    teamSize: '',
+    primaryGoal: '',
+    selectedPlan: null,
+    paymentMethod: 'monthly'
   });
-  const [teamInvites, setTeamInvites] = useState([{ email: '', role: 'editor' }]);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const steps = [
-    { 
-      title: 'Welcome to Mewayz', 
-      subtitle: 'Let\'s set up your workspace for success',
-      component: 'welcome'
-    },
-    { 
-      title: 'Choose Your Main Goals', 
-      subtitle: 'Select up to 3 primary business objectives',
-      component: 'goals'
-    },
-    { 
-      title: 'Workspace Details', 
-      subtitle: 'Tell us about your business',
-      component: 'workspace'
-    },
-    { 
-      title: 'Invite Your Team', 
-      subtitle: 'Collaborate with team members (optional)',
-      component: 'team'
-    },
-    { 
-      title: 'Choose Your Plan', 
-      subtitle: 'Select features that match your needs',
-      component: 'subscription'
-    },
-    { 
-      title: 'All Set!', 
-      subtitle: 'Your workspace is ready to go',
-      component: 'completion'
-    }
+    { id: 1, title: 'Workspace Setup', description: 'Set up your workspace' },
+    { id: 2, title: 'Business Details', description: 'Tell us about your business' },
+    { id: 3, title: 'Choose Your Plan', description: 'Select the perfect plan' },
+    { id: 4, title: 'Complete Setup', description: 'Finalize your workspace' }
   ];
 
-  const businessGoals = [
+  const pricingPlans = [
     {
-      id: 'instagram',
-      name: 'Instagram Growth',
-      description: 'Build your Instagram presence with database access and analytics',
-      icon: ChartBarIcon,
-      color: 'from-pink-500 to-rose-600',
-      features: ['Instagram Database', 'Lead Generation', 'Analytics', 'Content Planning']
+      id: 'starter',
+      name: 'Starter',
+      description: 'Perfect for individuals and small projects',
+      monthlyPrice: 29,
+      yearlyPrice: 290,
+      features: [
+        'Up to 3 social media accounts',
+        '1,000 AI-generated posts per month',
+        'Basic analytics dashboard',
+        'Email support',
+        '5GB storage',
+        'Basic templates'
+      ],
+      limits: {
+        socialAccounts: 3,
+        aiPosts: 1000,
+        storage: '5GB',
+        users: 1
+      },
+      badge: null
     },
     {
-      id: 'link_in_bio',
-      name: 'Link in Bio',
-      description: 'Create professional bio pages with drag-and-drop builder',
-      icon: GlobeAltIcon,
-      color: 'from-blue-500 to-cyan-600',
-      features: ['Drag & Drop Builder', 'Custom Domains', 'Analytics', 'QR Codes']
-    },
-    {
-      id: 'courses',
-      name: 'Courses & Education',
-      description: 'Build and sell online courses with community features',
-      icon: AcademicCapIcon,
-      color: 'from-green-500 to-emerald-600',
-      features: ['Video Hosting', 'Course Builder', 'Student Management', 'Certificates']
-    },
-    {
-      id: 'ecommerce',
-      name: 'E-commerce Store',
-      description: 'Create your online store and marketplace presence',
-      icon: ShoppingBagIcon,
-      color: 'from-purple-500 to-violet-600',
-      features: ['Product Management', 'Order Processing', 'Payment Gateway', 'Inventory']
-    },
-    {
-      id: 'crm',
-      name: 'CRM & Marketing',
-      description: 'Manage leads and automate your marketing campaigns',
-      icon: UsersIcon,
-      color: 'from-orange-500 to-red-600',
-      features: ['Contact Management', 'Email Marketing', 'Lead Scoring', 'Automation']
-    },
-    {
-      id: 'content_creation',
-      name: 'Content Creation',
-      description: 'AI-powered content generation and social media management',
-      icon: SparklesIcon,
-      color: 'from-indigo-500 to-purple-600',
-      features: ['AI Content', 'Social Scheduling', 'Template Library', 'Brand Kit']
-    }
-  ];
-
-  const subscriptionPlans = [
-    {
-      id: 'free',
-      name: 'Free Plan',
-      price: '$0',
-      period: 'forever',
-      description: 'Perfect for getting started',
-      features: ['Up to 10 platform features', 'Basic workspace', 'Community support'],
-      maxFeatures: 10,
-      color: 'border-gray-300',
-      popular: false
-    },
-    {
-      id: 'pro',
-      name: 'Pro Plan',
-      price: '$1/feature',
-      period: 'per month',
-      yearlyPrice: '$10/feature/year',
-      description: 'Best for growing businesses',
-      features: ['Unlimited selected features', 'Priority support', 'Advanced analytics', 'Team collaboration'],
-      maxFeatures: -1,
-      color: 'border-blue-500',
-      popular: true
+      id: 'professional',
+      name: 'Professional',
+      description: 'Ideal for growing businesses and teams',
+      monthlyPrice: 79,
+      yearlyPrice: 790,
+      features: [
+        'Up to 10 social media accounts',
+        '5,000 AI-generated posts per month',
+        'Advanced analytics & reporting',
+        'Priority support',
+        '50GB storage',
+        'Premium templates',
+        'Team collaboration (up to 5 users)',
+        'Custom branding'
+      ],
+      limits: {
+        socialAccounts: 10,
+        aiPosts: 5000,
+        storage: '50GB',
+        users: 5
+      },
+      badge: 'Most Popular'
     },
     {
       id: 'enterprise',
-      name: 'Enterprise Plan',
-      price: '$1.5/feature',
-      period: 'per month',
-      yearlyPrice: '$15/feature/year',
-      description: 'For large organizations',
-      features: ['All platform features', 'White-label options', 'Custom branding', 'Dedicated support'],
-      maxFeatures: -1,
-      color: 'border-purple-500',
-      popular: false
+      name: 'Enterprise',
+      description: 'For large organizations with advanced needs',
+      monthlyPrice: 199,
+      yearlyPrice: 1990,
+      features: [
+        'Unlimited social media accounts',
+        'Unlimited AI-generated posts',
+        'Enterprise analytics & insights',
+        'Dedicated account manager',
+        '500GB storage',
+        'White-label solution',
+        'Unlimited team members',
+        'Advanced integrations',
+        'Custom workflows'
+      ],
+      limits: {
+        socialAccounts: 'Unlimited',
+        aiPosts: 'Unlimited',
+        storage: '500GB',
+        users: 'Unlimited'
+      },
+      badge: 'Best Value'
     }
   ];
 
-  const handleGoalSelect = (goalId) => {
-    setSelectedGoals(prev => {
-      if (prev.includes(goalId)) {
-        return prev.filter(id => id !== goalId);
-      } else if (prev.length < 3) {
-        return [...prev, goalId];
-      }
-      return prev;
+  const industries = [
+    { value: 'technology', label: 'Technology & Software' },
+    { value: 'marketing', label: 'Marketing & Advertising' },
+    { value: 'ecommerce', label: 'E-commerce & Retail' },
+    { value: 'education', label: 'Education & Training' },
+    { value: 'healthcare', label: 'Healthcare & Wellness' },
+    { value: 'finance', label: 'Finance & Insurance' },
+    { value: 'realestate', label: 'Real Estate' },
+    { value: 'consulting', label: 'Consulting & Services' },
+    { value: 'nonprofit', label: 'Non-Profit' },
+    { value: 'other', label: 'Other' }
+  ];
+
+  const teamSizes = [
+    { value: 'solo', label: 'Just me' },
+    { value: 'small', label: '2-10 people' },
+    { value: 'medium', label: '11-50 people' },
+    { value: 'large', label: '51-200 people' },
+    { value: 'enterprise', label: '200+ people' }
+  ];
+
+  const primaryGoals = [
+    { value: 'social_media', label: 'Social Media Management' },
+    { value: 'ecommerce', label: 'E-commerce & Online Sales' },
+    { value: 'lead_generation', label: 'Lead Generation' },
+    { value: 'content_creation', label: 'Content Creation' },
+    { value: 'analytics', label: 'Analytics & Reporting' },
+    { value: 'team_collaboration', label: 'Team Collaboration' }
+  ];
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handlePlanSelect = (planId) => {
+    setFormData({
+      ...formData,
+      selectedPlan: planId
     });
   };
 
   const handleNext = () => {
-    if (currentStep < steps.length - 1) {
+    if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    if (currentStep > 0) {
+    if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  const handleTeamInviteChange = (index, field, value) => {
-    setTeamInvites(prev => prev.map((invite, i) => 
-      i === index ? { ...invite, [field]: value } : invite
-    ));
-  };
-
-  const addTeamInvite = () => {
-    setTeamInvites(prev => [...prev, { email: '', role: 'editor' }]);
-  };
-
-  const removeTeamInvite = (index) => {
-    setTeamInvites(prev => prev.filter((_, i) => i !== index));
-  };
-
   const handleComplete = async () => {
     setLoading(true);
-    
     try {
-      // Create workspace with selected goals and features
-      const workspacePayload = {
-        ...workspaceData,
-        goals: selectedGoals,
-        team_invites: teamInvites.filter(invite => invite.email)
-      };
-
-      // API call would go here
-      console.log('Creating workspace:', workspacePayload);
+      // TODO: Submit onboarding data to backend
+      console.log('Onboarding data:', formData);
       
-      // Simulate API delay
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Navigate to dashboard
       navigate('/dashboard');
     } catch (error) {
-      console.error('Error creating workspace:', error);
+      console.error('Onboarding error:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const renderStepContent = () => {
-    const step = steps[currentStep];
+  const getSelectedPlan = () => {
+    return pricingPlans.find(plan => plan.id === formData.selectedPlan);
+  };
 
-    switch (step.component) {
-      case 'welcome':
-        return (
-          <div className="text-center py-12">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8"
-            >
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <BoltIcon className="h-12 w-12 text-white" />
-              </div>
-              <h1 className="text-4xl font-bold text-primary mb-4">Welcome to Mewayz!</h1>
-              <p className="text-lg text-secondary max-w-md mx-auto">
-                The all-in-one platform to grow your business, manage your audience, and scale your success.
-              </p>
-            </motion.div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-              {['Social Media', 'E-commerce', 'Courses', 'CRM', 'Analytics', 'Templates'].map((feature, index) => (
-                <motion.div
-                  key={feature}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.3 }}
-                  className="bg-surface p-4 rounded-lg text-center"
-                >
-                  <p className="text-sm font-medium text-primary">{feature}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 'goals':
-        return (
-          <div className="py-8">
-            <div className="text-center mb-8">
-              <p className="text-secondary mb-4">Select up to 3 main business objectives</p>
-              <p className="text-sm text-secondary">
-                Selected: {selectedGoals.length}/3
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {businessGoals.map((goal) => {
-                const isSelected = selectedGoals.includes(goal.id);
-                const canSelect = selectedGoals.length < 3 || isSelected;
-                
-                return (
-                  <motion.div
-                    key={goal.id}
-                    whileHover={canSelect ? { scale: 1.02 } : {}}
-                    whileTap={canSelect ? { scale: 0.98 } : {}}
-                    className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                      isSelected 
-                        ? 'border-blue-500 bg-blue-500/10' 
-                        : canSelect 
-                        ? 'border-default hover:border-blue-300' 
-                        : 'border-default opacity-50 cursor-not-allowed'
-                    }`}
-                    onClick={() => canSelect && handleGoalSelect(goal.id)}
-                  >
-                    {isSelected && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                        <CheckIcon className="h-4 w-4 text-white" />
-                      </div>
-                    )}
-                    
-                    <div className={`w-12 h-12 bg-gradient-to-br ${goal.color} rounded-lg flex items-center justify-center mb-4`}>
-                      <goal.icon className="h-6 w-6 text-white" />
-                    </div>
-                    
-                    <h3 className="text-lg font-semibold text-primary mb-2">{goal.name}</h3>
-                    <p className="text-sm text-secondary mb-4">{goal.description}</p>
-                    
-                    <div className="space-y-1">
-                      {goal.features.slice(0, 3).map((feature) => (
-                        <div key={feature} className="flex items-center text-xs text-secondary">
-                          <CheckIcon className="h-3 w-3 text-green-500 mr-2" />
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        );
-
-      case 'workspace':
-        return (
-          <div className="max-w-2xl mx-auto py-8">
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-primary mb-2">
-                  Workspace Name *
-                </label>
-                <input
-                  type="text"
-                  value={workspaceData.name}
-                  onChange={(e) => setWorkspaceData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="My Awesome Business"
-                  className="input w-full"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-primary mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={workspaceData.description}
-                  onChange={(e) => setWorkspaceData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Tell us about your business..."
-                  rows={3}
-                  className="input w-full resize-none"
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-primary mb-2">
-                    Industry
-                  </label>
-                  <select
-                    value={workspaceData.industry}
-                    onChange={(e) => setWorkspaceData(prev => ({ ...prev, industry: e.target.value }))}
-                    className="input w-full"
-                  >
-                    <option value="">Select Industry</option>
-                    <option value="technology">Technology</option>
-                    <option value="retail">Retail & E-commerce</option>
-                    <option value="education">Education</option>
-                    <option value="healthcare">Healthcare</option>
-                    <option value="finance">Finance</option>
-                    <option value="marketing">Marketing & Advertising</option>
-                    <option value="consulting">Consulting</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-primary mb-2">
-                    Team Size
-                  </label>
-                  <select
-                    value={workspaceData.team_size}
-                    onChange={(e) => setWorkspaceData(prev => ({ ...prev, team_size: e.target.value }))}
-                    className="input w-full"
-                  >
-                    <option value="">Select Size</option>
-                    <option value="1">Just me</option>
-                    <option value="2-5">2-5 people</option>
-                    <option value="6-10">6-10 people</option>
-                    <option value="11-50">11-50 people</option>
-                    <option value="50+">50+ people</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'team':
-        return (
-          <div className="max-w-2xl mx-auto py-8">
-            <div className="text-center mb-8">
-              <p className="text-secondary">Invite team members to collaborate on your workspace</p>
-              <p className="text-sm text-secondary mt-2">You can skip this step and invite members later</p>
-            </div>
-            
-            <div className="space-y-4">
-              {teamInvites.map((invite, index) => (
-                <div key={index} className="flex gap-4 items-end">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-primary mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={invite.email}
-                      onChange={(e) => handleTeamInviteChange(index, 'email', e.target.value)}
-                      placeholder="teammate@example.com"
-                      className="input w-full"
-                    />
-                  </div>
-                  
-                  <div className="w-32">
-                    <label className="block text-sm font-medium text-primary mb-2">
-                      Role
-                    </label>
-                    <select
-                      value={invite.role}
-                      onChange={(e) => handleTeamInviteChange(index, 'role', e.target.value)}
-                      className="input w-full"
-                    >
-                      <option value="viewer">Viewer</option>
-                      <option value="editor">Editor</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  
-                  {teamInvites.length > 1 && (
-                    <button
-                      onClick={() => removeTeamInvite(index)}
-                      className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            
-            <button
-              onClick={addTeamInvite}
-              className="mt-4 text-sm text-blue-500 hover:text-blue-700 font-medium"
-            >
-              + Add Another Team Member
-            </button>
-          </div>
-        );
-
-      case 'subscription':
-        return (
-          <div className="py-8">
-            <div className="text-center mb-8">
-              <p className="text-secondary mb-2">Choose a plan that fits your needs</p>
-              <p className="text-sm text-secondary">You can change your plan anytime</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {subscriptionPlans.map((plan) => (
-                <div
-                  key={plan.id}
-                  className={`relative p-6 rounded-xl border-2 ${plan.color} ${
-                    plan.popular ? 'ring-2 ring-blue-500 ring-opacity-50' : ''
-                  }`}
-                >
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-primary mb-2">{plan.name}</h3>
-                    <div className="mb-2">
-                      <span className="text-3xl font-bold text-primary">{plan.price}</span>
-                      <span className="text-secondary ml-1">/{plan.period}</span>
-                    </div>
-                    {plan.yearlyPrice && (
-                      <p className="text-sm text-secondary">or {plan.yearlyPrice}</p>
-                    )}
-                    <p className="text-sm text-secondary mt-2">{plan.description}</p>
-                  </div>
-                  
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center text-sm">
-                        <CheckIcon className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-secondary">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  <button
-                    className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
-                      plan.popular
-                        ? 'bg-blue-500 text-white hover:bg-blue-600'
-                        : 'bg-surface-hover text-primary hover:bg-surface-elevated'
-                    }`}
-                  >
-                    {plan.id === 'free' ? 'Start Free' : 'Choose Plan'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 'completion':
-        return (
-          <div className="text-center py-12">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8"
-            >
-              <div className="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckIcon className="h-12 w-12 text-white" />
-              </div>
-              <h1 className="text-4xl font-bold text-primary mb-4">You're All Set!</h1>
-              <p className="text-lg text-secondary max-w-md mx-auto mb-8">
-                Your workspace is ready. Let's start building your success story with Mewayz.
-              </p>
-            </motion.div>
-            
-            <div className="bg-surface p-6 rounded-lg max-w-md mx-auto mb-8">
-              <h3 className="font-semibold text-primary mb-4">Your Selected Goals:</h3>
-              <div className="space-y-2">
-                {selectedGoals.map((goalId) => {
-                  const goal = businessGoals.find(g => g.id === goalId);
-                  return (
-                    <div key={goalId} className="flex items-center">
-                      <goal.icon className="h-5 w-5 text-blue-500 mr-3" />
-                      <span className="text-sm text-secondary">{goal.name}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        );
-
+  const canProceed = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.workspaceName.trim() !== '';
+      case 2:
+        return formData.industry && formData.teamSize && formData.primaryGoal;
+      case 3:
+        return formData.selectedPlan !== null;
       default:
-        return null;
+        return true;
     }
   };
 
   return (
-    <div className="min-h-screen bg-app py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="onboarding-wizard">
+      {/* Background Effects */}
+      <div className="bg-effects">
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
+        </div>
+      </div>
+
+      <div className="wizard-container">
+        {/* Header */}
+        <div className="wizard-header">
+          <div className="logo">
+            <span className="gradient-text">Mewayz</span>
+          </div>
+          <div className="progress-info">
+            <h1 className="wizard-title">Welcome to Mewayz</h1>
+            <p className="wizard-subtitle">
+              Let's set up your workspace in just a few steps
+            </p>
+          </div>
+        </div>
+
         {/* Progress Bar */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-4">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-center">
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    index <= currentStep
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-surface-elevated text-secondary'
-                  }`}
-                >
-                  {index < currentStep ? <CheckIcon className="h-4 w-4" /> : index + 1}
+        <div className="progress-container">
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${(currentStep / steps.length) * 100}%` }}
+            ></div>
+          </div>
+          <div className="progress-steps">
+            {steps.map((step) => (
+              <div 
+                key={step.id} 
+                className={`progress-step ${currentStep >= step.id ? 'completed' : ''}`}
+              >
+                <div className="step-circle">
+                  {currentStep > step.id ? (
+                    <span className="step-check">✓</span>
+                  ) : (
+                    <span className="step-number">{step.id}</span>
+                  )}
                 </div>
-                {index < steps.length - 1 && (
-                  <div
-                    className={`h-1 w-16 mx-2 ${
-                      index < currentStep ? 'bg-blue-500' : 'bg-surface-elevated'
-                    }`}
-                  />
-                )}
+                <div className="step-info">
+                  <span className="step-title">{step.title}</span>
+                  <span className="step-description">{step.description}</span>
+                </div>
               </div>
             ))}
-          </div>
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-primary">{steps[currentStep].title}</h2>
-            <p className="text-secondary mt-2">{steps[currentStep].subtitle}</p>
           </div>
         </div>
 
         {/* Step Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="mb-12"
-          >
-            {renderStepContent()}
-          </motion.div>
-        </AnimatePresence>
+        <div className="wizard-content">
+          {currentStep === 1 && (
+            <div className="step-content">
+              <div className="step-header">
+                <h2>Set Up Your Workspace</h2>
+                <p>Give your workspace a name that represents your brand or business</p>
+              </div>
+              <div className="form-section">
+                <div className="form-group">
+                  <label className="form-label">Workspace Name *</label>
+                  <input
+                    type="text"
+                    name="workspaceName"
+                    value={formData.workspaceName}
+                    onChange={handleInputChange}
+                    placeholder="Enter your workspace name"
+                    className="form-input"
+                  />
+                  <span className="form-hint">
+                    This will be displayed across your dashboard and can be changed later
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 2 && (
+            <div className="step-content">
+              <div className="step-header">
+                <h2>Tell Us About Your Business</h2>
+                <p>Help us personalize your experience with relevant features and recommendations</p>
+              </div>
+              <div className="form-section">
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Industry *</label>
+                    <select
+                      name="industry"
+                      value={formData.industry}
+                      onChange={handleInputChange}
+                      className="form-input"
+                    >
+                      <option value="">Select your industry</option>
+                      {industries.map((industry) => (
+                        <option key={industry.value} value={industry.value}>
+                          {industry.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Team Size *</label>
+                    <select
+                      name="teamSize"
+                      value={formData.teamSize}
+                      onChange={handleInputChange}
+                      className="form-input"
+                    >
+                      <option value="">Select team size</option>
+                      {teamSizes.map((size) => (
+                        <option key={size.value} value={size.value}>
+                          {size.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label className="form-label">Primary Goal *</label>
+                    <div className="goal-options">
+                      {primaryGoals.map((goal) => (
+                        <label key={goal.value} className="goal-option">
+                          <input
+                            type="radio"
+                            name="primaryGoal"
+                            value={goal.value}
+                            checked={formData.primaryGoal === goal.value}
+                            onChange={handleInputChange}
+                            className="goal-radio"
+                          />
+                          <span className="goal-label">{goal.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 3 && (
+            <div className="step-content">
+              <div className="step-header">
+                <h2>Choose Your Plan</h2>
+                <p>Select the plan that best fits your needs. You can upgrade or downgrade anytime.</p>
+                
+                <div className="billing-toggle">
+                  <span className={`billing-option ${formData.paymentMethod === 'monthly' ? 'active' : ''}`}>
+                    Monthly
+                  </span>
+                  <button
+                    onClick={() => setFormData({...formData, paymentMethod: formData.paymentMethod === 'monthly' ? 'yearly' : 'monthly'})}
+                    className="toggle-switch"
+                  >
+                    <div className={`toggle-slider ${formData.paymentMethod === 'yearly' ? 'active' : ''}`}></div>
+                  </button>
+                  <span className={`billing-option ${formData.paymentMethod === 'yearly' ? 'active' : ''}`}>
+                    Yearly <span className="savings-badge">Save 17%</span>
+                  </span>
+                </div>
+              </div>
+
+              <div className="pricing-plans">
+                {pricingPlans.map((plan) => (
+                  <div 
+                    key={plan.id}
+                    onClick={() => handlePlanSelect(plan.id)}
+                    className={`pricing-card ${formData.selectedPlan === plan.id ? 'selected' : ''}`}
+                  >
+                    {plan.badge && (
+                      <div className="plan-badge">{plan.badge}</div>
+                    )}
+                    
+                    <div className="plan-header">
+                      <h3 className="plan-name">{plan.name}</h3>
+                      <p className="plan-description">{plan.description}</p>
+                      <div className="plan-price">
+                        <span className="price-amount">
+                          ${formData.paymentMethod === 'monthly' ? plan.monthlyPrice : Math.floor(plan.yearlyPrice / 12)}
+                        </span>
+                        <span className="price-period">
+                          /{formData.paymentMethod === 'monthly' ? 'month' : 'month (billed yearly)'}
+                        </span>
+                      </div>
+                      {formData.paymentMethod === 'yearly' && (
+                        <div className="yearly-savings">
+                          Save ${(plan.monthlyPrice * 12) - plan.yearlyPrice} per year
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="plan-features">
+                      <h4>What's included:</h4>
+                      <ul className="features-list">
+                        {plan.features.map((feature, index) => (
+                          <li key={index} className="feature-item">
+                            <span className="feature-check">✓</span>
+                            <span className="feature-text">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="plan-limits">
+                      <div className="limits-grid">
+                        <div className="limit-item">
+                          <span className="limit-label">Social Accounts</span>
+                          <span className="limit-value">{plan.limits.socialAccounts}</span>
+                        </div>
+                        <div className="limit-item">
+                          <span className="limit-label">AI Posts</span>
+                          <span className="limit-value">{plan.limits.aiPosts}</span>
+                        </div>
+                        <div className="limit-item">
+                          <span className="limit-label">Storage</span>
+                          <span className="limit-value">{plan.limits.storage}</span>
+                        </div>
+                        <div className="limit-item">
+                          <span className="limit-label">Team Members</span>
+                          <span className="limit-value">{plan.limits.users}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="step-content">
+              <div className="step-header">
+                <h2>Complete Your Setup</h2>
+                <p>Review your selections and complete your workspace setup</p>
+              </div>
+
+              <div className="setup-summary">
+                <div className="summary-section">
+                  <h3>Workspace Details</h3>
+                  <div className="summary-item">
+                    <span className="summary-label">Name:</span>
+                    <span className="summary-value">{formData.workspaceName}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Industry:</span>
+                    <span className="summary-value">
+                      {industries.find(i => i.value === formData.industry)?.label}
+                    </span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Team Size:</span>
+                    <span className="summary-value">
+                      {teamSizes.find(s => s.value === formData.teamSize)?.label}
+                    </span>
+                  </div>
+                </div>
+
+                {formData.selectedPlan && (
+                  <div className="summary-section">
+                    <h3>Selected Plan</h3>
+                    <div className="selected-plan-summary">
+                      <div className="plan-summary-header">
+                        <span className="plan-summary-name">{getSelectedPlan().name}</span>
+                        <span className="plan-summary-price">
+                          ${formData.paymentMethod === 'monthly' 
+                            ? getSelectedPlan().monthlyPrice 
+                            : Math.floor(getSelectedPlan().yearlyPrice / 12)
+                          }/month
+                        </span>
+                      </div>
+                      <p className="plan-summary-billing">
+                        Billed {formData.paymentMethod === 'monthly' ? 'monthly' : 'yearly'}
+                        {formData.paymentMethod === 'yearly' && ' (17% savings)'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="setup-actions">
+                  <div className="trial-info">
+                    <h4>14-Day Free Trial</h4>
+                    <p>Start your free trial today. No credit card required.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center max-w-2xl mx-auto">
-          <button
-            onClick={handleBack}
-            disabled={currentStep === 0}
-            className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${
-              currentStep === 0
-                ? 'text-secondary cursor-not-allowed'
-                : 'text-primary hover:bg-surface-hover'
-            }`}
-          >
-            <ArrowLeftIcon className="h-4 w-4 mr-2" />
-            Back
-          </button>
-          
-          {currentStep === steps.length - 1 ? (
-            <button
-              onClick={handleComplete}
-              disabled={loading}
-              className="flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors disabled:opacity-50"
-            >
-              {loading ? 'Setting up...' : 'Go to Dashboard'}
-              <ArrowRightIcon className="h-4 w-4 ml-2" />
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              disabled={currentStep === 1 && selectedGoals.length === 0}
-              className={`flex items-center px-6 py-3 rounded-lg font-medium transition-colors ${
-                (currentStep === 1 && selectedGoals.length === 0)
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-              }`}
-            >
-              Next
-              <ArrowRightIcon className="h-4 w-4 ml-2" />
-            </button>
-          )}
+        <div className="wizard-navigation">
+          <div className="nav-left">
+            {currentStep > 1 && (
+              <button onClick={handleBack} className="btn btn-secondary">
+                Back
+              </button>
+            )}
+          </div>
+          <div className="nav-right">
+            {currentStep < steps.length ? (
+              <button 
+                onClick={handleNext} 
+                disabled={!canProceed()}
+                className="btn btn-primary"
+              >
+                Continue
+              </button>
+            ) : (
+              <button 
+                onClick={handleComplete}
+                disabled={loading || !canProceed()}
+                className="btn btn-primary"
+              >
+                {loading ? (
+                  <>
+                    <div className="loading-spinner"></div>
+                    Setting up workspace...
+                  </>
+                ) : (
+                  'Complete Setup'
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
