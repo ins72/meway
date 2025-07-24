@@ -357,6 +357,8 @@ const OnboardingWizard = () => {
         return formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
       case 3:
         return formData.selectedBundles.length > 0;
+      case 4:
+        return true; // Payment setup - always allow proceed for now
       default:
         return true;
     }
