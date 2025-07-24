@@ -15,8 +15,8 @@ BACKEND_URL = "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagen
 BASE_URL = f"{BACKEND_URL}/api"
 
 # Test credentials for admin access
-ADMIN_EMAIL = "admin@mewayz.com"
-ADMIN_PASSWORD = "AdminPassword123"
+ADMIN_EMAIL = "tmonnens@outlook.com"
+ADMIN_PASSWORD = "Voetballen5"
 
 class AdminSystemTester:
     def __init__(self):
