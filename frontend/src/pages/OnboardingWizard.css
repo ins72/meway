@@ -732,6 +732,21 @@
   transform: translateY(-2px);
 }
 
+.payment-method.selected {
+  border-color: var(--border-light);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.no-payment-methods {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  background: var(--bg-glass);
+  border-radius: 0.75rem;
+  border: 2px dashed var(--border);
+}
+
 .method-header {
   display: flex;
   align-items: center;
