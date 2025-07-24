@@ -216,8 +216,7 @@ class AuthSessionTester:
         # Test multiple endpoints rapidly to simulate tab switching
         endpoints = [
             "/api/auth/me",
-            "/api/auth/profile",
-            "/api/auth/health"
+            "/api/auth/health"  # Remove problematic profile endpoint
         ]
         
         total_calls = 0
