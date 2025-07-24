@@ -259,7 +259,10 @@ class PlanChangeImpactTester:
             print("\n❌ CRITICAL: Authentication failed - cannot proceed with tests")
             return False
         
-        # Step 2: Health check
+        # Step 2: Check if creator plan exists
+        plan_exists = self.test_plan_exists()
+        
+        # Step 3: Health check
         if not self.test_health_check():
             print("\n❌ CRITICAL: Health check failed - service may be down")
             return False
