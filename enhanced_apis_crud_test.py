@@ -941,7 +941,7 @@ class EnhancedAPICRUDTester:
                 "crud_operations": crud_operations,
                 "detailed_results": self.test_results,
                 "created_resources": self.created_resources
-            }, indent=2)
+            }, f, indent=2)
         
         print(f"\n💾 Detailed results saved to: /app/enhanced_apis_crud_test_results.json")
         print("=" * 80)
