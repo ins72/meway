@@ -58,6 +58,11 @@ export const onboardingAPI = {
   calculatePricing: (params) => api.get('/workspace-subscription/pricing/calculate', { params }),
 };
 
+// Google OAuth API endpoints  
+export const googleAuthAPI = {
+  verifyToken: (tokenData) => api.post('/google-oauth/google/verify', tokenData),
+};
+
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
   getRecentActivity: () => api.get('/dashboard/activity'),
