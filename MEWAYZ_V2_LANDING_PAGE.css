@@ -173,15 +173,18 @@
 }
 
 .logo {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Orbitron', 'Inter', sans-serif;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   cursor: pointer;
   transition: transform var(--animation-speed) var(--animation-bounce);
+  display: flex;
+  align-items: center;
+  letter-spacing: 1px;
 }
 
 .logo:hover {
