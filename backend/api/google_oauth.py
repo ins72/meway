@@ -60,12 +60,15 @@ async def google_verify_token(
                         "id": user_data["id"],
                         "email": user_data["email"],
                         "name": user_data.get("name", google_user["name"]),
-                        "picture": google_user.get("picture")
+                        "picture": google_user.get("picture"),
+                        "onboarding_completed": user_data.get("onboarding_completed", False),
+                        "onboarding_step": user_data.get("onboarding_step", 1),
+                        "has_workspace": user_data.get("has_workspace", False)
                     },
                     "access_token": access_token,
                     "token_type": "bearer",
                     "is_existing_user": True,
-                    "redirect_to": "dashboard"
+                    "redirect_to": "dashboard" if user_data.get("onboarding_completed") else "onboarding"
                 }
             else:
                 # User tried to login and account exists
@@ -76,12 +79,15 @@ async def google_verify_token(
                         "id": user_data["id"],
                         "email": user_data["email"],
                         "name": user_data.get("name", google_user["name"]),
-                        "picture": google_user.get("picture")
+                        "picture": google_user.get("picture"),
+                        "onboarding_completed": user_data.get("onboarding_completed", False),
+                        "onboarding_step": user_data.get("onboarding_step", 1),
+                        "has_workspace": user_data.get("has_workspace", False)
                     },
                     "access_token": access_token,
                     "token_type": "bearer",
                     "is_existing_user": True,
-                    "redirect_to": "dashboard"
+                    "redirect_to": "dashboard" if user_data.get("onboarding_completed") else "onboarding"
                 }
         else:
             # User doesn't exist - create new account
