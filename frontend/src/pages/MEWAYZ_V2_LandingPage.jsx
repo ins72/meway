@@ -100,20 +100,20 @@ const Header = ({ theme, toggleTheme, toggleMobileMenu, scrollToSection }) => {
       <nav className="nav">
         <div className="logo">Mewayz</div>
         <ul className="nav-links">
-          <li><a href="#about" onClick={() => scrollToSection('about')}>About</a></li>
           <li><a href="#features" onClick={() => scrollToSection('features')}>Features</a></li>
-          <li><a href="#testimonials" onClick={() => scrollToSection('testimonials')}>Testimonials</a></li>
           <li><a href="#pricing" onClick={() => scrollToSection('pricing')}>Pricing</a></li>
-          <li><a href="#contact" onClick={() => scrollToSection('contact')}>Contact</a></li>
+          <li><a href="#testimonials" onClick={() => scrollToSection('testimonials')}>Reviews</a></li>
+          <li><a href="/help" target="_blank">Help</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
         <div className="nav-actions">
           <button className="theme-toggle" onClick={toggleTheme}>
             <span>{theme === 'dark' ? '🌙' : '☀️'}</span>
           </button>
           <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>☰</button>
-          <a href="#login" className="btn btn-secondary">Login</a>
-          <a href="#signup" className="btn btn-primary">
-            Get Started
+          <a href="/login" className="btn btn-secondary">Login</a>
+          <a href="/register" className="btn btn-primary">
+            Start Free Trial
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
