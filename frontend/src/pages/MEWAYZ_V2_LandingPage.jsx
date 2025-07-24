@@ -314,13 +314,25 @@ const CTASection = () => {
   return (
     <section className="cta-section animate-on-scroll">
       <h2>Ready to Transform Your Business?</h2>
-      <p>Join the businesses already using Mewayz v2 to streamline operations, increase revenue, and scale efficiently. Start with 10 free features today.</p>
-      <a href="#signup" className="btn btn-primary">
-        Start Free Trial Now
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M7 17L17 7M17 7H7M17 7V17"/>
-        </svg>
-      </a>
+      <p>Join over 10,000 successful creators, entrepreneurs, and businesses who trust Mewayz to power their growth. Start your 14-day free trial today - no credit card required.</p>
+      <div className="cta-actions">
+        <a href="/register" className="btn btn-primary">
+          Start Free Trial - 14 Days
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M7 17L17 7M17 7H7M17 7V17"/>
+          </svg>
+        </a>
+        <a href="/contact" className="btn btn-secondary">
+          Schedule Demo Call
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+        </a>
+      </div>
+      <div className="cta-guarantee">
+        <p>✨ <strong>30-day money-back guarantee</strong> • 🔒 <strong>No setup fees</strong> • 📞 <strong>24/7 support</strong></p>
+      </div>
     </section>
   );
 };
