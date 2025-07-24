@@ -7,6 +7,7 @@ import { NotificationProvider } from './contexts/NotificationContext';
 
 // Public pages
 import LandingPage from './pages/LandingPage';
+import MEWAYZ_V2_LandingPage from './pages/MEWAYZ_V2_LandingPage.jsx';
 import AboutPage from './pages/AboutPage';
 import ContactUsPage from './pages/ContactUsPage';
 import LoginPage from './pages/auth/LoginPage';
