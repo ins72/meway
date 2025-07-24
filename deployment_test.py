@@ -83,11 +83,14 @@ class DeploymentResolutionTester:
         # Test root endpoint
         response = self.make_request("GET", "/")
         if response and response.status_code == 200:
-            data = response.json()
-            if data.get("service") == "mewayz-api" and data.get("status") == "running":
-                self.log_result("Root Endpoint", True, response.status_code, f"Service: {data.get('service')}, Status: {data.get('status')}")
-            else:
-                self.log_result("Root Endpoint", False, response.status_code, "Invalid response structure")
+            try:
+                data = response.json()
+                if data.get("service") == "mewayz-api" and data.get("status") == "running":
+                    self.log_result("Root Endpoint", True, response.status_code, f"Service: {data.get('service')}, Status: {data.get('status')}")
+                else:
+                    self.log_result("Root Endpoint", False, response.status_code, "Invalid response structure")
+            except json.JSONDecodeError:
+                self.log_result("Root Endpoint", False, response.status_code, f"Invalid JSON response: {response.text[:100]}")
         else:
             self.log_result("Root Endpoint", False, response.status_code if response else None, "Request failed")
             
