@@ -301,8 +301,27 @@ class PlanChangeImpactService:
             disable_date = data.get("disable_date")  # When to disable new subscriptions
             sunset_date = data.get("sunset_date")    # When to end existing subscriptions
             
+            # Enhanced validation
             if not plan_name:
                 return {"success": False, "error": "Plan name is required"}
+            
+            if not analyzed_by:
+                return {"success": False, "error": "Analyzed by user ID is required"}
+            
+            # Validate dates if provided
+            if disable_date:
+                try:
+                    if isinstance(disable_date, str):
+                        datetime.fromisoformat(disable_date.replace('Z', '+00:00'))
+                except ValueError:
+                    return {"success": False, "error": "Invalid disable_date format. Use ISO format"}
+            
+            if sunset_date:
+                try:
+                    if isinstance(sunset_date, str):
+                        datetime.fromisoformat(sunset_date.replace('Z', '+00:00'))
+                except ValueError:
+                    return {"success": False, "error": "Invalid sunset_date format. Use ISO format"}
             
             # Get current plan configuration
             current_plan = await self._get_current_plan(plan_name)
