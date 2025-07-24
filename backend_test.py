@@ -1586,6 +1586,9 @@ class MewayzBackendAuditor:
         # Step 3.7: Test Admin Plan Management System (CRITICAL FOR ADMIN DASHBOARD)
         self.test_admin_plan_management_system()
         
+        # Step 3.8: Test Plan Change Impact Analysis System (CRITICAL FOR PREVENTING SUBSCRIPTION DISRUPTIONS)
+        self.test_plan_change_impact_system()
+        
         # Step 4: Test additional systems
         self.test_additional_systems()
         
