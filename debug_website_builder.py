@@ -8,7 +8,7 @@ import json
 import sys
 
 # Configuration
-BACKEND_URL = "https://0b0b9ebf-d7aa-41df-aa42-dd8ab4b72b68.preview.emergentagent.com"
+BACKEND_URL = "https://bd15977c-5d37-4fb8-991c-847ae2409f32.preview.emergentagent.com"
 TEST_EMAIL = "tmonnens@outlook.com"
 TEST_PASSWORD = "Voetballen5"
 
