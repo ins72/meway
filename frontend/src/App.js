@@ -76,6 +76,8 @@ function App() {
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
+              <Route path="social-media" element={<SocialMediaPage />} />
+              <Route path="ecommerce" element={<EcommercePage />} />
               
               {/* Temporary placeholder routes - will be rebuilt */}
               <Route path="*" element={<div className="p-8 text-center">
