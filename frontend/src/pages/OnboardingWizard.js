@@ -351,36 +351,71 @@ const OnboardingWizard = () => {
   const handleComplete = async () => {
     setLoading(true);
     try {
-      // Prepare onboarding data
+      // Step 1: Create workspace with onboarding data
+      const workspaceData = {
+        name: formData.workspaceName,
+        industry: formData.industry,
+        team_size: formData.teamSize,
+        business_goals: formData.selectedGoals,
+        selected_bundles: formData.selectedBundles,
+        payment_method: formData.paymentMethod
+      };
+
+      console.log('Creating workspace:', workspaceData);
+      
+      // Create workspace
+      const workspaceResponse = await onboardingAPI.createWorkspace(workspaceData);
+      const workspaceId = workspaceResponse.data?.data?.id;
+      
+      if (!workspaceId) {
+        throw new Error('Failed to create workspace');
+      }
+
+      // Step 2: Complete onboarding process
       const onboardingData = {
+        workspace_id: workspaceId,
         workspace: {
           name: formData.workspaceName,
           industry: formData.industry,
-          team_size: formData.teamSize,
+          team_size: formData.teamSize
         },
         business_goals: formData.selectedGoals,
         selected_bundles: formData.selectedBundles,
         payment_method: formData.paymentMethod,
         pricing_details: calculateTotalPrice(),
-        user_id: user?.id,
+        user_preferences: {
+          notifications: true,
+          marketing_emails: true,
+          analytics_tracking: true
+        },
+        onboarding_step: "completed",
         completed_at: new Date().toISOString()
       };
 
-      console.log('Submitting onboarding data:', onboardingData);
+      console.log('Completing onboarding:', onboardingData);
       
-      // For now, simulate the API call since the backend requires admin auth
-      // In production, this would need a user-accessible onboarding endpoint
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Complete onboarding
+      await onboardingAPI.completeOnboarding(onboardingData);
       
-      // TODO: Replace with actual API call when user-level endpoint is available
-      // const response = await onboardingAPI.completeOnboarding(onboardingData);
+      console.log('✅ Onboarding completed successfully');
       
       // Navigate to dashboard
       navigate('/dashboard');
     } catch (error) {
       console.error('Onboarding error:', error);
-      // Show error message to user
-      alert('There was an error completing your setup. Please try again.');
+      
+      // Show specific error message
+      let errorMessage = 'There was an error completing your setup. Please try again.';
+      
+      if (error.response?.status === 401) {
+        errorMessage = 'Please log in to complete your setup.';
+        navigate('/login');
+        return;
+      } else if (error.response?.status === 400) {
+        errorMessage = 'Please check your information and try again.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
