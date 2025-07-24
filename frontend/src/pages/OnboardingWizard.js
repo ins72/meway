@@ -418,6 +418,16 @@ const OnboardingWizard = () => {
     }
   };
 
+  const handleStripePaymentSuccess = (paymentData) => {
+    console.log('Stripe payment successful:', paymentData);
+    handlePaymentSetup(paymentData);
+  };
+
+  const handleStripePaymentError = (error) => {
+    console.error('Stripe payment error:', error);
+    alert('❌ Payment setup failed: ' + error.message);
+  };
+
   const handlePaymentSetup = async (stripePaymentData = null) => {
     setLoading(true);
     try {
