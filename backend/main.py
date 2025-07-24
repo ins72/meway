@@ -99,10 +99,11 @@ async def api_health():
 # Only import and include routers if not in minimal mode
 MINIMAL_MODE = os.getenv("MINIMAL_MODE", "false").lower() == "true"
 
+# Auto-enable minimal mode in production containers if many imports fail
 if not MINIMAL_MODE:
     logger.info("Loading full router configuration...")
     try:
-        # Import core routers only
+        # Test critical imports first
         from api.auth import router as auth_router
         from api.user import router as user_router
         
@@ -110,19 +111,34 @@ if not MINIMAL_MODE:
         app.include_router(user_router, prefix="/api/user", tags=["user"])
         logger.info("✅ Core routers loaded successfully")
         
-        # Try to load additional routers
-        try:
-            from api.admin_plan_management import router as admin_plan_router
-            app.include_router(admin_plan_router, prefix="/api/admin-plan-management", tags=["admin"])
-            logger.info("✅ Admin routers loaded")
-        except Exception as e:
-            logger.warning(f"Admin routers not available: {e}")
+        # Try to load additional routers with individual error handling
+        additional_routers = [
+            ("api.admin_plan_management", "/api/admin-plan-management", "admin"),
+            ("api.plan_change_impact", "/api/plan-change-impact", "plan_impact"),
+        ]
+        
+        loaded_routers = 2  # auth and user already loaded
+        
+        for router_path, prefix, tag in additional_routers:
+            try:
+                module = __import__(router_path, fromlist=["router"])
+                router = getattr(module, "router")
+                app.include_router(router, prefix=prefix, tags=[tag])
+                loaded_routers += 1
+                logger.info(f"✅ {router_path} loaded")
+            except Exception as e:
+                logger.warning(f"⚠️ {router_path} not available: {e}")
+        
+        logger.info(f"✅ Total routers loaded: {loaded_routers}")
             
     except Exception as e:
-        logger.error(f"Router loading error: {e}")
-        logger.info("Continuing with minimal API...")
-else:
-    logger.info("Running in minimal mode - core endpoints only")
+        logger.error(f"❌ Critical router loading failed: {e}")
+        logger.info("🔄 Falling back to minimal mode")
+        MINIMAL_MODE = True
+
+if MINIMAL_MODE:
+    logger.info("🚀 Running in minimal mode - core endpoints only")
+    logger.info("   Available endpoints: /, /health, /api/health")
 
 # Catch-all for debugging
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
