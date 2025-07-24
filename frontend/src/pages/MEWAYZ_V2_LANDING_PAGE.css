@@ -1138,25 +1138,50 @@
   }
 }
 
-/* Tablet Portrait - 768px to 1024px */
+/* Tablet Portrait and Landscape - Improved Navigation */
 @media (max-width: 1024px) and (min-width: 769px) {
   .nav {
     padding: 1rem 2rem;
-    height: auto;
-    min-height: 70px; /* Set maximum height for nav */
+    min-height: 70px;
+    max-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    white-space: nowrap;
   }
   
   .nav-actions {
-    gap: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
   }
   
   .nav-actions .btn {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.9rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  
+  .theme-toggle {
+    padding: 0.625rem;
+    font-size: 1rem;
   }
 
   .hero {
-    padding: 9rem 2rem 6rem; /* Increased top padding to account for nav */
+    padding: 9rem 2rem 6rem;
   }
   
   .hero h1 {
@@ -1211,6 +1236,19 @@
   
   .pricing-card.popular {
     transform: scale(1.05);
+  }
+  
+  /* Improved checkmarks for tablet */
+  .plan-features li {
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    font-size: 0.9rem;
+  }
+  
+  .plan-features li::before {
+    width: 18px;
+    height: 18px;
+    font-size: 0.8rem;
   }
 }
 
