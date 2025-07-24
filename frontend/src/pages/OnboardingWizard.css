@@ -887,6 +887,55 @@
   color: var(--text-secondary);
 }
 
+/* Stripe Payment Section */
+.stripe-payment-section,
+.paypal-payment-section {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--surface-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.stripe-payment-section h3,
+.paypal-payment-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.paypal-info {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.paypal-info p {
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.paypal-continue-button {
+  background: #0070ba;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.paypal-continue-button:hover:not(:disabled) {
+  background: #005ea6;
+}
+
+.paypal-continue-button:disabled {
+  background: var(--text-disabled);
+  cursor: not-allowed;
+}
+
 .summary-value {
   font-size: var(--text-sm);
   font-weight: 500;
