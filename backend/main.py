@@ -79,6 +79,43 @@ async def api_status():
         "timestamp": datetime.utcnow().isoformat()
     }
 
+# Basic auth endpoints (without database functionality)
+@app.post("/api/auth/login")
+async def login():
+    """Minimal login endpoint"""
+    return {
+        "message": "Login endpoint available",
+        "status": "maintenance",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+@app.post("/api/auth/register")
+async def register():
+    """Minimal register endpoint"""
+    return {
+        "message": "Register endpoint available", 
+        "status": "maintenance",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+# Catch-all for any missing routes
+@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+async def catch_all():
+    """Catch-all handler"""
+    return {
+        "message": "API endpoint available",
+        "status": "minimal_mode",
+        "available_endpoints": [
+            "/",
+            "/health", 
+            "/api/health",
+            "/readiness",
+            "/liveness",
+            "/api/status"
+        ],
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
 logger.info("✅ Mewayz API ready")
 
 if __name__ == "__main__":
