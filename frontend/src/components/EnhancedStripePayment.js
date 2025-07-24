@@ -139,9 +139,9 @@ const EnhancedStripePayment = ({
         const url = `${process.env.REACT_APP_BACKEND_URL || window.location.origin}/api/payments/create-payment-intent`;
         const authToken = localStorage.getItem('auth_token');
         
-        console.log('Creating enhanced payment intent with URL:', url);
-        console.log('Auth token:', authToken ? 'present' : 'MISSING');
-        console.log('Request data:', {
+        // console.log('Creating enhanced payment intent with URL:', url);
+        // console.log('Auth token:', authToken ? 'present' : 'MISSING');
+        // console.log('Request data:', {
           amount: Math.round(amount * 100),
           currency,
           bundles,
@@ -180,7 +180,7 @@ const EnhancedStripePayment = ({
         if (data.client_secret) {
           setClientSecret(data.client_secret);
           setCustomerId(data.customer_id);
-          console.log('Enhanced payment intent created successfully:', data.payment_intent_id);
+          // console.log('Enhanced payment intent created successfully:', data.payment_intent_id);
         } else {
           throw new Error('No client secret received from server');
         }
