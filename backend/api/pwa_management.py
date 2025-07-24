@@ -7,9 +7,11 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from typing import Dict, Any, List, Optional
 import json
 import os
+import uuid
 from datetime import datetime
 import base64
 from core.auth import get_current_admin
+from core.database import get_database_async
 
 router = APIRouter(tags=["pwa"])
 
@@ -17,19 +19,20 @@ class PWAManifestService:
     """PWA Manifest generation and management service"""
     
     def __init__(self):
-        self.default_manifest = {
-            "name": "Mewayz v2 - Business Platform",
-            "short_name": "Mewayz",
-            "description": "All-in-One Business Management Platform",
-            "start_url": "/",
-            "display": "standalone",
-            "background_color": "#101010",
-            "theme_color": "#007AFF",
-            "orientation": "portrait-primary",
-            "categories": ["business", "productivity", "finance"],
-            "lang": "en",
-            "dir": "ltr"
-        }
+        self.collection_name = "pwa_configurations"
+        self.manifest_collection = "pwa_manifests"
+        self.install_tracking_collection = "pwa_install_tracking"
+        self.sync_data_collection = "pwa_sync_data"
+    
+    async def _get_collection(self, collection_name: str = None):
+        """Get database collection"""
+        try:
+            db = await get_database_async()
+            if db is None:
+                return None
+            return db[collection_name or self.collection_name]
+        except Exception as e:
+            return None
     
     async def generate_manifest(self, workspace_data: Dict[str, Any]) -> Dict[str, Any]:
         """Generate custom PWA manifest for workspace"""
