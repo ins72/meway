@@ -796,6 +796,9 @@ class MewayzBackendAuditor:
         self.test_course_community_system()
         self.test_multi_vendor_marketplace()
         
+        # Step 3.5: Test Launch Pricing System (CRITICAL FOR PRODUCTION)
+        self.test_launch_pricing_system()
+        
         # Step 4: Test additional systems
         self.test_additional_systems()
         
