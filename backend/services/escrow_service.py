@@ -62,6 +62,189 @@ class EscrowService:
             logger.error(f"Database error: {e}")
             return None
     
+    async def calculate_transaction_fees(self, amount: float, workspace_id: str) -> Dict[str, Any]:
+        """Calculate transaction fees based on workspace subscription"""
+        try:
+            # Get workspace subscription to determine fee rate
+            subscription_service = get_workspace_subscription_service()
+            subscription_result = await subscription_service.get_workspace_subscription(workspace_id, "system")
+            
+            # Determine fee rate
+            is_enterprise = False
+            if subscription_result.get("success"):
+                subscription = subscription_result.get("subscription", {})
+                # Check if workspace has enterprise-level subscription (4+ bundles)
+                bundles = subscription.get("bundles", [])
+                is_enterprise = len(bundles) >= 4
+            
+            fee_rate = self.fee_config["enterprise_rate"] if is_enterprise else self.fee_config["standard_rate"]
+            
+            # Calculate fees
+            platform_fee = amount * fee_rate
+            
+            # Apply minimum and maximum fee limits
+            platform_fee = max(platform_fee, self.fee_config["minimum_fee"])
+            platform_fee = min(platform_fee, self.fee_config["maximum_fee"])
+            
+            # Calculate net amount to seller
+            net_amount = amount - platform_fee
+            
+            return {
+                "success": True,
+                "original_amount": amount,
+                "platform_fee": round(platform_fee, 2),
+                "net_amount": round(net_amount, 2),
+                "fee_rate": fee_rate,
+                "fee_type": "enterprise" if is_enterprise else "standard",
+                "currency": self.fee_config["currency"],
+                "calculation_details": {
+                    "fee_rate_applied": fee_rate,
+                    "raw_fee": amount * fee_rate,
+                    "minimum_fee": self.fee_config["minimum_fee"],
+                    "maximum_fee": self.fee_config["maximum_fee"],
+                    "final_fee": platform_fee
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating transaction fees: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "original_amount": amount,
+                "platform_fee": 0,
+                "net_amount": amount
+            }
+    
+    async def create_transaction_with_fees(self, transaction_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create transaction with automatic fee calculation and collection"""
+        try:
+            amount = transaction_data.get("amount", 0)
+            workspace_id = transaction_data.get("workspace_id")
+            transaction_type = transaction_data.get("type", "payment")
+            
+            if not amount or not workspace_id:
+                return {"success": False, "error": "Amount and workspace_id are required"}
+            
+            # Calculate fees
+            fee_calculation = await self.calculate_transaction_fees(amount, workspace_id)
+            
+            if not fee_calculation.get("success"):
+                return fee_calculation
+            
+            # Create enhanced transaction record
+            enhanced_transaction = {
+                **transaction_data,
+                "id": str(uuid.uuid4()),
+                "original_amount": fee_calculation["original_amount"],
+                "platform_fee": fee_calculation["platform_fee"],
+                "net_amount": fee_calculation["net_amount"],
+                "fee_details": fee_calculation,
+                "status": "pending",
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+                "fee_collected": False,
+                "processing_status": "created"
+            }
+            
+            # Store transaction with fees
+            result = await self.create_escrow(enhanced_transaction)
+            
+            if result.get("success"):
+                # Create fee collection record
+                await self._create_fee_record(enhanced_transaction)
+                
+                return {
+                    "success": True,
+                    "transaction": result["data"],
+                    "fee_breakdown": fee_calculation,
+                    "message": f"Transaction created with {fee_calculation['fee_rate']*100:.1f}% platform fee"
+                }
+            else:
+                return result
+                
+        except Exception as e:
+            logger.error(f"Error creating transaction with fees: {e}")
+            return {"success": False, "error": str(e)}
+    
+    async def _create_fee_record(self, transaction_data: Dict[str, Any]):
+        """Create fee collection record for accounting"""
+        try:
+            fee_record = {
+                "id": str(uuid.uuid4()),
+                "transaction_id": transaction_data["id"],
+                "workspace_id": transaction_data["workspace_id"],
+                "fee_amount": transaction_data["platform_fee"],
+                "fee_rate": transaction_data["fee_details"]["fee_rate"],
+                "fee_type": transaction_data["fee_details"]["fee_type"],
+                "original_amount": transaction_data["original_amount"],
+                "currency": transaction_data["fee_details"]["currency"],
+                "created_at": datetime.utcnow(),
+                "status": "pending_collection",
+                "collection_method": "automatic",
+                "accounting_period": datetime.utcnow().strftime("%Y-%m")
+            }
+            
+            db = get_database()
+            fee_collection = db.transaction_fees
+            await fee_collection.insert_one(fee_record)
+            
+        except Exception as e:
+            logger.error(f"Error creating fee record: {e}")
+    
+    async def process_fee_collection(self, transaction_id: str) -> Dict[str, Any]:
+        """Process fee collection for a transaction"""
+        try:
+            # Get transaction
+            transaction_result = await self.get_escrow(transaction_id)
+            
+            if not transaction_result.get("success"):
+                return transaction_result
+            
+            transaction = transaction_result["data"]
+            
+            if transaction.get("fee_collected"):
+                return {
+                    "success": False,
+                    "error": "Fee already collected for this transaction"
+                }
+            
+            # Mark fee as collected
+            update_result = await self.update_escrow(transaction_id, {
+                "fee_collected": True,
+                "fee_collected_at": datetime.utcnow(),
+                "processing_status": "fee_collected"
+            })
+            
+            if update_result.get("success"):
+                # Update fee record
+                db = get_database()
+                fee_collection = db.transaction_fees
+                await fee_collection.update_one(
+                    {"transaction_id": transaction_id},
+                    {
+                        "$set": {
+                            "status": "collected",
+                            "collected_at": datetime.utcnow()
+                        }
+                    }
+                )
+                
+                return {
+                    "success": True,
+                    "transaction_id": transaction_id,
+                    "fee_amount": transaction.get("platform_fee"),
+                    "message": "Fee collected successfully"
+                }
+            else:
+                return update_result
+                
+        except Exception as e:
+            logger.error(f"Error processing fee collection: {e}")
+            return {"success": False, "error": str(e)}
+            logger.error(f"Database error: {e}")
+            return None
+    
     async def _get_collection_async(self):
         """Get collection - ASYNC version - GUARANTEED to work"""
         try:
