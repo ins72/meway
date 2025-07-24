@@ -352,7 +352,9 @@ try:
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
-    raise
+    logger.error(f"📊 Stack trace: {traceback.format_exc()}")
+    logger.warning("⚠️ Some routers may not be available - application continuing")
+    # Don't crash the app, continue with available routers
 
 @app.get("/")
 async def root():
