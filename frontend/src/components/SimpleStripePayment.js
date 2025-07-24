@@ -84,7 +84,16 @@ const SimpleStripePayment = ({
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/create-payment-intent`, {
+        const url = `${process.env.REACT_APP_BACKEND_URL}/api/create-payment-intent`;
+        console.log('Creating payment intent with URL:', url);
+        console.log('Request data:', {
+          amount: Math.round(amount * 100),
+          currency,
+          bundles,
+          workspace_name: workspaceName
+        });
+
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
