@@ -131,11 +131,24 @@ class PlanChangeImpactService:
             feature_changes = data.get("feature_changes", {})
             analyzed_by = data.get("analyzed_by")
             
+            # Enhanced validation
+            if not plan_name:
+                return {"success": False, "error": "Plan name is required"}
+            
+            if not isinstance(feature_changes, dict):
+                return {"success": False, "error": "Feature changes must be a dictionary"}
+            
             features_added = feature_changes.get("features_added", [])
             features_removed = feature_changes.get("features_removed", [])
             
-            if not plan_name or (not features_added and not features_removed):
-                return {"success": False, "error": "Plan name and feature changes are required"}
+            # Ensure features are lists
+            if not isinstance(features_added, list):
+                features_added = []
+            if not isinstance(features_removed, list):
+                features_removed = []
+            
+            if not features_added and not features_removed:
+                return {"success": False, "error": "At least one feature addition or removal is required"}
             
             # Get current plan configuration
             current_plan = await self._get_current_plan(plan_name)
