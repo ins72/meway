@@ -49,21 +49,26 @@ const LoginPage = () => {
         
         // Send token to backend for verification and login
         const response = await googleAuthAPI.verifyToken({
-          access_token: credentialResponse.access_token
+          access_token: credentialResponse.access_token,
+          intent: "login"  // Specify this is a login attempt
         });
         
         if (response.data.success) {
-          const { user, access_token } = response.data;
+          const { user, access_token, message, redirect_to, is_new_user } = response.data;
           
           // Store authentication data
           localStorage.setItem('authToken', access_token);
           localStorage.setItem('user', JSON.stringify(user));
           
-          // Show success message
-          alert(`✅ Login successful!\nWelcome back, ${user.name}!`);
+          // Show appropriate success message
+          alert(`✅ ${message}\nWelcome ${is_new_user ? 'to MEWAYZ' : 'back'}, ${user.name}!`);
           
-          // Navigate to dashboard
-          navigate('/dashboard');
+          // Navigate based on backend recommendation
+          if (redirect_to === "onboarding") {
+            navigate('/onboarding');
+          } else {
+            navigate('/dashboard');
+          }
         } else {
           throw new Error(response.data.message || 'Login failed');
         }
