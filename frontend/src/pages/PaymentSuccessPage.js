@@ -23,7 +23,7 @@ const PaymentSuccessPage = () => {
           return;
         }
 
-        console.log('Verifying payment:', paymentIntentId);
+        // console.log('Verifying payment:', paymentIntentId);
 
         // Confirm payment success with backend
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || window.location.origin}/api/payments/confirm-payment-success`, {
