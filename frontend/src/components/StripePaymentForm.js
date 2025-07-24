@@ -53,7 +53,7 @@ const StripePaymentForm = ({
     const cardElement = elements.getElement(CardElement);
 
     // Create payment method
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
     });
@@ -66,27 +66,27 @@ const StripePaymentForm = ({
       return;
     }
 
-    console.log('Payment method created:', paymentMethod);
+    console.log('Payment method created:', stripePaymentMethod);
     
     try {
       // Create checkout session via backend
       const checkoutResponse = await stripeAPI.createCheckoutSession({
         bundles: bundles,
         workspace_name: workspaceName,
-        payment_method: paymentMethod  // This should be 'monthly' or 'yearly'
+        payment_method: paymentMethod  // This is the billing frequency ('monthly' or 'yearly')
       });
       
       if (checkoutResponse.data.success) {
         // If checkout session created successfully, confirm payment
         const confirmResponse = await stripeAPI.confirmPayment({
-          paymentMethodId: paymentMethod.id,  // Now use the Stripe PaymentMethod object
+          paymentMethodId: stripePaymentMethod.id,  // Use the Stripe PaymentMethod object ID
           sessionId: checkoutResponse.data.session_id
         });
         
         if (confirmResponse.data.success) {
           onSuccess?.({
-            paymentMethodId: paymentMethod.id,
-            paymentMethod: paymentMethod,
+            paymentMethodId: stripePaymentMethod.id,
+            paymentMethod: stripePaymentMethod,
             sessionId: checkoutResponse.data.session_id
           });
         } else {
