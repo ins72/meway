@@ -1,0 +1,380 @@
+{
+  "summary": {
+    "total_tests": 38,
+    "passed_tests": 30,
+    "failed_tests": 8,
+    "success_rate": 78.94736842105263,
+    "timestamp": "2025-07-24T03:43:09.663151"
+  },
+  "systems": {
+    "Enhanced Escrow": {
+      "passed": 5,
+      "failed": 0,
+      "total": 5
+    },
+    "Usage Tracking": {
+      "passed": 8,
+      "failed": 0,
+      "total": 8
+    },
+    "Enterprise Revenue": {
+      "passed": 8,
+      "failed": 0,
+      "total": 8
+    },
+    "Template Marketplace Access": {
+      "passed": 4,
+      "failed": 3,
+      "total": 7
+    },
+    "AI Token Purchase": {
+      "passed": 5,
+      "failed": 5,
+      "total": 10
+    }
+  },
+  "detailed_results": [
+    {
+      "system": "Enhanced Escrow",
+      "endpoint": "escrow/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.478604"
+    },
+    {
+      "system": "Enhanced Escrow",
+      "endpoint": "escrow/calculate-fees?amount=100&workspace_id=deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.507850"
+    },
+    {
+      "system": "Enhanced Escrow",
+      "endpoint": "escrow/transaction-with-fees",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.554931"
+    },
+    {
+      "system": "Enhanced Escrow",
+      "endpoint": "escrow/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.577934"
+    },
+    {
+      "system": "Enhanced Escrow",
+      "endpoint": "escrow/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.602756"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.622442"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/track",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.680119"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/check-limit",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.702999"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/current/deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.751824"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/limits/deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.779666"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/analytics/deebdeae-4a9d-4611-ad12-9b71e13376a6?period=month",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.801994"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/warnings/deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.826139"
+    },
+    {
+      "system": "Usage Tracking",
+      "endpoint": "usage-tracking/upgrade-suggestion/deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.881377"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.901902"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/revenue/deebdeae-4a9d-4611-ad12-9b71e13376a6?period=current_month",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.920754"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/billing/calculate",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.955142"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/revenue-sources/deebdeae-4a9d-4611-ad12-9b71e13376a6?period=current_month",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:08.978394"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/billing-history/deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.008628"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/billing/generate",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.045912"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/revenue/track",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.093256"
+    },
+    {
+      "system": "Enterprise Revenue",
+      "endpoint": "enterprise-revenue/revenue/projections/deebdeae-4a9d-4611-ad12-9b71e13376a6?months_ahead=12",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.116197"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.138188"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/seller-access/test_user_123?workspace_id=deebdeae-4a9d-4611-ad12-9b71e13376a6",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.164704"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/selling-requirements",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.185238"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/enable-selling",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Status: 400 - Error: {\"detail\":\"User is not a member of this workspace\"}",
+      "timestamp": "2025-07-24T03:43:09.207005"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/validate-template",
+      "method": "POST",
+      "success": false,
+      "status_code": 403,
+      "details": "Status: 403 - Error: {\"detail\":\"Template selling access required\"}",
+      "timestamp": "2025-07-24T03:43:09.238634"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/seller-stats/test_user_123?workspace_id=deebdeae-4a9d-4611-ad12-9b71e13376a6&period=month",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Status: 404 - Error: {\"detail\":\"No seller record found\"}",
+      "timestamp": "2025-07-24T03:43:09.262794"
+    },
+    {
+      "system": "Template Marketplace Access",
+      "endpoint": "template-marketplace-access/bundle-requirements/creator",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.284501"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.308501"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/pricing",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.328083"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/workspace/deebdeae-4a9d-4611-ad12-9b71e13376a6/balance",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Status: 404 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_get_usage_breakdown'\"}",
+      "timestamp": "2025-07-24T03:43:09.366566"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/purchase",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.517829"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/workspace/deebdeae-4a9d-4611-ad12-9b71e13376a6/usage-history?period=month",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Status: 404 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_calculate_period_dates'\"}",
+      "timestamp": "2025-07-24T03:43:09.535964"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/workspace/deebdeae-4a9d-4611-ad12-9b71e13376a6/purchase-history",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.562894"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/gift",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Status: 400 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_workspace_exists'\"}",
+      "timestamp": "2025-07-24T03:43:09.582396"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/workspace/deebdeae-4a9d-4611-ad12-9b71e13376a6/auto-refill",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Status: 200 - Success: True",
+      "timestamp": "2025-07-24T03:43:09.618573"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/workspace/deebdeae-4a9d-4611-ad12-9b71e13376a6/recommendations",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Status: 404 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_get_usage_analytics'\"}",
+      "timestamp": "2025-07-24T03:43:09.641274"
+    },
+    {
+      "system": "AI Token Purchase",
+      "endpoint": "ai-token-purchase/redeem-promo",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Status: 400 - Error: {\"detail\":\"Invalid promo code\"}",
+      "timestamp": "2025-07-24T03:43:09.662604"
+    }
+  ]
+}
