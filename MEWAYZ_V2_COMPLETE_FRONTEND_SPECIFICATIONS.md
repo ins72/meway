@@ -49,7 +49,377 @@ const getVisibleFeatures = (user, currentWorkspace) => {
 
 ---
 
-## 🤖 AI TOKEN PURCHASE SYSTEM ⚠️ CRITICAL NEW IMPLEMENTATION NEEDED
+## 🎉 LAUNCH PRICING SYSTEM ⚠️ CRITICAL NEW IMPLEMENTATION NEEDED
+
+### **Launch Special Banner** (Site-wide)
+**File:** `/frontend/src/components/LaunchSpecialBanner.js`  
+**Location:** Top of all pages, sticky header
+
+#### **Banner Structure:**
+```javascript
+const LaunchSpecialBanner = {
+  display_logic: {
+    show_conditions: [
+      "User not logged in (marketing)",
+      "User logged in with eligible workspace",
+      "User in onboarding flow"
+    ],
+    hide_conditions: [
+      "User already claimed special",
+      "Special expired or sold out",
+      "User dismissed banner permanently"
+    ]
+  },
+  
+  content_rotation: {
+    specials: [
+      {
+        bundle: "creator",
+        text: "🎉 LAUNCH SPECIAL: First 1000 users get Creator Bundle for $9/month (3 months)!",
+        urgency: "Only 127 spots left!",
+        cta: "Claim Special",
+        background: "gradient-orange"
+      },
+      {
+        bundle: "ecommerce", 
+        text: "🎁 E-COMMERCE LAUNCH: First 500 users get 2 months FREE!",
+        urgency: "Limited time offer",
+        cta: "Get Free Months",
+        background: "gradient-blue"
+      },
+      {
+        bundle: "social_media",
+        text: "📱 SOCIAL MEDIA BUNDLE: Free 2-week trial - No credit card required!",
+        urgency: "Start today",
+        cta: "Start Free Trial", 
+        background: "gradient-purple"
+      }
+    ],
+    
+    rotation_logic: "Show most relevant to user's interests/behavior",
+    auto_rotate_interval: "8 seconds",
+    click_tracking: "Track which specials get most clicks"
+  },
+  
+  api_integration: {
+    specials_endpoint: "GET /api/launch-pricing/active-specials",
+    claim_endpoint: "POST /api/launch-pricing/claim-special",
+    eligibility_check: "POST /api/launch-pricing/validate-eligibility"
+  }
+};
+```
+
+### **Launch Special Modal** ⚠️ CRITICAL IMPLEMENTATION
+**File:** `/frontend/src/modals/LaunchSpecialModal.js`  
+**Trigger:** Click banner CTA, onboarding step, pricing page
+
+#### **Modal Layout:**
+```javascript
+const LaunchSpecialModal = {
+  header: {
+    title: "🎉 Limited Time Launch Special",
+    subtitle: "Don't miss out on exclusive founding member pricing",
+    countdown_timer: {
+      shows: "Time remaining: 23 days, 14 hours, 32 minutes",
+      urgency_colors: {
+        green: "30+ days remaining",
+        yellow: "7-30 days remaining", 
+        red: "< 7 days remaining"
+      }
+    }
+  },
+  
+  special_details: {
+    creator_special: {
+      title: "Creator Bundle Launch Special",
+      original_price: "$19/month",
+      special_price: "$9/month", 
+      duration: "First 3 months",
+      savings_highlight: "Save $30 total + ongoing 50% discount",
+      features_preview: ["Unlimited Bio Links", "Website Builder", "AI Content (500 credits)", "Template Selling"],
+      spots_remaining: "127 of 1000 spots left",
+      urgency_bar: "Progress bar showing 87.3% claimed"
+    },
+    
+    ecommerce_special: {
+      title: "E-commerce Bundle Launch Special",
+      original_price: "$24/month",
+      special_price: "FREE",
+      duration: "First 2 months",
+      savings_highlight: "Save $48 + get started with no upfront cost",
+      features_preview: ["Unlimited Products", "Multi-vendor Support", "Payment Processing", "Inventory Management"],
+      spots_remaining: "67 of 500 spots left",
+      urgency_bar: "Progress bar showing 86.6% claimed"
+    }
+  },
+  
+  claim_process: {
+    step_1: {
+      title: "Verify Eligibility",
+      content: "✅ New workspace - eligible for launch special!",
+      api_call: "POST /api/launch-pricing/validate-eligibility"
+    },
+    
+    step_2: {
+      title: "Claim Your Special",
+      content: "Secure your founding member pricing",
+      promo_code_input: {
+        optional: true,
+        placeholder: "Optional: Enter promo code",
+        validation: "Real-time validation"
+      }
+    },
+    
+    step_3: {
+      title: "Confirmation",
+      content: "Special claimed! Your discount will apply automatically.",
+      next_steps: "Complete workspace setup to activate"
+    }
+  },
+  
+  social_proof: {
+    testimonials: [
+      '"Saved me $200/month vs other tools!" - Sarah K.',
+      '"Everything I need in one platform" - Mike R.'
+    ],
+    stats: [
+      "Join 2,847 founding members",
+      "Average savings: $156/month",
+      "98% customer satisfaction"
+    ]
+  }
+};
+```
+
+### **Pricing Page Enhancement** ⚠️ ENHANCEMENT NEEDED
+**File:** Enhancement to existing pricing components  
+**Location:** `/pricing` page and onboarding step 5
+
+#### **Enhanced Pricing Cards:**
+```javascript
+const EnhancedPricingCards = {
+  creator_bundle: {
+    header: {
+      title: "Creator Bundle",
+      badge: "🔥 LAUNCH SPECIAL",
+      original_price: "$19/month",
+      strikethrough: true,
+      special_price: "$9/month",
+      special_duration: "First 3 months"
+    },
+    
+    launch_special_section: {
+      background: "special-gradient",
+      content: {
+        title: "Founding Member Special",
+        savings: "Save $30 in your first 3 months",
+        urgency: "Only 127 spots left!",
+        countdown: "23 days remaining",
+        claim_button: "Claim Special ($9/month)"
+      }
+    },
+    
+    features_section: {
+      standard_features: ["Unlimited Bio Links", "Website Builder", "AI Content", "Template Selling"],
+      bonus_features: ["🎁 Priority Support", "🎁 Launch Member Badge", "🎁 Future Feature Early Access"]
+    }
+  },
+  
+  multi_bundle_special: {
+    position: "Between bundle cards",
+    content: {
+      title: "💥 Multi-Bundle Launch Combo",
+      description: "Combine any 2+ bundles and save even more!",
+      examples: [
+        { bundles: "Creator + E-commerce", regular: "$43/month", special: "$28/month", savings: "35% off" },
+        { bundles: "All 3 Popular", regular: "$72/month", special: "$40/month", savings: "44% off" }
+      ],
+      cta: "Build Your Combo"
+    }
+  }
+};
+```
+
+### **Launch Special Tracking Dashboard** ⚠️ ADMIN FEATURE
+**File:** `/frontend/src/pages/admin/LaunchSpecialAdmin.js`  
+**Route:** `/admin/launch-specials`  
+**Access:** Admin users only
+
+#### **Admin Dashboard:**
+```javascript
+const LaunchSpecialAdminDashboard = {
+  overview_metrics: {
+    cards: [
+      { title: "Total Claims", value: "2,847", change: "+127 today" },
+      { title: "Revenue Impact", value: "$34,567", subtitle: "Discounts given" },
+      { title: "Conversion Rate", value: "23.4%", subtitle: "Visitors to claims" },
+      { title: "Most Popular", value: "Creator Bundle", subtitle: "87.3% claimed" }
+    ]
+  },
+  
+  special_status_table: {
+    columns: ["Bundle", "Claims", "Limit", "% Claimed", "Days Left", "Status", "Actions"],
+    data: [
+      {
+        bundle: "Creator",
+        claims: "873 / 1000",
+        percentage: "87.3%",
+        days_left: 23,
+        status: "Active",
+        actions: ["Extend Time", "Increase Limit", "Generate Codes"]
+      }
+    ]
+  },
+  
+  analytics_charts: [
+    { type: "Line chart", title: "Daily Claims", timeframe: "Last 30 days" },
+    { type: "Bar chart", title: "Claims by Bundle" },
+    { type: "Funnel chart", title: "Claim Conversion Funnel" }
+  ],
+  
+  management_actions: {
+    generate_promo_codes: "Create custom promo codes",
+    extend_specials: "Extend end dates",
+    modify_limits: "Increase claim limits",
+    create_new_special: "Launch new promotional campaigns"
+  }
+};
+```
+
+### **User Account - Claimed Specials Section** ⚠️ USER FEATURE
+**File:** `/frontend/src/components/account/ClaimedSpecials.js`  
+**Location:** User account page, billing section
+
+#### **Claimed Specials Display:**
+```javascript
+const ClaimedSpecialsSection = {
+  header: {
+    title: "Your Launch Specials",
+    subtitle: "Founding member benefits and savings"
+  },
+  
+  claimed_special_cards: [
+    {
+      bundle: "Creator Bundle",
+      status: "Active",
+      special_price: "$9/month",
+      regular_price: "$19/month",
+      expires: "February 28, 2025",
+      days_remaining: 23,
+      total_savings: "$30 saved so far",
+      progress_bar: "2 of 3 months used",
+      renewal_info: "Will renew at $19/month after special expires"
+    }
+  ],
+  
+  savings_summary: {
+    total_saved: "$67 saved with launch specials",
+    ongoing_savings: "Save $156/month vs competitors",
+    member_since: "Founding member since December 2024",
+    member_badge: "🏆 Launch Member Badge"
+  },
+  
+  referral_section: {
+    title: "Share the Special",
+    description: "Help friends save too and earn rewards",
+    referral_code: "LAUNCH-SARAH-2024",
+    share_buttons: ["Copy Link", "Email", "Social Media"],
+    referral_stats: "3 friends joined, you earned $45 credit"
+  }
+};
+```
+
+### **Onboarding Integration** ⚠️ STEP 5 ENHANCEMENT
+**File:** Enhancement to existing onboarding Step 5  
+**Integration:** Show available launch specials in pricing selection
+
+#### **Enhanced Onboarding Step 5:**
+```javascript
+const EnhancedOnboardingPricing = {
+  launch_special_prompt: {
+    position: "Top of pricing step",
+    content: {
+      title: "🎉 Perfect timing! You're eligible for launch specials",
+      subtitle: "As a new user, you can claim exclusive founding member pricing",
+      cta: "View Available Specials"
+    }
+  },
+  
+  pricing_cards_enhancement: {
+    special_badges: "Show launch special badges on eligible bundles",
+    special_pricing: "Display special prices prominently",
+    urgency_indicators: "Show spots remaining and countdown",
+    claim_integration: "Allow claiming directly from pricing cards"
+  },
+  
+  multi_bundle_calculator: {
+    real_time_special_pricing: true,
+    shows_launch_discounts: true,
+    stacks_with_multi_bundle: true,
+    example: {
+      creator_plus_ecommerce: {
+        regular_bundle_price: "$43/month",
+        multi_bundle_discount: "$34/month (20% off)",
+        launch_special: "$23/month (additional special pricing)",
+        total_savings: "Save $20/month for first 3 months"
+      }
+    }
+  }
+};
+```
+
+### **Mobile Launch Special Experience** ⚠️ MOBILE OPTIMIZATION
+**Files:** Mobile-specific components for launch specials
+
+#### **Mobile Considerations:**
+```javascript
+const MobileLaunchSpecials = {
+  banner: {
+    design: "Collapsible banner to save screen space",
+    interaction: "Swipe up to dismiss, tap to expand",
+    position: "Sticky at top, auto-hide on scroll"
+  },
+  
+  modal: {
+    design: "Full-screen modal for better mobile experience",
+    navigation: "Swipe between different specials",
+    claim_flow: "Simplified 2-step process for mobile"
+  },
+  
+  pricing_cards: {
+    layout: "Vertical stack with horizontal scroll for specials",
+    special_indicators: "Prominent badges and colors",
+    claim_buttons: "Large, thumb-friendly tap targets"
+  }
+};
+```
+
+---
+
+## 📊 LAUNCH PRICING BACKEND INTEGRATION
+
+### **API Endpoints Implemented:**
+```javascript
+const LaunchPricingAPIs = {
+  "GET /api/launch-pricing/active-specials": "Get all current launch specials",
+  "GET /api/launch-pricing/bundle/{bundle_name}/special": "Get specific bundle special",
+  "POST /api/launch-pricing/claim-special": "Claim a launch special",
+  "POST /api/launch-pricing/validate-eligibility": "Check user eligibility",
+  "GET /api/launch-pricing/claimed-specials/{workspace_id}": "Get claimed specials",
+  "POST /api/launch-pricing/generate-promo-code": "Generate promo codes (admin)",
+  "GET /api/launch-pricing/special-analytics": "Get special analytics (admin)",
+  "POST /api/launch-pricing/extend-special": "Modify specials (admin)",
+  "GET /api/launch-pricing/referral-tracking/{code}": "Track referral usage"
+};
+```
+
+### **Real-time Features Required:**
+- **Live claim counters** - WebSocket updates for spots remaining
+- **Countdown timers** - Real-time special expiration countdowns  
+- **Eligibility checking** - Instant validation of user eligibility
+- **Urgency updates** - Dynamic urgency levels based on claims
+
+---
 
 ### **AI Token Balance Widget** (Dashboard Header)
 **File:** `/frontend/src/components/AITokenBalance.js`  
