@@ -101,7 +101,7 @@ const SettingsPage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`nav-item ${activeTab === tab.id ? 'active' : ''}`}
                 >
-                  <span className="nav-icon">{tab.icon}</span>
+                  <span className="nav-icon-settings">{tab.icon}</span>
                   <span className="nav-label">{tab.label}</span>
                 </button>
               ))}
