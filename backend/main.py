@@ -159,6 +159,8 @@ try:
     from api.native_mobile import router as native_mobile_router
     from api.advanced_ui import router as advanced_ui_router
     from api.workspace_subscription import router as workspace_subscription_router
+    from api.usage_tracking import router as usage_tracking_router
+    from api.enterprise_revenue import router as enterprise_revenue_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
