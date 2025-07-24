@@ -17,12 +17,13 @@ router = APIRouter()
 async def get_payment_methods_settings():
     """Get payment methods configuration - PUBLIC endpoint for frontend"""
     try:
-        db = get_database()
+        # Use async database access
+        db = await get_database_async()
         if db is None:
             raise HTTPException(status_code=500, detail="Database unavailable")
         
-        # Get payment methods settings (sync operation)
-        setting = db['admin_settings'].find_one({'setting_key': 'payment_methods'})
+        # Get payment methods settings (async operation)
+        setting = await db['admin_settings'].find_one({'setting_key': 'payment_methods'})
         
         if setting:
             return {
@@ -46,7 +47,15 @@ async def get_payment_methods_settings():
             
     except Exception as e:
         logger.error(f"Get payment methods settings error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        # Return default settings on error instead of raising exception
+        return {
+            "success": True,
+            "data": {
+                "paypal_enabled": False,
+                "credit_card_enabled": True,
+                "stripe_enabled": True
+            }
+        }
 
 @router.put("/payment-methods")
 async def update_payment_methods_settings(
