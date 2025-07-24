@@ -82,15 +82,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/onboarding" element={
-              stripePromise ? (
-                <Elements stripe={stripePromise}>
-                  <OnboardingWizard />
-                </Elements>
-              ) : (
-                <OnboardingWizard />
-              )
-            } />
+            <Route path="/onboarding" element={<OnboardingWizard />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
             
             {/* Legal Pages */}
