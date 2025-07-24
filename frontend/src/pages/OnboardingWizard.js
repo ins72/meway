@@ -276,11 +276,42 @@ const OnboardingWizard = () => {
     });
   };
 
-  const handlePlanSelect = (planId) => {
+  const handleBundleSelect = (bundleId) => {
+    const newBundles = formData.selectedBundles.includes(bundleId)
+      ? formData.selectedBundles.filter(b => b !== bundleId)
+      : [...formData.selectedBundles, bundleId];
     setFormData({
       ...formData,
-      selectedPlan: planId
+      selectedBundles: newBundles
     });
+  };
+
+  const calculateBundleDiscount = () => {
+    const bundleCount = formData.selectedBundles.length;
+    if (bundleCount >= 4) return 0.40; // 40% discount for 4+ bundles
+    if (bundleCount === 3) return 0.30; // 30% discount for 3 bundles
+    if (bundleCount === 2) return 0.20; // 20% discount for 2 bundles
+    return 0; // No discount for 1 bundle
+  };
+
+  const calculateTotalPrice = () => {
+    const selectedBundles = pricingBundles.filter(bundle => 
+      formData.selectedBundles.includes(bundle.id)
+    );
+    
+    const basePrice = selectedBundles.reduce((total, bundle) => {
+      return total + (formData.paymentMethod === 'monthly' ? bundle.monthlyPrice : bundle.yearlyPrice);
+    }, 0);
+    
+    const discount = calculateBundleDiscount();
+    const discountedPrice = basePrice * (1 - discount);
+    
+    return {
+      basePrice,
+      discount,
+      discountedPrice,
+      savings: basePrice - discountedPrice
+    };
   };
 
   const handleNext = () => {
