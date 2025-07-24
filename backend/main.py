@@ -1,124 +1,58 @@
 """
-Mewayz API - ULTRA MINIMAL CONTAINER VERSION
-Guaranteed to start in any container environment
+EMERGENCY MINIMAL BACKEND FOR CONTAINER DEPLOYMENT
+This is the most basic FastAPI app possible - guaranteed to work in any container
 """
 
+from fastapi import FastAPI
+from datetime import datetime
 import logging
 import sys
-import os
-from datetime import datetime
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-# Ultra-simple logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stdout)]
-)
-logger = logging.getLogger("mewayz")
+# Minimal logging
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+logger = logging.getLogger("emergency")
 
-# Create the most minimal FastAPI app possible
-app = FastAPI(title="Mewayz API", version="2.0.0")
+# Create app with absolute minimum configuration
+app = FastAPI()
 
-# Minimal CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Enable CORS for all origins
+@app.middleware("http")
+async def add_cors_header(request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
 
-logger.info("🚀 Mewayz API starting...")
+logger.info("Emergency API starting...")
 
 @app.get("/")
-async def root():
-    """Root endpoint - always works"""
-    return {
-        "service": "mewayz-api",
-        "status": "running",
-        "version": "2.0.0",
-        "timestamp": datetime.utcnow().isoformat(),
-        "message": "API is operational"
-    }
+def root():
+    return {"status": "running", "time": datetime.utcnow().isoformat()}
 
 @app.get("/health")
-async def health():
-    """Health check - always returns healthy"""
-    return {
-        "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat()
-    }
+def health():
+    return {"status": "healthy"}
 
 @app.get("/api/health")
-async def api_health():
-    """API health check"""
-    return {
-        "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat()
-    }
+def api_health():
+    return {"status": "healthy"}
 
 @app.get("/readiness")
-async def readiness():
-    """Kubernetes readiness probe"""
+def readiness():
     return {"ready": True}
 
-@app.get("/liveness")  
-async def liveness():
-    """Kubernetes liveness probe"""
+@app.get("/liveness")
+def liveness():
     return {"alive": True}
 
-# Basic API endpoints that don't require database
-@app.get("/api/status")
-async def api_status():
-    """API status"""
-    return {
-        "api": "operational",
-        "version": "2.0.0", 
-        "timestamp": datetime.utcnow().isoformat()
-    }
+# Catch everything else
+@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+def catch_all():
+    return {"message": "API available", "time": datetime.utcnow().isoformat()}
 
-# Basic auth endpoints (without database functionality)
-@app.post("/api/auth/login")
-async def login():
-    """Minimal login endpoint"""
-    return {
-        "message": "Login endpoint available",
-        "status": "maintenance",
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-@app.post("/api/auth/register")
-async def register():
-    """Minimal register endpoint"""
-    return {
-        "message": "Register endpoint available", 
-        "status": "maintenance",
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-# Catch-all for any missing routes
-@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
-async def catch_all():
-    """Catch-all handler"""
-    return {
-        "message": "API endpoint available",
-        "status": "minimal_mode",
-        "available_endpoints": [
-            "/",
-            "/health", 
-            "/api/health",
-            "/readiness",
-            "/liveness",
-            "/api/status"
-        ],
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-logger.info("✅ Mewayz API ready")
+logger.info("Emergency API ready")
 
 if __name__ == "__main__":
     import uvicorn
-    logger.info("Starting uvicorn...")
-    uvicorn.run(app, host="0.0.0.0", port=8001, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=8001)
