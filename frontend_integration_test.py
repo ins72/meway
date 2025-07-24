@@ -156,13 +156,13 @@ class FrontendIntegrationTester:
         
         # Test AI content endpoint (for social media content)
         try:
-            response = requests.get(f"{self.base_url}/api/ai_content/health", 
+            response = requests.get(f"{self.base_url}/api/ai-content/health", 
                                   headers=self.headers, timeout=10)
             success = response.status_code == 200
-            self.log_result("/api/ai_content/health", success, response.status_code,
+            self.log_result("/api/ai-content/health", success, response.status_code,
                           "AI Content system available" if success else f"Failed: {response.text[:100]}")
         except Exception as e:
-            self.log_result("/api/ai_content/health", False, None, f"AI Content error: {str(e)}")
+            self.log_result("/api/ai-content/health", False, None, f"AI Content error: {str(e)}")
     
     def test_ecommerce_endpoints(self):
         """Test endpoints needed for EcommercePage"""
