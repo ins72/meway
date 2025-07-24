@@ -376,74 +376,52 @@ async def root():
 
 @app.get("/health")
 async def health():
-    """Comprehensive system status for deployment monitoring"""
+    """Enhanced health check endpoint that works even without database"""
     try:
-        import psutil
-        import platform
-        
-        # Get system information
-        system_info = {
-            "platform": platform.system(),
-            "platform_release": platform.release(),
-            "platform_version": platform.version(),
-            "architecture": platform.architecture()[0],
-            "hostname": platform.node(),
-            "ip_address": "unknown",
-            "mac_address": "unknown",
-            "processor": platform.processor()
+        # Basic app health
+        health_status = {
+            "status": "healthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "services": {
+                "api": "operational",
+                "database": "unknown",
+                "collections": 0
+            },
+            "version": "2.0.0",
+            "environment": "production"
         }
         
-        # Get memory information
-        memory = psutil.virtual_memory()
-        memory_info = {
-            "total": memory.total,
-            "available": memory.available,
-            "percent": memory.percent,
-            "used": memory.used,
-            "free": memory.free
-        }
-        
-        # Get CPU information
-        cpu_info = {
-            "cpu_count": psutil.cpu_count(),
-            "cpu_count_logical": psutil.cpu_count(logical=True),
-            "cpu_percent": psutil.cpu_percent(interval=1)
-        }
-        
-        # Test database connection
-        db_status = "unknown"
+        # Try to get database status with timeout
         try:
             if db.database is not None:
+                # Test database connection with shorter timeout for health checks
                 await asyncio.wait_for(
                     db.client.admin.command('ping'), 
-                    timeout=2.0
+                    timeout=3.0
                 )
-                db_status = "connected"
+                health_status["services"]["database"] = "connected"
+                
+                # Get collection count
+                collections = await db.database.list_collection_names()
+                health_status["services"]["collections"] = len(collections)
             else:
-                db_status = "not_initialized"
+                health_status["services"]["database"] = "not_initialized"
+        except asyncio.TimeoutError:
+            health_status["services"]["database"] = "timeout"
         except Exception as e:
-            db_status = f"error: {str(e)[:30]}"
+            health_status["services"]["database"] = f"error: {str(e)[:50]}"
         
-        return {
-            "status": "operational",
-            "timestamp": datetime.utcnow().isoformat(),
-            "system": system_info,
-            "memory": memory_info,
-            "cpu": cpu_info,
-            "database": db_status,
-            "services": {
-                "api": "running",
-                "uvicorn": "operational",
-                "fastapi": "operational"
-            }
-        }
-    
+        return health_status
+        
     except Exception as e:
+        # Even if there's an error, return a basic health status
+        logger.error(f"Health check error: {e}")
         return {
-            "status": "error",
+            "status": "degraded",
             "timestamp": datetime.utcnow().isoformat(),
-            "error": str(e),
-            "message": "System status check failed"
+            "error": str(e)[:100],
+            "message": "API is operational despite errors",
+            "version": "2.0.0"
         }
     """Enhanced health check endpoint that works even without database"""
     try:
