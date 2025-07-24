@@ -78,6 +78,7 @@ function App() {
                 <OnboardingWizard />
               </Elements>
             } />
+            <Route path="/payment-success" element={<PaymentSuccessPage />} />
             
             {/* Legal Pages */}
             <Route path="/terms-of-service" element={<TermsOfServicePage />} />
