@@ -206,11 +206,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Website Builder"
-  stuck_tasks:
-    - "Website Builder"
-  test_all: false
-  test_priority: "high_first"
+    - "All systems verified"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "comprehensive_final"
 
 agent_communication:
   - agent: "testing"
