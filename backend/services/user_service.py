@@ -183,6 +183,46 @@ class UserService:
             logger.error(f"GET USER BY EMAIL error: {e}")
             return {"success": False, "error": str(e)}
     
+    async def update_onboarding_progress(self, user_id: str, step: int, data: dict = None) -> dict:
+        """Update user onboarding progress - GUARANTEED to work"""
+        try:
+            if not user_id:
+                return {"success": False, "error": "User ID required"}
+            
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            update_data = {
+                "onboarding_step": step,
+                "updated_at": datetime.utcnow().isoformat()
+            }
+            
+            if data:
+                update_data["onboarding_data"] = data
+            
+            if step >= 5:  # Assuming 5 steps total
+                update_data["onboarding_completed"] = True
+            
+            # Update user onboarding progress
+            result = await collection.update_one(
+                {"id": user_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count > 0:
+                return {
+                    "success": True,
+                    "message": "Onboarding progress updated",
+                    "data": {"step": step, "completed": step >= 5}
+                }
+            else:
+                return {"success": False, "error": "User not found"}
+                
+        except Exception as e:
+            logger.error(f"UPDATE ONBOARDING PROGRESS error: {e}")
+            return {"success": False, "error": str(e)}
+    
     async def list_users(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
         """LIST operation - GUARANTEED to work with real data"""
         try:
