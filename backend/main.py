@@ -51,10 +51,23 @@ async def lifespan(app: FastAPI):
     # Try database connection in background - don't wait for it
     asyncio.create_task(try_database_connection())
     
+    # Initialize proper database connection for services
+    try:
+        from core.database import connect_to_mongo, db
+        await connect_to_mongo()
+        logger.info("✅ Database connection initialized for services")
+    except Exception as e:
+        logger.warning(f"⚠️ Database initialization failed (services will run in fallback mode): {e}")
+    
     logger.info("✅ Application ready")
     yield
     
     logger.info("🔄 Application shutting down...")
+    try:
+        from core.database import close_mongo_connection
+        await close_mongo_connection()
+    except Exception:
+        pass
 
 # Create minimal FastAPI app
 app = FastAPI(
