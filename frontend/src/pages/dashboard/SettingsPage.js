@@ -23,11 +23,11 @@ const SettingsPage = () => {
   });
 
   const tabs = [
-    { id: 'general', label: 'General', icon: '⚙️' },
-    { id: 'profile', label: 'Profile', icon: '👤' },
-    { id: 'notifications', label: 'Notifications', icon: '🔔' },
-    { id: 'security', label: 'Security', icon: '🔒' },
-    { id: 'billing', label: 'Billing', icon: '💳' }
+    { id: 'general', label: 'General', icon: 'settings' },
+    { id: 'profile', label: 'Profile', icon: 'user' },
+    { id: 'notifications', label: 'Notifications', icon: 'bell' },
+    { id: 'security', label: 'Security', icon: 'shield' },
+    { id: 'billing', label: 'Billing', icon: 'credit-card' }
   ];
 
   const industries = [
