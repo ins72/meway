@@ -145,11 +145,11 @@ const SocialMediaPage = () => {
         </div>
         <div className="header-actions">
           <button onClick={handleCreatePost} className="btn btn-primary">
-            <span>📝</span>
+            <span className="btn-icon">+</span>
             Create Post
           </button>
           <button onClick={handleScheduleCampaign} className="btn btn-secondary">
-            <span>📅</span>
+            <span className="btn-icon">📅</span>
             Schedule Campaign
           </button>
         </div>
