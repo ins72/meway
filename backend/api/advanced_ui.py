@@ -609,6 +609,50 @@ class AdvancedUIService:
             
         except Exception as e:
             return {"success": False, "healthy": False, "error": str(e)}
+    
+    async def get_component_config(self, component_type: str) -> Dict[str, Any]:
+        """Get component configuration"""
+        try:
+            configs = {
+                "data_table": {
+                    "columns": ["id", "name", "status", "created_at", "actions"],
+                    "sorting": {"enabled": True, "default": "created_at"},
+                    "filtering": {"enabled": True, "fields": ["name", "status"]},
+                    "pagination": {"enabled": True, "page_size": 25},
+                    "actions": ["view", "edit", "delete"],
+                    "export": {"enabled": True, "formats": ["csv", "xlsx", "pdf"]}
+                },
+                "chart": {
+                    "types": ["line", "bar", "pie", "doughnut", "area", "scatter"],
+                    "data_sources": ["api", "static", "real_time"],
+                    "customization": {"colors": True, "labels": True, "legend": True},
+                    "interactivity": {"zoom": True, "hover": True, "click": True}
+                },
+                "form": {
+                    "field_types": ["text", "email", "password", "number", "select", "multi_select", "checkbox", "radio", "textarea", "file", "date", "time", "color"],
+                    "validation": {"client_side": True, "server_side": True},
+                    "layout": {"columns": [1, 2, 3, 4], "responsive": True},
+                    "submission": {"ajax": True, "redirect": True, "callback": True}
+                },
+                "calendar": {
+                    "views": ["month", "week", "day", "agenda"],
+                    "events": {"create": True, "edit": True, "delete": True, "drag_drop": True},
+                    "integrations": ["google_calendar", "outlook", "ical"],
+                    "notifications": {"email": True, "push": True, "sms": True}
+                }
+            }
+            
+            if component_type in configs:
+                return {
+                    "success": True,
+                    "data": configs[component_type],
+                    "component_type": component_type
+                }
+            else:
+                return {"success": False, "error": "Component type not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
 # Service instance
 advanced_ui_service = AdvancedUIService()
