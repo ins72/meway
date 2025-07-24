@@ -24,7 +24,7 @@ const OnboardingWizard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch payment settings on component mount
+  // Fetch payment settings and onboarding progress on component mount
   useEffect(() => {
     const fetchPaymentSettings = async () => {
       try {
@@ -38,8 +38,32 @@ const OnboardingWizard = () => {
       }
     };
     
+    const fetchOnboardingProgress = async () => {
+      try {
+        const response = await onboardingAPI.getProgress();
+        if (response.data.success) {
+          const progress = response.data.data;
+          // Set current step based on saved progress
+          setCurrentStep(progress.step);
+          // Restore any saved data
+          if (progress.data) {
+            setFormData(prevData => ({
+              ...prevData,
+              ...progress.data
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch onboarding progress:', error);
+        // Continue with default step 1
+      }
+    };
+    
     fetchPaymentSettings();
-  }, []);
+    if (user) {
+      fetchOnboardingProgress();
+    }
+  }, [user]);
 
   const steps = [
     { id: 1, title: 'Workspace Setup', description: 'Set up your workspace' },
