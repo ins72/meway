@@ -458,30 +458,35 @@ const OnboardingWizard = () => {
               </div>
 
               <div className="pricing-plans">
-                {pricingPlans.map((plan) => (
+                {pricingBundles.map((bundle) => (
                   <div 
-                    key={plan.id}
-                    onClick={() => handlePlanSelect(plan.id)}
-                    className={`pricing-card ${formData.selectedPlan === plan.id ? 'selected' : ''}`}
+                    key={bundle.id}
+                    onClick={() => handlePlanSelect(bundle.id)}
+                    className={`pricing-card ${formData.selectedPlan === bundle.id ? 'selected' : ''}`}
                   >
-                    {plan.badge && (
-                      <div className="plan-badge">{plan.badge}</div>
+                    {bundle.badge && (
+                      <div className="plan-badge">{bundle.badge}</div>
                     )}
                     
                     <div className="plan-header">
-                      <h3 className="plan-name">{plan.name}</h3>
-                      <p className="plan-description">{plan.description}</p>
+                      <h3 className="plan-name">{bundle.name}</h3>
+                      <p className="plan-description">{bundle.description}</p>
                       <div className="plan-price">
                         <span className="price-amount">
-                          ${formData.paymentMethod === 'monthly' ? plan.monthlyPrice : Math.floor(plan.yearlyPrice / 12)}
+                          ${formData.paymentMethod === 'monthly' ? bundle.monthlyPrice : Math.floor(bundle.yearlyPrice / 12)}
                         </span>
                         <span className="price-period">
                           /{formData.paymentMethod === 'monthly' ? 'month' : 'month (billed yearly)'}
                         </span>
                       </div>
-                      {formData.paymentMethod === 'yearly' && (
+                      {formData.paymentMethod === 'yearly' && bundle.yearlyPrice > 0 && (
                         <div className="yearly-savings">
-                          Save ${(plan.monthlyPrice * 12) - plan.yearlyPrice} per year
+                          Save ${(bundle.monthlyPrice * 12) - bundle.yearlyPrice} per year
+                        </div>
+                      )}
+                      {bundle.launchSpecial && (
+                        <div className="launch-special">
+                          🚀 Launch Special: {bundle.launchSpecial}
                         </div>
                       )}
                     </div>
@@ -489,7 +494,7 @@ const OnboardingWizard = () => {
                     <div className="plan-features">
                       <h4>What's included:</h4>
                       <ul className="features-list">
-                        {plan.features.map((feature, index) => (
+                        {bundle.features.map((feature, index) => (
                           <li key={index} className="feature-item">
                             <span className="feature-check">✓</span>
                             <span className="feature-text">{feature}</span>
@@ -500,22 +505,12 @@ const OnboardingWizard = () => {
 
                     <div className="plan-limits">
                       <div className="limits-grid">
-                        <div className="limit-item">
-                          <span className="limit-label">Social Accounts</span>
-                          <span className="limit-value">{plan.limits.socialAccounts}</span>
-                        </div>
-                        <div className="limit-item">
-                          <span className="limit-label">AI Posts</span>
-                          <span className="limit-value">{plan.limits.aiPosts}</span>
-                        </div>
-                        <div className="limit-item">
-                          <span className="limit-label">Storage</span>
-                          <span className="limit-value">{plan.limits.storage}</span>
-                        </div>
-                        <div className="limit-item">
-                          <span className="limit-label">Team Members</span>
-                          <span className="limit-value">{plan.limits.users}</span>
-                        </div>
+                        {Object.entries(bundle.limits).map(([key, value]) => (
+                          <div key={key} className="limit-item">
+                            <span className="limit-label">{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
+                            <span className="limit-value">{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
