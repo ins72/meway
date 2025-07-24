@@ -711,6 +711,14 @@
 .author-info span {
   font-size: 0.9rem;
   color: var(--text-muted);
+  display: block;
+}
+
+.author-info .company {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.25rem;
 }
 
 /* CTA Section */
