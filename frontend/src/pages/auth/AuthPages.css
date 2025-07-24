@@ -260,7 +260,7 @@
 
 .input-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.25rem;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
@@ -269,6 +269,7 @@
   align-items: center;
   justify-content: center;
   transition: color var(--animation-speed) var(--animation-smooth);
+  pointer-events: none;
 }
 
 .input-wrapper:focus-within .input-icon {
@@ -277,7 +278,7 @@
 
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3rem;
+  padding: 0.75rem 1rem 0.75rem 3.5rem;
   background: var(--bg-glass);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
