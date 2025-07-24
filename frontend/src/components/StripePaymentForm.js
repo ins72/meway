@@ -4,7 +4,7 @@ import {
   useStripe,
   useElements
 } from '@stripe/react-stripe-js';
-import { adminSettingsAPI } from '../services/api';
+import { stripeAPI } from '../services/api';
 
 const StripePaymentForm = ({ 
   totalAmount, 
