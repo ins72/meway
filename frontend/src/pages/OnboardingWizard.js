@@ -327,6 +327,26 @@ const OnboardingWizard = () => {
     }
   };
 
+  const handlePaymentSetup = async () => {
+    setLoading(true);
+    try {
+      // TODO: Integrate with Stripe/PayPal for payment processing
+      // For now, simulate payment setup
+      console.log('Setting up payment for bundles:', formData.selectedBundles);
+      console.log('Total amount:', calculateTotalPrice().discountedPrice);
+      
+      // Simulate API call for subscription creation
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Move to final step
+      setCurrentStep(currentStep + 1);
+    } catch (error) {
+      console.error('Payment setup error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleComplete = async () => {
     setLoading(true);
     try {
