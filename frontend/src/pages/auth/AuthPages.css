@@ -474,11 +474,19 @@
 @media (max-width: 1024px) {
   .auth-container {
     grid-template-columns: 1fr;
-    max-width: 500px;
+    max-width: 600px;
   }
   
   .auth-branding {
     padding: 2rem;
+  }
+  
+  .auth-form-panel {
+    padding: 2rem;
+  }
+  
+  .auth-form-container {
+    max-width: 500px;
   }
   
   .branding-title {
@@ -509,8 +517,17 @@
     padding: 1rem;
   }
   
+  .auth-container {
+    max-width: 100%;
+    margin: 0;
+  }
+  
   .auth-form-panel {
-    padding: 2rem;
+    padding: 1.5rem;
+  }
+  
+  .auth-form-container {
+    max-width: 100%;
   }
   
   .form-title {
@@ -522,7 +539,13 @@
   }
   
   .social-btn {
-    padding: 0.625rem 1rem;
+    padding: 0.75rem 1rem;
     font-size: var(--text-sm);
+    min-height: 48px;
+  }
+  
+  .form-input {
+    min-height: 48px;
+    font-size: var(--text-base);
   }
 }
