@@ -576,7 +576,6 @@ const OnboardingWizard = () => {
 
   return (
     <div className="onboarding-wizard">
-      <EnvironmentDebug />
       {/* Background Effects */}
       <div className="bg-effects">
         <div className="floating-shapes">
