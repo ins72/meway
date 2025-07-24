@@ -138,7 +138,7 @@ const EnhancedStripePayment = ({
         const authToken = localStorage.getItem('auth_token');
         
         console.log('Creating enhanced payment intent with URL:', url);
-        console.log('Auth token:', authToken ? `${authToken.substring(0, 50)}...` : 'MISSING');
+        console.log('Auth token:', authToken ? 'present' : 'MISSING');
         console.log('Request data:', {
           amount: Math.round(amount * 100),
           currency,
