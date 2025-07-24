@@ -18,34 +18,35 @@ class Database:
 db = Database()
 
 async def connect_to_mongo():
-    """Create database connection"""
-    mongo_url = settings.MONGO_URL
+    """Create database connection - production optimized"""
+    mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
+    database_name = "mewayz_professional"
     
-    # Log connection attempt (without exposing credentials)
-    print(f"🔗 Attempting to connect to MongoDB...")
-    print(f"   Database name: {settings.DATABASE_NAME}")
+    logger.info(f"🔗 Connecting to MongoDB...")
+    logger.info(f"   Database: {database_name}")
     
     try:
-        db.client = AsyncIOMotorClient(mongo_url)
-        db.database = db.client[settings.DATABASE_NAME]
-        
-        # Test connection with timeout
-        await asyncio.wait_for(
-            db.client.admin.command('ping'), 
-            timeout=10.0
+        db.client = AsyncIOMotorClient(
+            mongo_url,
+            serverSelectionTimeoutMS=5000,  # 5 second timeout
+            connectTimeoutMS=5000,
+            socketTimeoutMS=5000,
+            maxPoolSize=10,
+            minPoolSize=1
         )
-        print(f"✅ Connected to MongoDB: {settings.DATABASE_NAME}")
+        db.database = db.client[database_name]
         
-        # Also test database access
-        collections = await db.database.list_collection_names()
-        print(f"   📋 Available collections: {len(collections)}")
+        # Quick ping test
+        await db.client.admin.command('ping')
+        logger.info(f"✅ MongoDB connected successfully")
         
-    except asyncio.TimeoutError:
-        print(f"❌ MongoDB connection timeout")
-        raise Exception("Database connection timeout - check connection string and network")
+        return True
+        
     except Exception as e:
-        print(f"❌ Failed to connect to MongoDB: {e}")
-        print(f"   Check if MONGO_URL environment variable is set correctly")
+        logger.error(f"❌ MongoDB connection failed: {e}")
+        # Set db to None so app knows database is unavailable
+        db.client = None
+        db.database = None
         raise
 
 async def close_mongo_connection():
