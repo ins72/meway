@@ -218,12 +218,12 @@ const OnboardingWizard = () => {
   ];
 
   const primaryGoals = [
-    { value: 'social_media', label: 'Social Media Management' },
-    { value: 'ecommerce', label: 'E-commerce & Online Sales' },
-    { value: 'lead_generation', label: 'Lead Generation' },
-    { value: 'content_creation', label: 'Content Creation' },
-    { value: 'analytics', label: 'Analytics & Reporting' },
-    { value: 'team_collaboration', label: 'Team Collaboration' }
+    { value: 'social_media', label: 'Social Media Growth', description: 'Grow followers, engagement, and leads' },
+    { value: 'ecommerce', label: 'E-commerce Sales', description: 'Sell products and manage inventory' },
+    { value: 'content_creation', label: 'Content & Courses', description: 'Create and monetize educational content' },
+    { value: 'client_management', label: 'Client & CRM', description: 'Manage relationships and sales pipeline' },
+    { value: 'marketing', label: 'Marketing Campaigns', description: 'Email, ads, and campaign management' },
+    { value: 'analytics', label: 'Business Analytics', description: 'Track performance and make data-driven decisions' }
   ];
 
   const handleInputChange = (e) => {
