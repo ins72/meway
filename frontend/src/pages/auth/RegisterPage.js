@@ -91,31 +91,34 @@ const RegisterPage = () => {
           throw new Error('No access token received from Google');
         }
         
-        // Get user info from Google
-        const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${credentialResponse.access_token}`,
-            Accept: 'application/json'
-          }
+        // Send token to backend for verification and registration
+        const response = await googleAuthAPI.verifyToken({
+          access_token: credentialResponse.access_token
         });
         
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user info: ${response.status}`);
+        if (response.data.success) {
+          const { user, access_token, is_new_user } = response.data;
+          
+          // Store authentication data
+          localStorage.setItem('authToken', access_token);
+          localStorage.setItem('user', JSON.stringify(user));
+          
+          // Show appropriate success message
+          if (is_new_user) {
+            alert(`✅ Registration successful!\nWelcome to MEWAYZ, ${user.name}!\n\nYou'll be redirected to complete your setup.`);
+            navigate('/onboarding');
+          } else {
+            alert(`✅ Welcome back, ${user.name}!\nYou already have an account with us.`);
+            navigate('/dashboard');
+          }
+        } else {
+          throw new Error(response.data.message || 'Registration failed');
         }
-        
-        const userInfo = await response.json();
-        console.log('✅ Google user info:', userInfo);
-        
-        // TODO: Send Google user info to backend for registration
-        // For now, show success message and redirect to onboarding
-        alert(`✅ Google signup successful!\nWelcome ${userInfo.name} (${userInfo.email})\n\n⚠️ Backend integration pending - you'll be redirected to onboarding.`);
-        
-        // Redirect to onboarding
-        navigate('/onboarding');
         
       } catch (error) {
         console.error('❌ Google signup error:', error);
-        alert(`❌ Google signup failed: ${error.message}\n\nPlease try again or use email/password registration.`);
+        const errorMessage = error.response?.data?.detail || error.message || 'Google signup failed';
+        alert(`❌ Registration failed: ${errorMessage}\n\nPlease try again or use email/password registration.`);
       }
     },
     onError: (error) => {
