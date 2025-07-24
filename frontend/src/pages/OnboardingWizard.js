@@ -618,6 +618,95 @@ const OnboardingWizard = () => {
           {currentStep === 4 && (
             <div className="step-content">
               <div className="step-header">
+                <h2>Payment Setup</h2>
+                <p>Complete your subscription to get started with your selected bundles</p>
+              </div>
+
+              <div className="payment-setup">
+                <div className="payment-summary">
+                  <h3>Order Summary</h3>
+                  <div className="order-details">
+                    {getSelectedBundles().map((bundle) => (
+                      <div key={bundle.id} className="order-item">
+                        <span className="item-name">{bundle.name}</span>
+                        <span className="item-price">
+                          ${formData.paymentMethod === 'monthly' 
+                            ? bundle.monthlyPrice 
+                            : bundle.yearlyPrice
+                          }
+                        </span>
+                      </div>
+                    ))}
+                    
+                    {formData.selectedBundles.length > 1 && (
+                      <>
+                        <div className="order-item subtotal">
+                          <span>Subtotal:</span>
+                          <span>${calculateTotalPrice().basePrice.toFixed(2)}</span>
+                        </div>
+                        <div className="order-item discount">
+                          <span>Multi-bundle Discount ({(calculateBundleDiscount() * 100)}%):</span>
+                          <span>-${calculateTotalPrice().savings.toFixed(2)}</span>
+                        </div>
+                      </>
+                    )}
+                    
+                    <div className="order-item total">
+                      <span>Total Amount:</span>
+                      <span>${calculateTotalPrice().discountedPrice.toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="billing-period">
+                      <small>Billed {formData.paymentMethod}</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="payment-options">
+                  <h3>Choose Payment Method</h3>
+                  <div className="payment-methods">
+                    <div className="payment-method card-payment">
+                      <div className="method-header">
+                        <span className="method-icon">💳</span>
+                        <span className="method-name">Credit Card</span>
+                        <span className="method-badge">Recommended</span>
+                      </div>
+                      <div className="method-description">
+                        Secure payment with Stripe. Start your 14-day free trial.
+                      </div>
+                    </div>
+                    
+                    <div className="payment-method paypal-payment">
+                      <div className="method-header">
+                        <span className="method-icon">💰</span>
+                        <span className="method-name">PayPal</span>
+                      </div>
+                      <div className="method-description">
+                        Pay securely with your PayPal account.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="trial-notice">
+                  <div className="notice-content">
+                    <h4>🎉 14-Day Free Trial</h4>
+                    <p>Start your free trial today. No charges for 14 days. Cancel anytime during the trial period.</p>
+                    <ul className="trial-benefits">
+                      <li>✓ Full access to all selected bundles</li>
+                      <li>✓ No setup fees or hidden charges</li>
+                      <li>✓ Cancel anytime before trial ends</li>
+                      <li>✓ Keep all data if you decide to continue</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 5 && (
+            <div className="step-content">
+              <div className="step-header">
                 <h2>Complete Your Setup</h2>
                 <p>Review your selections and complete your workspace setup</p>
               </div>
