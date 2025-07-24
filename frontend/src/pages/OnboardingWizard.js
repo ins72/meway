@@ -932,19 +932,17 @@ const OnboardingWizard = () => {
                   </div>
                 </div>
 
-                {/* Stripe Payment Form */}
+                {/* Simple Stripe Payment Form */}
                 {formData.selectedPaymentType === 'credit_card' && (
                   <div className="stripe-payment-section">
                     <h3>Payment Information</h3>
-                    <StripePaymentForm
-                      totalAmount={calculateTotalPrice().discountedPrice}
-                      onSuccess={handleStripePaymentSuccess}
-                      onError={handleStripePaymentError}
-                      loading={loading}
-                      disabled={!formData.selectedPaymentType}
+                    <SimpleStripePayment
+                      amount={calculateTotalPrice().discountedPrice}
+                      currency="usd"
                       bundles={formData.selectedBundles}
                       workspaceName={formData.workspaceName}
-                      paymentMethod={formData.paymentMethod}
+                      onSuccess={handleStripePaymentSuccess}
+                      onError={handleStripePaymentError}
                     />
                   </div>
                 )}
