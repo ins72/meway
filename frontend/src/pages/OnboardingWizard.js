@@ -556,8 +556,8 @@ const OnboardingWizard = () => {
                 {pricingBundles.map((bundle) => (
                   <div 
                     key={bundle.id}
-                    onClick={() => handlePlanSelect(bundle.id)}
-                    className={`pricing-card ${formData.selectedPlan === bundle.id ? 'selected' : ''}`}
+                    onClick={() => handleBundleSelect(bundle.id)}
+                    className={`pricing-card ${formData.selectedBundles.includes(bundle.id) ? 'selected' : ''}`}
                   >
                     {bundle.badge && (
                       <div className="plan-badge">{bundle.badge}</div>
