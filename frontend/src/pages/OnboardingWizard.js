@@ -503,7 +503,15 @@ const OnboardingWizard = () => {
       case 1:
         return formData.workspaceName.trim() !== '';
       case 2:
-        return formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
+        const step2Valid = formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
+        console.log('Step 2 validation:', {
+          industry: formData.industry,
+          teamSize: formData.teamSize,
+          selectedGoals: formData.selectedGoals,
+          selectedGoalsLength: formData.selectedGoals.length,
+          isValid: step2Valid
+        });
+        return step2Valid;
       case 3:
         return formData.selectedBundles.length > 0;
       case 4:
