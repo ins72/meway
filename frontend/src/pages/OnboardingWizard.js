@@ -679,6 +679,22 @@ const OnboardingWizard = () => {
                 <h2>Choose Your Bundles</h2>
                 <p>Select the bundles that match your business goals. Multi-bundle discounts available!</p>
                 
+                {formData.selectedGoals.length > 0 && (
+                  <div className="selected-goals-info">
+                    <h4>✨ Recommended bundles for your goals:</h4>
+                    <div className="goals-summary">
+                      {formData.selectedGoals.map(goalId => {
+                        const goal = businessGoals.find(g => g.id === goalId);
+                        return goal ? (
+                          <span key={goalId} className="goal-tag">
+                            {goal.icon} {goal.title}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                )}
+                
                 <div className="billing-toggle">
                   <span className={`billing-option ${formData.paymentMethod === 'monthly' ? 'active' : ''}`}>
                     Monthly
