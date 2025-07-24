@@ -1,10 +1,10 @@
 {
   "summary": {
     "total_tests": 38,
-    "passed_tests": 30,
-    "failed_tests": 8,
-    "success_rate": 78.94736842105263,
-    "timestamp": "2025-07-24T03:43:09.663151"
+    "passed_tests": 29,
+    "failed_tests": 9,
+    "success_rate": 76.31578947368422,
+    "timestamp": "2025-07-24T03:44:31.671551"
   },
   "systems": {
     "Enhanced Escrow": {
@@ -28,8 +28,8 @@
       "total": 7
     },
     "AI Token Purchase": {
-      "passed": 5,
-      "failed": 5,
+      "passed": 4,
+      "failed": 6,
       "total": 10
     }
   },
@@ -41,7 +41,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.478604"
+      "timestamp": "2025-07-24T03:44:30.631803"
     },
     {
       "system": "Enhanced Escrow",
@@ -50,7 +50,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.507850"
+      "timestamp": "2025-07-24T03:44:30.658417"
     },
     {
       "system": "Enhanced Escrow",
@@ -59,7 +59,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.554931"
+      "timestamp": "2025-07-24T03:44:30.681551"
     },
     {
       "system": "Enhanced Escrow",
@@ -68,7 +68,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.577934"
+      "timestamp": "2025-07-24T03:44:30.706343"
     },
     {
       "system": "Enhanced Escrow",
@@ -77,7 +77,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.602756"
+      "timestamp": "2025-07-24T03:44:30.729681"
     },
     {
       "system": "Usage Tracking",
@@ -86,7 +86,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.622442"
+      "timestamp": "2025-07-24T03:44:30.752486"
     },
     {
       "system": "Usage Tracking",
@@ -95,7 +95,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.680119"
+      "timestamp": "2025-07-24T03:44:30.787250"
     },
     {
       "system": "Usage Tracking",
@@ -104,7 +104,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.702999"
+      "timestamp": "2025-07-24T03:44:30.813238"
     },
     {
       "system": "Usage Tracking",
@@ -113,7 +113,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.751824"
+      "timestamp": "2025-07-24T03:44:30.864887"
     },
     {
       "system": "Usage Tracking",
@@ -122,7 +122,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.779666"
+      "timestamp": "2025-07-24T03:44:30.889148"
     },
     {
       "system": "Usage Tracking",
@@ -131,7 +131,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.801994"
+      "timestamp": "2025-07-24T03:44:30.909145"
     },
     {
       "system": "Usage Tracking",
@@ -140,7 +140,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.826139"
+      "timestamp": "2025-07-24T03:44:30.930609"
     },
     {
       "system": "Usage Tracking",
@@ -149,7 +149,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.881377"
+      "timestamp": "2025-07-24T03:44:30.985838"
     },
     {
       "system": "Enterprise Revenue",
@@ -158,7 +158,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.901902"
+      "timestamp": "2025-07-24T03:44:31.006196"
     },
     {
       "system": "Enterprise Revenue",
@@ -167,7 +167,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.920754"
+      "timestamp": "2025-07-24T03:44:31.032243"
     },
     {
       "system": "Enterprise Revenue",
@@ -176,7 +176,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.955142"
+      "timestamp": "2025-07-24T03:44:31.056540"
     },
     {
       "system": "Enterprise Revenue",
@@ -185,7 +185,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:08.978394"
+      "timestamp": "2025-07-24T03:44:31.080813"
     },
     {
       "system": "Enterprise Revenue",
@@ -194,7 +194,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.008628"
+      "timestamp": "2025-07-24T03:44:31.108652"
     },
     {
       "system": "Enterprise Revenue",
@@ -203,7 +203,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.045912"
+      "timestamp": "2025-07-24T03:44:31.135344"
     },
     {
       "system": "Enterprise Revenue",
@@ -212,7 +212,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.093256"
+      "timestamp": "2025-07-24T03:44:31.161778"
     },
     {
       "system": "Enterprise Revenue",
@@ -221,7 +221,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.116197"
+      "timestamp": "2025-07-24T03:44:31.184647"
     },
     {
       "system": "Template Marketplace Access",
@@ -230,7 +230,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.138188"
+      "timestamp": "2025-07-24T03:44:31.204799"
     },
     {
       "system": "Template Marketplace Access",
@@ -239,7 +239,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.164704"
+      "timestamp": "2025-07-24T03:44:31.227010"
     },
     {
       "system": "Template Marketplace Access",
@@ -248,7 +248,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.185238"
+      "timestamp": "2025-07-24T03:44:31.245485"
     },
     {
       "system": "Template Marketplace Access",
@@ -257,7 +257,7 @@
       "success": false,
       "status_code": 400,
       "details": "Status: 400 - Error: {\"detail\":\"User is not a member of this workspace\"}",
-      "timestamp": "2025-07-24T03:43:09.207005"
+      "timestamp": "2025-07-24T03:44:31.269910"
     },
     {
       "system": "Template Marketplace Access",
@@ -266,7 +266,7 @@
       "success": false,
       "status_code": 403,
       "details": "Status: 403 - Error: {\"detail\":\"Template selling access required\"}",
-      "timestamp": "2025-07-24T03:43:09.238634"
+      "timestamp": "2025-07-24T03:44:31.293771"
     },
     {
       "system": "Template Marketplace Access",
@@ -275,7 +275,7 @@
       "success": false,
       "status_code": 404,
       "details": "Status: 404 - Error: {\"detail\":\"No seller record found\"}",
-      "timestamp": "2025-07-24T03:43:09.262794"
+      "timestamp": "2025-07-24T03:44:31.314458"
     },
     {
       "system": "Template Marketplace Access",
@@ -284,7 +284,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.284501"
+      "timestamp": "2025-07-24T03:44:31.337471"
     },
     {
       "system": "AI Token Purchase",
@@ -293,7 +293,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.308501"
+      "timestamp": "2025-07-24T03:44:31.358629"
     },
     {
       "system": "AI Token Purchase",
@@ -302,7 +302,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.328083"
+      "timestamp": "2025-07-24T03:44:31.380737"
     },
     {
       "system": "AI Token Purchase",
@@ -311,7 +311,7 @@
       "success": false,
       "status_code": 404,
       "details": "Status: 404 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_get_usage_breakdown'\"}",
-      "timestamp": "2025-07-24T03:43:09.366566"
+      "timestamp": "2025-07-24T03:44:31.404923"
     },
     {
       "system": "AI Token Purchase",
@@ -320,7 +320,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.517829"
+      "timestamp": "2025-07-24T03:44:31.533492"
     },
     {
       "system": "AI Token Purchase",
@@ -329,7 +329,7 @@
       "success": false,
       "status_code": 404,
       "details": "Status: 404 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_calculate_period_dates'\"}",
-      "timestamp": "2025-07-24T03:43:09.535964"
+      "timestamp": "2025-07-24T03:44:31.553615"
     },
     {
       "system": "AI Token Purchase",
@@ -338,7 +338,7 @@
       "success": true,
       "status_code": 200,
       "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.562894"
+      "timestamp": "2025-07-24T03:44:31.577874"
     },
     {
       "system": "AI Token Purchase",
@@ -347,16 +347,16 @@
       "success": false,
       "status_code": 400,
       "details": "Status: 400 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_workspace_exists'\"}",
-      "timestamp": "2025-07-24T03:43:09.582396"
+      "timestamp": "2025-07-24T03:44:31.600266"
     },
     {
       "system": "AI Token Purchase",
       "endpoint": "ai-token-purchase/workspace/deebdeae-4a9d-4611-ad12-9b71e13376a6/auto-refill",
       "method": "POST",
-      "success": true,
-      "status_code": 200,
-      "details": "Status: 200 - Success: True",
-      "timestamp": "2025-07-24T03:43:09.618573"
+      "success": false,
+      "status_code": 400,
+      "details": "Status: 400 - Error: {\"detail\":\"After applying the update, the (immutable) field '_id' was found to have been altered to _id: \\\"3a4e674e-1edc-48fe-8d39-b124a65bfa9f\\\", full error: {'index': 0, 'code': 66, 'errmsg': 'After",
+      "timestamp": "2025-07-24T03:44:31.624703"
     },
     {
       "system": "AI Token Purchase",
@@ -365,7 +365,7 @@
       "success": false,
       "status_code": 404,
       "details": "Status: 404 - Error: {\"detail\":\"'AITokenPurchaseService' object has no attribute '_get_usage_analytics'\"}",
-      "timestamp": "2025-07-24T03:43:09.641274"
+      "timestamp": "2025-07-24T03:44:31.647702"
     },
     {
       "system": "AI Token Purchase",
@@ -374,7 +374,7 @@
       "success": false,
       "status_code": 400,
       "details": "Status: 400 - Error: {\"detail\":\"Invalid promo code\"}",
-      "timestamp": "2025-07-24T03:43:09.662604"
+      "timestamp": "2025-07-24T03:44:31.670884"
     }
   ]
 }
