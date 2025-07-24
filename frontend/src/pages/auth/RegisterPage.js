@@ -93,23 +93,28 @@ const RegisterPage = () => {
         
         // Send token to backend for verification and registration
         const response = await googleAuthAPI.verifyToken({
-          access_token: credentialResponse.access_token
+          access_token: credentialResponse.access_token,
+          intent: "register"  // Specify this is a registration attempt
         });
         
         if (response.data.success) {
-          const { user, access_token, is_new_user } = response.data;
+          const { user, access_token, message, redirect_to, is_new_user, is_existing_user } = response.data;
           
           // Store authentication data
           localStorage.setItem('authToken', access_token);
           localStorage.setItem('user', JSON.stringify(user));
           
-          // Show appropriate success message
-          if (is_new_user) {
-            alert(`✅ Registration successful!\nWelcome to MEWAYZ, ${user.name}!\n\nYou'll be redirected to complete your setup.`);
+          // Show appropriate success message based on user status
+          if (is_existing_user) {
+            alert(`ℹ️ ${message}\nHi ${user.name}, you already have an account with us. Logging you in instead.`);
+            navigate('/dashboard');
+          } else if (is_new_user) {
+            alert(`✅ ${message}\nWelcome to MEWAYZ, ${user.name}!\n\nLet's complete your setup.`);
             navigate('/onboarding');
           } else {
-            alert(`✅ Welcome back, ${user.name}!\nYou already have an account with us.`);
-            navigate('/dashboard');
+            // Fallback to redirect_to
+            alert(`✅ ${message}\nWelcome, ${user.name}!`);
+            navigate(redirect_to === "onboarding" ? '/onboarding' : '/dashboard');
           }
         } else {
           throw new Error(response.data.message || 'Registration failed');
