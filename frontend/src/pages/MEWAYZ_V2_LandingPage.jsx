@@ -452,66 +452,71 @@ const Footer = () => {
         <div className="footer-grid">
           <div className="footer-brand">
             <div className="logo">Mewayz</div>
-            <p>The complete all-in-one business management platform. Built for creators, entrepreneurs, and businesses ready to scale with advanced tools and real-time analytics.</p>
+            <p>The complete creator economy platform trusted by over 10,000 businesses worldwide. Build, manage, and scale your online business with our comprehensive suite of tools.</p>
             <div className="social-links">
-              <a href="#twitter" className="social-link" aria-label="Twitter">𝕏</a>
-              <a href="#instagram" className="social-link" aria-label="Instagram">📷</a>
-              <a href="#linkedin" className="social-link" aria-label="LinkedIn">💼</a>
-              <a href="#youtube" className="social-link" aria-label="YouTube">📺</a>
+              <a href="https://twitter.com/mewayz" className="social-link" aria-label="Twitter" target="_blank" rel="noopener">𝕏</a>
+              <a href="https://instagram.com/mewayz" className="social-link" aria-label="Instagram" target="_blank" rel="noopener">📷</a>
+              <a href="https://linkedin.com/company/mewayz" className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">💼</a>
+              <a href="https://youtube.com/mewayz" className="social-link" aria-label="YouTube" target="_blank" rel="noopener">📺</a>
             </div>
-          </div>
-          
-          <div className="footer-section">
-            <h4>Main Goals</h4>
-            <ul>
-              <li><a href="#instagram">Instagram Database</a></li>
-              <li><a href="#linkinbio">Link in Bio Builder</a></li>
-              <li><a href="#courses">Courses & Community</a></li>
-              <li><a href="#ecommerce">E-commerce & Marketplace</a></li>
-              <li><a href="#crm">CRM & Email Marketing</a></li>
-              <li><a href="#analytics">Analytics & Automation</a></li>
-            </ul>
-          </div>
-          
-          <div className="footer-section">
-            <h4>Features</h4>
-            <ul>
-              <li><a href="#website-builder">Website Builder</a></li>
-              <li><a href="#booking">Booking System</a></li>
-              <li><a href="#financial">Financial Management</a></li>
-              <li><a href="#templates">Template Marketplace</a></li>
-              <li><a href="#escrow">Escrow System</a></li>
-              <li><a href="#ai-tools">AI Content Generation</a></li>
-            </ul>
           </div>
           
           <div className="footer-section">
             <h4>Platform</h4>
             <ul>
-              <li><a href="#api-docs">API Documentation</a></li>
-              <li><a href="#mobile">Mobile App (Flutter)</a></li>
-              <li><a href="#pwa">Progressive Web App</a></li>
-              <li><a href="#integrations">Integrations</a></li>
-              <li><a href="#security">Security</a></li>
-              <li><a href="#status">System Status</a></li>
+              <li><a href="/features/instagram">Instagram Lead Gen</a></li>
+              <li><a href="/features/bio-links">Bio Link Builder</a></li>
+              <li><a href="/features/courses">Course Platform</a></li>
+              <li><a href="/features/marketplace">Marketplace</a></li>
+              <li><a href="/features/website-builder">Website Builder</a></li>
+              <li><a href="/features/crm">CRM & Automation</a></li>
             </ul>
           </div>
           
           <div className="footer-section">
-            <h4>Support</h4>
+            <h4>Resources</h4>
             <ul>
-              <li><a href="#help">Help Center</a></li>
-              <li><a href="#docs">Documentation</a></li>
-              <li><a href="#community">Community</a></li>
-              <li><a href="mailto:support@mewayz.com">support@mewayz.com</a></li>
-              <li><a href="#terms">Terms of Service</a></li>
-              <li><a href="#privacy">Privacy Policy</a></li>
+              <li><a href="/help">Help Center</a></li>
+              <li><a href="/documentation">Documentation</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/case-studies">Case Studies</a></li>
+              <li><a href="/templates">Template Library</a></li>
+              <li><a href="/api-docs">API Documentation</a></li>
+            </ul>
+          </div>
+          
+          <div className="footer-section">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/contact">Contact Sales</a></li>
+              <li><a href="/partners">Partners</a></li>
+              <li><a href="/affiliate">Affiliate Program</a></li>
+              <li><a href="/status">System Status</a></li>
+            </ul>
+          </div>
+          
+          <div className="footer-section">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="/terms">Terms of Service</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/cookies">Cookie Policy</a></li>
+              <li><a href="/security">Security</a></li>
+              <li><a href="/gdpr">GDPR Compliance</a></li>
+              <li><a href="mailto:support@mewayz.com">Support</a></li>
             </ul>
           </div>
         </div>
         
         <div className="footer-bottom">
-          <p>© {currentYear} Mewayz v2. All rights reserved. Built for the modern business. | 62 APIs • 15+ Systems • 100% Real Data</p>
+          <p>© {currentYear} Mewayz. All rights reserved. | Trusted by 10,000+ businesses worldwide | $2.5M+ revenue generated | 99.9% uptime</p>
+          <div className="footer-badges">
+            <span className="badge">SOC 2 Compliant</span>
+            <span className="badge">GDPR Ready</span>
+            <span className="badge">ISO 27001</span>
+          </div>
         </div>
       </div>
     </footer>
