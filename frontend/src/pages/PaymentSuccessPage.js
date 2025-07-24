@@ -26,7 +26,7 @@ const PaymentSuccessPage = () => {
         console.log('Verifying payment:', paymentIntentId);
 
         // Confirm payment success with backend
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/payments/confirm-payment-success`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || window.location.origin}/api/payments/confirm-payment-success`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
