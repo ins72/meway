@@ -257,6 +257,18 @@ backend:
         agent: "testing"
         comment: "✅ COMPREHENSIVE CRUD VERIFIED - 6/7 endpoints working (85.7% success rate). Complete CRUD operations functional with real database storage. Workflow CREATE ✅, READ ✅, UPDATE ✅, DELETE ✅, LIST ✅, Health ✅. Minor issue with stats endpoint due to route ordering (404 error). All core workflow automation functionality operational with real data persistence and complex workflow step management."
 
+  - task: "Workspace Subscription System"
+    implemented: true
+    working: false
+    file: "/app/backend/api/workspace_subscription.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "🔄 NEWLY IMPLEMENTED - Comprehensive workspace subscription system with full CRUD operations, bundle management, pricing calculation, feature access control, billing history, and upgrade/downgrade workflows. Needs testing for production readiness."
+
 frontend:
   - task: "Frontend Integration"
     implemented: true
