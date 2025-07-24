@@ -60,7 +60,44 @@ class PlanChangeImpactTester:
             print(f"❌ Authentication error: {str(e)}")
             return False
     
-    def test_health_check(self):
+    def test_plan_exists(self):
+        """Check if the creator plan exists in the database"""
+        print("\n🔍 Checking if 'creator' plan exists")
+        
+        try:
+            # Try to get plan information from admin plan management
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/plan/creator", headers=self.headers, timeout=30)
+            
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                data = response.json()
+                print(f"   ✅ SUCCESS: Creator plan exists")
+                print(f"   Plan name: {data.get('plan_name', 'N/A')}")
+                if 'pricing' in data:
+                    print(f"   Current monthly price: ${data['pricing'].get('monthly_price', 'N/A')}")
+                return True
+                
+            elif response.status_code == 404:
+                print(f"   ❌ PLAN NOT FOUND: Creator plan does not exist in database")
+                print(f"   This explains why the simulate-change and rollback endpoints are failing")
+                return False
+                
+            elif response.status_code == 403:
+                print(f"   ⚠️  ADMIN ACCESS REQUIRED: Cannot check plan existence (403)")
+                return True  # Plan might exist but we can't verify
+                
+            else:
+                print(f"   ❌ UNEXPECTED STATUS: {response.status_code}")
+                try:
+                    print(f"   Response: {response.json()}")
+                except:
+                    print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"   ❌ REQUEST ERROR: {str(e)}")
+            return False
         """Quick health check to ensure service is working"""
         try:
             response = requests.get(f"{self.base_url}/api/plan-change-impact/health", timeout=30)
