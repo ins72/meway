@@ -30,6 +30,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      console.error('401 Unauthorized error:', error.config.url, error.response.data);
       localStorage.removeItem('auth_token');
       window.location.href = '/login';
     } else if (error.response?.status >= 500) {
