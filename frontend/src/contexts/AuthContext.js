@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => {
     // Initialize token from localStorage with fallback
     const storedToken = localStorage.getItem('auth_token');
-    console.log('AuthContext: Initial token from localStorage:', storedToken);
+  console.log('AuthContext: Initial token from localStorage:', storedToken ? 'present' : 'missing');
     return storedToken;
   });
   const [currentWorkspace, setCurrentWorkspace] = useState(null);
