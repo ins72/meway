@@ -106,11 +106,11 @@ const RegisterPage = () => {
         <div className="auth-branding">
           <div className="branding-content">
             <div className="logo-large">
-              <span className="gradient-text">Mewayz</span>
+              <span className="gradient-text">MEWAYZ</span>
             </div>
             <h1 className="branding-title">Join thousands of creators</h1>
             <p className="branding-description">
-              Start your journey with the most comprehensive business platform
+              Start building your online empire with MEWAYZ
             </p>
             
             <div className="features-list">
