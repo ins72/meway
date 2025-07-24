@@ -35,7 +35,7 @@ class WorkspaceSubscriptionTester:
         self.total_tests = 0
         self.passed_tests = 0
         self.failed_tests = 0
-        self.test_workspace_id = str(uuid.uuid4())
+        self.test_workspace_id = "112c88a7-b6a3-44ac-a5c6-ff7ef0bc786c"  # Pre-created workspace owned by test user
         
     def log_result(self, test_name: str, endpoint: str, method: str, success: bool, status_code: int = None, details: str = ""):
         """Log test result"""
