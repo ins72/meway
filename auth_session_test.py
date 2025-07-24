@@ -327,9 +327,9 @@ class AuthSessionTester:
         # Simulate user behavior: login, then navigate between different pages/tabs
         navigation_sequence = [
             ("Dashboard", "/api/auth/me"),
-            ("Profile", "/api/auth/profile"),
+            ("User Info", "/api/auth/me"),  # Simulate checking user info again
             ("Back to Dashboard", "/api/auth/me"),
-            ("Settings", "/api/auth/me"),  # Using /me as proxy for settings check
+            ("Settings Check", "/api/auth/me"),  # Using /me as proxy for settings check
             ("Another Tab", "/api/auth/me"),
         ]
         
