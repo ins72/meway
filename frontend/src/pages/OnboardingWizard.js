@@ -522,8 +522,8 @@ const OnboardingWizard = () => {
           {currentStep === 3 && (
             <div className="step-content">
               <div className="step-header">
-                <h2>Choose Your Plan</h2>
-                <p>Select the plan that best fits your needs. You can upgrade or downgrade anytime.</p>
+                <h2>Choose Your Bundles</h2>
+                <p>Select the bundles that match your business goals. Multi-bundle discounts available!</p>
                 
                 <div className="billing-toggle">
                   <span className={`billing-option ${formData.paymentMethod === 'monthly' ? 'active' : ''}`}>
@@ -539,6 +539,17 @@ const OnboardingWizard = () => {
                     Yearly <span className="savings-badge">Save 17%</span>
                   </span>
                 </div>
+
+                {formData.selectedBundles.length > 1 && (
+                  <div className="multi-bundle-discount">
+                    <h4>🎉 Multi-Bundle Discount Applied!</h4>
+                    <p>
+                      {formData.selectedBundles.length === 2 && "20% discount for 2 bundles"}
+                      {formData.selectedBundles.length === 3 && "30% discount for 3 bundles"}
+                      {formData.selectedBundles.length >= 4 && "40% discount for 4+ bundles"}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="pricing-plans">
