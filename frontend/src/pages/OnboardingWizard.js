@@ -16,8 +16,30 @@ const OnboardingWizard = () => {
     selectedPaymentType: null // Add payment type selection (credit_card, paypal)
   });
   const [loading, setLoading] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState({
+    paypal_enabled: false,
+    credit_card_enabled: true,
+    stripe_enabled: true
+  });
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Fetch payment settings on component mount
+  useEffect(() => {
+    const fetchPaymentSettings = async () => {
+      try {
+        const response = await adminSettingsAPI.getPaymentMethods();
+        if (response.data.success) {
+          setPaymentSettings(response.data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch payment settings:', error);
+        // Use default settings on error
+      }
+    };
+    
+    fetchPaymentSettings();
+  }, []);
 
   const steps = [
     { id: 1, title: 'Workspace Setup', description: 'Set up your workspace' },
