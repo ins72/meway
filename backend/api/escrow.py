@@ -23,6 +23,74 @@ async def health_check():
         logger.error(f"Health check error: {e}")
         return {"success": False, "healthy": False, "error": str(e)}
 
+@router.post("/transaction-with-fees")
+async def create_transaction_with_fees(
+    data: Dict[str, Any] = Body(..., description="Transaction data with automatic fee calculation"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create transaction with automatic fee calculation and collection"""
+    try:
+        # Add user context
+        data["created_by"] = current_user.get("id")
+        data["created_by_email"] = current_user.get("email")
+        
+        service = get_escrow_service()
+        result = await service.create_transaction_with_fees(data)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Create transaction with fees error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/calculate-fees")
+async def calculate_transaction_fees(
+    amount: float = Query(..., description="Transaction amount"),
+    workspace_id: str = Query(..., description="Workspace ID"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Calculate transaction fees for given amount and workspace"""
+    try:
+        service = get_escrow_service()
+        result = await service.calculate_transaction_fees(amount, workspace_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Calculate fees error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/collect-fee/{transaction_id}")
+async def collect_transaction_fee(
+    transaction_id: str = Path(..., description="Transaction ID"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Process fee collection for a transaction"""
+    try:
+        service = get_escrow_service()
+        result = await service.process_fee_collection(transaction_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Collect fee error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/")
 async def create_escrow(
     data: Dict[str, Any] = Body({}, description="Data for creating escrow"),
