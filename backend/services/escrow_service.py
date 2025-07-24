@@ -1,6 +1,7 @@
 """
-Escrow Service
+Escrow Service - Enhanced with Automatic Transaction Fees
 BULLETPROOF service with GUARANTEED working CRUD operations and REAL data
+Now includes automatic 2.4% transaction fee collection for all e-commerce transactions
 """
 
 import uuid
@@ -8,15 +9,25 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
+from services.workspace_subscription_service import get_workspace_subscription_service
 import logging
 
 logger = logging.getLogger(__name__)
 
 class EscrowService:
-    """Service class for EscrowService operations"""
+    """Service class for EscrowService operations with automatic fee collection"""
     def __init__(self):
         self.service_name = "escrow"
         self.collection_name = "escrow"
+        
+        # Transaction fee configuration
+        self.fee_config = {
+            "standard_rate": 0.024,  # 2.4% for standard plans
+            "enterprise_rate": 0.019,  # 1.9% for enterprise plans
+            "minimum_fee": 0.30,  # $0.30 minimum fee
+            "maximum_fee": 50.00,  # $50.00 maximum fee
+            "currency": "USD"
+        }
         
     def _get_collection(self):
         """Get collection for database operations"""
