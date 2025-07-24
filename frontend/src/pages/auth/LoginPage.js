@@ -62,9 +62,9 @@ const LoginPage = () => {
         <div className="auth-branding">
           <div className="branding-content">
             <div className="logo-large">
-              <span className="gradient-text">Mewayz</span>
+              <span className="gradient-text">MEWAYZ</span>
             </div>
-            <h1 className="branding-title">Welcome back to Mewayz</h1>
+            <h1 className="branding-title">Welcome back to MEWAYZ</h1>
             <p className="branding-description">
               Access your all-in-one business platform with powerful tools for growth
             </p>
