@@ -26,7 +26,28 @@ const OnboardingWizard = () => {
     { id: 5, title: 'Complete Setup', description: 'Finalize your workspace' }
   ];
 
-  const pricingBundles = [
+  // Bundle-to-goal mapping for filtering
+  const bundleGoalMapping = {
+    'free': ['social_media', 'ecommerce', 'content_creation', 'client_management', 'marketing', 'analytics'], // Free plan supports all goals at basic level
+    'creator': ['content_creation', 'social_media', 'marketing'], // Bio links, website building, content creation
+    'ecommerce': ['ecommerce', 'marketing', 'analytics'], // E-commerce focused
+    'social_media': ['social_media', 'marketing', 'analytics'], // Social media focused  
+    'education': ['content_creation', 'analytics', 'client_management'], // Course platform focused
+    'business': ['client_management', 'marketing', 'analytics'], // CRM and business focused
+    'operations': ['client_management', 'analytics', 'ecommerce'] // Booking and operations focused
+  };
+
+  // Get filtered bundles based on selected goals
+  const getFilteredBundles = () => {
+    if (formData.selectedGoals.length === 0) {
+      return pricingBundles; // Show all bundles if no goals selected
+    }
+    
+    return pricingBundles.filter(bundle => {
+      const bundleGoals = bundleGoalMapping[bundle.id] || [];
+      return formData.selectedGoals.some(goal => bundleGoals.includes(goal));
+    });
+  };
     {
       id: 'free',
       name: 'Free Starter',
