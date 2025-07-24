@@ -467,6 +467,39 @@ class VisualBuilderService:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
+    async def publish_project(self, project_id: str, user_id: str) -> Dict[str, Any]:
+        """Publish a project and generate public URL"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Generate unique URL
+            published_url = f"https://published.mewayz.com/{project_id}"
+            
+            result = await collection.update_one(
+                {"id": project_id, "user_id": user_id},
+                {"$set": {
+                    "published": True,
+                    "published_url": published_url,
+                    "published_at": datetime.utcnow().isoformat(),
+                    "updated_at": datetime.utcnow().isoformat()
+                }}
+            )
+            
+            if result.matched_count > 0:
+                return {
+                    "success": True,
+                    "message": "Project published successfully",
+                    "published_url": published_url,
+                    "timestamp": datetime.utcnow().isoformat()
+                }
+            else:
+                return {"success": False, "error": "Project not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
     async def save_component_library(self, component_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
         """Save custom component to library"""
         try:
