@@ -34,9 +34,12 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
     } catch (error) {
       console.error('Failed to fetch user:', error);
-      logout();
+      // Clear invalid token and reset state
+      localStorage.removeItem('auth_token');
+      setToken(null);
+      setUser(null);
     } finally {
-      setLoading(false);
+      setLoading(false);  
     }
   };
 
