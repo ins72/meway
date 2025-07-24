@@ -481,18 +481,28 @@ class PlanChangeImpactService:
                     "error": f"All impact analyses failed: {'; '.join(overall_errors)}"
                 }
             
-            # Calculate overall risk and migration needs
-            overall_risk = await self._calculate_overall_simulation_risk(
-                simulation_results["impact_analyses"]
-            )
-            simulation_results["overall_risk"] = overall_risk["level"]
-            simulation_results["requires_migration"] = overall_risk["requires_migration"]
+            # Calculate overall risk and migration needs with error handling
+            try:
+                overall_risk = await self._calculate_overall_simulation_risk(
+                    simulation_results["impact_analyses"]
+                )
+                simulation_results["overall_risk"] = overall_risk["level"]
+                simulation_results["requires_migration"] = overall_risk["requires_migration"]
+            except Exception as e:
+                logger.warning(f"Error calculating overall risk: {e}")
+                simulation_results["overall_risk"] = "medium"
+                simulation_results["requires_migration"] = False
             
-            # Generate combined recommendations
-            combined_recommendations = await self._generate_simulation_recommendations(
-                simulation_results["impact_analyses"], overall_risk
-            )
-            simulation_results["recommendations"] = combined_recommendations
+            # Generate combined recommendations with error handling
+            try:
+                combined_recommendations = await self._generate_simulation_recommendations(
+                    simulation_results["impact_analyses"], 
+                    {"level": simulation_results["overall_risk"], "requires_migration": simulation_results["requires_migration"]}
+                )
+                simulation_results["recommendations"] = combined_recommendations
+            except Exception as e:
+                logger.warning(f"Error generating recommendations: {e}")
+                simulation_results["recommendations"] = ["Simulation completed with limited analysis"]
             
             # Store simulation
             try:
