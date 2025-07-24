@@ -23,6 +23,8 @@ async def google_verify_token(
     """Verify Google OAuth token and login/register user"""
     try:
         access_token = token_data.get("access_token")
+        intent = token_data.get("intent", "login")  # "login" or "register"
+        
         if not access_token:
             raise HTTPException(status_code=400, detail="Access token is required")
         
@@ -45,24 +47,44 @@ async def google_verify_token(
         existing_user = await user_service.get_user_by_email(google_user["email"])
         
         if existing_user and existing_user.get("success"):
-            # User exists, log them in
+            # User exists
             user_data = existing_user["data"]
             access_token = create_access_token({"id": user_data["id"], "email": user_data["email"]})
             
-            return {
-                "success": True,
-                "message": "Login successful",
-                "user": {
-                    "id": user_data["id"],
-                    "email": user_data["email"],
-                    "name": user_data.get("name", google_user["name"]),
-                    "picture": google_user.get("picture")
-                },
-                "access_token": access_token,
-                "token_type": "bearer"
-            }
+            if intent == "register":
+                # User tried to register but account exists
+                return {
+                    "success": True,
+                    "message": "Account already exists - logging you in instead",
+                    "user": {
+                        "id": user_data["id"],
+                        "email": user_data["email"],
+                        "name": user_data.get("name", google_user["name"]),
+                        "picture": google_user.get("picture")
+                    },
+                    "access_token": access_token,
+                    "token_type": "bearer",
+                    "is_existing_user": True,
+                    "redirect_to": "dashboard"
+                }
+            else:
+                # User tried to login and account exists
+                return {
+                    "success": True,
+                    "message": "Welcome back!",
+                    "user": {
+                        "id": user_data["id"],
+                        "email": user_data["email"],
+                        "name": user_data.get("name", google_user["name"]),
+                        "picture": google_user.get("picture")
+                    },
+                    "access_token": access_token,
+                    "token_type": "bearer",
+                    "is_existing_user": True,
+                    "redirect_to": "dashboard"
+                }
         else:
-            # User doesn't exist, register them
+            # User doesn't exist - create new account
             new_user_data = {
                 "email": google_user["email"],
                 "name": google_user["name"],
@@ -79,9 +101,14 @@ async def google_verify_token(
                 user_data = user_result["data"]
                 access_token = create_access_token({"id": user_data["id"], "email": user_data["email"]})
                 
+                if intent == "register":
+                    message = "Registration successful! Welcome to MEWAYZ"
+                else:
+                    message = "Welcome to MEWAYZ! Your account has been created"
+                
                 return {
                     "success": True,
-                    "message": "Registration successful",
+                    "message": message,
                     "user": {
                         "id": user_data["id"],
                         "email": user_data["email"],
@@ -90,7 +117,8 @@ async def google_verify_token(
                     },
                     "access_token": access_token,
                     "token_type": "bearer",
-                    "is_new_user": True
+                    "is_new_user": True,
+                    "redirect_to": "onboarding"
                 }
             else:
                 raise HTTPException(status_code=400, detail="Failed to create user account")
