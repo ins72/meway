@@ -5,18 +5,6 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 
-// Initialize Stripe with LIVE keys - with fallback
-const getStripeKey = () => {
-  const key = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
-  if (!key) {
-    console.warn('REACT_APP_STRIPE_PUBLISHABLE_KEY not found in environment variables');
-    return null;
-  }
-  return key;
-};
-
-const stripePromise = getStripeKey() ? loadStripe(getStripeKey()) : null;
-
 // Global Styles
 import './styles/globals.css';
 
