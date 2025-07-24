@@ -116,7 +116,8 @@ function App() {
           <NotificationProvider>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<MEWAYZ_V2_LandingPage />} />
+            <Route path="/legacy-landing" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/login" element={<LoginPage />} />
