@@ -1129,6 +1129,64 @@
   }
 }
 
+/* Tablet Portrait - 768px to 1024px */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .hero {
+    padding: 8rem 2rem 6rem;
+  }
+  
+  .hero h1 {
+    font-size: clamp(3rem, 6vw, 4rem);
+  }
+  
+  .hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 100%;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    margin-top: 4rem;
+  }
+  
+  .feature-card {
+    padding: 2.5rem;
+  }
+  
+  .testimonials-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+  
+  .testimonial-card {
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+  
+  .pricing-card {
+    padding: 2rem;
+  }
+  
+  .pricing-card.popular {
+    transform: scale(1.05);
+  }
+}
+
 @media (max-width: 768px) {
   .mobile-menu-toggle {
     display: block;
