@@ -1497,7 +1497,7 @@ class MewayzBackendAuditor:
         critical_systems = [
             "Booking System", "Escrow System", "Website Builder", 
             "Template Marketplace", "Link in Bio System", "Course & Community",
-            "Multi-Vendor Marketplace"
+            "Multi-Vendor Marketplace", "Plan Change Impact"
         ]
         
         working_critical = 0
