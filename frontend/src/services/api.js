@@ -203,6 +203,12 @@ export const adminAPI = {
   updateSubscriptionPlan: (id, data) => api.put(`/admin/subscription-plans/${id}`, data),
 };
 
+export const stripeAPI = {
+  createCheckoutSession: (data) => api.post('/stripe-integration/create-checkout-session', data),
+  confirmPayment: (data) => api.post('/stripe-integration/confirm-payment', data),
+  getPaymentHistory: () => api.get('/stripe-integration/'),
+};
+
 export const healthAPI = {
   checkHealth: () => api.get('/health'),
 };
