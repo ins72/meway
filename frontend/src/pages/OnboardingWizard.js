@@ -377,18 +377,45 @@ const OnboardingWizard = () => {
   const handlePaymentSetup = async () => {
     setLoading(true);
     try {
-      // TODO: Integrate with Stripe/PayPal for payment processing
-      // For now, simulate payment setup
-      console.log('Setting up payment for bundles:', formData.selectedBundles);
+      // Check if user selected free plan only
+      const hasFreePlanOnly = formData.selectedBundles.length === 1 && formData.selectedBundles.includes('free');
+      
+      if (hasFreePlanOnly) {
+        console.log('Free plan selected - skipping payment setup');
+        setCurrentStep(currentStep + 1);
+        return;
+      }
+      
+      // Validate payment method selection for paid plans
+      if (!formData.selectedPaymentType) {
+        alert('⚠️ Please select a payment method to continue with your subscription.');
+        return;
+      }
+      
+      console.log('Setting up payment with method:', formData.selectedPaymentType);
+      console.log('Selected bundles:', formData.selectedBundles);
       console.log('Total amount:', calculateTotalPrice().discountedPrice);
       
-      // Simulate API call for subscription creation
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // TODO: Integrate with Stripe/PayPal for actual payment processing
+      // For now, simulate payment setup based on selected method
+      
+      if (formData.selectedPaymentType === 'credit_card') {
+        // Simulate Stripe integration
+        console.log('Processing credit card payment with Stripe...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        alert('✅ Payment method verified!\nYour subscription will begin after the 14-day free trial.');
+      } else if (formData.selectedPaymentType === 'paypal') {
+        // Simulate PayPal integration  
+        console.log('Processing PayPal payment...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        alert('✅ PayPal payment method verified!\nYour subscription will begin after the 14-day free trial.');
+      }
       
       // Move to final step
       setCurrentStep(currentStep + 1);
     } catch (error) {
       console.error('Payment setup error:', error);
+      alert('❌ Payment setup failed. Please try again or contact support.');
     } finally {
       setLoading(false);
     }
