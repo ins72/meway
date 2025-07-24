@@ -458,7 +458,7 @@ const OnboardingWizard = () => {
             <span className="gradient-text">MEWAYZ</span>
           </div>
           <div className="progress-info">
-            <h1 className="wizard-title">Welcome to Mewayz</h1>
+            <h1 className="wizard-title">Welcome to MEWAYZ</h1>
             <p className="wizard-subtitle">
               Let's set up your workspace in just a few steps
             </p>
