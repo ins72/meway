@@ -374,8 +374,77 @@ async def root():
         "health": "/health"
     }
 
-@app.get("/health")
-async def health():
+@app.get("/api/system/status")
+async def system_status():
+    """Comprehensive system status for deployment monitoring"""
+    try:
+        import psutil
+        import platform
+        
+        # Get system information
+        system_info = {
+            "platform": platform.system(),
+            "platform_release": platform.release(),
+            "platform_version": platform.version(),
+            "architecture": platform.architecture()[0],
+            "hostname": platform.node(),
+            "ip_address": "unknown",
+            "mac_address": "unknown",
+            "processor": platform.processor()
+        }
+        
+        # Get memory information
+        memory = psutil.virtual_memory()
+        memory_info = {
+            "total": memory.total,
+            "available": memory.available,
+            "percent": memory.percent,
+            "used": memory.used,
+            "free": memory.free
+        }
+        
+        # Get CPU information
+        cpu_info = {
+            "cpu_count": psutil.cpu_count(),
+            "cpu_count_logical": psutil.cpu_count(logical=True),
+            "cpu_percent": psutil.cpu_percent(interval=1)
+        }
+        
+        # Test database connection
+        db_status = "unknown"
+        try:
+            if db.database is not None:
+                await asyncio.wait_for(
+                    db.client.admin.command('ping'), 
+                    timeout=2.0
+                )
+                db_status = "connected"
+            else:
+                db_status = "not_initialized"
+        except Exception as e:
+            db_status = f"error: {str(e)[:30]}"
+        
+        return {
+            "status": "operational",
+            "timestamp": datetime.utcnow().isoformat(),
+            "system": system_info,
+            "memory": memory_info,
+            "cpu": cpu_info,
+            "database": db_status,
+            "services": {
+                "api": "running",
+                "uvicorn": "operational",
+                "fastapi": "operational"
+            }
+        }
+    
+    except Exception as e:
+        return {
+            "status": "error",
+            "timestamp": datetime.utcnow().isoformat(),
+            "error": str(e),
+            "message": "System status check failed"
+        }
     """Enhanced health check endpoint that works even without database"""
     try:
         # Basic app health
