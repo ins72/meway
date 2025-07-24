@@ -418,7 +418,7 @@ const OnboardingWizard = () => {
     }
   };
 
-  const handlePaymentSetup = async () => {
+  const handlePaymentSetup = async (stripePaymentData = null) => {
     setLoading(true);
     try {
       // Check if user selected free plan only
@@ -430,7 +430,7 @@ const OnboardingWizard = () => {
         return;
       }
       
-      // Validate payment method selection for paid plans
+      // For paid plans, validate payment method selection
       if (!formData.selectedPaymentType) {
         alert('⚠️ Please select a payment method to continue with your subscription.');
         return;
@@ -440,16 +440,21 @@ const OnboardingWizard = () => {
       console.log('Selected bundles:', formData.selectedBundles);
       console.log('Total amount:', calculateTotalPrice().discountedPrice);
       
-      // TODO: Integrate with Stripe/PayPal for actual payment processing
-      // For now, simulate payment setup based on selected method
-      
       if (formData.selectedPaymentType === 'credit_card') {
-        // Simulate Stripe integration
-        console.log('Processing credit card payment with Stripe...');
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        alert('✅ Payment method verified!\nYour subscription will begin after the 14-day free trial.');
+        // Handle Stripe payment
+        if (stripePaymentData) {
+          console.log('Processing Stripe payment method:', stripePaymentData.paymentMethodId);
+          
+          // TODO: Send payment method to backend to create subscription
+          // For now, simulate successful payment setup
+          alert('✅ Payment method verified!\nYour subscription will begin after the 14-day free trial.');
+        } else {
+          // This shouldn't happen with proper Stripe integration
+          alert('⚠️ Payment information is required for credit card payments.');
+          return;
+        }
       } else if (formData.selectedPaymentType === 'paypal') {
-        // Simulate PayPal integration  
+        // Simulate PayPal integration (PayPal would be handled differently)
         console.log('Processing PayPal payment...');
         await new Promise(resolve => setTimeout(resolve, 2000));
         alert('✅ PayPal payment method verified!\nYour subscription will begin after the 14-day free trial.');
