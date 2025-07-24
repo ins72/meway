@@ -194,32 +194,27 @@
   list-style: none;
 }
 
-/* Mobile-first responsive navigation */
+/* Mobile screens only: Show hamburger, hide nav links */
 @media screen and (max-width: 767px) {
-  .nav .nav-links {
-    display: none !important;
-  }
-  
-  .nav .nav-actions {
-    display: none !important;
-  }
-  
-  .nav .mobile-menu-toggle {
+  .mobile-menu-toggle {
     display: block !important;
+  }
+  
+  .nav-links,
+  .nav-actions {
+    display: none !important;
   }
 }
 
+/* Desktop screens: Ensure hamburger is hidden */
 @media screen and (min-width: 768px) {
-  .nav .nav-links {
-    display: flex !important;
-  }
-  
-  .nav .nav-actions {
-    display: flex !important;
-  }
-  
-  .nav .mobile-menu-toggle {
+  .mobile-menu-toggle {
     display: none !important;
+  }
+  
+  .nav-links,
+  .nav-actions {
+    display: flex !important;
   }
 }
 
