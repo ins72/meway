@@ -172,63 +172,63 @@ const FeaturesSection = () => {
   const features = [
     {
       icon: '🔍',
-      title: 'Instagram Database & Lead Generation',
-      description: 'Advanced filtering system for Instagram profiles with follower count, engagement rate, location, and hashtag analysis. Export leads with email discovery.'
+      title: 'Instagram Lead Generation',
+      description: 'Advanced Instagram database with 50M+ profiles. Filter by engagement rate, follower count, location, and hashtags. Export qualified leads with contact discovery.'
     },
     {
       icon: '🔗',
-      title: 'Link in Bio Builder',
-      description: 'Drag-and-drop bio link builder with custom domains, analytics tracking, dynamic content, and e-commerce integration for maximum conversions.'
+      title: 'Bio Link Builder',
+      description: 'Create stunning bio link pages with custom domains, analytics tracking, payment integration, and unlimited links. Convert followers to customers instantly.'
     },
     {
       icon: '🎓',
-      title: 'Courses & Community Platform',
-      description: 'Complete Skool-like platform with video hosting, progress tracking, discussion forums, gamification, and live streaming capabilities.'
+      title: 'Course Platform',
+      description: 'Complete learning management system with video hosting, progress tracking, certificates, live sessions, and community features. Monetize your expertise.'
     },
     {
       icon: '🛍️',
-      title: 'E-commerce & Marketplace',
-      description: 'Multi-vendor marketplace with individual stores, payment processing, inventory management, review system, and order fulfillment.'
+      title: 'Multi-Vendor Marketplace',
+      description: 'Build your own marketplace like Amazon or Etsy. Vendor management, commission tracking, payment processing, and order fulfillment - all automated.'
     },
     {
       icon: '👥',
-      title: 'CRM & Email Marketing',
-      description: 'Advanced CRM with lead scoring, pipeline management, automated email campaigns, A/B testing, and detailed analytics tracking.'
+      title: 'CRM & Automation',
+      description: 'Advanced customer relationship management with lead scoring, email sequences, SMS marketing, and AI-powered follow-ups. Never lose a lead again.'
     },
     {
       icon: '📊',
-      title: 'Analytics & Automation',
-      description: 'Unified analytics dashboard with gamification, workflow automation, AI-powered insights, and customizable reporting tools.'
+      title: 'Analytics Dashboard',
+      description: 'Real-time insights across all your business channels. Track revenue, conversion rates, customer lifetime value, and ROI with beautiful visualizations.'
     },
     {
       icon: '🌐',
       title: 'Website Builder',
-      description: 'No-code website builder with responsive templates, SEO optimization, custom domains, and integrated e-commerce capabilities.'
+      description: 'Professional drag-and-drop website builder with e-commerce integration, SEO optimization, mobile responsiveness, and custom domains.'
     },
     {
       icon: '📅',
       title: 'Booking System',
-      description: 'Professional appointment scheduling with calendar integration, payment processing, automated reminders, and staff management.'
+      description: 'Complete appointment scheduling with calendar sync, automated reminders, payment collection, and team management. Perfect for service businesses.'
     },
     {
       icon: '💳',
       title: 'Financial Management',
-      description: 'Complete invoicing system with payment processing, expense tracking, financial reporting, and multi-currency support.'
+      description: 'Comprehensive invoicing, expense tracking, tax reporting, and multi-currency support. Accept payments globally with low fees.'
     },
     {
       icon: '🎨',
       title: 'Template Marketplace',
-      description: 'Create, share, and monetize templates for websites, emails, and social media with rating system and revenue sharing.'
+      description: 'Monetize your designs by selling templates for websites, emails, and social media. Built-in licensing, payments, and creator revenue sharing.'
     },
     {
       icon: '🔐',
       title: 'Escrow System',
-      description: 'Secure transaction platform for digital products and services with dispute resolution and milestone payment support.'
+      description: 'Secure transaction processing for digital products and services. Built-in dispute resolution and milestone payments for project-based work.'
     },
     {
       icon: '🤖',
-      title: 'AI Content Generation',
-      description: 'AI-powered content creation for blogs, social media, and marketing with trend analysis and optimization suggestions.'
+      title: 'AI Content Assistant',
+      description: 'Generate high-converting content for social media, blogs, ads, and emails. AI-powered optimization suggestions and trend analysis included.'
     }
   ];
 
@@ -236,11 +236,11 @@ const FeaturesSection = () => {
     <section className="features" id="features">
       <div className="section-header">
         <div className="section-badge">
-          <span className="emoji">🚀</span> 
-          <span className="text-content">6 Main Goals + Advanced Features</span>
+          <span className="emoji">⚡</span> 
+          <span className="text-content">12 Powerful Tools in One Platform</span>
         </div>
-        <h2>Everything You Need in One Platform</h2>
-        <p className="features-subtitle">Complete business management solution with 15+ integrated systems, all backed by real database operations and 62 production-ready APIs.</p>
+        <h2>Everything You Need to Succeed Online</h2>
+        <p className="features-subtitle">From lead generation to course creation, marketplace building to financial management - we've got every aspect of your digital business covered.</p>
       </div>
       
       <div className="features-grid">
