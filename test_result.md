@@ -473,12 +473,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Stripe Integration Backend testing completed successfully - all 400 errors resolved"
-    - "All critical revenue-generating systems 100% operational"
-    - "Platform ready for production deployment"
-  stuck_tasks: []
-  test_all: true
-  test_priority: "stripe_integration_complete"
+    - "CRITICAL: Authentication system completely broken - users cannot register or access onboarding"
+    - "URGENT: Registration API integration failing - no JWT tokens stored"
+    - "CRITICAL: Payment setup unreachable due to authentication failures"
+    - "User's card not being charged because they never reach payment form"
+  stuck_tasks:
+    - "Onboarding Wizard Integration - Authentication system preventing access to payment setup"
+  test_all: false
+  test_priority: "authentication_critical_fix_required"
 
 agent_communication:
   - agent: "testing"
