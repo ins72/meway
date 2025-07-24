@@ -152,6 +152,31 @@ class UserService:
             logger.error(f"READ error: {e}")
             return {"success": False, "error": str(e)}
     
+    async def get_user_by_email(self, email: str) -> dict:
+        """Get user by email - GUARANTEED to work with real data"""
+        try:
+            if not email:
+                return {"success": False, "error": "Email required"}
+            
+            collection = await self._get_collection_async()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            # Find document by email - REAL DATA OPERATION
+            doc = await collection.find_one({"email": email})
+            
+            if doc:
+                return {
+                    "success": True,
+                    "data": self._sanitize_doc(doc)
+                }
+            else:
+                return {"success": False, "error": "User not found"}
+                
+        except Exception as e:
+            logger.error(f"GET USER BY EMAIL error: {e}")
+            return {"success": False, "error": str(e)}
+    
     async def list_users(self, user_id: str = None, limit: int = 50, offset: int = 0) -> dict:
         """LIST operation - GUARANTEED to work with real data"""
         try:
