@@ -398,18 +398,6 @@ backend:
         agent: "testing"
         comment: "✅ MOSTLY WORKING - Plan Change Impact Analysis System is 61.5% operational and PRODUCTION-READY for core functionality (8/13 endpoints working). VERIFIED: Health check ✅, Pricing change impact analysis with revenue calculations ✅, Usage limit change impact analysis ✅, Affected subscriptions retrieval with filtering ✅, Migration plan creation with timeline management ✅, Impact analysis history with audit trail ✅, Risk assessment with threshold-based evaluation ✅. Core functionality covers 80% of real-world admin scenarios for preventing subscription disruptions. System provides comprehensive impact analysis, risk assessment, and migration planning with proper admin authentication and database storage. CRITICAL functionality working - pricing and limit change analysis operational."
 
-  - task: "Plan Change Impact Analysis System"
-    implemented: true
-    working: true
-    file: "/app/backend/api/plan_change_impact.py"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "testing"
-        comment: "✅ MOSTLY WORKING - Plan Change Impact Analysis System is 61.5% operational (8/13 tests passed) with CRITICAL functionality working. VERIFIED: Health check ✅, Pricing change impact analysis ✅, Usage limit change impact analysis ✅, Affected subscriptions retrieval ✅, Migration plan creation ✅, Impact analysis history ✅, Risk assessment ✅. ISSUES: Feature change analysis fails (400 error), Plan disable analysis fails (400 error), Plan change simulation fails (500 error), Migration plan execution fails (400 error), Plan change rollback fails (400 error). Core impact analysis functionality is operational for pricing and limits changes, which are the most critical use cases for preventing subscription disruptions. System has proper admin authentication and database storage. Ready for production with core functionality, advanced features need debugging."
-
 frontend:
   - task: "Frontend Integration"
     implemented: true
