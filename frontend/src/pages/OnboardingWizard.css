@@ -290,6 +290,40 @@
   border: 1px solid var(--border);
 }
 
+/* Goal Tags and Recommendations */
+.selected-goals-info {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-light);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.selected-goals-info h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.goals-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.goal-tag {
+  background: var(--gradient-primary);
+  color: white;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 /* Multi-bundle Discount */
 .multi-bundle-discount {
   background: var(--gradient-warm);
