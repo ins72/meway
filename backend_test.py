@@ -1011,6 +1011,9 @@ class MewayzBackendAuditor:
         # Step 3.5: Test Launch Pricing System (CRITICAL FOR PRODUCTION)
         self.test_launch_pricing_system()
         
+        # Step 3.6: Test Admin Pricing System (CRITICAL FOR ADMIN DASHBOARD)
+        self.test_admin_pricing_system()
+        
         # Step 4: Test additional systems
         self.test_additional_systems()
         
