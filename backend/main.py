@@ -317,7 +317,7 @@ try:
     app.include_router(customer_notification_router, prefix="/api/customer-notification", tags=["customer_notification"])
 
     
-    logger.info(f"✅ Successfully included 147 bulletproof routers")
+    logger.info(f"✅ Successfully included 148 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
