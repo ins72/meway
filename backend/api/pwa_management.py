@@ -34,110 +34,223 @@ class PWAManifestService:
         except Exception as e:
             return None
     
-    async def generate_manifest(self, workspace_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate custom PWA manifest for workspace"""
+    async def create_pwa_config(self, config_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Create PWA configuration with real database storage"""
         try:
-            manifest = self.default_manifest.copy()
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
             
-            # Customize based on workspace
-            if workspace_data:
-                manifest["name"] = f"{workspace_data.get('name', 'Business')} - Mewayz"
-                manifest["short_name"] = workspace_data.get('name', 'Mewayz')[:12]
-                manifest["description"] = workspace_data.get('description', manifest["description"])
-                
-                # Custom branding if available
-                if workspace_data.get('branding'):
-                    branding = workspace_data['branding']
-                    manifest["theme_color"] = branding.get('primary_color', '#007AFF')
-                    manifest["background_color"] = branding.get('background_color', '#101010')
-            
-            # Add icons
-            manifest["icons"] = [
-                {
-                    "src": "/icons/icon-72x72.png",
-                    "sizes": "72x72",
-                    "type": "image/png",
-                    "purpose": "maskable any"
+            pwa_config = {
+                "id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "workspace_id": config_data.get("workspace_id"),
+                "app_name": config_data.get("app_name", "Business App"),
+                "short_name": config_data.get("short_name", "App"),
+                "description": config_data.get("description", "Progressive Web App"),
+                "start_url": config_data.get("start_url", "/"),
+                "display": config_data.get("display", "standalone"),
+                "background_color": config_data.get("background_color", "#101010"),
+                "theme_color": config_data.get("theme_color", "#007AFF"),
+                "orientation": config_data.get("orientation", "portrait-primary"),
+                "categories": config_data.get("categories", ["business", "productivity"]),
+                "lang": config_data.get("lang", "en"),
+                "dir": config_data.get("dir", "ltr"),
+                "icons": config_data.get("icons", []),
+                "screenshots": config_data.get("screenshots", []),
+                "display_override": config_data.get("display_override", ["window-controls-overlay", "standalone"]),
+                "edge_side_panel": config_data.get("edge_side_panel", {"preferred_width": 320}),
+                "service_worker_config": {
+                    "cache_name": f"mewayz-{user_id}-cache",
+                    "version": config_data.get("version", "1.0.0"),
+                    "offline_pages": config_data.get("offline_pages", ["/", "/dashboard", "/offline", "/login"]),
+                    "cache_strategies": config_data.get("cache_strategies", {
+                        "api": "network_first",
+                        "assets": "cache_first",
+                        "pages": "stale_while_revalidate",
+                        "images": "cache_first"
+                    }),
+                    "background_sync": config_data.get("background_sync", {"enabled": True, "tag": "mewayz-sync"}),
+                    "push_notifications": config_data.get("push_notifications", {
+                        "enabled": True,
+                        "vapid_public_key": config_data.get("vapid_public_key", ""),
+                        "subscription_endpoint": "/api/notifications/subscribe"
+                    })
                 },
-                {
-                    "src": "/icons/icon-96x96.png", 
-                    "sizes": "96x96",
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                },
-                {
-                    "src": "/icons/icon-128x128.png",
-                    "sizes": "128x128", 
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                },
-                {
-                    "src": "/icons/icon-144x144.png",
-                    "sizes": "144x144",
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                },
-                {
-                    "src": "/icons/icon-152x152.png",
-                    "sizes": "152x152",
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                },
-                {
-                    "src": "/icons/icon-192x192.png",
-                    "sizes": "192x192",
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                },
-                {
-                    "src": "/icons/icon-384x384.png",
-                    "sizes": "384x384",
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                },
-                {
-                    "src": "/icons/icon-512x512.png",
-                    "sizes": "512x512",
-                    "type": "image/png",
-                    "purpose": "maskable any"
-                }
-            ]
-            
-            # Add screenshots for app store
-            manifest["screenshots"] = [
-                {
-                    "src": "/screenshots/desktop-dashboard.png",
-                    "sizes": "1280x720",
-                    "type": "image/png",
-                    "form_factor": "wide",
-                    "label": "Dashboard Overview"
-                },
-                {
-                    "src": "/screenshots/mobile-dashboard.png", 
-                    "sizes": "390x844",
-                    "type": "image/png",
-                    "form_factor": "narrow",
-                    "label": "Mobile Dashboard"
-                }
-            ]
-            
-            # Add advanced PWA features
-            manifest["display_override"] = ["window-controls-overlay", "standalone"]
-            manifest["edge_side_panel"] = {
-                "preferred_width": 320
+                "features": config_data.get("features", {
+                    "offline_support": True,
+                    "push_notifications": True,
+                    "background_sync": True,
+                    "install_prompt": True,
+                    "file_system_access": False,
+                    "payment_request": True,
+                    "geolocation": True,
+                    "camera_access": True,
+                    "device_orientation": True
+                }),
+                "status": "active",
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat()
             }
+            
+            result = await collection.insert_one(pwa_config)
+            
+            if result.inserted_id:
+                return {
+                    "success": True,
+                    "message": "PWA configuration created successfully",
+                    "data": {k: v for k, v in pwa_config.items() if k != '_id'},
+                    "id": pwa_config["id"]
+                }
+            else:
+                return {"success": False, "error": "Failed to create PWA configuration"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_pwa_config(self, config_id: str, user_id: str) -> Dict[str, Any]:
+        """Get PWA configuration by ID"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            config = await collection.find_one({"id": config_id, "user_id": user_id})
+            
+            if config:
+                return {
+                    "success": True,
+                    "data": {k: v for k, v in config.items() if k != '_id'}
+                }
+            else:
+                return {"success": False, "error": "PWA configuration not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def update_pwa_config(self, config_id: str, update_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Update PWA configuration"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await collection.update_one(
+                {"id": config_id, "user_id": user_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count > 0:
+                updated_config = await collection.find_one({"id": config_id, "user_id": user_id})
+                return {
+                    "success": True,
+                    "message": "PWA configuration updated successfully",
+                    "data": {k: v for k, v in updated_config.items() if k != '_id'} if updated_config else None
+                }
+            else:
+                return {"success": False, "error": "PWA configuration not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def delete_pwa_config(self, config_id: str, user_id: str) -> Dict[str, Any]:
+        """Delete PWA configuration"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"id": config_id, "user_id": user_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "PWA configuration deleted successfully",
+                    "deleted_count": result.deleted_count
+                }
+            else:
+                return {"success": False, "error": "PWA configuration not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def list_pwa_configs(self, user_id: str, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List PWA configurations for user"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            cursor = collection.find({"user_id": user_id}).skip(offset).limit(limit)
+            configs = await cursor.to_list(length=limit)
+            
+            sanitized_configs = [{k: v for k, v in config.items() if k != '_id'} for config in configs]
+            
+            total = await collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": sanitized_configs,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def generate_manifest(self, config_id: str, user_id: str) -> Dict[str, Any]:
+        """Generate PWA manifest from stored configuration"""
+        try:
+            # Get stored configuration
+            config_result = await self.get_pwa_config(config_id, user_id)
+            if not config_result.get("success"):
+                return config_result
+            
+            config_data = config_result["data"]
+            
+            # Generate manifest from real data
+            manifest = {
+                "name": config_data.get("app_name", "Business App"),
+                "short_name": config_data.get("short_name", "App"),
+                "description": config_data.get("description", "Progressive Web App"),
+                "start_url": config_data.get("start_url", "/"),
+                "display": config_data.get("display", "standalone"),
+                "background_color": config_data.get("background_color", "#101010"),
+                "theme_color": config_data.get("theme_color", "#007AFF"),
+                "orientation": config_data.get("orientation", "portrait-primary"),
+                "categories": config_data.get("categories", ["business", "productivity"]),
+                "lang": config_data.get("lang", "en"),
+                "dir": config_data.get("dir", "ltr"),
+                "icons": config_data.get("icons", []),
+                "screenshots": config_data.get("screenshots", []),
+                "display_override": config_data.get("display_override", ["window-controls-overlay", "standalone"]),
+                "edge_side_panel": config_data.get("edge_side_panel", {"preferred_width": 320})
+            }
+            
+            # Store generated manifest
+            manifest_collection = await self._get_collection(self.manifest_collection)
+            if manifest_collection:
+                manifest_record = {
+                    "id": str(uuid.uuid4()),
+                    "config_id": config_id,
+                    "user_id": user_id,
+                    "manifest": manifest,
+                    "generated_at": datetime.utcnow().isoformat()
+                }
+                await manifest_collection.insert_one(manifest_record)
             
             return {
                 "success": True,
                 "manifest": manifest,
+                "config_id": config_id,
                 "generated_at": datetime.utcnow().isoformat()
             }
             
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e)
-            }
+            return {"success": False, "error": str(e)}
     
     async def get_service_worker_config(self) -> Dict[str, Any]:
         """Get service worker configuration"""
