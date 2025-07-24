@@ -273,6 +273,7 @@ try:
     app.include_router(tiktok_router, prefix="/api/tiktok", tags=["tiktok"])
     app.include_router(stripe_integration_router, prefix="/api/stripe-integration", tags=["stripe_integration"])
     app.include_router(simple_stripe_router, prefix="/api", tags=["simple_stripe"])
+    app.include_router(enhanced_stripe_router, prefix="/api/payments", tags=["enhanced_stripe"])
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
     app.include_router(production_monitoring_router, prefix="/api", tags=["production"])
     app.include_router(pwa_management_router, prefix="/api/pwa", tags=["pwa"])
