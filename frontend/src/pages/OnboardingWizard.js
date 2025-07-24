@@ -351,16 +351,36 @@ const OnboardingWizard = () => {
   const handleComplete = async () => {
     setLoading(true);
     try {
-      // TODO: Submit onboarding data to backend
-      console.log('Onboarding data:', formData);
+      // Prepare onboarding data
+      const onboardingData = {
+        workspace: {
+          name: formData.workspaceName,
+          industry: formData.industry,
+          team_size: formData.teamSize,
+        },
+        business_goals: formData.selectedGoals,
+        selected_bundles: formData.selectedBundles,
+        payment_method: formData.paymentMethod,
+        pricing_details: calculateTotalPrice(),
+        user_id: user?.id,
+        completed_at: new Date().toISOString()
+      };
+
+      console.log('Submitting onboarding data:', onboardingData);
       
-      // Simulate API call
+      // For now, simulate the API call since the backend requires admin auth
+      // In production, this would need a user-accessible onboarding endpoint
       await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // TODO: Replace with actual API call when user-level endpoint is available
+      // const response = await onboardingAPI.completeOnboarding(onboardingData);
       
       // Navigate to dashboard
       navigate('/dashboard');
     } catch (error) {
       console.error('Onboarding error:', error);
+      // Show error message to user
+      alert('There was an error completing your setup. Please try again.');
     } finally {
       setLoading(false);
     }
