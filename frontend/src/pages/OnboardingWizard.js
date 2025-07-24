@@ -535,29 +535,15 @@ const OnboardingWizard = () => {
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        const step1Valid = formData.workspaceName.trim() !== '';
-        console.log('Step 1 validation:', { workspaceName: formData.workspaceName, valid: step1Valid });
-        return step1Valid;
+        return formData.workspaceName.trim() !== '';
       case 2:
-        const step2Valid = formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
-        console.log('Step 2 validation:', { 
-          industry: formData.industry, 
-          teamSize: formData.teamSize, 
-          selectedGoals: formData.selectedGoals,
-          selectedGoalsCount: formData.selectedGoals.length,
-          valid: step2Valid 
-        });
-        return step2Valid;
+        return formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
       case 3:
-        const step3Valid = formData.selectedBundles.length > 0;
-        console.log('Step 3 validation:', { selectedBundles: formData.selectedBundles, valid: step3Valid });
-        return step3Valid;
+        return formData.selectedBundles.length > 0;
       case 4:
         // Require payment method selection for paid plans
         const hasFreePlanOnly = formData.selectedBundles.length === 1 && formData.selectedBundles.includes('free');
-        const step4Valid = hasFreePlanOnly || formData.selectedPaymentType !== null;
-        console.log('Step 4 validation:', { hasFreePlanOnly, selectedPaymentType: formData.selectedPaymentType, valid: step4Valid });
-        return step4Valid;
+        return hasFreePlanOnly || formData.selectedPaymentType !== null;
       default:
         return true;
     }
