@@ -33,6 +33,57 @@ async def health_check():
         logger.error(f"Health check error: {e}")
         return {"success": False, "healthy": False, "error": str(e)}
 
+@router.post("/create-checkout-session")
+async def create_checkout_session(
+    request: CheckoutSessionRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create Stripe checkout session for subscription"""
+    try:
+        service = get_stripe_integration_service()
+        result = await service.create_checkout_session(
+            user_id=current_user.get("_id", "unknown"),
+            user_email=current_user.get("email", "unknown"),
+            bundles=request.bundles,
+            workspace_name=request.workspace_name,
+            payment_method=request.payment_method
+        )
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Checkout session creation failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Checkout session creation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/confirm-payment")
+async def confirm_payment(
+    data: Dict[str, Any] = Body({}, description="Payment confirmation data"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Confirm payment and create subscription"""
+    try:
+        service = get_stripe_integration_service()
+        result = await service.confirm_payment(
+            user_id=current_user.get("_id", "unknown"),
+            payment_data=data
+        )
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error", "Payment confirmation failed"))
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Payment confirmation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/")
 async def list_payments(
     limit: int = Query(50, ge=1, le=100),
