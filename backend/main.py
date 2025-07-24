@@ -166,6 +166,7 @@ try:
     from api.launch_pricing import router as launch_pricing_router
     from api.admin_pricing import router as admin_pricing_router
     from api.admin_plan_management import router as admin_plan_management_router
+    from api.plan_change_impact import router as plan_change_impact_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
