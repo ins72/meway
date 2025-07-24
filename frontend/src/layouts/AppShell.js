@@ -33,48 +33,48 @@ const AppShell = () => {
     {
       section: 'main',
       items: [
-        { label: 'Overview', icon: '🏠', route: '/dashboard', badge: null },
-        { label: 'Social Media', icon: '📱', route: '/dashboard/social-media', badge: '3' },
-        { label: 'E-commerce', icon: '🛍️', route: '/dashboard/ecommerce', badge: null },
-        { label: 'Content & Courses', icon: '🎓', route: '/dashboard/courses', badge: null },
-        { label: 'CRM & Contacts', icon: '👥', route: '/dashboard/crm', badge: '12' },
-        { label: 'Analytics', icon: '📊', route: '/dashboard/analytics', badge: null },
+        { label: 'Overview', icon: 'overview', route: '/dashboard', badge: null },
+        { label: 'Social Media', icon: 'social', route: '/dashboard/social-media', badge: '3' },
+        { label: 'E-commerce', icon: 'store', route: '/dashboard/ecommerce', badge: null },
+        { label: 'Content & Courses', icon: 'education', route: '/dashboard/courses', badge: null },
+        { label: 'CRM & Contacts', icon: 'contacts', route: '/dashboard/crm', badge: '12' },
+        { label: 'Analytics', icon: 'analytics', route: '/dashboard/analytics', badge: null },
       ]
     },
     {
       section: 'tools',
       title: 'Tools & Features',
       items: [
-        { label: 'Website Builder', icon: '🌐', route: '/dashboard/website-builder' },
-        { label: 'Bio Links', icon: '🔗', route: '/dashboard/bio-sites' },
-        { label: 'Email Marketing', icon: '📧', route: '/dashboard/email-marketing' },
-        { label: 'Booking System', icon: '📅', route: '/dashboard/advanced-booking' },
-        { label: 'Financial', icon: '💳', route: '/dashboard/financial-management' },
-        { label: 'AI Features', icon: '🤖', route: '/dashboard/ai-features' },
+        { label: 'Website Builder', icon: 'website', route: '/dashboard/website-builder' },
+        { label: 'Bio Links', icon: 'links', route: '/dashboard/bio-sites' },
+        { label: 'Email Marketing', icon: 'email', route: '/dashboard/email-marketing' },
+        { label: 'Booking System', icon: 'calendar', route: '/dashboard/advanced-booking' },
+        { label: 'Financial', icon: 'finance', route: '/dashboard/financial-management' },
+        { label: 'AI Features', icon: 'ai', route: '/dashboard/ai-features' },
       ]
     },
     {
       section: 'workspace',
       title: 'Workspace',
       items: [
-        { label: 'Settings', icon: '⚙️', route: '/dashboard/settings' },
-        { label: 'Team', icon: '👨‍👩‍👧‍👦', route: '/dashboard/team-management' },
-        { label: 'Subscription', icon: '💎', route: '/dashboard/subscription' },
+        { label: 'Settings', icon: 'settings', route: '/dashboard/settings' },
+        { label: 'Team', icon: 'team', route: '/dashboard/team-management' },
+        { label: 'Subscription', icon: 'subscription', route: '/dashboard/subscription' },
       ]
     }
   ];
 
   const adminItems = [
-    { label: 'Admin Dashboard', icon: '👑', route: '/dashboard/admin' },
-    { label: 'Plan Management', icon: '📋', route: '/dashboard/admin/plans' },
-    { label: 'User Management', icon: '👤', route: '/dashboard/admin/users' },
-    { label: 'System Settings', icon: '🔧', route: '/dashboard/admin/system' },
+    { label: 'Admin Dashboard', icon: 'admin', route: '/dashboard/admin' },
+    { label: 'Plan Management', icon: 'plans', route: '/dashboard/admin/plans' },
+    { label: 'User Management', icon: 'users', route: '/dashboard/admin/users' },
+    { label: 'System Settings', icon: 'system', route: '/dashboard/admin/system' },
   ];
 
   const quickActions = [
-    { label: 'Create Post', icon: '📝', action: 'create_post' },
-    { label: 'Add Contact', icon: '👤', action: 'add_contact' },
-    { label: 'New Campaign', icon: '📢', action: 'new_campaign' },
+    { label: 'Create Post', icon: 'create', action: 'create_post' },
+    { label: 'Add Contact', icon: 'add-user', action: 'add_contact' },
+    { label: 'New Campaign', icon: 'campaign', action: 'new_campaign' },
   ];
 
   const handleNavigation = (route) => {
