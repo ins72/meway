@@ -1043,6 +1043,17 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
 @media (max-width: 1024px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
@@ -1054,7 +1065,20 @@
   }
   
   .features-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .hero {
+    padding: 10rem 2rem 6rem;
+  }
+  
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+  
+  .features, .pricing, .testimonials, .cta-section {
+    padding: 6rem 2rem;
   }
 }
 
@@ -1070,68 +1094,203 @@
   .nav {
     padding: 1rem;
   }
+  
+  .nav-actions {
+    gap: 0.5rem;
+  }
+  
+  .nav-actions .btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
 
   .hero {
-    padding: 10rem 1rem 6rem;
+    padding: 8rem 1rem 5rem;
+  }
+  
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+  }
+  
+  .hero p {
+    font-size: 1.125rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
   }
 
   .hero-stats {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+    max-width: 400px;
+  }
+  
+  .stat {
+    padding: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
   }
 
   .features-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .feature-card {
+    padding: 2rem;
+  }
+  
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
   }
 
   .testimonials-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .testimonial-card {
+    padding: 2rem;
+  }
+  
+  .testimonial-card p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
   }
 
   .pricing-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .pricing-card {
+    padding: 2rem;
   }
 
   .pricing-card.popular {
     transform: none;
+    margin-top: 0;
+  }
+  
+  .pricing-card.popular:hover {
+    transform: translateY(-5px) scale(1.02);
   }
 
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 2.5rem;
+  }
+  
+  .footer-brand {
+    text-align: center;
+    grid-column: 1;
+  }
+  
+  .footer-section {
+    text-align: center;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
-    padding: 8rem 1rem 4rem;
+    padding: 7rem 1rem 4rem;
   }
-
-  .features, .pricing, .testimonials, .cta-section {
-    padding: 5rem 1rem;
-  }
-
-  .feature-card, .pricing-card, .testimonial-card {
-    padding: 2rem;
+  
+  .hero-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    margin-bottom: 2rem;
   }
 
   .hero h1 {
-    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-size: clamp(2rem, 10vw, 2.75rem);
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-actions .btn {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
   }
 
-  .hero p {
-    font-size: 1.2rem;
+  .features, .pricing, .testimonials, .cta-section {
+    padding: 4rem 1rem;
+  }
+  
+  .section-header {
+    margin-bottom: 3rem;
+  }
+  
+  .section-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card, .pricing-card, .testimonial-card {
+    padding: 1.5rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.25rem;
+  }
+  
+  .feature-card p {
+    font-size: 0.95rem;
   }
 
   .stat {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 
   .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .plan-price {
     font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .plan-features li {
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .cta-section h2 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-section p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
   }
 }
 
