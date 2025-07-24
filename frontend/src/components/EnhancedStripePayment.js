@@ -257,6 +257,11 @@ const EnhancedStripePayment = ({
     },
   };
 
+  const elementsOptions = {
+    clientSecret,
+    appearance
+  };
+
   return (
     <div className="enhanced-stripe-payment">
       <div className="payment-header">
@@ -264,18 +269,26 @@ const EnhancedStripePayment = ({
         <p>Secure payment powered by Stripe</p>
       </div>
       
-      <Elements 
-        stripe={stripePromise} 
-        options={{ clientSecret, appearance }}
-      >
-        <EnhancedPaymentForm
-          clientSecret={clientSecret}
-          onSuccess={onSuccess}
-          onError={onError}
-          workspaceName={workspaceName}
-          bundles={bundles}
-        />
-      </Elements>
+      {stripePromise ? (
+        <Elements 
+          stripe={stripePromise} 
+          options={elementsOptions}
+        >
+          <EnhancedPaymentForm
+            clientSecret={clientSecret}
+            onSuccess={onSuccess}
+            onError={onError}
+            workspaceName={workspaceName}
+            bundles={bundles}
+          />
+        </Elements>
+      ) : (
+        <div className="enhanced-payment-error">
+          <div className="error-icon">🔧</div>
+          <h3>Payment System Unavailable</h3>
+          <p>Payment processing is temporarily unavailable. Please try again later.</p>
+        </div>
+      )}
       
       <div className="customer-info">
         <p className="info-text">
