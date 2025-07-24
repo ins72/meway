@@ -932,11 +932,11 @@ const OnboardingWizard = () => {
                   </div>
                 </div>
 
-                {/* Simple Stripe Payment Form */}
+                {/* Enhanced Stripe Payment Form */}
                 {formData.selectedPaymentType === 'credit_card' && (
-                  <div className="stripe-payment-section">
+                  <div className="enhanced-payment-section">
                     <h3>Payment Information</h3>
-                    <SimpleStripePayment
+                    <EnhancedStripePayment
                       amount={calculateTotalPrice().discountedPrice}
                       currency="usd"
                       bundles={formData.selectedBundles}
