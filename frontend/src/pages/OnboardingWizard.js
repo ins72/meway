@@ -455,20 +455,31 @@ const OnboardingWizard = () => {
                   </div>
 
                   <div className="form-group full-width">
-                    <label className="form-label">Primary Goal *</label>
-                    <div className="goal-options">
-                      {primaryGoals.map((goal) => (
-                        <label key={goal.value} className="goal-option">
-                          <input
-                            type="radio"
-                            name="primaryGoal"
-                            value={goal.value}
-                            checked={formData.primaryGoal === goal.value}
-                            onChange={handleInputChange}
-                            className="goal-radio"
-                          />
-                          <span className="goal-label">{goal.label}</span>
-                        </label>
+                    <label className="form-label">Business Goals *</label>
+                    <p className="form-hint">Select all that apply - we'll customize your experience</p>
+                    <div className="business-goals-grid">
+                      {businessGoals.map((goal) => (
+                        <div 
+                          key={goal.id} 
+                          className={`goal-card ${formData.selectedGoals.includes(goal.id) ? 'selected' : ''}`}
+                          onClick={() => {
+                            const newGoals = formData.selectedGoals.includes(goal.id)
+                              ? formData.selectedGoals.filter(g => g !== goal.id)
+                              : [...formData.selectedGoals, goal.id];
+                            setFormData({...formData, selectedGoals: newGoals});
+                          }}
+                        >
+                          <div className="goal-icon">{goal.icon}</div>
+                          <div className="goal-content">
+                            <h4 className="goal-title">{goal.title}</h4>
+                            <p className="goal-description">{goal.description}</p>
+                            <div className="goal-features">
+                              {goal.features_preview.map((feature, index) => (
+                                <span key={index} className="goal-feature">{feature}</span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </div>
