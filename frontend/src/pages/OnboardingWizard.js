@@ -932,6 +932,37 @@ const OnboardingWizard = () => {
                   </div>
                 </div>
 
+                {/* Stripe Payment Form */}
+                {formData.selectedPaymentType === 'credit_card' && (
+                  <div className="stripe-payment-section">
+                    <h3>Payment Information</h3>
+                    <StripePaymentForm
+                      totalAmount={calculateTotalPrice().discountedPrice}
+                      onSuccess={handleStripePaymentSuccess}
+                      onError={handleStripePaymentError}
+                      loading={loading}
+                      disabled={!formData.selectedPaymentType}
+                    />
+                  </div>
+                )}
+
+                {/* PayPal Payment Section */}
+                {formData.selectedPaymentType === 'paypal' && (
+                  <div className="paypal-payment-section">
+                    <h3>PayPal Payment</h3>
+                    <div className="paypal-info">
+                      <p>You'll be redirected to PayPal to complete your payment setup.</p>
+                      <button
+                        onClick={() => handlePaymentSetup()}
+                        disabled={loading}
+                        className="paypal-continue-button"
+                      >
+                        {loading ? 'Processing...' : 'Continue with PayPal'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="trial-notice">
                   <div className="notice-content">
                     <h4>🎉 14-Day Free Trial</h4>
