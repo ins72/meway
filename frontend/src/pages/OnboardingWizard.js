@@ -355,7 +355,7 @@ const OnboardingWizard = () => {
       case 2:
         return formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
       case 3:
-        return formData.selectedPlan !== null;
+        return formData.selectedBundles.length > 0;
       default:
         return true;
     }
