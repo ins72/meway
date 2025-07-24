@@ -333,12 +333,14 @@ except Exception as e:
 
 @app.get("/")
 async def root():
-    """Root endpoint"""
+    """Root endpoint - simple response that doesn't require database"""
     return {
-        "message": "Mewayz Professional Platform - BULLETPROOF VERSION",
+        "message": "Mewayz Professional Platform API",
+        "version": "2.0.0",
         "status": "operational",
-        "services": 132,
-        "version": "2.0.0"
+        "timestamp": datetime.utcnow().isoformat(),
+        "docs": "/docs",
+        "health": "/health"
     }
 
 @app.get("/health")
