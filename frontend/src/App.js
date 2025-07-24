@@ -22,7 +22,7 @@ import PrivacyPolicyPage from './pages/legal/PrivacyPolicyPage';
 import CookiePolicyPage from './pages/legal/CookiePolicyPage';
 
 // Protected pages
-import DashboardLayout from './layouts/DashboardLayout';
+import AppShell from './layouts/AppShell';
 import DashboardHome from './pages/dashboard/DashboardHome';
 import SocialMediaPage from './pages/dashboard/SocialMediaPage';
 import InstagramManagementPage from './pages/dashboard/InstagramManagementPage';
