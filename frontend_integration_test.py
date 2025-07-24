@@ -170,13 +170,13 @@ class FrontendIntegrationTester:
         
         # Test multi-vendor marketplace endpoint
         try:
-            response = requests.get(f"{self.base_url}/api/multi_vendor_marketplace/health", 
+            response = requests.get(f"{self.base_url}/api/multi-vendor-marketplace/health", 
                                   headers=self.headers, timeout=10)
             success = response.status_code == 200
-            self.log_result("/api/multi_vendor_marketplace/health", success, response.status_code,
+            self.log_result("/api/multi-vendor-marketplace/health", success, response.status_code,
                           "Multi-vendor marketplace available" if success else f"Failed: {response.text[:100]}")
         except Exception as e:
-            self.log_result("/api/multi_vendor_marketplace/health", False, None, f"Marketplace error: {str(e)}")
+            self.log_result("/api/multi-vendor-marketplace/health", False, None, f"Marketplace error: {str(e)}")
         
         # Test financial endpoint (for payments)
         try:
