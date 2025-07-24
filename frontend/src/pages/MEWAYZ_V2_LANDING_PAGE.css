@@ -188,23 +188,50 @@
   transform: scale(1.05);
 }
 
-.nav-links {
+/* Responsive Classes */
+.desktop-only {
   display: flex;
-  gap: 2.5rem;
-  list-style: none;
 }
 
-.nav-links a {
+.mobile-tablet-only {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .mobile-tablet-only {
+    display: flex !important;
+  }
+}
+
+/* Navigation */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.nav-links li a {
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
+  font-size: var(--text-sm);
+  transition: all var(--animation-speed) var(--animation-smooth);
   position: relative;
-  transition: all var(--animation-speed) ease;
   padding: 0.5rem 0;
-  cursor: pointer;
 }
 
-.nav-links a::before {
+.nav-links li a:hover {
+  color: var(--text-primary);
+}
+
+.nav-links li a::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -212,16 +239,11 @@
   width: 0;
   height: 2px;
   background: var(--gradient-primary);
-  transition: all var(--animation-speed) var(--animation-bounce);
   transform: translateX(-50%);
+  transition: width var(--animation-speed) var(--animation-smooth);
 }
 
-.nav-links a:hover {
-  color: var(--text-primary);
-  transform: translateY(-2px);
-}
-
-.nav-links a:hover::before {
+.nav-links li a:hover::after {
   width: 100%;
 }
 
@@ -236,27 +258,35 @@
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  cursor: pointer;
   padding: 0.75rem;
-  border-radius: 12px;
-  font-size: 1.2rem;
-  transition: all var(--animation-speed) var(--animation-bounce);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all var(--animation-speed) var(--animation-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover {
   background: var(--bg-card);
-  transform: scale(1.1) rotate(180deg);
   border-color: var(--border-light);
+  transform: scale(1.05);
 }
 
 .mobile-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
   color: var(--text-primary);
-  font-size: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
   cursor: pointer;
-  padding: 0.5rem;
+  transition: all var(--animation-speed) var(--animation-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
 }
 
 /* Mobile Menu */
