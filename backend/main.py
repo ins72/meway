@@ -98,6 +98,7 @@ try:
     from api.crm import router as crm_router
     from api.templates import router as templates_router
     from api.enhanced_features import router as enhanced_features_router
+    from api.admin_settings import router as admin_settings_router
     from api.google_oauth import router as google_oauth_router
     from api.template_marketplace import router as template_marketplace_router
     from api.realtime_notifications import router as realtime_notifications_router
