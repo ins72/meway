@@ -368,6 +368,18 @@ backend:
         agent: "testing"
         comment: "✅ FULLY WORKING - Admin Pricing Management System is 100% operational and production-ready. All 10 tests passed (100% success rate). VERIFIED: Health check ✅, Current pricing configuration retrieval ✅, Bundle pricing updates ✅, Bundle feature updates ✅, Bundle enable/disable functionality ✅, Bulk pricing updates ✅, Pricing analytics ✅, Pricing change testing ✅, Pricing history tracking ✅, Pricing template application ✅. All endpoints working with proper admin authentication, comprehensive CRUD operations, real database storage, impact analysis, risk assessment, and pricing templates. System includes 3 predefined pricing templates (holiday_discount, new_year_special, enterprise_promotion) and complete audit trail functionality. Ready for immediate production deployment in admin dashboard."
 
+  - task: "Admin Plan Management System"
+    implemented: true
+    working: false
+    file: "/app/backend/api/admin_plan_management.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "🔄 NEWLY IMPLEMENTED - Comprehensive admin plan management system with full control over plan definitions: pricing, features, limits, availability, launch specials. Includes plan CRUD operations, bulk updates, analytics, subscription tracking, and change history. Allows admins to control all aspects of plans that workspaces can subscribe to. Critical for complete platform management."
+
 frontend:
   - task: "Frontend Integration"
     implemented: true
