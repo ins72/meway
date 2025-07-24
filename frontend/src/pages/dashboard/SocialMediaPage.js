@@ -102,10 +102,10 @@ const SocialMediaPage = () => {
   ]);
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
-    { id: 'content', label: 'Content', icon: '📝' },
-    { id: 'analytics', label: 'Analytics', icon: '📊' },
-    { id: 'leads', label: 'Lead Database', icon: '👥' }
+    { id: 'dashboard', label: 'Dashboard', icon: 'overview' },
+    { id: 'content', label: 'Content', icon: 'content' },
+    { id: 'analytics', label: 'Analytics', icon: 'chart' },
+    { id: 'leads', label: 'Lead Database', icon: 'database' }
   ];
 
   const handleCreatePost = () => {
