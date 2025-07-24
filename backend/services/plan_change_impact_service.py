@@ -429,30 +429,57 @@ class PlanChangeImpactService:
                 "recommendations": []
             }
             
-            # Analyze each type of change
+            # Analyze each type of change with better error handling
+            overall_errors = []
+            
             if "pricing" in changes:
-                pricing_analysis = await self.analyze_pricing_change_impact({
-                    "plan_name": plan_name,
-                    "pricing_changes": changes["pricing"],
-                    "analyzed_by": simulated_by
-                })
-                simulation_results["impact_analyses"]["pricing"] = pricing_analysis
+                try:
+                    pricing_analysis = await self.analyze_pricing_change_impact({
+                        "plan_name": plan_name,
+                        "pricing_changes": changes["pricing"],
+                        "analyzed_by": simulated_by
+                    })
+                    if pricing_analysis.get("success"):
+                        simulation_results["impact_analyses"]["pricing"] = pricing_analysis
+                    else:
+                        overall_errors.append(f"Pricing analysis failed: {pricing_analysis.get('error')}")
+                except Exception as e:
+                    overall_errors.append(f"Pricing analysis error: {str(e)}")
                 
             if "features" in changes:
-                feature_analysis = await self.analyze_feature_change_impact({
-                    "plan_name": plan_name,
-                    "feature_changes": changes["features"],
-                    "analyzed_by": simulated_by
-                })
-                simulation_results["impact_analyses"]["features"] = feature_analysis
+                try:
+                    feature_analysis = await self.analyze_feature_change_impact({
+                        "plan_name": plan_name,
+                        "feature_changes": changes["features"],
+                        "analyzed_by": simulated_by
+                    })
+                    if feature_analysis.get("success"):
+                        simulation_results["impact_analyses"]["features"] = feature_analysis
+                    else:
+                        overall_errors.append(f"Feature analysis failed: {feature_analysis.get('error')}")
+                except Exception as e:
+                    overall_errors.append(f"Feature analysis error: {str(e)}")
                 
             if "limits" in changes:
-                limit_analysis = await self.analyze_limit_change_impact({
-                    "plan_name": plan_name,
-                    "limit_changes": changes["limits"],
-                    "analyzed_by": simulated_by
-                })
-                simulation_results["impact_analyses"]["limits"] = limit_analysis
+                try:
+                    limit_analysis = await self.analyze_limit_change_impact({
+                        "plan_name": plan_name,
+                        "limit_changes": changes["limits"],
+                        "analyzed_by": simulated_by
+                    })
+                    if limit_analysis.get("success"):
+                        simulation_results["impact_analyses"]["limits"] = limit_analysis
+                    else:
+                        overall_errors.append(f"Limit analysis failed: {limit_analysis.get('error')}")
+                except Exception as e:
+                    overall_errors.append(f"Limit analysis error: {str(e)}")
+            
+            # Check if any analyses succeeded
+            if not simulation_results["impact_analyses"]:
+                return {
+                    "success": False, 
+                    "error": f"All impact analyses failed: {'; '.join(overall_errors)}"
+                }
             
             # Calculate overall risk and migration needs
             overall_risk = await self._calculate_overall_simulation_risk(
