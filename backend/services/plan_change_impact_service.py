@@ -397,8 +397,25 @@ class PlanChangeImpactService:
             changes = data.get("changes", {})
             simulated_by = data.get("simulated_by")
             
-            if not plan_name or not changes:
-                return {"success": False, "error": "Plan name and changes are required"}
+            # Enhanced validation
+            if not plan_name:
+                return {"success": False, "error": "Plan name is required"}
+            
+            if not isinstance(changes, dict) or not changes:
+                return {"success": False, "error": "Changes must be a non-empty dictionary"}
+            
+            if not simulated_by:
+                return {"success": False, "error": "Simulated by user ID is required"}
+            
+            # Validate changes structure
+            valid_change_types = ["pricing", "features", "limits"]
+            if not any(change_type in changes for change_type in valid_change_types):
+                return {"success": False, "error": f"Changes must include at least one of: {', '.join(valid_change_types)}"}
+            
+            # Verify plan exists before simulation
+            current_plan = await self._get_current_plan(plan_name)
+            if not current_plan:
+                return {"success": False, "error": f"Plan '{plan_name}' not found"}
             
             simulation_results = {
                 "plan_name": plan_name,
