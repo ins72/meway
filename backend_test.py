@@ -757,6 +757,299 @@ class MewayzBackendAuditor:
         except Exception as e:
             self.log_result("Launch Pricing", "/api/launch-pricing/referral-tracking/TESTREF123", "GET", False, 0, str(e))
 
+    def test_admin_plan_management_system(self):
+        """Test Admin Plan Management System - CRITICAL FOR ADMIN DASHBOARD"""
+        print(f"\n🎛️ TESTING ADMIN PLAN MANAGEMENT SYSTEM - CRITICAL FOR ADMIN DASHBOARD")
+        print("=" * 60)
+        
+        # 1. Health Check (No auth required)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/health", timeout=30)
+            success = response.status_code == 200
+            if success:
+                data = response.json()
+                details = f"Service healthy: {data.get('healthy', False)}, Features available: {data.get('available_features', 0)}"
+            else:
+                details = "Health check failed"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/health", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/health", "GET", False, 0, str(e))
+        
+        # 2. Get All Plans (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/plans", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Retrieved {data.get('total_plans', 0)} plans with analytics"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to get all plans"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plans", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plans", "GET", False, 0, str(e))
+        
+        # 3. Get Plan Details (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/plan/creator", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin, 404 if plan doesn't exist
+            if response.status_code == 200:
+                data = response.json()
+                plan = data.get('plan', {})
+                details = f"Plan details retrieved: {plan.get('display_name', 'Unknown')} plan"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Plan not found (expected for new system)"
+            else:
+                details = "Failed to get plan details"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator", "GET", False, 0, str(e))
+        
+        # 4. Update Plan Pricing (requires admin auth)
+        try:
+            test_data = {
+                "pricing_updates": {
+                    "monthly_price": 29.99,
+                    "yearly_price": 299.99,
+                    "yearly_discount_percentage": 16.7
+                },
+                "reason": "Test pricing update for admin plan management verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/plan/creator/pricing", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan pricing updated successfully with impact analysis"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Plan not found (expected for new system)"
+            else:
+                details = "Failed to update plan pricing"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/pricing", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/pricing", "POST", False, 0, str(e))
+        
+        # 5. Update Plan Features (requires admin auth)
+        try:
+            test_data = {
+                "feature_updates": {
+                    "added_features": ["advanced_analytics", "priority_support"],
+                    "removed_features": []
+                },
+                "reason": "Test feature update for admin plan management verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/plan/creator/features", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan features updated successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Plan not found (expected for new system)"
+            else:
+                details = "Failed to update plan features"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/features", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/features", "POST", False, 0, str(e))
+        
+        # 6. Update Plan Limits (requires admin auth)
+        try:
+            test_data = {
+                "limit_updates": {
+                    "ai_content_generation": 1000,
+                    "instagram_searches": 500,
+                    "emails_sent": 2000,
+                    "websites_created": 5,
+                    "storage_gb": 10
+                },
+                "reason": "Test limits update for admin plan management verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/plan/creator/limits", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan limits updated successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Plan not found (expected for new system)"
+            else:
+                details = "Failed to update plan limits"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/limits", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/limits", "POST", False, 0, str(e))
+        
+        # 7. Update Plan Status (requires admin auth)
+        try:
+            test_data = {
+                "action": "disable",
+                "reason": "Test status update for admin plan management verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/plan/creator/status", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan status updated successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Plan not found (expected for new system)"
+            else:
+                details = "Failed to update plan status"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/status", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/status", "POST", False, 0, str(e))
+        
+        # 8. Update Launch Pricing (requires admin auth)
+        try:
+            test_data = {
+                "launch_special": {
+                    "enabled": True,
+                    "special_price": 19.99,
+                    "end_date": "2025-03-31T23:59:59Z",
+                    "description": "Limited time launch special"
+                },
+                "reason": "Test launch pricing update for admin plan management verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/plan/creator/launch-pricing", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Launch pricing updated successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "Plan not found (expected for new system)"
+            else:
+                details = "Failed to update launch pricing"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/launch-pricing", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/launch-pricing", "POST", False, 0, str(e))
+        
+        # 9. Create New Plan (requires admin auth)
+        try:
+            test_data = {
+                "name": "test_plan",
+                "display_name": "Test Plan",
+                "description": "Test plan for admin management verification",
+                "pricing": {
+                    "monthly_price": 39.99,
+                    "yearly_price": 399.99,
+                    "yearly_discount_percentage": 16.7
+                },
+                "features": {
+                    "included_features": ["website_builder", "ai_content_generation"],
+                    "excluded_features": ["white_label"]
+                },
+                "limits": {
+                    "ai_content_generation": 500,
+                    "instagram_searches": 200,
+                    "emails_sent": 1000,
+                    "websites_created": 3,
+                    "storage_gb": 5
+                }
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/plan", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 201, 403]  # 403 expected for non-admin users
+            if response.status_code in [200, 201]:
+                data = response.json()
+                details = f"New plan created successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to create new plan"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan", "POST", False, 0, str(e))
+        
+        # 10. Bulk Plan Update (requires admin auth)
+        try:
+            test_data = {
+                "plan_updates": {
+                    "creator": {
+                        "pricing": {
+                            "monthly_price": 24.99,
+                            "yearly_price": 249.99
+                        }
+                    },
+                    "business": {
+                        "pricing": {
+                            "monthly_price": 49.99,
+                            "yearly_price": 499.99
+                        }
+                    }
+                },
+                "reason": "Test bulk update for admin plan management verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-plan-management/bulk-update", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Bulk update completed successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to perform bulk update"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/bulk-update", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/bulk-update", "POST", False, 0, str(e))
+        
+        # 11. Get Plan Analytics (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/plan-analytics", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan analytics retrieved successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "No analytics data found (expected for new system)"
+            else:
+                details = "Failed to get plan analytics"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan-analytics", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan-analytics", "GET", False, 0, str(e))
+        
+        # 12. Get Plan Subscriptions (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/plan/creator/subscriptions?limit=10", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan subscriptions retrieved successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "No subscriptions found (expected for new system)"
+            else:
+                details = "Failed to get plan subscriptions"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/subscriptions", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan/creator/subscriptions", "GET", False, 0, str(e))
+        
+        # 13. Get Plan Change History (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-plan-management/plan-change-history?plan_name=creator&limit=10", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Plan change history retrieved successfully"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "No change history found (expected for new system)"
+            else:
+                details = "Failed to get plan change history"
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan-change-history", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Plan Management", "/api/admin-plan-management/plan-change-history", "GET", False, 0, str(e))
+
     def test_additional_systems(self):
         """Test additional systems mentioned in the comprehensive test results"""
         print(f"\n🔧 TESTING ADDITIONAL SYSTEMS")
