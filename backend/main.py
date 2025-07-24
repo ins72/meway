@@ -3,19 +3,42 @@ Mewayz Professional Platform - BULLETPROOF VERSION
 FastAPI application with ALL services working 100% with real data and full CRUD
 """
 
-from fastapi import FastAPI, Request, HTTPException
+import logging
+import sys
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
-import uvicorn
-import logging
-import asyncio
-from datetime import datetime
+from motor.motor_asyncio import AsyncIOMotorClient
 from core.database import connect_to_mongo, close_mongo_connection, db
+from datetime import datetime
+import asyncio
+import uvicorn
+import traceback
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Enhanced logging configuration for production
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.StreamHandler(sys.stderr)
+    ]
+)
 logger = logging.getLogger(__name__)
+
+# Log startup information
+logger.info("🚀 Starting Mewayz Professional Platform API")
+logger.info(f"🐍 Python version: {sys.version}")
+logger.info(f"📦 FastAPI startup initiated")
+
+# Production-ready error handling
+def handle_startup_error(error: Exception, context: str):
+    """Handle startup errors gracefully"""
+    logger.error(f"❌ {context}: {error}")
+    logger.error(f"📊 Stack trace: {traceback.format_exc()}")
+    # Log but don't crash - let the app try to start
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
