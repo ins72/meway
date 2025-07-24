@@ -97,12 +97,15 @@ class DeploymentResolutionTester:
         # Test health endpoint
         response = self.make_request("GET", "/health")
         if response and response.status_code == 200:
-            data = response.json()
-            if data.get("status") == "healthy":
-                db_status = data.get("database", "unknown")
-                self.log_result("Health Endpoint", True, response.status_code, f"Status: healthy, Database: {db_status}")
-            else:
-                self.log_result("Health Endpoint", False, response.status_code, "Status not healthy")
+            try:
+                data = response.json()
+                if data.get("status") == "healthy":
+                    db_status = data.get("database", "unknown")
+                    self.log_result("Health Endpoint", True, response.status_code, f"Status: healthy, Database: {db_status}")
+                else:
+                    self.log_result("Health Endpoint", False, response.status_code, "Status not healthy")
+            except json.JSONDecodeError:
+                self.log_result("Health Endpoint", False, response.status_code, f"Invalid JSON response: {response.text[:100]}")
         else:
             self.log_result("Health Endpoint", False, response.status_code if response else None, "Request failed")
             
