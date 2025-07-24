@@ -267,7 +267,7 @@ class PlanChangeImpactTester:
             print("\n❌ CRITICAL: Health check failed - service may be down")
             return False
         
-        # Step 3: Test the 2 specific endpoints
+        # Step 4: Test the 2 specific endpoints
         simulate_result = self.test_simulate_change()
         rollback_result = self.test_rollback_plan_change()
         
