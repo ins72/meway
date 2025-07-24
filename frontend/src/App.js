@@ -5,6 +5,9 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 
+// Global Styles
+import './styles/globals.css';
+
 // Public pages
 import LandingPage from './pages/LandingPage';
 import MEWAYZ_V2_LandingPage from './pages/MEWAYZ_V2_LandingPage.jsx';
@@ -24,77 +27,10 @@ import CookiePolicyPage from './pages/legal/CookiePolicyPage';
 // Protected pages
 import AppShell from './layouts/AppShell';
 import DashboardHome from './pages/dashboard/DashboardHome';
-import SocialMediaPage from './pages/dashboard/SocialMediaPage';
-import InstagramManagementPage from './pages/dashboard/InstagramManagementPage';
-import EcommercePage from './pages/dashboard/EcommercePage';
-import CoursesPage from './pages/dashboard/CoursesPage';
-import CRMPage from './pages/dashboard/CRMPage';
-import AnalyticsPage from './pages/dashboard/AnalyticsPage';
-import BioSitesPage from './pages/dashboard/BioSitesPage';
-import EmailMarketingPage from './pages/dashboard/EmailMarketingPage';
-import PaymentsPage from './pages/dashboard/PaymentsPage';
-import AIFeaturesPageV2 from './pages/dashboard/AIFeaturesPageV2';
-import WorkspacePage from './pages/dashboard/WorkspacePage';
-import WebsiteBuilderPage from './pages/dashboard/WebsiteBuilderPage';
-import AdminDashboard from './pages/dashboard/AdminDashboard';
-import AdvancedBookingPage from './pages/dashboard/AdvancedBookingPage';
-import FinancialManagementPage from './pages/dashboard/FinancialManagementPage';
-import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
-import RealtimeCollaborationPage from './pages/dashboard/RealtimeCollaborationPage';
-import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
-import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
-import UserSettingsPage from './pages/dashboard/UserSettingsPage';
-import TemplateMarketplaceV2Page from './pages/dashboard/TemplateMarketplaceV2Page';
-import EnhancedTemplateMarketplace from './pages/dashboard/EnhancedTemplateMarketplace';
-import GamifiedAnalyticsPage from './pages/dashboard/GamifiedAnalyticsPage';
-import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
-import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
-import ComprehensiveAdminDashboard from './pages/dashboard/ComprehensiveAdminDashboard';
-import AdvancedLinkInBioBuilder from './pages/dashboard/AdvancedLinkInBioBuilder';
-import ProfessionalCourseBuilder from './pages/dashboard/ProfessionalCourseBuilder';
-import EnhancedSocialMediaManager from './pages/dashboard/EnhancedSocialMediaManager';
-import InstagramDatabasePage from './pages/dashboard/InstagramDatabasePage';
-import AdvancedWebsiteBuilder from './pages/dashboard/AdvancedWebsiteBuilder';
-import ComprehensiveBookingSystem from './pages/dashboard/ComprehensiveBookingSystem';
-
-// New enhanced pages
-import UltraAdvancedAIFeaturesPage from './pages/dashboard/UltraAdvancedAIFeaturesPage';
-import UltraAdvancedWorkspaceManagement from './pages/dashboard/UltraAdvancedWorkspaceManagement';
-import UltraAdvancedSubscriptionManager from './pages/dashboard/UltraAdvancedSubscriptionManager';
-import UltraAdvancedInstagramManager from './pages/dashboard/UltraAdvancedInstagramManager';
-import UltraAdvancedSocialMediaScheduler from './pages/dashboard/UltraAdvancedSocialMediaScheduler';
-
-// Professional comprehensive pages
-import ProfessionalLinkInBioBuilder from './pages/dashboard/ProfessionalLinkInBioBuilder';
-import ComprehensiveMarketplace from './pages/dashboard/ComprehensiveMarketplace';
-import ProfessionalBookingSystem from './pages/dashboard/ProfessionalBookingSystem';
-import AdvancedWorkspaceSettings from './pages/dashboard/AdvancedWorkspaceSettings';
-import ProfessionalOnboardingWizard from './pages/onboarding/ProfessionalOnboardingWizard';
-import UltraAdvancedAdminDashboard from './pages/dashboard/UltraAdvancedAdminDashboard';
-import ComprehensiveCRMSystem from './pages/dashboard/ComprehensiveCRMSystem';
-import ComprehensiveCoursesSystem from './pages/dashboard/ComprehensiveCoursesSystem';
-import AmazonStyleMarketplace from './pages/dashboard/AmazonStyleMarketplace';
-
-// New pages
-import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
-import TeamManagementPage from './pages/dashboard/TeamManagementPage';
-import FormTemplatesPage from './pages/dashboard/FormTemplatesPage';
-import DiscountCodesPage from './pages/dashboard/DiscountCodesPage';
-import TokenManagementPage from './pages/dashboard/TokenManagementPage';
-import InstagramLeadGeneration from './pages/dashboard/InstagramLeadGeneration';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminRoute from './components/AdminRoute';
 import LoadingSpinner from './components/LoadingSpinner';
-import AdvancedAIFeatures from './components/ai/AdvancedAIFeatures';
-import WorkspaceManager from './components/workspace/WorkspaceManager';
-import SubscriptionManager from './components/subscription/SubscriptionManager';
-import TemplateMarketplace from './components/templates/TemplateMarketplace';
-import AdvancedAnalytics from './components/analytics/AdvancedAnalytics';
-import RealtimeCollaboration from './components/realtime/RealtimeCollaboration';
-import IntegrationHub from './components/integrations/IntegrationHub';
-import ReferralSystem from './components/growth/ReferralSystem';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
