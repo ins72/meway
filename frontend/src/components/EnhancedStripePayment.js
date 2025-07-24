@@ -134,7 +134,7 @@ const EnhancedStripePayment = ({
         setLoading(true);
         setError(null);
 
-        const url = `${process.env.REACT_APP_BACKEND_URL}/api/payments/create-payment-intent`;
+        const url = `${process.env.REACT_APP_BACKEND_URL || window.location.origin}/api/payments/create-payment-intent`;
         const authToken = localStorage.getItem('auth_token');
         
         console.log('Creating enhanced payment intent with URL:', url);
