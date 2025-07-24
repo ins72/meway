@@ -104,8 +104,12 @@ class AuthSessionTester:
                 )
                 return True
             else:
+                # Log the login failure details
+                print(f"🔄 Login failed with status {response.status_code}: {response.text}")
+                self.log_result("Login Authentication", False, response.status_code, f"Login failed: {response.text}")
+                
                 # Try registration if login fails
-                print("🔄 Login failed, attempting registration...")
+                print("🔄 Attempting registration...")
                 register_data = {
                     "email": TEST_EMAIL,
                     "password": TEST_PASSWORD,
