@@ -12,7 +12,7 @@ from datetime import datetime
 from core.auth import get_current_admin
 from core.database import get_database_async
 
-router = APIRouter(prefix="/native-mobile", tags=["native_mobile"])
+router = APIRouter(tags=["native_mobile"])
 
 class NativeMobileService:
     """Service for native mobile app backend support"""
