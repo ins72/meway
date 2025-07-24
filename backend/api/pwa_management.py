@@ -11,7 +11,7 @@ from datetime import datetime
 import base64
 from core.auth import get_current_admin
 
-router = APIRouter(prefix="/pwa", tags=["pwa"])
+router = APIRouter(tags=["pwa"])
 
 class PWAManifestService:
     """PWA Manifest generation and management service"""
