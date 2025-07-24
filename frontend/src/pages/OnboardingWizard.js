@@ -322,7 +322,7 @@ const OnboardingWizard = () => {
       case 1:
         return formData.workspaceName.trim() !== '';
       case 2:
-        return formData.industry && formData.teamSize && formData.primaryGoal;
+        return formData.industry && formData.teamSize && formData.selectedGoals.length > 0;
       case 3:
         return formData.selectedPlan !== null;
       default:
