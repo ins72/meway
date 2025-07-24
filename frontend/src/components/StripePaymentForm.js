@@ -73,13 +73,13 @@ const StripePaymentForm = ({
       const checkoutResponse = await stripeAPI.createCheckoutSession({
         bundles: bundles,
         workspace_name: workspaceName,
-        payment_method: paymentMethod
+        payment_method: paymentMethod  // This should be 'monthly' or 'yearly'
       });
       
       if (checkoutResponse.data.success) {
         // If checkout session created successfully, confirm payment
         const confirmResponse = await stripeAPI.confirmPayment({
-          paymentMethodId: paymentMethod.id,
+          paymentMethodId: paymentMethod.id,  // Now use the Stripe PaymentMethod object
           sessionId: checkoutResponse.data.session_id
         });
         
