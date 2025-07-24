@@ -1160,6 +1160,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 2.5rem;
     margin-top: 4rem;
+    min-height: auto;
   }
   
   .feature-card {
@@ -1170,6 +1171,7 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 2rem;
     margin-top: 4rem;
+    min-height: auto;
   }
   
   .testimonial-card {
@@ -1182,6 +1184,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-top: 4rem;
+    min-height: auto;
   }
   
   .pricing-card {
@@ -1190,6 +1193,65 @@
   
   .pricing-card.popular {
     transform: scale(1.05);
+  }
+}
+
+/* Tablet Landscape and smaller desktops - 820px to 1024px */
+@media (max-width: 1024px) and (min-width: 821px) {
+  .features-grid {
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .testimonials-grid {
+    grid-template-columns: repeat(1, minmax(300px, 600px));
+    justify-content: center;
+  }
+  
+  .pricing-grid {
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Specific fix for 820px width */
+@media (max-width: 820px) and (min-width: 769px) {
+  .features-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  
+  .feature-card {
+    padding: 2rem;
+  }
+  
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    max-width: 100%;
+  }
+  
+  .testimonial-card {
+    padding: 2rem;
+    max-width: 100%;
+  }
+  
+  .pricing-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  
+  .pricing-card {
+    padding: 1.8rem;
+  }
+  
+  .pricing-card:nth-child(3) {
+    grid-column: 1 / -1;
+    max-width: 400px;
+    margin: 0 auto;
   }
 }
 
