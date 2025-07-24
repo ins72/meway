@@ -142,7 +142,7 @@ const AppShell = () => {
                       onClick={() => handleNavigation(item.route)}
                       className={`nav-link ${location.pathname === item.route ? 'active' : ''}`}
                     >
-                      <span className="nav-icon">{item.icon}</span>
+                      <span className="nav-icon-professional">{item.icon}</span>
                       {isSidebarOpen && (
                         <>
                           <span className="nav-label">{item.label}</span>
