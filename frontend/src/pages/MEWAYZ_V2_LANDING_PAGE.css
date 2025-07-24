@@ -1137,8 +1137,23 @@
 
 /* Tablet Portrait - 768px to 1024px */
 @media (max-width: 1024px) and (min-width: 769px) {
+  .nav {
+    padding: 1rem 2rem;
+    height: auto;
+    min-height: 70px; /* Set maximum height for nav */
+  }
+  
+  .nav-actions {
+    gap: 1rem;
+  }
+  
+  .nav-actions .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
   .hero {
-    padding: 8rem 2rem 6rem;
+    padding: 9rem 2rem 6rem; /* Increased top padding to account for nav */
   }
   
   .hero h1 {
