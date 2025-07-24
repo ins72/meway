@@ -328,7 +328,7 @@ async def get_admin_analytics_overview(
             return {
                 "success": True,
                 "analytics": analytics,
-                "generated_at": service.db.client.admin.command("serverStatus")["localTime"].isoformat()
+                "generated_at": datetime.utcnow().isoformat()
             }
         else:
             raise HTTPException(status_code=400, detail=result.get("error"))
