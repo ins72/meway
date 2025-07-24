@@ -58,11 +58,11 @@ const LandingPage = () => {
       {/* Mobile Menu */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
         <button className="mobile-menu-close" onClick={toggleMobileMenu}>×</button>
-        <a href="#about" onClick={() => scrollToSection('about')}>About</a>
         <a href="#features" onClick={() => scrollToSection('features')}>Features</a>
-        <a href="#testimonials" onClick={() => scrollToSection('testimonials')}>Testimonials</a>
         <a href="#pricing" onClick={() => scrollToSection('pricing')}>Pricing</a>
-        <a href="#contact" onClick={() => scrollToSection('contact')}>Contact</a>
+        <a href="#testimonials" onClick={() => scrollToSection('testimonials')}>Reviews</a>
+        <a href="/help" target="_blank">Help</a>
+        <a href="/contact">Contact</a>
       </div>
 
       {/* Header */}
