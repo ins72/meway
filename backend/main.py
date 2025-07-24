@@ -152,6 +152,9 @@ try:
     from api.referral_system import router as referral_system_router
     from api.production_monitoring import router as production_monitoring_router
     from api.pwa_management import router as pwa_management_router
+    from api.visual_builder import router as visual_builder_router
+    from api.native_mobile import router as native_mobile_router
+    from api.advanced_ui import router as advanced_ui_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
