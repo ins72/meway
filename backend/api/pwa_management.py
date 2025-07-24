@@ -453,25 +453,91 @@ class PWAManifestService:
 # Service instance
 pwa_service = PWAManifestService()
 
-@router.post("/manifest/generate")
-async def generate_pwa_manifest(
-    workspace_id: Optional[str] = None,
+# FULL CRUD ENDPOINTS
+
+@router.post("/configs")
+async def create_pwa_config(
+    config_data: Dict[str, Any],
     current_user: dict = Depends(get_current_admin)
 ):
-    """Generate PWA manifest for workspace"""
+    """Create PWA configuration"""
     try:
-        workspace_data = {}
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.create_pwa_config(config_data, user_id)
         
-        if workspace_id:
-            # Get workspace data from database
-            from core.database import get_database_async
-            db = await get_database_async()
-            if db:
-                workspace = await db.workspaces.find_one({"_id": workspace_id})
-                if workspace:
-                    workspace_data = workspace
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/configs/{config_id}")
+async def get_pwa_config(
+    config_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get PWA configuration by ID"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.get_pwa_config(config_id, user_id)
         
-        result = await pwa_service.generate_manifest(workspace_data)
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/configs/{config_id}")
+async def update_pwa_config(
+    config_id: str,
+    update_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Update PWA configuration"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.update_pwa_config(config_id, update_data, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/configs/{config_id}")
+async def delete_pwa_config(
+    config_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete PWA configuration"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.delete_pwa_config(config_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/configs")
+async def list_pwa_configs(
+    limit: int = 50,
+    offset: int = 0,
+    current_user: dict = Depends(get_current_admin)
+):
+    """List PWA configurations"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.list_pwa_configs(user_id, limit, offset)
         
         if result.get("success"):
             return result
@@ -481,34 +547,38 @@ async def generate_pwa_manifest(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/manifest/current")
-async def get_current_manifest(
-    workspace_id: Optional[str] = None,
+@router.post("/manifest/generate/{config_id}")
+async def generate_pwa_manifest(
+    config_id: str,
     current_user: dict = Depends(get_current_admin)
 ):
-    """Get current PWA manifest"""
+    """Generate PWA manifest from configuration"""
     try:
-        # For now, return default manifest
-        result = await pwa_service.generate_manifest({})
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.generate_manifest(config_id, user_id)
         
         if result.get("success"):
-            return result["manifest"]
+            return result
         else:
-            raise HTTPException(status_code=500, detail=result.get("error"))
+            raise HTTPException(status_code=404, detail=result.get("error"))
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/service-worker/config")
-async def get_service_worker_config():
+@router.get("/service-worker/config/{config_id}")
+async def get_service_worker_config(
+    config_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
     """Get service worker configuration"""
     try:
-        result = await pwa_service.get_service_worker_config()
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.get_service_worker_config(config_id, user_id)
         
         if result.get("success"):
-            return result["config"]
+            return result
         else:
-            raise HTTPException(status_code=500, detail=result.get("error"))
+            raise HTTPException(status_code=404, detail=result.get("error"))
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -520,77 +590,31 @@ async def track_pwa_install(
 ):
     """Track PWA installation"""
     try:
-        # Log PWA installation
-        from core.production_logging import production_logger
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.track_installation(install_data, user_id)
         
-        production_logger.log_business_event(
-            "pwa_install",
-            user_id=current_user.get("email"),
-            metadata={
-                "platform": install_data.get("platform"),
-                "user_agent": install_data.get("user_agent"),
-                "timestamp": datetime.utcnow().isoformat()
-            }
-        )
-        
-        return {
-            "success": True,
-            "message": "PWA installation tracked",
-            "timestamp": datetime.utcnow().isoformat()
-        }
-        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/capabilities")
-async def get_pwa_capabilities():
-    """Get PWA capabilities and features"""
+@router.get("/install/stats")
+async def get_installation_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get PWA installation statistics"""
     try:
-        capabilities = {
-            "features": {
-                "offline_support": True,
-                "push_notifications": True,
-                "background_sync": True,
-                "install_prompt": True,
-                "file_system_access": False,
-                "payment_request": True,
-                "geolocation": True,
-                "camera_access": True,
-                "device_orientation": True
-            },
-            "supported_platforms": [
-                "web",
-                "android",
-                "ios",
-                "windows", 
-                "macos",
-                "linux"
-            ],
-            "minimum_requirements": {
-                "https": True,
-                "service_worker": True,
-                "manifest": True
-            },
-            "installation": {
-                "prompt_criteria": [
-                    "user_engagement_heuristics",
-                    "site_engagement",
-                    "frequent_visits"
-                ],
-                "install_sources": [
-                    "browser_prompt",
-                    "custom_button",
-                    "app_store"
-                ]
-            }
-        }
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.get_installation_stats(user_id)
         
-        return {
-            "success": True,
-            "capabilities": capabilities,
-            "timestamp": datetime.utcnow().isoformat()
-        }
-        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -601,42 +625,33 @@ async def handle_offline_sync(
 ):
     """Handle offline data synchronization"""
     try:
-        # Process offline data sync
-        synced_items = []
-        errors = []
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.handle_offline_sync(sync_data, user_id)
         
-        for item in sync_data.get("items", []):
-            try:
-                # Process each sync item based on type
-                item_type = item.get("type")
-                
-                if item_type == "booking":
-                    # Sync booking data
-                    pass
-                elif item_type == "financial":
-                    # Sync financial data
-                    pass
-                elif item_type == "analytics":
-                    # Sync analytics data
-                    pass
-                
-                synced_items.append(item.get("id"))
-                
-            except Exception as item_error:
-                errors.append({
-                    "id": item.get("id"),
-                    "error": str(item_error)
-                })
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/sync/history")
+async def get_sync_history(
+    limit: int = 50,
+    offset: int = 0,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get synchronization history"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await pwa_service.get_sync_history(user_id, limit, offset)
         
-        return {
-            "success": True,
-            "synced_count": len(synced_items),
-            "error_count": len(errors),
-            "synced_items": synced_items,
-            "errors": errors,
-            "timestamp": datetime.utcnow().isoformat()
-        }
-        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -644,22 +659,12 @@ async def handle_offline_sync(
 async def pwa_health_check():
     """PWA system health check"""
     try:
-        return {
-            "success": True,
-            "healthy": True,
-            "service": "PWA Management",
-            "features": {
-                "manifest_generation": True,
-                "service_worker_support": True,
-                "offline_sync": True,
-                "installation_tracking": True
-            },
-            "timestamp": datetime.utcnow().isoformat()
-        }
+        result = await pwa_service.health_check()
         
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
     except Exception as e:
-        return {
-            "success": False,
-            "healthy": False,
-            "error": str(e)
-        }
+        raise HTTPException(status_code=500, detail=str(e))
