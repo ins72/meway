@@ -81,10 +81,37 @@ const RegisterPage = () => {
     }
   };
 
-  const handleGoogleSignup = () => {
-    console.log('Google signup clicked');
-    // TODO: Implement Google OAuth
-  };
+  const handleGoogleSignup = useGoogleLogin({
+    onSuccess: async (credentialResponse) => {
+      try {
+        console.log('Google signup success:', credentialResponse);
+        
+        // Get user info from Google
+        const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${credentialResponse.access_token}`,
+            Accept: 'application/json'
+          }
+        });
+        
+        const userInfo = await response.json();
+        console.log('Google user info:', userInfo);
+        
+        // TODO: Send Google user info to backend for registration
+        // For now, simulate successful registration and redirect to onboarding
+        alert(`Google signup successful for ${userInfo.email}! (Integration pending)`);
+        navigate('/onboarding');
+        
+      } catch (error) {
+        console.error('Google signup error:', error);
+        alert('Google signup failed. Please try again.');
+      }
+    },
+    onError: (error) => {
+      console.error('Google signup error:', error);
+      alert('Google signup failed. Please try again.');
+    }
+  });
 
   const handleAppleSignup = () => {
     console.log('Apple signup clicked');
