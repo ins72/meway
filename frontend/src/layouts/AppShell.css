@@ -626,3 +626,45 @@
     display: none;
   }
 }
+
+/* Additional Tablet Styles */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .header-center {
+    max-width: 250px;
+    margin: 0 1rem;
+  }
+  
+  .search-input {
+    font-size: var(--text-sm);
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+  }
+  
+  .header-btn {
+    padding: 0.625rem;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .header-center {
+    display: none;
+  }
+  
+  .header-left {
+    gap: 0.75rem;
+  }
+  
+  .workspace-selector {
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .workspace-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}
