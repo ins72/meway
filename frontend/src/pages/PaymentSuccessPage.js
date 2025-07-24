@@ -22,7 +22,7 @@ const PaymentSuccessPage = () => {
 
         // Verify payment with backend
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/payment-intent/${paymentIntentId}`,
+          `${process.env.REACT_APP_BACKEND_URL}/payment-intent/${paymentIntentId}`,
           {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
