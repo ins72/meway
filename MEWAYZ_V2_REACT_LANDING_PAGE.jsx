@@ -132,7 +132,7 @@ const HeroSection = () => {
         <span className="text-content">Now: Complete Platform with 62 APIs</span>
       </div>
       <h1>
-        All-in-One Business<br>
+        All-in-One Business<br />
         <span className="gradient-text">Management Platform</span>
       </h1>
       <p>Manage your social media, courses, e-commerce, CRM, and marketing campaigns all in one place. Built for creators, entrepreneurs, and businesses ready to scale.</p>
