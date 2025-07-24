@@ -789,26 +789,42 @@ const OnboardingWizard = () => {
                 <div className="payment-options">
                   <h3>Choose Payment Method</h3>
                   <div className="payment-methods">
-                    <div className="payment-method card-payment">
-                      <div className="method-header">
-                        <span className="method-icon">💳</span>
-                        <span className="method-name">Credit Card</span>
-                        <span className="method-badge">Recommended</span>
+                    {paymentSettings.credit_card_enabled && (
+                      <div 
+                        className={`payment-method card-payment ${formData.selectedPaymentType === 'credit_card' ? 'selected' : ''}`}
+                        onClick={() => setFormData({...formData, selectedPaymentType: 'credit_card'})}
+                      >
+                        <div className="method-header">
+                          <span className="method-icon">💳</span>
+                          <span className="method-name">Credit Card</span>
+                          <span className="method-badge">Recommended</span>
+                        </div>
+                        <div className="method-description">
+                          Secure payment with Stripe. Start your 14-day free trial.
+                        </div>
                       </div>
-                      <div className="method-description">
-                        Secure payment with Stripe. Start your 14-day free trial.
-                      </div>
-                    </div>
+                    )}
                     
-                    <div className="payment-method paypal-payment">
-                      <div className="method-header">
-                        <span className="method-icon">💰</span>
-                        <span className="method-name">PayPal</span>
+                    {paymentSettings.paypal_enabled && (
+                      <div 
+                        className={`payment-method paypal-payment ${formData.selectedPaymentType === 'paypal' ? 'selected' : ''}`}
+                        onClick={() => setFormData({...formData, selectedPaymentType: 'paypal'})}
+                      >
+                        <div className="method-header">
+                          <span className="method-icon">💰</span>
+                          <span className="method-name">PayPal</span>
+                        </div>
+                        <div className="method-description">
+                          Pay securely with your PayPal account.
+                        </div>
                       </div>
-                      <div className="method-description">
-                        Pay securely with your PayPal account.
+                    )}
+                    
+                    {!paymentSettings.credit_card_enabled && !paymentSettings.paypal_enabled && (
+                      <div className="no-payment-methods">
+                        <p>Payment methods are currently being configured. Please try again later.</p>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
