@@ -266,9 +266,10 @@ try:
     app.include_router(advanced_ui_router, prefix="/api/advanced-ui", tags=["advanced_ui"])
     app.include_router(vendor_customer_referrals_router, prefix="/api/vendor-customer-referrals", tags=["vendor_customer_referrals"])
     app.include_router(template_marketplace_revenue_router, prefix="/api/template-marketplace-revenue", tags=["template_marketplace_revenue"])
+    app.include_router(workspace_subscription_router, prefix="/api/workspace-subscription", tags=["workspace_subscription"])
 
     
-    logger.info(f"✅ Successfully included 137 bulletproof routers")
+    logger.info(f"✅ Successfully included 138 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
