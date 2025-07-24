@@ -257,9 +257,12 @@ try:
     app.include_router(referral_system_router, prefix="/api/referral-system", tags=["referral_system"])
     app.include_router(production_monitoring_router, prefix="/api", tags=["production"])
     app.include_router(pwa_management_router, prefix="/api/pwa", tags=["pwa"])
+    app.include_router(visual_builder_router, prefix="/api/visual-builder", tags=["visual_builder"])
+    app.include_router(native_mobile_router, prefix="/api/native-mobile", tags=["native_mobile"])
+    app.include_router(advanced_ui_router, prefix="/api/advanced-ui", tags=["advanced_ui"])
 
     
-    logger.info(f"✅ Successfully included 132 bulletproof routers")
+    logger.info(f"✅ Successfully included 135 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
