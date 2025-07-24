@@ -90,7 +90,7 @@ def test_checkout_session_api():
         
         # First login to get token
         login_response = requests.post(
-            "https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/api/auth/login",
+            "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/auth/login",
             json={
                 "email": "tmonnens@outlook.com",
                 "password": "Voetballen5"
@@ -103,7 +103,7 @@ def test_checkout_session_api():
             
             # Test checkout session creation
             checkout_response = requests.post(
-                "https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/api/stripe-integration/create-checkout-session",
+                "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/stripe-integration/create-checkout-session",
                 json={
                     "bundles": ["creator", "ecommerce"],
                     "workspace_name": "API Test Workspace",

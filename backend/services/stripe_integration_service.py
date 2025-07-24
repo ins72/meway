@@ -676,8 +676,8 @@ class StripeIntegrationService:
                 payment_method_types=['card'],
                 line_items=line_items,
                 mode='subscription',
-                success_url='https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/onboarding?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url='https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/onboarding?step=4',
+                success_url='https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/onboarding?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url='https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/onboarding?step=4',
                 customer_email=user_email,
                 metadata={
                     'user_id': user_id,

@@ -17,7 +17,7 @@ def test_webhook_endpoint():
         print("🧪 TESTING STRIPE WEBHOOK ENDPOINT")
         print("=" * 50)
         
-        webhook_url = "https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/api/payments/webhook"
+        webhook_url = "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/payments/webhook"
         
         # Test if endpoint is accessible (should return 400 without proper signature)
         response = requests.post(webhook_url, json={"test": "data"}, timeout=10)
@@ -101,7 +101,7 @@ def test_webhook_with_mock_signature():
         print("\n🔐 TESTING WEBHOOK WITH MOCK SIGNATURE")
         print("=" * 50)
         
-        webhook_url = "https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/api/payments/webhook"
+        webhook_url = "https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/payments/webhook"
         
         # Generate test payload
         test_payload = generate_test_webhook_payload()
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         print("✅ Your webhook endpoint is properly configured")
         print("✅ Signature verification is working")
         print("🔗 Add this URL to Stripe Dashboard:")
-        print("   https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com/api/payments/webhook")
+        print("   https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com/api/payments/webhook")
     else:
         print("\n⚠️  WEBHOOK SYSTEM NEEDS ATTENTION")
         print("❌ Please check the issues above before setting up Stripe webhooks")

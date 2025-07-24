@@ -1,6 +1,6 @@
 🚀 STARTING COMPREHENSIVE MEWAYZ V2 BACKEND AUDIT
 ================================================================================
-Backend URL: https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com
+Backend URL: https://3dc4dc3c-9195-4a26-87f6-3f23beffd557.preview.emergentagent.com
 Test User: tmonnens@outlook.com
 Timestamp: 2025-07-24T00:00:03.573658
 
