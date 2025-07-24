@@ -102,7 +102,14 @@ const SimpleStripePayment = ({
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorText = await response.text();
+          console.error(`Payment Intent Creation Failed:`, {
+            status: response.status,
+            statusText: response.statusText,
+            url: response.url,
+            errorText: errorText
+          });
+          throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json();
