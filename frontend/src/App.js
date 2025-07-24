@@ -51,8 +51,15 @@ function App() {
 
   console.log('App: Rendering main app');
 
+  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  
+  if (!googleClientId) {
+    console.error('REACT_APP_GOOGLE_CLIENT_ID is not set');
+    return <div>Configuration Error: Google OAuth not configured</div>;
+  }
+
   return (
-    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={googleClientId}>
       <div className={theme} data-theme={theme}>
         <ErrorBoundary>
           <NotificationProvider>
