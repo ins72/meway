@@ -40,7 +40,11 @@ const LoginPage = () => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (credentialResponse) => {
       try {
-        console.log('Google login success:', credentialResponse);
+        console.log('✅ Google login success:', credentialResponse);
+        
+        if (!credentialResponse.access_token) {
+          throw new Error('No access token received from Google');
+        }
         
         // Get user info from Google
         const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.access_token}`, {
@@ -50,22 +54,30 @@ const LoginPage = () => {
           }
         });
         
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user info: ${response.status}`);
+        }
+        
         const userInfo = await response.json();
-        console.log('Google user info:', userInfo);
+        console.log('✅ Google user info:', userInfo);
         
         // TODO: Send Google user info to backend for authentication
-        // For now, simulate successful login
-        alert(`Google login successful for ${userInfo.email}! (Integration pending)`);
+        // For now, show success message and redirect
+        alert(`✅ Google login successful!\nWelcome ${userInfo.name} (${userInfo.email})\n\n⚠️ Backend integration pending - you'll be redirected to dashboard.`);
+        
+        // Simulate successful authentication
+        navigate('/dashboard');
         
       } catch (error) {
-        console.error('Google login error:', error);
-        alert('Google login failed. Please try again.');
+        console.error('❌ Google login error:', error);
+        alert(`❌ Google login failed: ${error.message}\n\nPlease try again or use email/password login.`);
       }
     },
     onError: (error) => {
-      console.error('Google login error:', error);
-      alert('Google login failed. Please try again.');
-    }
+      console.error('❌ Google login error:', error);
+      alert('❌ Google authentication failed. Please try again.');
+    },
+    flow: 'implicit',
   });
 
   const handleAppleLogin = () => {
