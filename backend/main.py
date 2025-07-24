@@ -165,6 +165,7 @@ try:
     from api.ai_token_purchase import router as ai_token_purchase_router
     from api.launch_pricing import router as launch_pricing_router
     from api.admin_pricing import router as admin_pricing_router
+    from api.admin_plan_management import router as admin_plan_management_router
 
     # Include all routers
     app.include_router(financial_router, prefix="/api/financial", tags=["financial"])
