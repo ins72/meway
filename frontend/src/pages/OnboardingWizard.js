@@ -480,7 +480,9 @@ const OnboardingWizard = () => {
       case 3:
         return formData.selectedBundles.length > 0;
       case 4:
-        return true; // Payment setup - always allow proceed for now
+        // Require payment method selection for paid plans
+        const hasFreePlanOnly = formData.selectedBundles.length === 1 && formData.selectedBundles.includes('free');
+        return hasFreePlanOnly || formData.selectedPaymentType !== null;
       default:
         return true;
     }
