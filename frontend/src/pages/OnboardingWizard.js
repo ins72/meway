@@ -363,13 +363,8 @@ const OnboardingWizard = () => {
   };
 
   const handleNext = () => {
-    console.log('handleNext called, currentStep:', currentStep);
-    console.log('canProceed():', canProceed());
-    console.log('formData:', formData);
-    
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
-      console.log('Moving to step:', currentStep + 1);
     }
   };
 
