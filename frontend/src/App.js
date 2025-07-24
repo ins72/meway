@@ -22,6 +22,7 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import OnboardingWizard from './pages/OnboardingWizard';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Legal pages
