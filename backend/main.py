@@ -213,6 +213,7 @@ try:
     app.include_router(crm_router, prefix="/api/crm", tags=["crm"])
     app.include_router(templates_router, prefix="/api/templates", tags=["templates"])
     app.include_router(enhanced_features_router, prefix="/api/enhanced-features", tags=["enhanced_features"])
+    app.include_router(admin_settings_router, prefix="/api/admin-settings", tags=["admin_settings"])
     app.include_router(google_oauth_router, prefix="/api/google-oauth", tags=["google_oauth"])
     app.include_router(template_marketplace_router, prefix="/api/template-marketplace", tags=["template_marketplace"])
     app.include_router(realtime_notifications_router, prefix="/api/realtime-notifications", tags=["realtime_notifications"])
