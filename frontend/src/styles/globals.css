@@ -136,19 +136,24 @@ body {
 /* Responsive Button Adjustments */
 @media (max-width: 768px) {
   .btn {
-    padding: 0.625rem 1.25rem;
-    font-size: var(--text-xs);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--text-sm);
     gap: 0.375rem;
+    min-height: 44px;
+    min-width: 100px;
   }
   
   .btn-sm {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.75rem;
+    padding: 0.625rem 1rem;
+    font-size: var(--text-xs);
+    min-height: 40px;
+    min-width: 80px;
   }
   
   .btn-lg {
-    padding: 0.75rem 1.5rem;
-    font-size: var(--text-sm);
+    padding: 1rem 1.75rem;
+    font-size: var(--text-base);
+    min-height: 48px;
   }
   
   .btn-full {
