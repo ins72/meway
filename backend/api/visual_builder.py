@@ -768,26 +768,160 @@ async def publish_project(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.delete("/projects/{project_id}")
+async def delete_project(
+    project_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete a project"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.delete_project(project_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/projects/stats")
+async def get_project_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get project statistics"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.get_project_stats(user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/projects/{project_id}/duplicate")
+async def duplicate_project(
+    project_id: str,
+    duplicate_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Duplicate a project"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        new_name = duplicate_data.get("new_name")
+        result = await visual_builder_service.duplicate_project(project_id, user_id, new_name)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/projects/{project_id}/unpublish")
+async def unpublish_project(
+    project_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Unpublish a project"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.unpublish_project(project_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/components/custom")
+async def save_custom_component(
+    component_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Save custom component to library"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.save_component_library(component_data, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/components/custom")
+async def get_custom_components(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get user's custom components"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.get_custom_components(user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/templates")
+async def create_template(
+    template_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Create a template from project"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.create_template(template_data, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/templates")
+async def get_templates(
+    public_only: bool = False,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get templates"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await visual_builder_service.get_templates(user_id, public_only)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/health")
 async def health_check():
     """Health check endpoint"""
     try:
-        return {
-            "success": True,
-            "healthy": True,
-            "service": "Visual Builder",
-            "features": {
-                "drag_drop": True,
-                "component_library": True,
-                "real_time_editing": True,
-                "publishing": True,
-                "responsive_design": True
-            },
-            "timestamp": datetime.utcnow().isoformat()
-        }
+        result = await visual_builder_service.health_check()
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
     except Exception as e:
-        return {
-            "success": False,
-            "healthy": False,
-            "error": str(e)
-        }
+        raise HTTPException(status_code=500, detail=str(e))
