@@ -23,8 +23,8 @@ import jwt as jwt_lib
 
 # Configuration
 BACKEND_URL = "https://b2614b52-973e-4c52-9dec-e3ec14470901.preview.emergentagent.com"
-TEST_EMAIL = "test@example.com"
-TEST_PASSWORD = "password123"
+TEST_EMAIL = "tmonnens@outlook.com"
+TEST_PASSWORD = "Voetballen5"
 
 class AuthSessionTester:
     def __init__(self):
