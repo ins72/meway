@@ -272,6 +272,42 @@ backend:
         agent: "testing"
         comment: "✅ FULLY WORKING - Comprehensive workspace subscription system is 100% operational and production-ready. All 21 tests passed (100% success rate). VERIFIED: Health check ✅, Bundle information ✅, Pricing calculations with multi-bundle discounts (20%, 30%, 40%) ✅, Complete CRUD operations ✅, Feature access control ✅, Usage limits tracking ✅, Billing history ✅, Upgrade/downgrade workflows ✅, Subscription cancellation ✅. Fixed permission checking issue by correcting database collection name and field mappings. All 6 bundle types working with proper discount calculations for monthly/yearly billing cycles. Real database operations with proper data persistence. System ready for production deployment."
 
+  - task: "Usage Tracking System"
+    implemented: true
+    working: false
+    file: "/app/backend/api/usage_tracking.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "🔄 NEWLY IMPLEMENTED - Real-time usage tracking system for all bundle features (AI credits, Instagram searches, emails sent, etc.). Includes usage limits enforcement, warnings, analytics, and upgrade suggestions. Critical for production billing compliance."
+
+  - task: "Enterprise Revenue Tracking"
+    implemented: true
+    working: false
+    file: "/app/backend/api/enterprise_revenue.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "🔄 NEWLY IMPLEMENTED - Automatic 15% revenue share calculation for Enterprise workspaces. Tracks revenue from all sources (e-commerce, courses, bookings, templates). Generates billing records with $99 minimum fee. Essential for Enterprise plan business model."
+
+  - task: "Template Marketplace Access Control"
+    implemented: true
+    working: false
+    file: "/app/backend/api/template_marketplace_access.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "🔄 NEWLY IMPLEMENTED - Bundle-based access control for template selling. Only Creator+ bundle users can sell templates. Includes seller validation, quality requirements, revenue sharing (15% platform commission), and seller statistics. Critical for marketplace monetization."
+
 frontend:
   - task: "Frontend Integration"
     implemented: true
