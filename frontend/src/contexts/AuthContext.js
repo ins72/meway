@@ -44,16 +44,20 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const fetchUser = async () => {
+    console.log('AuthContext: fetchUser called');
     try {
+      console.log('AuthContext: Making API call to getProfile');
       const response = await authAPI.getProfile();
+      console.log('AuthContext: API call successful', response.data);
       setUser(response.data.user);
     } catch (error) {
-      console.error('Failed to fetch user:', error);
+      console.error('AuthContext: Failed to fetch user:', error);
       // Clear invalid token and reset state
       localStorage.removeItem('auth_token');
       setToken(null);
       setUser(null);
     } finally {
+      console.log('AuthContext: Setting loading to false');
       setLoading(false);  
     }
   };
