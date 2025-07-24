@@ -17,7 +17,8 @@
 3. **💰 Enterprise Revenue Dashboard** - Revenue tracking for Enterprise workspaces
 4. **🛒 Template Marketplace Access Control** - Bundle-based selling permissions
 5. **💳 Enhanced Transaction Fees** - Automatic fee calculation display
-6. **📋 Updated Launch Pricing** - New bundle pricing ($19-39/month) with multi-bundle discounts
+6. **🎉 Launch Pricing System** - Time-limited launch specials with claim tracking ⚠️ **CRITICAL NEW**
+7. **📋 Updated Launch Pricing** - New bundle pricing ($19-39/month) with multi-bundle discounts
 
 ---
 
