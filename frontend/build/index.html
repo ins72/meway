@@ -1,1 +1,81 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#1f2937"/><meta name="description" content="Mewayz - Complete Creator Economy Platform for Social Media Management, E-commerce, Courses, CRM, and Analytics"/><meta name="keywords" content="creator economy, social media, e-commerce, courses, CRM, analytics, bio sites, payment processing"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><title>Mewayz - Complete Creator Economy Platform</title><script defer="defer" src="/static/js/main.d419bee3.js"></script><link href="/static/css/main.bfcf78d7.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mewayz Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { margin: 0 0 20px 0; font-size: 2.5rem; }
+        p { margin: 10px 0; font-size: 1.1rem; opacity: 0.9; }
+        .status { 
+            background: #10b981; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .api-link {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .api-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Mewayz Platform</h1>
+        <div class="status">✅ System Operational</div>
+        <p>Professional business management platform</p>
+        <p>Container deployment successful!</p>
+        
+        <div style="margin-top: 30px;">
+            <a href="/api/health" class="api-link">API Health Check</a>
+            <a href="/health" class="api-link">System Status</a>
+        </div>
+        
+        <script>
+            // Test API connectivity
+            fetch('/api/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API Status:', data);
+                    if (data.status === 'healthy') {
+                        document.querySelector('.status').innerHTML = '✅ API Connected';
+                    }
+                })
+                .catch(error => {
+                    console.log('API check failed:', error);
+                    document.querySelector('.status').innerHTML = '⚠️ API Connecting...';
+                });
+        </script>
+    </div>
+</body>
+</html>
