@@ -217,13 +217,55 @@ const OnboardingWizard = () => {
     { value: 'enterprise', label: '200+ people' }
   ];
 
-  const primaryGoals = [
-    { value: 'social_media', label: 'Social Media Growth', description: 'Grow followers, engagement, and leads' },
-    { value: 'ecommerce', label: 'E-commerce Sales', description: 'Sell products and manage inventory' },
-    { value: 'content_creation', label: 'Content & Courses', description: 'Create and monetize educational content' },
-    { value: 'client_management', label: 'Client & CRM', description: 'Manage relationships and sales pipeline' },
-    { value: 'marketing', label: 'Marketing Campaigns', description: 'Email, ads, and campaign management' },
-    { value: 'analytics', label: 'Business Analytics', description: 'Track performance and make data-driven decisions' }
+  const businessGoals = [
+    {
+      id: 'social_media',
+      title: 'Social Media Growth',
+      description: 'Grow followers, engagement, and leads',
+      icon: '👥',
+      gradient: 'var(--gradient-primary)',
+      features_preview: ['Instagram database', 'Content scheduling', 'Analytics']
+    },
+    {
+      id: 'ecommerce',
+      title: 'E-commerce Sales', 
+      description: 'Sell products and manage inventory',
+      icon: '🛒',
+      gradient: 'var(--gradient-accent)',
+      features_preview: ['Online store', 'Payment processing', 'Order management']
+    },
+    {
+      id: 'content_creation',
+      title: 'Content & Courses',
+      description: 'Create and monetize educational content',
+      icon: '🎥',
+      gradient: 'var(--gradient-warm)',
+      features_preview: ['Course builder', 'Student management', 'Content library']
+    },
+    {
+      id: 'client_management',
+      title: 'Client & CRM',
+      description: 'Manage relationships and sales pipeline',
+      icon: '🤝',
+      gradient: 'var(--gradient-secondary)',
+      features_preview: ['Contact management', 'Pipeline tracking', 'Task automation']
+    },
+    {
+      id: 'marketing',
+      title: 'Marketing Campaigns',
+      description: 'Email, ads, and campaign management',
+      icon: '📢',
+      gradient: 'var(--gradient-cool)',
+      features_preview: ['Email marketing', 'Campaign tracking', 'Lead generation']
+    },
+    {
+      id: 'analytics',
+      title: 'Business Analytics',
+      description: 'Track performance and make data-driven decisions',
+      icon: '📊',
+      gradient: 'var(--gradient-primary)',
+      features_preview: ['Revenue tracking', 'Performance metrics', 'Custom reports']
+    }
   ];
 
   const handleInputChange = (e) => {
