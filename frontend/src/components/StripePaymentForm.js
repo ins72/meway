@@ -4,13 +4,17 @@ import {
   useStripe,
   useElements
 } from '@stripe/react-stripe-js';
+import { adminSettingsAPI } from '../services/api';
 
 const StripePaymentForm = ({ 
   totalAmount, 
   onSuccess, 
   onError, 
   loading = false,
-  disabled = false 
+  disabled = false,
+  bundles = [],
+  workspaceName = '',
+  paymentMethod = 'monthly'
 }) => {
   const stripe = useStripe();
   const elements = useElements();
