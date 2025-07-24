@@ -17,7 +17,12 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('auth_token'));
+  const [token, setToken] = useState(() => {
+    // Initialize token from localStorage with fallback
+    const storedToken = localStorage.getItem('auth_token');
+    console.log('AuthContext: Initial token from localStorage:', storedToken);
+    return storedToken;
+  });
   const [currentWorkspace, setCurrentWorkspace] = useState(null);
 
   useEffect(() => {
