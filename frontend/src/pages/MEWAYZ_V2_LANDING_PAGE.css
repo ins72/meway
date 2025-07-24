@@ -758,6 +758,32 @@
   line-height: 1.7;
 }
 
+.cta-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.cta-guarantee {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-guarantee p {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
 /* Pricing Section */
 .pricing {
   padding: 8rem 2rem;
