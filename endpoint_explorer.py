@@ -11,7 +11,7 @@ import json
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://70437ee3-8310-47da-a8a9-4b9a2db36bda.preview.emergentagent.com"
+BACKEND_URL = "https://73aa7a8d-1282-4389-99c1-66ddc80405f1.preview.emergentagent.com"
 TEST_EMAIL = "tmonnens@outlook.com"
 TEST_PASSWORD = "Voetballen5"
 
