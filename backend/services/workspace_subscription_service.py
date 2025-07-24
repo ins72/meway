@@ -162,11 +162,12 @@ class WorkspaceSubscriptionService:
         """Check if user has permission to manage billing for workspace"""
         try:
             # Check if user is owner or admin of workspace
-            workspace_collection = self.db.workspaces
+            workspace_collection = self.db.workspace  # Fixed collection name
             workspace = await workspace_collection.find_one({
-                "_id": workspace_id,
+                "id": workspace_id,  # Fixed field name
                 "$or": [
                     {"owner_id": user_id},
+                    {"user_id": user_id},  # Also check user_id field
                     {"admins": {"$in": [user_id]}}
                 ]
             })
