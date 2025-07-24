@@ -34,19 +34,28 @@ const OnboardingWizard = () => {
         }
       } catch (error) {
         console.error('Failed to fetch payment settings:', error);
-        // Use default settings on error
+        // Use default settings on error - don't show error to user
+        setPaymentSettings({
+          paypal_enabled: false,
+          credit_card_enabled: true,
+          stripe_enabled: true
+        });
       }
     };
     
     const fetchOnboardingProgress = async () => {
       try {
+        if (!user) return; // Skip if no user
+        
         const response = await onboardingAPI.getProgress();
-        if (response.data.success) {
+        if (response.data.success && response.data.data) {
           const progress = response.data.data;
           // Set current step based on saved progress
-          setCurrentStep(progress.step);
+          if (progress.step > 1) {
+            setCurrentStep(progress.step);
+          }
           // Restore any saved data
-          if (progress.data) {
+          if (progress.data && Object.keys(progress.data).length > 0) {
             setFormData(prevData => ({
               ...prevData,
               ...progress.data
@@ -55,14 +64,12 @@ const OnboardingWizard = () => {
         }
       } catch (error) {
         console.error('Failed to fetch onboarding progress:', error);
-        // Continue with default step 1
+        // Continue with default step 1 - don't show error to user
       }
     };
     
     fetchPaymentSettings();
-    if (user) {
-      fetchOnboardingProgress();
-    }
+    fetchOnboardingProgress();
   }, [user]);
 
   const steps = [
