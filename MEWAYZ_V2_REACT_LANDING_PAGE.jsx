@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './LandingPage.css';
+import './MEWAYZ_V2_LANDING_PAGE.css';
 
 const LandingPage = () => {
   const [theme, setTheme] = useState('dark');
