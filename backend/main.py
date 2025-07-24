@@ -52,6 +52,9 @@ app.add_middleware(
 
 # Import and include all bulletproof routers
 try:
+    # Import new revenue-share APIs
+    from api.vendor_customer_referrals import router as vendor_customer_referrals_router
+    from api.template_marketplace_revenue import router as template_marketplace_revenue_router
     from api.financial import router as financial_router
     from api.complete_course_community import router as complete_course_community_router
     from api.complete_link_in_bio import router as complete_link_in_bio_router
