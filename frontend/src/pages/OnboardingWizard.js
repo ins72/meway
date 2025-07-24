@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { onboardingAPI } from '../services/api';
+import { onboardingAPI, adminSettingsAPI } from '../services/api';
 import './OnboardingWizard.css';
 
 const OnboardingWizard = () => {
