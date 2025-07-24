@@ -5,7 +5,11 @@ Professional Mewayz Platform
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional
 import asyncio
+import os
+import logging
 from .config import settings
+
+logger = logging.getLogger(__name__)
 
 class Database:
     client: Optional[AsyncIOMotorClient] = None
