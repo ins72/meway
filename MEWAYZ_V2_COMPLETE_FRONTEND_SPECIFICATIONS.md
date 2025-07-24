@@ -48,7 +48,852 @@ const getVisibleFeatures = (user, currentWorkspace) => {
 
 ---
 
-## 📊 MAIN DASHBOARD WITH WORKSPACE CONTROL
+## 🤖 AI TOKEN PURCHASE SYSTEM ⚠️ CRITICAL NEW IMPLEMENTATION NEEDED
+
+### **AI Token Balance Widget** (Dashboard Header)
+**File:** `/frontend/src/components/AITokenBalance.js`  
+**Location:** Dashboard header, right side of workspace selector
+
+#### **Component Structure:**
+```javascript
+const AITokenBalanceWidget = {
+  display_elements: {
+    current_balance: {
+      format: "1,247 tokens remaining",
+      color_coding: {
+        green: "500+ tokens",
+        yellow: "100-499 tokens", 
+        red: "< 100 tokens"
+      },
+      click_action: "Open token management modal"
+    },
+    
+    monthly_allocation: {
+      format: "500/month from Creator Bundle",
+      tooltip: "Resets on January 1st",
+      progress_bar: "Usage this month"
+    },
+    
+    purchase_button: {
+      text: "Buy More",
+      prominence: "Only visible when < 200 tokens",
+      click_action: "Open token purchase modal"
+    }
+  },
+  
+  api_integration: {
+    balance_endpoint: "GET /api/ai-token-purchase/workspace/{id}/balance",
+    refresh_interval: "30 seconds",
+    real_time_updates: "WebSocket for token usage"
+  }
+};
+```
+
+### **Token Purchase Modal** ⚠️ CRITICAL IMPLEMENTATION
+**File:** `/frontend/src/modals/TokenPurchaseModal.js`  
+**Trigger:** Click "Buy More" button, or automatic when hitting limits
+
+#### **Modal Layout:**
+```javascript
+const TokenPurchaseModal = {
+  header: {
+    title: "Purchase AI Tokens",
+    subtitle: "Get more credits for AI content generation",
+    current_balance_display: "Current: 47 tokens"
+  },
+  
+  pricing_packages: {
+    layout: "3x2 grid (6 packages)",
+    packages: [
+      {
+        id: "starter_100",
+        name: "Starter Pack",
+        tokens: 100,
+        price: "$9.99",
+        price_per_token: "$0.099",
+        popular: false,
+        badge: null,
+        features: ["Valid 6 months", "No rollover"]
+      },
+      {
+        id: "popular_500",
+        name: "Popular Pack", 
+        tokens: 500,
+        price: "$39.99",
+        price_per_token: "$0.079",
+        popular: true,
+        badge: "MOST POPULAR",
+        features: ["Valid 6 months", "20% discount", "Priority support"]
+      },
+      {
+        id: "professional_1000",
+        name: "Professional Pack",
+        tokens: 1000, 
+        price: "$69.99",
+        price_per_token: "$0.069",
+        popular: false,
+        badge: "BEST VALUE",
+        features: ["Valid 12 months", "30% discount", "Priority support", "Analytics"]
+      },
+      {
+        id: "business_2500",
+        name: "Business Pack",
+        tokens: 2500,
+        price: "$149.99", 
+        price_per_token: "$0.059",
+        popular: false,
+        badge: null,
+        features: ["Valid 12 months", "40% discount", "Priority support", "Analytics", "Bulk gifting"]
+      },
+      {
+        id: "enterprise_5000",
+        name: "Enterprise Pack",
+        tokens: 5000,
+        price: "$249.99",
+        price_per_token: "$0.049", 
+        popular: false,
+        badge: null,
+        features: ["Valid 12 months", "50% discount", "Priority support", "Analytics", "Bulk gifting", "Custom integrations"]
+      },
+      {
+        id: "unlimited_monthly",
+        name: "Unlimited Monthly",
+        tokens: "∞",
+        price: "$199.99",
+        price_per_token: "N/A",
+        popular: false,
+        badge: "POWER USERS",
+        features: ["Unlimited for 30 days", "Priority support", "Advanced analytics", "API access"]
+      }
+    ],
+    
+    selection_logic: {
+      single_select: true,
+      auto_recommend: "Based on usage patterns",
+      savings_calculator: "Show savings vs $0.10 base price"
+    }
+  },
+  
+  payment_section: {
+    payment_methods: ["Credit Card", "PayPal", "Stripe"],
+    billing_info: "Reuse workspace billing info",
+    purchase_button: "Purchase {tokens} Tokens for ${price}",
+    processing_states: ["Processing...", "Success!", "Error"]
+  },
+  
+  api_integration: {
+    pricing_endpoint: "GET /api/ai-token-purchase/pricing",
+    purchase_endpoint: "POST /api/ai-token-purchase/purchase",
+    success_callback: "Update balance widget + close modal"
+  }
+};
+```
+
+### **Token Usage Analytics Page** ⚠️ NEEDS IMPLEMENTATION
+**File:** `/frontend/src/pages/TokenAnalytics.js`  
+**Route:** `/workspace/{id}/ai-tokens`  
+**Access:** All paid bundles
+
+#### **Page Sections:**
+```javascript
+const TokenAnalyticsPage = {
+  header_stats: {
+    cards: [
+      { title: "Current Balance", value: "1,247 tokens", change: "+500 this month" },
+      { title: "This Month Usage", value: "753 tokens", change: "+12% vs last month" },
+      { title: "Bundle Allocation", value: "500/month", change: "Creator Bundle" },
+      { title: "Purchased Tokens", value: "1,500 tokens", change: "Expires in 4 months" }
+    ]
+  },
+  
+  usage_chart: {
+    type: "Line chart",
+    timeframe: "Last 30 days",
+    data_points: "Daily usage",
+    categories: ["Content Generation", "Image Creation", "Code Generation", "Translation", "SEO Optimization", "Data Analysis"]
+  },
+  
+  category_breakdown: {
+    type: "Donut chart + table",
+    shows: "Usage by category",
+    details: "Tokens used, number of operations, average per operation"
+  },
+  
+  purchase_history: {
+    type: "Table",
+    columns: ["Date", "Package", "Tokens", "Price", "Status", "Expires"],
+    actions: ["View Receipt", "Download Invoice"]
+  },
+  
+  recommendations: {
+    type: "Cards",
+    shows: "Based on usage patterns",
+    suggestions: ["Upgrade bundle", "Buy tokens", "Usage optimization tips"]
+  }
+};
+```
+
+### **Token Gifting Modal** ⚠️ PREMIUM FEATURE
+**File:** `/frontend/src/modals/TokenGiftModal.js`  
+**Access:** Business+ bundles only
+
+#### **Gifting Flow:**
+```javascript
+const TokenGiftModal = {
+  recipient_selection: {
+    input_type: "Workspace ID or email",
+    validation: "Check workspace exists",
+    workspace_preview: "Show recipient workspace info"
+  },
+  
+  gift_amount: {
+    input_type: "Number input",
+    constraints: "Min 10, Max current balance",
+    balance_check: "Real-time balance validation"
+  },
+  
+  personalization: {
+    message_input: "Optional gift message",
+    sender_info: "From {workspace_name}",
+    delivery_option: "Send immediately or schedule"
+  },
+  
+  confirmation: {
+    summary: "Gift {amount} tokens to {recipient}",
+    balance_after: "Your balance after: {remaining} tokens",
+    send_button: "Send Gift"
+  }
+};
+```
+
+### **Auto-Refill Settings** ⚠️ PREMIUM FEATURE
+**File:** `/frontend/src/components/AutoRefillSettings.js`  
+**Location:** Token Analytics page, settings section
+
+#### **Configuration Panel:**
+```javascript
+const AutoRefillSettings = {
+  enable_toggle: {
+    label: "Enable Auto-Refill",
+    description: "Automatically purchase tokens when balance gets low"
+  },
+  
+  trigger_threshold: {
+    input_type: "Number input",
+    label: "Refill when balance reaches",
+    default: 50,
+    validation: "10-500 range"
+  },
+  
+  refill_package: {
+    input_type: "Dropdown",
+    options: "All available packages",
+    recommendation: "Based on usage patterns"
+  },
+  
+  payment_method: {
+    input_type: "Dropdown", 
+    options: "Saved payment methods",
+    fallback: "Default workspace payment"
+  },
+  
+  notifications: {
+    checkboxes: ["Email when refill triggers", "Dashboard notification", "Slack notification"],
+    default: "All enabled"
+  }
+};
+```
+
+---
+
+## 📊 USAGE TRACKING DASHBOARD ⚠️ CRITICAL NEW IMPLEMENTATION NEEDED
+
+### **Usage Overview Widget** (Main Dashboard)
+**File:** `/frontend/src/components/UsageOverviewWidget.js`  
+**Location:** Main dashboard, prominent placement
+
+#### **Widget Structure:**
+```javascript
+const UsageOverviewWidget = {
+  layout: "Card with progress bars",
+  
+  tracked_features: {
+    ai_content_generation: {
+      label: "AI Content",
+      current: "347 / 500 credits",
+      percentage: 69.4,
+      color: "orange", // Warning at 70%
+      reset_date: "January 1st"
+    },
+    
+    instagram_searches: {
+      label: "Instagram Searches", 
+      current: "892 / 1000 searches",
+      percentage: 89.2,
+      color: "red", // Critical at 90%
+      reset_date: "January 1st"
+    },
+    
+    emails_sent: {
+      label: "Emails Sent",
+      current: "7,234 / 10,000 emails", 
+      percentage: 72.3,
+      color: "orange",
+      reset_date: "January 1st"
+    },
+    
+    // ... other tracked features based on workspace bundles
+  },
+  
+  action_buttons: {
+    view_details: "View Full Usage Report",
+    upgrade_workspace: "Upgrade Bundle", // Only if over limits
+    buy_tokens: "Buy AI Tokens" // For AI features only
+  },
+  
+  api_integration: {
+    data_endpoint: "GET /api/usage-tracking/current/{workspace_id}",
+    limits_endpoint: "GET /api/usage-tracking/limits/{workspace_id}", 
+    refresh_interval: "60 seconds"
+  }
+};
+```
+
+### **Detailed Usage Analytics Page** ⚠️ NEEDS IMPLEMENTATION
+**File:** `/frontend/src/pages/UsageAnalytics.js`  
+**Route:** `/workspace/{id}/usage`  
+**Access:** All workspaces
+
+#### **Page Layout:**
+```javascript
+const UsageAnalyticsPage = {
+  header_metrics: {
+    cards: [
+      { title: "Features Used", value: "12 / 25", subtitle: "Available in your bundles" },
+      { title: "This Month", value: "85% usage", subtitle: "Above average" },
+      { title: "Most Used", value: "AI Content", subtitle: "347 credits used" },
+      { title: "Days Until Reset", value: "12 days", subtitle: "January 1st" }
+    ]
+  },
+  
+  usage_trends: {
+    chart_type: "Multi-line chart",
+    timeframe: "Last 90 days", 
+    toggles: "Daily / Weekly / Monthly view",
+    feature_toggles: "Show/hide specific features"
+  },
+  
+  feature_breakdown: {
+    layout: "Table with progress bars",
+    columns: ["Feature", "Current Usage", "Limit", "% Used", "Trend", "Reset Date"],
+    sorting: "By usage percentage (highest first)",
+    filtering: "By bundle, by status (warning/critical)"
+  },
+  
+  warnings_alerts: {
+    section: "Usage Warnings",
+    alert_types: [
+      { type: "critical", threshold: "90%+", color: "red", message: "Approaching limit" },
+      { type: "warning", threshold: "80%+", color: "orange", message: "High usage" },
+      { type: "info", threshold: "50%+", color: "blue", message: "Normal usage" }
+    ]
+  },
+  
+  recommendations: {
+    section: "Upgrade Recommendations",
+    logic: "Based on usage patterns",
+    suggestions: ["Add Social Media Bundle", "Upgrade to Business Bundle", "Buy AI Tokens"]
+  }
+};
+```
+
+### **Usage Limit Warning Modal** ⚠️ CRITICAL IMPLEMENTATION
+**File:** `/frontend/src/modals/UsageLimitWarningModal.js`  
+**Trigger:** When user tries to use feature at/over limit
+
+#### **Modal Content:**
+```javascript
+const UsageLimitWarningModal = {
+  warning_types: {
+    approaching_limit: {
+      title: "Approaching Usage Limit",
+      message: "You've used 89% of your Instagram searches this month",
+      icon: "warning-triangle",
+      color: "orange",
+      actions: ["Continue Anyway", "Upgrade Bundle", "Cancel"]
+    },
+    
+    limit_exceeded: {
+      title: "Usage Limit Exceeded", 
+      message: "You've reached your limit of 1,000 Instagram searches this month",
+      icon: "stop-circle",
+      color: "red",
+      actions: ["Upgrade Bundle", "Buy More", "Cancel"]
+    },
+    
+    tokens_depleted: {
+      title: "AI Tokens Depleted",
+      message: "You've used all 500 AI credits this month",
+      icon: "zap-off", 
+      color: "red",
+      actions: ["Buy AI Tokens", "Upgrade Bundle", "Wait for Reset (12 days)"]  
+    }
+  },
+  
+  upgrade_suggestions: {
+    current_bundle: "Creator Bundle ($19/month)",
+    suggested_bundle: "Creator + Social Media Bundle ($34/month with 20% discount)",
+    savings_highlight: "Save $13/month vs separate purchases",
+    feature_comparison: "Side-by-side comparison table"
+  }
+};
+```
+
+---
+
+## 💰 ENTERPRISE REVENUE DASHBOARD ⚠️ ENTERPRISE ONLY IMPLEMENTATION
+
+### **Revenue Tracking Dashboard** 
+**File:** `/frontend/src/pages/EnterpriseRevenue.js`  
+**Route:** `/workspace/{id}/revenue`  
+**Access:** Enterprise workspaces only (4+ bundles or revenue-based pricing)
+
+#### **Dashboard Structure:**
+```javascript
+const EnterpriseRevenueDashboard = {
+  revenue_overview: {
+    cards: [
+      { title: "This Month Revenue", value: "$24,567", change: "+18% vs last month" },
+      { title: "Platform Fee (15%)", value: "$3,685", subtitle: "Due: January 31st" },
+      { title: "Net Revenue", value: "$20,882", change: "+18% vs last month" },
+      { title: "Revenue Sources", value: "6 active", subtitle: "E-commerce, Courses, etc." }
+    ]
+  },
+  
+  revenue_chart: {
+    type: "Area chart",
+    timeframe: "Last 12 months",
+    breakdown: "By revenue source",
+    drill_down: "Click to see source details"
+  },
+  
+  revenue_sources: {
+    table_columns: ["Source", "This Month", "Last Month", "Change", "% of Total"],
+    sources: [
+      "E-commerce Sales",
+      "Course Sales", 
+      "Booking Payments",
+      "Template Sales",
+      "Subscription Revenue",
+      "Affiliate Commissions",
+      "Consulting Services",
+      "Digital Products"
+    ]
+  },
+  
+  billing_history: {
+    section: "Platform Fee History",
+    table_columns: ["Month", "Revenue", "Fee (15%)", "Status", "Due Date", "Actions"],
+    actions: ["View Details", "Download Invoice", "Dispute"]
+  },
+  
+  projections: {
+    section: "Revenue Projections",
+    chart_type: "Line chart with confidence intervals",
+    timeframe: "Next 12 months",
+    methodology: "Based on historical trends"
+  }
+};
+```
+
+### **Revenue Source Details Modal** ⚠️ ENTERPRISE FEATURE
+**File:** `/frontend/src/modals/RevenueSourceModal.js`  
+**Trigger:** Click on revenue source in dashboard
+
+#### **Modal Content:**
+```javascript
+const RevenueSourceModal = {
+  header: {
+    title: "E-commerce Sales - December 2024",
+    total_revenue: "$18,456",
+    transaction_count: "347 transactions",
+    average_transaction: "$53.21"
+  },
+  
+  transaction_details: {
+    table_columns: ["Date", "Transaction ID", "Amount", "Customer", "Product", "Status"],
+    pagination: "50 per page",
+    filtering: ["Date range", "Amount range", "Customer", "Product category"],
+    export_options: ["CSV", "PDF", "Excel"]
+  },
+  
+  analytics: {
+    charts: [
+      { type: "Bar chart", title: "Daily Revenue", timeframe: "This month" },
+      { type: "Pie chart", title: "Revenue by Product Category" },
+      { type: "Line chart", title: "Average Transaction Value Trend" }
+    ]
+  }
+};
+```
+
+---
+
+## 🛒 TEMPLATE MARKETPLACE ACCESS CONTROL ⚠️ NEW IMPLEMENTATION NEEDED
+
+### **Template Selling Permission Check** 
+**Component:** Enhancement to existing template marketplace  
+**Logic:** Only show "Sell Template" options to Creator+ bundle users
+
+#### **Access Control Implementation:**
+```javascript
+const TemplateMarketplaceAccess = {
+  selling_button_logic: {
+    free_users: {
+      button_text: "Upgrade to Sell",
+      click_action: "Show upgrade modal",
+      tooltip: "Template selling requires Creator+ bundle"
+    },
+    
+    creator_plus_users: {
+      button_text: "Sell This Template", 
+      click_action: "Open template selling form",
+      tooltip: "Earn 85% revenue share"
+    }
+  },
+  
+  seller_onboarding: {
+    modal_title: "Start Selling Templates",
+    steps: [
+      {
+        title: "Verify Bundle Access",
+        content: "✅ Creator Bundle detected - you can sell templates!"
+      },
+      {
+        title: "Commission Structure", 
+        content: "You keep 85%, platform takes 15% commission"
+      },
+      {
+        title: "Quality Requirements",
+        content: "Templates must meet quality standards and get approved"
+      },
+      {
+        title: "Enable Selling",
+        content: "Activate template selling for your workspace"
+      }
+    ]
+  },
+  
+  seller_dashboard: {
+    file: "/frontend/src/pages/TemplateSeller.js",
+    route: "/workspace/{id}/template-selling",
+    access: "Creator+ bundle users only",
+    
+    metrics: [
+      { title: "Templates Live", value: "23 templates" },
+      { title: "Total Sales", value: "156 sales" },
+      { title: "Revenue Earned", value: "$2,847" },
+      { title: "Average Rating", value: "4.7 stars" }
+    ]
+  }
+};
+```
+
+### **Template Validation Interface** ⚠️ SELLER FEATURE
+**File:** `/frontend/src/components/TemplateValidator.js`  
+**Usage:** When sellers submit templates for approval
+
+#### **Validation UI:**
+```javascript
+const TemplateValidationInterface = {
+  validation_checklist: {
+    required_fields: [
+      { field: "Title", status: "✅", message: "Title provided" },
+      { field: "Description", status: "⚠️", message: "Description too short (32/50 chars)" },
+      { field: "Category", status: "✅", message: "Category selected" },
+      { field: "Price", status: "✅", message: "$29 (valid range)" },
+      { field: "Preview Images", status: "❌", message: "Need at least 1 preview image" }
+    ]
+  },
+  
+  quality_checks: {
+    automated: [
+      { check: "Image quality", status: "✅", message: "All images high resolution" },
+      { check: "Template functionality", status: "⚠️", message: "Some links not working" },
+      { check: "Mobile responsiveness", status: "✅", message: "Mobile-friendly design" },
+      { check: "Loading speed", status: "✅", message: "Fast loading (2.1s)" }
+    ]
+  },
+  
+  submission_status: {
+    states: ["Draft", "Validation", "Under Review", "Approved", "Rejected"],
+    current_state: "Validation",
+    next_steps: "Fix issues above to submit for review",
+    estimated_review: "2-3 business days"
+  }
+};
+```
+
+---
+
+## 💳 ENHANCED TRANSACTION FEES DISPLAY ⚠️ ENHANCEMENT NEEDED
+
+### **Transaction Fee Calculator Widget**
+**File:** `/frontend/src/components/TransactionFeeCalculator.js`  
+**Location:** E-commerce checkout, payment modals
+
+#### **Fee Display Implementation:**
+```javascript
+const TransactionFeeDisplay = {
+  fee_breakdown: {
+    layout: "Inline with transaction total",
+    
+    standard_workspace: {
+      subtotal: "$100.00",
+      platform_fee: "$2.40 (2.4%)",
+      seller_receives: "$97.60",
+      fee_description: "Standard platform fee"
+    },
+    
+    enterprise_workspace: {
+      subtotal: "$100.00", 
+      platform_fee: "$1.90 (1.9%)",
+      seller_receives: "$98.10",
+      fee_description: "Enterprise rate (4+ bundles)"
+    }
+  },
+  
+  fee_explanation: {
+    tooltip: "Platform fees help maintain servers, payment processing, and customer support",
+    comparison: "Competitive with PayPal (2.9%) and Stripe (2.9% + $0.30)",
+    benefits: "Includes escrow protection, dispute resolution, and analytics"
+  },
+  
+  real_time_calculation: {
+    api_endpoint: "GET /api/escrow/calculate-fees",
+    update_trigger: "Amount change",
+    debounce: "500ms"
+  }
+};
+```
+
+### **Enhanced Payment Flow** ⚠️ CHECKOUT ENHANCEMENT
+**File:** Enhancement to existing checkout components  
+**Logic:** Show fee calculation before payment confirmation
+
+#### **Checkout Flow Updates:**
+```javascript
+const EnhancedCheckoutFlow = {
+  step_3_payment: {
+    // Existing payment step enhanced with fee transparency
+    
+    order_summary: {
+      item_total: "$97.50",
+      shipping: "$2.50", 
+      subtotal: "$100.00",
+      platform_fee: "$2.40 (2.4%)", // NEW: Transparent fee display
+      total_charged: "$102.40", // NEW: Total including fees
+      seller_receives: "$97.60" // NEW: Seller net amount
+    },
+    
+    fee_explanation: {
+      expandable_section: true,
+      title: "Why platform fees?",
+      content: "Covers payment processing, escrow protection, dispute resolution, and platform maintenance",
+      comparison: "Lower than most competitors (PayPal: 2.9%, Square: 2.6% + $0.10)"
+    }
+  }
+};
+```
+
+---
+
+## 📋 UPDATED LAUNCH PRICING & ONBOARDING ⚠️ CRITICAL PRICING UPDATES
+
+### **Updated Pricing Display** (Multiple locations)
+**Files:** Update existing pricing components  
+**New Pricing:** Based on MEWAYZ_V2_SMART_LAUNCH_PRICING_STRATEGY.md
+
+#### **New Bundle Prices:**
+```javascript
+const UpdatedBundlePricing = {
+  bundle_prices: {
+    creator: {
+      monthly: "$19/month",
+      yearly: "$190/year (save $38)",
+      launch_special: "First 1000 users: 3 months for $9/month"
+    },
+    
+    ecommerce: {
+      monthly: "$24/month", 
+      yearly: "$240/year (save $48)",
+      launch_special: "First 500 users: 2 months free"
+    },
+    
+    social_media: {
+      monthly: "$29/month",
+      yearly: "$290/year (save $58)", 
+      launch_special: "First 2 weeks free trial"
+    },
+    
+    education: {
+      monthly: "$29/month",
+      yearly: "$290/year (save $58)",
+      launch_special: "First month free"
+    },
+    
+    business: {
+      monthly: "$39/month",
+      yearly: "$390/year (save $78)",
+      launch_special: "50% off first 3 months"
+    },
+    
+    operations: {
+      monthly: "$24/month",
+      yearly: "$240/year (save $48)",
+      launch_special: "First month free"
+    }
+  },
+  
+  multi_bundle_discounts: {
+    two_bundles: "20% discount",
+    three_bundles: "30% discount", 
+    four_plus_bundles: "40% discount"
+  },
+  
+  enterprise_pricing: {
+    model: "15% revenue share",
+    minimum: "$99/month",
+    launch_special: "First 50 customers: 10% revenue share for 6 months"
+  }
+};
+```
+
+### **Enhanced Onboarding Pricing Step** ⚠️ STEP 5 UPDATE
+**File:** `/frontend/src/components/onboarding/Step5PricingSelection.js`  
+**Enhancement:** Show multi-bundle discounts and launch specials
+
+#### **Updated Pricing Selection:**
+```javascript
+const EnhancedPricingStep = {
+  bundle_selection: {
+    layout: "2x3 grid of bundle cards",
+    multi_select: true,
+    
+    discount_calculator: {
+      real_time: true,
+      shows: "Live pricing as user selects bundles",
+      example: {
+        creator_plus_ecommerce: {
+          regular_price: "$43/month",
+          discounted_price: "$34/month (20% discount)",
+          savings: "Save $9/month"
+        }
+      }
+    }
+  },
+  
+  launch_specials: {
+    display: "Prominent banner above pricing",
+    offers: {
+      creator: "🎉 LAUNCH SPECIAL: First 1000 users get 3 months for $9/month!",
+      ecommerce: "🎁 LAUNCH SPECIAL: First 500 users get 2 months free!",
+      // ... other specials
+    },
+    
+    countdown_timer: {
+      shows: "Limited time offers",
+      urgency: "Only 127 spots left for Creator launch special!"
+    }
+  },
+  
+  enterprise_option: {
+    display: "Separate card at bottom",
+    title: "Enterprise Revenue Share",
+    description: "Pay 15% of revenue generated (min $99/month)",
+    benefits: ["All bundles included", "White-label solution", "Dedicated support"],
+    cta: "Contact Sales"
+  }
+};
+```
+
+---
+
+## 🎯 CRITICAL FRONTEND IMPLEMENTATIONS SUMMARY
+
+### **IMMEDIATE PRIORITIES (Week 1):**
+
+1. **🤖 AI Token Purchase System**
+   - Token balance widget (dashboard header)
+   - Token purchase modal (6 pricing packages)
+   - Usage analytics page
+   - Auto-refill settings
+
+2. **📊 Usage Tracking Dashboard**
+   - Usage overview widget (main dashboard) 
+   - Detailed usage analytics page
+   - Usage limit warning modals
+   - Real-time usage monitoring
+
+3. **💳 Enhanced Transaction Fees**
+   - Fee calculator widget (checkout)
+   - Transparent fee display 
+   - Fee explanation tooltips
+
+### **SECONDARY PRIORITIES (Week 2):**
+
+4. **💰 Enterprise Revenue Dashboard** (Enterprise only)
+   - Revenue tracking dashboard
+   - Revenue source details
+   - Billing history interface
+
+5. **🛒 Template Marketplace Access Control**
+   - Bundle-based selling permissions
+   - Seller onboarding flow
+   - Template validation interface
+
+6. **📋 Updated Pricing & Onboarding**
+   - New launch pricing display
+   - Multi-bundle discount calculator
+   - Launch specials banners
+
+### **TECHNICAL REQUIREMENTS:**
+
+- **Real-time Updates:** WebSocket connections for balance/usage
+- **Payment Integration:** Stripe for token purchases  
+- **Permission System:** Bundle-based feature visibility
+- **Responsive Design:** Mobile-first for all new components
+- **API Integration:** All new backend endpoints implemented
+- **Error Handling:** Graceful degradation for API failures
+
+---
+
+## 📱 MOBILE CONSIDERATIONS
+
+All new components must be mobile-responsive:
+
+- **Token Purchase Modal:** Stack pricing cards vertically on mobile
+- **Usage Dashboard:** Horizontal scroll for usage bars
+- **Revenue Dashboard:** Card layout for enterprise metrics
+- **Fee Calculator:** Collapsible details section
+
+---
+
+## 🔒 SECURITY & PERMISSIONS
+
+### **Access Control Matrix:**
+```javascript
+const FeatureAccessMatrix = {
+  ai_token_purchase: "All paid bundles",
+  usage_tracking: "All workspaces", 
+  enterprise_revenue: "Enterprise workspaces only (4+ bundles)",
+  template_selling: "Creator+ bundles only",
+  transaction_fees: "E-commerce bundle users",
+  
+  admin_features: "Workspace owners/admins only",
+  billing_management: "Owners/admins with billing permissions"
+};
+```
 
 ### **Enhanced Dashboard Layout**
 **File:** `/frontend/src/pages/dashboard/Dashboard.js`  
