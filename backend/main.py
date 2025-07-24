@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 import uvicorn
 import logging
+import asyncio
 from core.database import connect_to_mongo, close_mongo_connection
 
 # Configure logging
