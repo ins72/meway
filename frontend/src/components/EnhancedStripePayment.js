@@ -142,12 +142,12 @@ const EnhancedStripePayment = ({
         // console.log('Creating enhanced payment intent with URL:', url);
         // console.log('Auth token:', authToken ? 'present' : 'MISSING');
         // console.log('Request data:', {
-          amount: Math.round(amount * 100),
-          currency,
-          bundles,
-          workspace_name: workspaceName,
-          save_payment_method: true
-        });;
+        //   amount: Math.round(amount * 100),
+        //   currency,
+        //   bundles,
+        //   workspace_name: workspaceName,
+        //   save_payment_method: true
+        // });
 
         const response = await fetch(url, {
           method: 'POST',
