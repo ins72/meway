@@ -675,6 +675,24 @@ async def create_wizard_session(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/wizard/{session_id}")
+async def get_wizard_session(
+    session_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get wizard session by ID"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.get_wizard_session(session_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.put("/wizard/{session_id}")
 async def update_wizard_session(
     session_id: str,
@@ -694,6 +712,43 @@ async def update_wizard_session(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.delete("/wizard/{session_id}")
+async def delete_wizard_session(
+    session_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete wizard session"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.delete_wizard_session(session_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/wizard")
+async def list_wizard_sessions(
+    limit: int = 50,
+    offset: int = 0,
+    current_user: dict = Depends(get_current_admin)
+):
+    """List wizard sessions"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.list_wizard_sessions(user_id, limit, offset)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/goals")
 async def save_user_goals(
     goals_data: Dict[str, Any],
@@ -708,6 +763,58 @@ async def save_user_goals(
             return result
         else:
             raise HTTPException(status_code=400, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/goals")
+async def get_user_goals(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get user goals"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.get_user_goals(user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/goals")
+async def update_user_goals(
+    goals_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Update user goals"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.update_user_goals(goals_data, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/goals")
+async def delete_user_goals(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete user goals"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.delete_user_goals(user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -748,6 +855,79 @@ async def save_ui_state(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.put("/state/{component_id}")
+async def update_ui_state(
+    component_id: str,
+    state_data: Dict[str, Any],
+    current_user: dict = Depends(get_current_admin)
+):
+    """Update UI component state"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.update_ui_state(component_id, state_data, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/state/{component_id}")
+async def delete_ui_state(
+    component_id: str,
+    current_user: dict = Depends(get_current_admin)
+):
+    """Delete UI component state"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.delete_ui_state(component_id, user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=404, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/state")
+async def list_ui_states(
+    limit: int = 50,
+    offset: int = 0,
+    current_user: dict = Depends(get_current_admin)
+):
+    """List UI component states"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.list_ui_states(user_id, limit, offset)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/stats")
+async def get_ui_stats(
+    current_user: dict = Depends(get_current_admin)
+):
+    """Get UI statistics"""
+    try:
+        user_id = current_user.get("id") or current_user.get("email")
+        result = await advanced_ui_service.get_ui_stats(user_id)
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/component/{component_type}/config")
 async def get_component_config(
     component_type: str
@@ -768,22 +948,12 @@ async def get_component_config(
 async def health_check():
     """Health check endpoint"""
     try:
-        return {
-            "success": True,
-            "healthy": True,
-            "service": "Advanced UI Components",
-            "features": {
-                "wizard_sessions": True,
-                "goal_selection": True,
-                "ui_state_management": True,
-                "component_configs": True,
-                "interactive_interfaces": True
-            },
-            "timestamp": datetime.utcnow().isoformat()
-        }
+        result = await advanced_ui_service.health_check()
+        
+        if result.get("success"):
+            return result
+        else:
+            raise HTTPException(status_code=500, detail=result.get("error"))
+            
     except Exception as e:
-        return {
-            "success": False,
-            "healthy": False,
-            "error": str(e)
-        }
+        raise HTTPException(status_code=500, detail=str(e))
