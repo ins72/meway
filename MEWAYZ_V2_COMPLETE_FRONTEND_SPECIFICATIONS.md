@@ -8,6 +8,1476 @@
 
 ---
 
+## 🛡️ COMPREHENSIVE ADMIN SYSTEM SPECIFICATIONS
+
+Based on the comprehensive platform audit identifying 146 backend API systems, here are the complete admin interface specifications:
+
+---
+
+## 🏢 MASTER ADMIN COMMAND CENTER
+
+### **Master Admin Dashboard**
+**File:** `/frontend/src/pages/admin/MasterAdminDashboard.js`  
+**Route:** `/admin`  
+**Access:** Super Admin only - Central platform control
+
+#### **Dashboard Layout:**
+```javascript
+const MasterAdminDashboard = {
+  header: {
+    title: "Mewayz Platform Administration",
+    quick_stats: [
+      { label: "Total Users", value: "12,847", change: "+5.2% this month" },
+      { label: "Active Workspaces", value: "3,421", change: "+8.1% this month" },
+      { label: "Monthly Revenue", value: "$247,890", change: "+12.3% this month" },
+      { label: "System Health", value: "99.8%", status: "operational" }
+    ]
+  },
+  
+  main_sections: {
+    revenue_overview: {
+      title: "Revenue Operations Center",
+      widgets: [
+        { type: "revenue_chart", timeframe: "30_days", breakdown: "by_source" },
+        { type: "subscription_metrics", show: ["new", "churned", "upgraded"] },
+        { type: "transaction_volume", include_fees: true },
+        { type: "enterprise_revenue", minimum_fee_tracking: true }
+      ]
+    },
+    
+    system_operations: {
+      title: "Platform Operations",
+      widgets: [
+        { type: "user_activity", realtime: true },
+        { type: "workspace_creation_trends", period: "7_days" },
+        { type: "feature_usage_heatmap", top_features: 10 },
+        { type: "system_performance", include_api_health: true }
+      ]
+    },
+    
+    business_intelligence: {
+      title: "Business Intelligence",
+      widgets: [
+        { type: "customer_segmentation", segments: ["enterprise", "business", "creator"] },
+        { type: "churn_analysis", at_risk_customers: true },
+        { type: "growth_metrics", cohort_analysis: true },
+        { type: "market_penetration", industry_breakdown: true }
+      ]
+    }
+  },
+  
+  quick_actions: {
+    critical_actions: [
+      { label: "Emergency System Alert", icon: "alert-triangle", color: "red" },
+      { label: "Broadcast Message", icon: "megaphone", color: "blue" },
+      { label: "Generate Revenue Report", icon: "dollar-sign", color: "green" },
+      { label: "System Maintenance Mode", icon: "settings", color: "orange" }
+    ],
+    
+    daily_operations: [
+      { label: "Review Pending Accounts", icon: "user-check", badge: "23" },
+      { label: "Process Refund Requests", icon: "credit-card", badge: "7" },
+      { label: "Check System Alerts", icon: "bell", badge: "12" },
+      { label: "Review Usage Violations", icon: "shield", badge: "3" }
+    ]
+  },
+  
+  admin_navigation: {
+    main_categories: [
+      {
+        category: "Revenue Management",
+        icon: "dollar-sign",
+        items: [
+          { label: "Plan & Pricing Control", route: "/admin/pricing-management" },
+          { label: "Revenue Analytics", route: "/admin/revenue-analytics" },
+          { label: "Enterprise Billing", route: "/admin/enterprise-billing" },
+          { label: "Transaction Monitoring", route: "/admin/transactions" }
+        ]
+      },
+      {
+        category: "User & Workspace Management", 
+        icon: "users",
+        items: [
+          { label: "User Administration", route: "/admin/users" },
+          { label: "Workspace Management", route: "/admin/workspaces" },
+          { label: "Team & Permissions", route: "/admin/teams" },
+          { label: "Account Verification", route: "/admin/verification" }
+        ]
+      },
+      {
+        category: "System Operations",
+        icon: "server",
+        items: [
+          { label: "System Monitoring", route: "/admin/system-monitoring" },
+          { label: "API Health Dashboard", route: "/admin/api-health" },
+          { label: "Performance Analytics", route: "/admin/performance" },
+          { label: "Security & Compliance", route: "/admin/security" }
+        ]
+      },
+      {
+        category: "Business Operations", 
+        icon: "briefcase",
+        items: [
+          { label: "Template Marketplace", route: "/admin/marketplace" },
+          { label: "Vendor Management", route: "/admin/vendors" },
+          { label: "Content Moderation", route: "/admin/moderation" },
+          { label: "Customer Support", route: "/admin/support" }
+        ]
+      }
+    ]
+  }
+};
+```
+
+---
+
+## 💰 REVENUE OPERATIONS CENTER
+
+### **Comprehensive Revenue Dashboard**
+**File:** `/frontend/src/pages/admin/RevenueOperationsCenter.js`  
+**Route:** `/admin/revenue-operations`  
+**Access:** Admin - Central revenue management
+
+#### **Revenue Operations Interface:**
+```javascript
+const RevenueOperationsCenter = {
+  revenue_overview: {
+    title: "Multi-Source Revenue Tracking",
+    revenue_streams: [
+      {
+        source: "Workspace Subscriptions",
+        current_month: "$127,450",
+        growth: "+15.2%",
+        breakdown: {
+          creator: "$45,600",
+          business: "$62,340", 
+          enterprise: "$19,510"
+        }
+      },
+      {
+        source: "Transaction Fees (Escrow)",
+        current_month: "$34,680",
+        growth: "+22.1%",
+        breakdown: {
+          standard_2_4: "$28,450",
+          enterprise_1_9: "$6,230"
+        }
+      },
+      {
+        source: "Enterprise Revenue Share (15%)",
+        current_month: "$89,230",
+        growth: "+31.5%",
+        breakdown: {
+          above_minimum: "$78,120",
+          minimum_fees: "$11,110"
+        }
+      },
+      {
+        source: "Template Marketplace (15%)",
+        current_month: "$12,340",
+        growth: "+18.7%",
+        breakdown: {
+          template_sales: "$82,267",
+          commission_earned: "$12,340"
+        }
+      },
+      {
+        source: "AI Token Purchases", 
+        current_month: "$23,890",
+        growth: "+45.3%",
+        breakdown: {
+          starter_pack: "$8,450",
+          professional_pack: "$12,340",
+          enterprise_pack: "$3,100"
+        }
+      },
+      {
+        source: "Launch Specials",
+        current_month: "$15,670",
+        growth: "+125.4%",
+        breakdown: {
+          creator_special: "$9,230",
+          business_discount: "$4,120",
+          education_promo: "$2,320"
+        }
+      }
+    ]
+  },
+  
+  billing_operations: {
+    title: "Billing & Collection Management",
+    sections: [
+      {
+        section: "Subscription Billing",
+        widgets: [
+          { type: "billing_cycle_overview", show_upcoming: true },
+          { type: "failed_payments", retry_status: true },
+          { type: "proration_calculations", upgrade_downgrades: true },
+          { type: "subscription_changes", plan_migrations: true }
+        ]
+      },
+      {
+        section: "Enterprise Billing",
+        widgets: [
+          { type: "revenue_calculation", minimum_enforcement: true },
+          { type: "billing_statements", auto_generation: true },
+          { type: "payment_processing", integration_status: true },
+          { type: "commission_tracking", vendor_payouts: true }
+        ]
+      }
+    ]
+  },
+  
+  financial_analytics: {
+    title: "Advanced Financial Analytics",
+    charts: [
+      { type: "revenue_trends", timeframe: "12_months", breakdown_by: "source" },
+      { type: "customer_ltv", segmentation: "by_plan" },
+      { type: "churn_impact", revenue_loss: true },
+      { type: "growth_projections", forecasting: "6_months" }
+    ]
+  },
+  
+  revenue_alerts: {
+    title: "Revenue Monitoring Alerts",
+    alert_types: [
+      { type: "revenue_drop", threshold: "10%", period: "week" },
+      { type: "failed_payments", critical_count: 50 },
+      { type: "enterprise_minimum", below_threshold_customers: true },
+      { type: "commission_discrepancies", marketplace_vendors: true }
+    ]
+  }
+};
+```
+
+---
+
+## 👥 USER & WORKSPACE ADMINISTRATION
+
+### **User Administration Panel**
+**File:** `/frontend/src/pages/admin/UserAdministration.js`  
+**Route:** `/admin/users`  
+**Access:** Admin - Complete user management
+
+#### **User Management Interface:**
+```javascript
+const UserAdministrationPanel = {
+  user_directory: {
+    title: "User Directory & Management",
+    search_filters: [
+      { field: "email", type: "text", placeholder: "Search by email..." },
+      { field: "registration_date", type: "daterange" },
+      { field: "subscription_status", type: "select", options: ["active", "cancelled", "trial"] },
+      { field: "workspace_count", type: "number_range" },
+      { field: "last_activity", type: "daterange" },
+      { field: "user_status", type: "select", options: ["active", "suspended", "deleted"] }
+    ],
+    
+    user_table: {
+      columns: [
+        { field: "avatar", type: "image", sortable: false },
+        { field: "name", type: "text", sortable: true },
+        { field: "email", type: "text", sortable: true },
+        { field: "workspaces", type: "number", sortable: true },
+        { field: "subscription_value", type: "currency", sortable: true },
+        { field: "last_activity", type: "datetime", sortable: true },
+        { field: "status", type: "status_badge", sortable: true },
+        { field: "actions", type: "action_menu", sortable: false }
+      ],
+      
+      bulk_actions: [
+        { label: "Send Message", icon: "mail", requires_selection: true },
+        { label: "Bulk Suspend", icon: "user-x", requires_confirmation: true },
+        { label: "Export Users", icon: "download", format_options: ["csv", "excel"] },
+        { label: "Tag Users", icon: "tag", custom_tags: true }
+      ]
+    }
+  },
+  
+  user_detail_panel: {
+    title: "User Profile & Activity",
+    sections: [
+      {
+        section: "User Information",
+        fields: [
+          { field: "profile_photo", type: "image_upload", editable: true },
+          { field: "full_name", type: "text", editable: true },
+          { field: "email", type: "email", editable: true, unique_validation: true },
+          { field: "phone", type: "phone", editable: true },
+          { field: "registration_date", type: "datetime", readonly: true },
+          { field: "email_verified", type: "boolean", admin_toggle: true },
+          { field: "account_status", type: "select", options: ["active", "suspended", "deleted"] }
+        ]
+      },
+      {
+        section: "Workspace Associations",
+        workspace_list: {
+          columns: ["workspace_name", "role", "joined_date", "status", "actions"],
+          actions: ["view_workspace", "change_role", "remove_user"]
+        }
+      },
+      {
+        section: "Subscription History",
+        subscription_timeline: {
+          show_events: ["subscription_created", "plan_changed", "payment_failed", "cancelled"],
+          revenue_tracking: true,
+          refund_history: true
+        }
+      },
+      {
+        section: "Activity Log",
+        activity_types: ["login", "workspace_created", "subscription_change", "feature_usage"],
+        real_time_updates: true,
+        export_options: true
+      }
+    ]
+  },
+  
+  user_actions: {
+    account_management: [
+      { label: "Reset Password", icon: "key", send_email: true },
+      { label: "Verify Email", icon: "mail-check", manual_verification: true },
+      { label: "Suspend Account", icon: "user-x", requires_reason: true },
+      { label: "Delete Account", icon: "trash", confirmation_required: true }
+    ],
+    
+    communication: [
+      { label: "Send Message", icon: "mail", template_options: true },
+      { label: "Schedule Call", icon: "phone", calendar_integration: true },
+      { label: "Add Note", icon: "edit", internal_only: true },
+      { label: "Flag for Review", icon: "flag", priority_levels: true }
+    ],
+    
+    billing_actions: [
+      { label: "Manual Refund", icon: "credit-card", amount_input: true },
+      { label: "Comp Subscription", icon: "gift", duration_selector: true },
+      { label: "Apply Discount", icon: "percent", discount_types: ["percentage", "fixed"] },
+      { label: "Override Billing", icon: "dollar-sign", admin_only: true }
+    ]
+  }
+};
+```
+
+### **Workspace Management Console**
+**File:** `/frontend/src/pages/admin/WorkspaceManagement.js`  
+**Route:** `/admin/workspaces`  
+**Access:** Admin - Complete workspace administration
+
+#### **Workspace Administration Interface:**
+```javascript
+const WorkspaceManagementConsole = {
+  workspace_overview: {
+    title: "Workspace Directory & Analytics",
+    overview_metrics: [
+      { metric: "Total Workspaces", value: "3,421", change: "+8.1%" },
+      { metric: "Active Subscriptions", value: "2,987", change: "+12.3%" },
+      { metric: "Average Revenue per Workspace", value: "$87.45", change: "+15.7%" },
+      { metric: "Workspace Creation Rate", value: "47/week", change: "+22.1%" }
+    ],
+    
+    workspace_distribution: {
+      by_plan: {
+        creator: { count: 1245, percentage: 36.4, revenue: "$23,655" },
+        business: { count: 987, percentage: 28.8, revenue: "$38,493" },
+        enterprise: { count: 234, percentage: 6.8, revenue: "$45,670" },
+        free: { count: 955, percentage: 27.9, revenue: "$0" }
+      },
+      
+      by_industry: [
+        { industry: "E-commerce", count: 567, growth: "+15.2%" },
+        { industry: "Education", count: 423, growth: "+22.1%" },
+        { industry: "Consulting", count: 389, growth: "+18.7%" },
+        { industry: "Creative Services", count: 345, growth: "+25.3%" }
+      ]
+    }
+  },
+  
+  workspace_directory: {
+    title: "Workspace Search & Management",
+    advanced_filters: [
+      { field: "workspace_name", type: "text", placeholder: "Search workspace..." },
+      { field: "owner_email", type: "text", placeholder: "Owner email..." },
+      { field: "subscription_plan", type: "multiselect", options: ["free", "creator", "business", "enterprise"] },
+      { field: "creation_date", type: "daterange" },
+      { field: "last_activity", type: "daterange" },
+      { field: "team_size", type: "number_range", min: 1, max: 100 },
+      { field: "monthly_revenue", type: "currency_range" },
+      { field: "workspace_status", type: "select", options: ["active", "suspended", "deleted"] }
+    ],
+    
+    workspace_table: {
+      columns: [
+        { field: "workspace_logo", type: "image", size: "small" },
+        { field: "workspace_name", type: "text", sortable: true },
+        { field: "owner_name", type: "text", sortable: true },
+        { field: "owner_email", type: "email", sortable: true },
+        { field: "subscription_plan", type: "plan_badge", sortable: true },
+        { field: "team_members", type: "number", sortable: true },
+        { field: "monthly_revenue", type: "currency", sortable: true },
+        { field: "last_activity", type: "relative_time", sortable: true },
+        { field: "status", type: "status_indicator", sortable: true },
+        { field: "actions", type: "dropdown_menu", sortable: false }
+      ],
+      
+      row_actions: [
+        { label: "View Details", icon: "eye", route: "/admin/workspace/{id}" },
+        { label: "Impersonate", icon: "user", admin_mode: true },
+        { label: "Billing Details", icon: "credit-card", route: "/admin/billing/{id}" },
+        { label: "Usage Analytics", icon: "bar-chart", route: "/admin/usage/{id}" },
+        { label: "Suspend Workspace", icon: "pause", requires_reason: true },
+        { label: "Delete Workspace", icon: "trash", confirmation_required: true }
+      ]
+    }
+  },
+  
+  workspace_detail_view: {
+    title: "Comprehensive Workspace Management",
+    tabs: [
+      {
+        tab: "Overview",
+        sections: [
+          {
+            section: "Workspace Information",
+            fields: [
+              { field: "workspace_name", type: "text", editable: true },
+              { field: "description", type: "textarea", editable: true },
+              { field: "industry", type: "select", editable: true },
+              { field: "website", type: "url", editable: true },
+              { field: "creation_date", type: "datetime", readonly: true },
+              { field: "last_activity", type: "datetime", readonly: true }
+            ]
+          },
+          {
+            section: "Subscription Details",
+            fields: [
+              { field: "current_plan", type: "plan_selector", admin_changeable: true },
+              { field: "billing_cycle", type: "select", options: ["monthly", "yearly"] },
+              { field: "next_billing_date", type: "date", readonly: true },
+              { field: "subscription_status", type: "status_badge", readonly: true },
+              { field: "total_paid", type: "currency", readonly: true }
+            ]
+          }
+        ]
+      },
+      {
+        tab: "Team Management",
+        team_interface: {
+          member_list: {
+            columns: ["avatar", "name", "email", "role", "joined_date", "last_active", "actions"],
+            member_actions: ["change_role", "suspend_member", "remove_member"]
+          },
+          
+          role_management: {
+            available_roles: ["owner", "admin", "member", "viewer"],
+            permission_matrix: true,
+            custom_roles: true
+          },
+          
+          invitation_management: {
+            pending_invitations: true,
+            invitation_history: true,
+            bulk_invite: true
+          }
+        }
+      },
+      {
+        tab: "Billing & Revenue",
+        billing_interface: {
+          billing_history: {
+            show_invoices: true,
+            payment_methods: true,
+            refund_history: true,
+            failed_payments: true
+          },
+          
+          revenue_tracking: {
+            workspace_revenue: true,
+            commission_calculation: true,
+            enterprise_revenue_share: true,
+            transaction_fees: true
+          },
+          
+          billing_actions: [
+            { label: "Generate Invoice", icon: "file-text", manual_billing: true },
+            { label: "Process Refund", icon: "credit-card", amount_selector: true },
+            { label: "Apply Credit", icon: "plus-circle", credit_amount: true },
+            { label: "Change Plan", icon: "arrow-up", plan_selector: true }
+          ]
+        }
+      },
+      {
+        tab: "Usage Analytics",
+        usage_interface: {
+          feature_usage: {
+            chart_type: "heatmap",
+            time_period: "30_days",
+            features: "all_enabled",
+            usage_limits: true
+          },
+          
+          performance_metrics: {
+            api_calls: true,
+            data_storage: true,
+            bandwidth_usage: true,
+            ai_token_consumption: true
+          },
+          
+          usage_alerts: {
+            approaching_limits: true,
+            exceeded_limits: true,
+            unusual_activity: true
+          }
+        }
+      },
+      {
+        tab: "Activity Log",
+        activity_interface: {
+          activity_timeline: {
+            event_types: ["logins", "feature_usage", "billing_events", "team_changes"],
+            real_time: true,
+            export_options: ["csv", "json"],
+            search_filters: true
+          }
+        }
+      }
+    ]
+  }
+};
+```
+
+---
+
+## 🔧 PLAN CHANGE IMPACT ANALYSIS CENTER
+
+### **Impact Analysis Dashboard**
+**File:** `/frontend/src/pages/admin/PlanChangeImpactCenter.js`  
+**Route:** `/admin/plan-change-impact`  
+**Access:** Admin - Critical for safe plan changes
+
+#### **Impact Analysis Interface:**
+```javascript
+const PlanChangeImpactCenter = {
+  impact_wizard: {
+    title: "Plan Change Impact Analysis Wizard",
+    steps: [
+      {
+        step: 1,
+        title: "Select Plan & Change Type",
+        form: {
+          plan_selector: {
+            type: "dropdown",
+            options: "all_active_plans",
+            with_subscription_count: true
+          },
+          change_type: {
+            type: "radio",
+            options: [
+              { value: "pricing", label: "Pricing Changes", icon: "dollar-sign" },
+              { value: "features", label: "Feature Changes", icon: "toggle-left" },
+              { value: "limits", label: "Usage Limits", icon: "bar-chart" },
+              { value: "disable", label: "Plan Disable", icon: "x-circle" },
+              { value: "comprehensive", label: "Comprehensive Changes", icon: "settings" }
+            ]
+          }
+        }
+      },
+      {
+        step: 2,
+        title: "Define Changes",
+        dynamic_form: {
+          pricing_changes: {
+            monthly_price: { type: "currency", current_value: true },
+            yearly_price: { type: "currency", current_value: true },
+            launch_special: { type: "boolean", special_price: true }
+          },
+          feature_changes: {
+            features_to_add: { type: "multiselect", available_features: true },
+            features_to_remove: { type: "multiselect", current_features: true }
+          },
+          limit_changes: {
+            ai_tokens: { type: "number", current_limit: true },
+            storage_gb: { type: "number", current_limit: true },
+            team_members: { type: "number", current_limit: true },
+            api_calls: { type: "number", current_limit: true }
+          }
+        }
+      },
+      {
+        step: 3,
+        title: "Impact Analysis Results",
+        analysis_display: {
+          affected_subscriptions: {
+            count: "number_display",
+            list: "expandable_table",
+            revenue_impact: "currency_display"
+          },
+          risk_assessment: {
+            level: "risk_badge",
+            factors: "bullet_list",
+            recommendations: "alert_cards"
+          },
+          migration_requirements: {
+            requires_migration: "boolean_indicator",
+            estimated_timeline: "duration_display",
+            notification_needed: "boolean_indicator"
+          }
+        }
+      },
+      {
+        step: 4,
+        title: "Migration Planning",
+        migration_interface: {
+          migration_strategy: {
+            type: "radio",
+            options: ["immediate", "gradual", "scheduled"],
+            with_descriptions: true
+          },
+          notification_plan: {
+            advance_notice: { type: "select", options: ["7_days", "14_days", "30_days"] },
+            communication_channels: { type: "multiselect", options: ["email", "in_app", "sms"] },
+            message_template: { type: "textarea", template_library: true }
+          },
+          rollback_plan: {
+            rollback_window: { type: "select", options: ["24_hours", "7_days", "30_days"] },
+            rollback_criteria: { type: "multiselect", auto_triggers: true }
+          }
+        }
+      }
+    ]
+  },
+  
+  impact_history: {
+    title: "Impact Analysis History",
+    history_table: {
+      columns: [
+        { field: "analysis_date", type: "datetime", sortable: true },
+        { field: "plan_name", type: "text", sortable: true },
+        { field: "change_type", type: "badge", sortable: true },
+        { field: "affected_count", type: "number", sortable: true },
+        { field: "risk_level", type: "risk_badge", sortable: true },
+        { field: "status", type: "status_badge", sortable: true },
+        { field: "analyzed_by", type: "user_avatar", sortable: true },
+        { field: "actions", type: "action_menu", sortable: false }
+      ],
+      
+      filters: [
+        { field: "date_range", type: "daterange" },
+        { field: "plan_name", type: "multiselect" },
+        { field: "change_type", type: "multiselect" },
+        { field: "risk_level", type: "multiselect" },
+        { field: "status", type: "multiselect" }
+      ]
+    }
+  },
+  
+  migration_execution: {
+    title: "Migration Execution Center",
+    active_migrations: {
+      list_view: {
+        columns: ["migration_id", "plan_name", "progress", "affected_count", "status", "eta"],
+        real_time_updates: true
+      },
+      
+      migration_detail: {
+        progress_bar: true,
+        phase_indicators: ["notification", "migration", "verification", "completion"],
+        logs_panel: true,
+        rollback_button: true
+      }
+    }
+  },
+  
+  risk_monitoring: {
+    title: "Plan Change Risk Monitoring",
+    risk_alerts: [
+      { type: "high_risk_changes", threshold: "500_users_affected" },
+      { type: "revenue_impact", threshold: "$10000_monthly" },
+      { type: "failed_migrations", alert_immediately: true },
+      { type: "customer_complaints", spike_detection: true }
+    ],
+    
+    risk_dashboard: {
+      widgets: [
+        { type: "risk_level_distribution", chart: "donut" },
+        { type: "change_frequency", chart: "timeline" },
+        { type: "success_rate", chart: "gauge" },
+        { type: "customer_impact", chart: "heatmap" }
+      ]
+    }
+  }
+};
+```
+
+---
+
+## 🖥️ SYSTEM MONITORING & OPERATIONS
+
+### **System Health Dashboard**
+**File:** `/frontend/src/pages/admin/SystemMonitoring.js`  
+**Route:** `/admin/system-monitoring`  
+**Access:** Admin - Platform health monitoring
+
+#### **System Monitoring Interface:**
+```javascript
+const SystemMonitoringDashboard = {
+  system_health_overview: {
+    title: "Platform Health Status",
+    health_indicators: [
+      { service: "API Gateway", status: "operational", uptime: "99.98%", response_time: "125ms" },
+      { service: "Database", status: "operational", uptime: "99.99%", response_time: "45ms" },
+      { service: "Authentication", status: "operational", uptime: "99.97%", response_time: "89ms" },
+      { service: "File Storage", status: "operational", uptime: "99.95%", response_time: "234ms" },
+      { service: "Email Service", status: "degraded", uptime: "99.12%", response_time: "1.2s" },
+      { service: "AI Services", status: "operational", uptime: "99.89%", response_time: "567ms" }
+    ]
+  },
+  
+  api_performance: {
+    title: "API Performance Monitoring",
+    performance_widgets: [
+      {
+        widget: "API Response Times",
+        chart_type: "line",
+        timeframe: "24_hours",
+        endpoints: "top_20",
+        alert_threshold: "2000ms"
+      },
+      {
+        widget: "API Success Rates",
+        chart_type: "bar",
+        timeframe: "7_days",
+        group_by: "endpoint_category",
+        target_rate: "99.5%"
+      },
+      {
+        widget: "Request Volume",
+        chart_type: "area",
+        timeframe: "30_days",  
+        breakdown: "by_service",
+        capacity_indicators: true
+      },
+      {
+        widget: "Error Rate Distribution",
+        chart_type: "heatmap",
+        error_codes: ["4xx", "5xx"],
+        real_time: true
+      }
+    ]
+  },
+  
+  infrastructure_monitoring: {
+    title: "Infrastructure & Resource Usage",
+    resource_metrics: [
+      {
+        resource: "CPU Usage",
+        current: "34%",
+        average: "28%",
+        peak: "67%",
+        alert_threshold: "80%",
+        status: "normal"
+      },
+      {
+        resource: "Memory Usage", 
+        current: "56%",
+        average: "52%",
+        peak: "78%",
+        alert_threshold: "85%",
+        status: "normal"
+      },
+      {
+        resource: "Database Connections",
+        current: "145/500",
+        average: "123",
+        peak: "289",
+        alert_threshold: "450",
+        status: "normal"
+      },
+      {
+        resource: "Storage Usage",
+        current: "2.3TB/10TB",
+        growth_rate: "+12GB/day",
+        projected_full: "8_months",
+        status: "normal"
+      }
+    ]
+  },
+  
+  security_monitoring: {
+    title: "Security & Compliance Monitoring",
+    security_widgets: [
+      {
+        widget: "Failed Login Attempts",
+        current_count: 23,
+        threshold: 100,
+        chart_type: "timeline",
+        blocked_ips: 5
+      },
+      {
+        widget: "Suspicious Activity",
+        alerts_count: 2,
+        activity_types: ["unusual_api_usage", "multiple_failed_logins"],
+        auto_actions: ["ip_blocking", "account_flagging"]
+      },
+      {
+        widget: "Data Access Logs",
+        admin_access: 45,
+        user_data_exports: 12,
+        compliance_events: 3,
+        audit_trail: "complete"
+      }
+    ]
+  },
+  
+  maintenance_operations: {
+    title: "System Maintenance & Operations",
+    maintenance_panels: [
+      {
+        panel: "Scheduled Maintenance",
+        upcoming_maintenance: [
+          { type: "Database Backup", scheduled: "Tonight 2:00 AM", duration: "30 minutes" },
+          { type: "Server Updates", scheduled: "Sunday 1:00 AM", duration: "2 hours" },
+          { type: "SSL Certificate Renewal", scheduled: "Next Week", duration: "15 minutes" }
+        ]
+      },
+      {
+        panel: "Emergency Actions",
+        emergency_controls: [
+          { action: "Enable Maintenance Mode", description: "Block all user access", requires_confirmation: true },
+          { action: "Scale Up Resources", description: "Increase server capacity", auto_scaling: true },
+          { action: "Broadcast System Message", description: "Notify all users", message_templates: true },
+          { action: "Emergency Backup", description: "Create immediate backup", priority: "high" }
+        ]
+      }
+    ]
+  },
+  
+  alert_management: {
+    title: "Alert Management Center", 
+    alert_categories: [
+      {
+        category: "Critical Alerts",
+        count: 0,
+        color: "red",
+        auto_escalation: true,
+        notification_channels: ["sms", "email", "slack"]
+      },
+      {
+        category: "Warning Alerts",
+        count: 3,
+        color: "orange",
+        alerts: [
+          { message: "High API response time detected", severity: "medium", time: "5 minutes ago" },
+          { message: "Storage usage above 70%", severity: "low", time: "1 hour ago" },
+          { message: "Failed payment spike detected", severity: "medium", time: "2 hours ago" }
+        ]
+      },
+      {
+        category: "Info Alerts",
+        count: 12,
+        color: "blue",
+        summary: "Normal operational events and notifications"
+      }
+    ]
+  }
+};
+```
+
+---
+
+## 📊 BUSINESS ANALYTICS & REPORTING
+
+### **Business Intelligence Dashboard**
+**File:** `/frontend/src/pages/admin/BusinessIntelligence.js`  
+**Route:** `/admin/business-intelligence`  
+**Access:** Admin - Advanced business analytics
+
+#### **Business Intelligence Interface:**
+```javascript
+const BusinessIntelligenceDashboard = {
+  executive_summary: {
+    title: "Executive Summary & KPIs",
+    key_metrics: [
+      {
+        metric: "Monthly Recurring Revenue (MRR)", 
+        current: "$487,450",
+        growth: "+18.3%",
+        target: "$500,000",
+        progress: 97.5
+      },
+      {
+        metric: "Customer Acquisition Cost (CAC)",
+        current: "$45.67",
+        change: "-12.3%",
+        benchmark: "$50.00",
+        status: "good"
+      },
+      {
+        metric: "Customer Lifetime Value (LTV)",
+        current: "$1,234",
+        ltv_cac_ratio: 27.0,
+        benchmark_ratio: 25.0,
+        status: "excellent"
+      },
+      {
+        metric: "Churn Rate",
+        current: "2.1%",
+        change: "-0.3%",
+        target: "2.0%",
+        trend: "improving"
+      }
+    ]
+  },
+  
+  revenue_analytics: {
+    title: "Advanced Revenue Analytics",
+    analytics_panels: [
+      {
+        panel: "Revenue Attribution",
+        chart_type: "sankey",
+        data_flow: "traffic_source → signup → subscription → revenue",
+        attribution_model: "first_touch",
+        time_period: "90_days"
+      },
+      {
+        panel: "Cohort Analysis",
+        chart_type: "cohort_table",
+        cohort_by: "signup_month",
+        metric: "revenue_retention", 
+        time_periods: 12
+      },
+      {
+        panel: "Revenue Forecasting",
+        chart_type: "predictive_line",
+        forecast_period: "12_months",
+        confidence_interval: "95%",
+        forecasting_model: "machine_learning"
+      },
+      {
+        panel: "Plan Performance Analysis",
+        chart_type: "comparison_table",
+        metrics: ["subscriber_count", "revenue", "churn_rate", "upgrade_rate"],
+        comparison_periods: ["current_month", "previous_month", "year_ago"]
+      }
+    ]
+  },
+  
+  customer_analytics: {
+    title: "Customer Intelligence",
+    customer_panels: [
+      {
+        panel: "Customer Segmentation",
+        chart_type: "treemap",
+        segments: ["high_value", "growth_potential", "at_risk", "churned"],
+        segment_criteria: ["revenue", "engagement", "tenure"],
+        actionable_insights: true
+      },
+      {
+        panel: "Customer Journey Analysis",
+        chart_type: "funnel",
+        stages: ["visitor", "signup", "trial", "paid", "advocate"],
+        conversion_rates: true,
+        drop_off_analysis: true
+      },
+      {
+        panel: "Feature Adoption Analysis",
+        chart_type: "adoption_matrix",
+        features: "all_platform_features",
+        adoption_metrics: ["activated", "engaged", "retained"],
+        correlation_revenue: true
+      },
+      {
+        panel: "Customer Health Score",
+        chart_type: "gauge_collection",
+        health_factors: ["product_usage", "payment_history", "support_tickets", "engagement"],
+        predictive_churn: true
+      }
+    ]
+  },
+  
+  operational_analytics: {
+    title: "Operational Intelligence",
+    operational_panels: [
+      {
+        panel: "Team Performance",
+        metrics: ["support_ticket_resolution", "sales_pipeline", "development_velocity"],
+        team_comparison: true,
+        performance_trends: true
+      },
+      {
+        panel: "Feature Usage Analytics", 
+        chart_type: "usage_heatmap",
+        dimensions: ["feature", "user_segment", "time"],
+        usage_intensity: true,
+        correlation_analysis: true
+      },
+      {
+        panel: "Content Performance",
+        content_types: ["blog_posts", "templates", "courses", "videos"],
+        metrics: ["views", "engagement", "conversions", "revenue_attribution"],
+        content_optimization: true
+      },
+      {
+        panel: "Support Analytics",
+        metrics: ["ticket_volume", "resolution_time", "satisfaction_score", "escalation_rate"],
+        categorization: "by_issue_type",
+        trend_analysis: true
+      }
+    ]
+  },
+  
+  competitive_intelligence: {
+    title: "Market & Competitive Intelligence",
+    intelligence_panels: [
+      {
+        panel: "Market Positioning",
+        chart_type: "positioning_map",
+        dimensions: ["price", "features", "market_share"],
+        competitor_tracking: true,
+        market_gaps: true
+      },
+      {
+        panel: "Feature Gap Analysis",
+        comparison_matrix: true,
+        competitors: ["competitor_a", "competitor_b", "competitor_c"],
+        feature_categories: "all_platform_features",
+        priority_scoring: true
+      },
+      {
+        panel: "Pricing Analysis",
+        chart_type: "pricing_comparison",
+        pricing_models: ["subscription", "usage_based", "freemium"],
+        value_proposition: true,
+        elasticity_analysis: true
+      }
+    ]
+  },
+  
+  custom_reporting: {
+    title: "Custom Report Builder",
+    report_builder: {
+      data_sources: ["users", "subscriptions", "revenue", "usage", "support"],
+      visualization_types: ["table", "chart", "dashboard", "exported_pdf"],
+      filters_available: "all_platform_dimensions",
+      scheduling: ["daily", "weekly", "monthly"],
+      distribution: ["email", "slack", "api_webhook"]
+    },
+    
+    saved_reports: {
+      executive_reports: [
+        { name: "Monthly Board Report", schedule: "monthly", recipients: "executives" },
+        { name: "Weekly Revenue Summary", schedule: "weekly", recipients: "leadership" },
+        { name: "Daily Operational Metrics", schedule: "daily", recipients: "operations_team" }
+      ],
+      
+      departmental_reports: [
+        { name: "Customer Success Metrics", department: "cs", schedule: "weekly" },
+        { name: "Product Usage Analytics", department: "product", schedule: "bi_weekly" },
+        { name: "Sales Performance Dashboard", department: "sales", schedule: "daily" }
+      ]
+    }
+  }
+};
+```
+
+---
+
+## 🛍️ MARKETPLACE & VENDOR MANAGEMENT
+
+### **Template Marketplace Administration**
+**File:** `/frontend/src/pages/admin/MarketplaceAdministration.js`  
+**Route:** `/admin/marketplace`  
+**Access:** Admin - Complete marketplace control
+
+#### **Marketplace Management Interface:**
+```javascript
+const MarketplaceAdministration = {
+  marketplace_overview: {
+    title: "Template Marketplace Operations",
+    marketplace_metrics: [
+      { metric: "Total Templates", value: "2,847", change: "+156 this month" },
+      { metric: "Active Vendors", value: "445", change: "+23 this month" },
+      { metric: "Monthly Sales", value: "$89,340", change: "+28.5%" },
+      { metric: "Commission Earned", value: "$13,401", change: "+28.5%" }
+    ]
+  },
+  
+  template_management: {
+    title: "Template Catalog Management",
+    template_browser: {
+      search_filters: [
+        { field: "template_name", type: "text", placeholder: "Search templates..." },
+        { field: "category", type: "multiselect", options: "template_categories" },
+        { field: "vendor", type: "select", options: "all_vendors" },
+        { field: "price_range", type: "range", min: 0, max: 500 },
+        { field: "upload_date", type: "daterange" },
+        { field: "status", type: "select", options: ["pending", "approved", "rejected", "suspended"] },
+        { field: "sales_count", type: "number_range" }
+      ],
+      
+      template_grid: {
+        view_modes: ["grid", "list", "table"],
+        template_cards: {
+          preview_image: true,
+          template_name: true,
+          vendor_name: true,
+          price: true,
+          sales_count: true,
+          rating: true,
+          status_badge: true,
+          quick_actions: ["preview", "approve", "reject", "suspend"]
+        }
+      }
+    },
+    
+    template_review_queue: {
+      title: "Template Review Queue",
+      pending_templates: {
+        columns: ["preview", "name", "vendor", "category", "price", "submitted_date", "actions"],
+        bulk_actions: ["bulk_approve", "bulk_reject", "assign_reviewer"],
+        review_criteria: {
+          quality_checklist: ["design_quality", "functionality", "documentation", "originality"],
+          automated_checks: ["file_integrity", "malware_scan", "copyright_scan"],
+          manual_review: ["brand_guidelines", "content_quality", "user_experience"]
+        }
+      }
+    }
+  },
+  
+  vendor_management: {
+    title: "Vendor Management System",
+    vendor_directory: {
+      search_filters: [
+        { field: "vendor_name", type: "text" },
+        { field: "email", type: "text" },
+        { field: "join_date", type: "daterange" },
+        { field: "total_sales", type: "currency_range" },
+        { field: "template_count", type: "number_range" },
+        { field: "vendor_status", type: "select", options: ["active", "suspended", "banned"] },
+        { field: "verification_status", type: "select", options: ["verified", "pending", "rejected"] }
+      ],
+      
+      vendor_table: {
+        columns: [
+          { field: "vendor_avatar", type: "image" },
+          { field: "vendor_name", type: "text", sortable: true },
+          { field: "email", type: "email", sortable: true },
+          { field: "templates_count", type: "number", sortable: true },
+          { field: "total_sales", type: "currency", sortable: true },
+          { field: "commission_earned", type: "currency", sortable: true },
+          { field: "rating", type: "star_rating", sortable: true },
+          { field: "status", type: "status_badge", sortable: true },
+          { field: "actions", type: "dropdown_menu", sortable: false }
+        ]
+      }
+    },
+    
+    vendor_detail_management: {
+      vendor_profile: {
+        sections: [
+          {
+            section: "Vendor Information",
+            fields: [
+              { field: "business_name", type: "text", editable: true },
+              { field: "contact_person", type: "text", editable: true },
+              { field: "email", type: "email", editable: true },
+              { field: "phone", type: "phone", editable: true },
+              { field: "business_address", type: "address", editable: true },
+              { field: "tax_id", type: "text", sensitive: true },
+              { field: "verification_status", type: "select", admin_only: true }
+            ]
+          },
+          {
+            section: "Performance Metrics",
+            metrics: [
+              { metric: "Total Templates", value: "47", trend: "+3 this month" },
+              { metric: "Total Sales", value: "$12,450", trend: "+18.3%" },
+              { metric: "Average Rating", value: "4.7/5", based_on: "156 reviews" },
+              { metric: "Commission Earned", value: "$1,868", calculation: "15%" }
+            ]
+          }
+        ]
+      },
+      
+      template_portfolio: {
+        title: "Vendor Template Portfolio",
+        portfolio_view: {
+          templates_grid: true,
+          performance_metrics: ["views", "sales", "rating", "downloads"],
+          revenue_breakdown: true
+        }
+      },
+      
+      payout_management: {
+        title: "Commission & Payout Management",
+        payout_interface: {
+          payout_schedule: { frequency: "monthly", next_payout: "auto_calculated" },
+          payment_methods: { options: ["bank_transfer", "paypal", "stripe"], setup_required: true },
+          payout_history: { table: true, filters: ["date", "amount", "status"], export: true },
+          manual_payout: { admin_trigger: true, reason_required: true }
+        }
+      }
+    }
+  },
+  
+  revenue_management: {
+    title: "Marketplace Revenue Management",
+    revenue_analytics: {
+      revenue_streams: [
+        { stream: "Template Sales Commission (15%)", amount: "$13,401", growth: "+28.5%" },
+        { stream: "Premium Vendor Subscriptions", amount: "$2,340", growth: "+15.2%" },
+        { stream: "Featured Placement Fees", amount: "$890", growth: "+45.1%" },
+        { stream: "Marketplace Advertising", amount: "$1,250", growth: "+12.8%" }
+      ],
+      
+      commission_tracking: {
+        commission_rate: "15%",
+        total_sales: "$89,340",
+        commission_earned: "$13,401",
+        pending_payouts: "$8,234",
+        paid_out: "$5,167"
+      }
+    }
+  },
+  
+  marketplace_settings: {
+    title: "Marketplace Configuration",
+    settings_panels: [
+      {
+        panel: "Commission Settings",
+        settings: [
+          { setting: "Commission Rate", current: "15%", editable: true },
+          { setting: "Minimum Payout", current: "$50", editable: true },
+          { setting: "Payout Schedule", current: "Monthly", options: ["Weekly", "Monthly", "Quarterly"] },
+          { setting: "Payment Processing Fee", current: "2.9%", editable: true }
+        ]
+      },
+      {
+        panel: "Quality Standards",
+        settings: [
+          { setting: "Auto-approval", current: "Disabled", toggle: true },
+          { setting: "Required Reviews", current: "2", editable: true },
+          { setting: "Minimum Rating", current: "4.0", editable: true },
+          { setting: "Quality Checks", current: "Enabled", checklist: true }
+        ]
+      },
+      {
+        panel: "Vendor Requirements",
+        settings: [
+          { setting: "Identity Verification", current: "Required", toggle: false },
+          { setting: "Business Verification", current: "Optional", toggle: true },
+          { setting: "Tax Information", current: "Required", toggle: false },
+          { setting: "Portfolio Minimum", current: "3 templates", editable: true }
+        ]
+      }
+    ]
+  }
+};
+```
+
+---
+
+## 🎯 ADMIN SYSTEM INTEGRATION & NAVIGATION
+
+### **Master Admin Navigation**
+```javascript
+const MasterAdminNavigation = {
+  main_navigation: {
+    primary_sections: [
+      {
+        section: "Dashboard",
+        icon: "home",
+        route: "/admin",
+        badge: null
+      },
+      {
+        section: "Revenue Operations",
+        icon: "dollar-sign", 
+        expanded: false,
+        subsections: [
+          { label: "Revenue Dashboard", route: "/admin/revenue-operations", icon: "trending-up" },
+          { label: "Plan Management", route: "/admin/plan-management", icon: "layers" },
+          { label: "Pricing Control", route: "/admin/pricing-management", icon: "tag" },
+          { label: "Impact Analysis", route: "/admin/plan-change-impact", icon: "activity" },
+          { label: "Enterprise Billing", route: "/admin/enterprise-billing", icon: "credit-card" },
+          { label: "Transaction Monitoring", route: "/admin/transactions", icon: "exchange" }
+        ]
+      },
+      {
+        section: "User Management", 
+        icon: "users",
+        expanded: false,
+        badge: "23",
+        subsections: [
+          { label: "User Administration", route: "/admin/users", icon: "user", badge: "23" },
+          { label: "Workspace Management", route: "/admin/workspaces", icon: "briefcase" },
+          { label: "Team & Permissions", route: "/admin/teams", icon: "shield" },
+          { label: "Account Verification", route: "/admin/verification", icon: "user-check" }
+        ]
+      },
+      {
+        section: "Business Operations",
+        icon: "briefcase",
+        expanded: false,
+        subsections: [
+          { label: "Marketplace Admin", route: "/admin/marketplace", icon: "shopping-bag" },
+          { label: "Vendor Management", route: "/admin/vendors", icon: "truck" },
+          { label: "Content Moderation", route: "/admin/moderation", icon: "flag" },
+          { label: "Customer Support", route: "/admin/support", icon: "headphones" }
+        ]
+      },
+      {
+        section: "Analytics & BI",
+        icon: "bar-chart",
+        expanded: false,
+        subsections: [
+          { label: "Business Intelligence", route: "/admin/business-intelligence", icon: "pie-chart" },
+          { label: "Revenue Analytics", route: "/admin/revenue-analytics", icon: "trending-up" },
+          { label: "User Analytics", route: "/admin/user-analytics", icon: "users" },
+          { label: "Custom Reports", route: "/admin/custom-reports", icon: "file-text" }
+        ]
+      },
+      {
+        section: "System Operations",
+        icon: "server",
+        expanded: false,
+        badge: "3",
+        subsections: [
+          { label: "System Monitoring", route: "/admin/system-monitoring", icon: "activity" },
+          { label: "API Health", route: "/admin/api-health", icon: "globe" },
+          { label: "Performance Metrics", route: "/admin/performance", icon: "zap" },
+          { label: "Security & Compliance", route: "/admin/security", icon: "lock" }
+        ]
+      }
+    ]
+  },
+  
+  quick_actions: {
+    global_actions: [
+      { 
+        label: "Emergency Alert", 
+        icon: "alert-triangle", 
+        color: "red",
+        action: "broadcast_emergency",
+        requires_confirmation: true
+      },
+      { 
+        label: "System Message", 
+        icon: "megaphone", 
+        color: "blue",
+        action: "send_system_message",
+        modal: "system_message_composer"
+      },
+      { 
+        label: "Maintenance Mode", 
+        icon: "settings", 
+        color: "orange",
+        action: "toggle_maintenance",
+        requires_confirmation: true
+      },
+      { 
+        label: "Export Data", 
+        icon: "download", 
+        color: "green",
+        action: "data_export",
+        modal: "export_selector"
+      }
+    ]
+  },
+  
+  notification_center: {
+    notification_types: [
+      { type: "system_alerts", priority: "critical", count: 0 },
+      { type: "user_reports", priority: "high", count: 3 },
+      { type: "payment_failures", priority: "medium", count: 7 },
+      { type: "new_signups", priority: "low", count: 45 }
+    ],
+    
+    notification_settings: {
+      email_notifications: true,
+      sms_alerts: true,
+      slack_integration: true,
+      push_notifications: true
+    }
+  }
+};
+```
+
+### **Responsive Admin Design System**
+```javascript
+const AdminDesignSystem = {
+  layout_structure: {
+    desktop: {
+      sidebar_width: "280px",
+      header_height: "64px",
+      content_padding: "24px",
+      max_width: "none"
+    },
+    tablet: {
+      sidebar_width: "240px", 
+      header_height: "56px",
+      content_padding: "16px",
+      collapsible_sidebar: true
+    },
+    mobile: {
+      sidebar: "overlay",
+      header_height: "48px", 
+      content_padding: "12px",
+      bottom_navigation: true
+    }
+  },
+  
+  color_scheme: {
+    primary: "#2563eb",
+    secondary: "#64748b", 
+    success: "#059669",
+    warning: "#d97706",
+    danger: "#dc2626",
+    info: "#0891b2",
+    background: "#f8fafc",
+    surface: "#ffffff",
+    text_primary: "#1e293b",
+    text_secondary: "#64748b"
+  },
+  
+  component_library: {
+    admin_cards: {
+      metric_card: { padding: "24px", border_radius: "8px", shadow: "sm" },
+      stat_card: { padding: "20px", border_radius: "8px", shadow: "sm" },
+      action_card: { padding: "16px", border_radius: "8px", shadow: "sm" }
+    },
+    
+    admin_tables: {
+      header_styling: { background: "#f1f5f9", font_weight: "600" },
+      row_styling: { border_bottom: "1px solid #e2e8f0", hover_background: "#f8fafc" },
+      pagination: { size: "sm", show_info: true }
+    },
+    
+    admin_forms: {
+      input_styling: { border_radius: "6px", border_color: "#d1d5db" },
+      label_styling: { font_weight: "500", color: "#374151" },
+      validation: { show_inline: true, color_coding: true }
+    }
+  }
+};
+```
+
+---
+
+This completes the comprehensive admin system specifications based on the full platform audit. The specifications cover:
+
+1. **Master Admin Command Center** - Central dashboard with overview
+2. **Revenue Operations Center** - Complete revenue management
+3. **User & Workspace Administration** - Full user management
+4. **Plan Change Impact Analysis** - Critical for safe plan changes  
+5. **System Monitoring & Operations** - Platform health and performance
+6. **Business Intelligence Dashboard** - Advanced analytics
+7. **Marketplace & Vendor Management** - Complete marketplace control
+8. **Integrated Navigation & Design System** - Cohesive admin experience
+
+All admin interfaces follow the professional design established by the landing page and provide comprehensive control over the 146+ backend API systems identified in the audit.
+
+---
+
 ## 🎯 MAJOR UPDATES FOR PRODUCTION LAUNCH
 
 ### **NEW SYSTEMS REQUIRING FRONTEND IMPLEMENTATION:**
