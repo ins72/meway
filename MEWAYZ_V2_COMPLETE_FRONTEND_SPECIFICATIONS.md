@@ -1,9 +1,23 @@
-# MEWAYZ V2 WORKSPACE-BASED FRONTEND SPECIFICATIONS
-## Every Screen, Widget, Popup & Page with Workspace Access Control
+# MEWAYZ V2 COMPLETE FRONTEND SPECIFICATIONS - UPDATED
+## Every Screen, Widget, Popup & Page with Workspace Access Control + New Systems
 
 **Documentation Date:** December 30, 2024  
+**Updated with:** AI Token Purchase System, New Launch Pricing, Enhanced Transaction Fees  
 **Scope:** Complete UI/UX specifications with workspace-based access control  
 **Key Principle:** Users only see features their current workspace has access to
+
+---
+
+## 🎯 MAJOR UPDATES FOR PRODUCTION LAUNCH
+
+### **NEW SYSTEMS REQUIRING FRONTEND IMPLEMENTATION:**
+
+1. **🤖 AI Token Purchase System** - Complete token buying/management UI
+2. **📊 Usage Tracking Dashboard** - Real-time feature usage monitoring
+3. **💰 Enterprise Revenue Dashboard** - Revenue tracking for Enterprise workspaces
+4. **🛒 Template Marketplace Access Control** - Bundle-based selling permissions
+5. **💳 Enhanced Transaction Fees** - Automatic fee calculation display
+6. **📋 Updated Launch Pricing** - New bundle pricing ($19-39/month) with multi-bundle discounts
 
 ---
 
