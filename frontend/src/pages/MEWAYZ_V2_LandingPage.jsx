@@ -324,61 +324,61 @@ const CTASection = () => {
 const PricingSection = () => {
   const plans = [
     {
-      name: 'Free',
+      name: 'Starter',
       price: '$0',
       period: '/month',
-      description: 'Perfect for getting started',
+      description: 'Perfect for solopreneurs getting started',
       features: [
-        '10 features included',
-        'Basic workspace access',
-        'Community support',
+        '14-day free trial',
+        '1 workspace',
+        'Basic Instagram lead generation',
+        'Simple bio link page',
         'Basic analytics',
         'Email support',
         'Mobile app access',
-        'Basic templates',
-        'Standard integrations'
+        'Community support'
       ],
-      cta: 'Get Started Free',
+      cta: 'Start Free Trial',
       popular: false
     },
     {
-      name: 'Pro',
-      price: '$1',
-      period: '/feature/month',
-      yearly: '$10/feature/year',
-      description: 'For growing businesses',
+      name: 'Professional',
+      price: '$29',
+      period: '/month',
+      yearly: '$290/year (save $58)',
+      description: 'Best for growing creators & businesses',
       features: [
-        'All Free features',
-        'Unlimited features available',
+        'Everything in Starter',
+        '5 workspaces',
+        'Advanced Instagram database',
+        'Multi-vendor marketplace',
+        'Course creation platform',
+        'Advanced CRM & automation',
+        'Professional website builder',
         'Priority support',
-        'Advanced analytics',
         'Custom domains',
-        'Team collaboration',
-        'Premium templates',
-        'API access',
-        'Advanced integrations',
-        'White-label options'
+        'Advanced analytics & reporting'
       ],
-      cta: 'Choose Your Features',
+      cta: 'Start Professional',
       popular: true
     },
     {
       name: 'Enterprise',
-      price: '$1.5',
-      period: '/feature/month',
-      yearly: '$15/feature/year',
-      description: 'For large organizations',
+      price: '$99',
+      period: '/month',
+      yearly: '$990/year (save $198)',
+      description: 'For teams & large organizations',
       features: [
-        'All Pro features',
-        'Full white-label solution',
+        'Everything in Professional',
+        'Unlimited workspaces',
+        'White-label solution',
         'Custom branding',
         'Dedicated account manager',
         'Custom integrations',
-        'Priority feature requests',
-        'Advanced security',
-        'SLA guarantee',
-        'Custom development',
-        '24/7 phone support'
+        'Advanced security features',
+        'SLA guarantee (99.9% uptime)',
+        '24/7 phone support',
+        'Priority feature requests'
       ],
       cta: 'Contact Sales',
       popular: false
@@ -391,10 +391,10 @@ const PricingSection = () => {
         <div className="section-header">
           <div className="section-badge">
             <span className="emoji">💰</span> 
-            <span className="text-content">Flexible Pricing</span>
+            <span className="text-content">Transparent Pricing</span>
           </div>
-          <h2>Pay Only for What You Use</h2>
-          <p className="pricing-subtitle">Start free with 10 features, then scale by adding only the features you need. No hidden fees, cancel anytime.</p>
+          <h2>Choose Your Growth Plan</h2>
+          <p className="pricing-subtitle">Start free and scale as you grow. No hidden fees, cancel anytime. Join thousands of successful creators and businesses.</p>
         </div>
         
         <div className="pricing-grid">
@@ -404,7 +404,7 @@ const PricingSection = () => {
               <div className="plan-price">
                 {plan.price}
                 <span>{plan.period}</span>
-                {plan.yearly && <div className="yearly-price">or {plan.yearly}</div>}
+                {plan.yearly && <div className="yearly-price">{plan.yearly}</div>}
               </div>
               <p className="plan-description">{plan.description}</p>
               <ul className="plan-features">
@@ -412,7 +412,7 @@ const PricingSection = () => {
                   <li key={featureIndex}>{feature}</li>
                 ))}
               </ul>
-              <a href="#signup" className="btn btn-primary plan-cta">
+              <a href="/register" className="btn btn-primary plan-cta">
                 {plan.cta}
               </a>
             </div>
@@ -420,7 +420,7 @@ const PricingSection = () => {
         </div>
         
         <div className="pricing-note">
-          <p>All plans include access to our 62 production-ready APIs, real-time analytics, and comprehensive documentation.</p>
+          <p><strong>All plans include:</strong> Mobile app access, real-time analytics, automatic backups, SSL security, API access, and our comprehensive knowledge base. Trusted by 10,000+ businesses worldwide.</p>
         </div>
       </div>
     </section>
