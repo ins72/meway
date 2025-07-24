@@ -8,10 +8,20 @@ from typing import Dict, Any, List, Optional
 from core.auth import get_current_user, get_current_admin
 from services.stripe_integration_service import get_stripe_integration_service
 import logging
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+class CheckoutSessionRequest(BaseModel):
+    bundles: List[str]
+    workspace_name: str
+    payment_method: str  # 'monthly' or 'yearly'
+
+class SubscriptionWebhookRequest(BaseModel):
+    event_type: str
+    data: Dict[str, Any]
 
 @router.get("/health")
 async def health_check():
