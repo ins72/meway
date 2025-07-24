@@ -1307,6 +1307,9 @@ class MewayzBackendAuditor:
         # Step 3.6: Test Admin Pricing System (CRITICAL FOR ADMIN DASHBOARD)
         self.test_admin_pricing_system()
         
+        # Step 3.7: Test Admin Plan Management System (CRITICAL FOR ADMIN DASHBOARD)
+        self.test_admin_plan_management_system()
+        
         # Step 4: Test additional systems
         self.test_additional_systems()
         
