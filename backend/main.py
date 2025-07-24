@@ -42,45 +42,33 @@ def handle_startup_error(error: Exception, context: str):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan with robust error handling"""
+    """Simplified lifespan for production deployment"""
+    logger.info("🚀 Application lifespan starting...")
+    
+    # Don't let database connection issues prevent startup
     try:
-        # Initialize database with retries
-        max_retries = 5
-        retry_delay = 2
-        
-        for attempt in range(max_retries):
-            try:
-                await connect_to_mongo()
-                logger.info("✅ Database connection initialized successfully")
-                break
-            except Exception as e:
-                logger.warning(f"⚠️ Database connection attempt {attempt + 1}/{max_retries} failed: {e}")
-                if attempt == max_retries - 1:
-                    logger.error("❌ Failed to connect to database after all retries")
-                    # Don't crash the app, continue without database
-                    logger.error("🚨 Application starting WITHOUT database connection")
-                    logger.error("   This may cause API errors but the app will still serve static content")
-                else:
-                    await asyncio.sleep(retry_delay)
-                    retry_delay *= 2  # Exponential backoff
-        
-        # Application is starting - log success
-        logger.info("🚀 Application startup completed")
-        
-        yield
-        
+        logger.info("🔗 Attempting database connection...")
+        # Try to connect with a short timeout
+        await asyncio.wait_for(connect_to_mongo(), timeout=10.0)
+        logger.info("✅ Database connected successfully")
+    except asyncio.TimeoutError:
+        logger.warning("⚠️ Database connection timeout - continuing without database")
     except Exception as e:
-        logger.error(f"❌ Critical lifespan error: {e}")
-        logger.info("🔄 Application continuing despite lifespan error")
-        # Don't crash - let the app try to start anyway
-        yield  
-    finally:
-        try:
-            await close_mongo_connection()
-            logger.info("✅ Database connection closed gracefully")
-        except Exception as e:
-            logger.warning(f"⚠️ Error closing database connection: {e}")
-            # Don't crash on cleanup errors
+        logger.warning(f"⚠️ Database connection failed: {e} - continuing anyway")
+    
+    logger.info("✅ Application startup completed - ready to serve requests")
+    
+    yield
+    
+    # Cleanup
+    logger.info("🔄 Application shutting down...")
+    try:
+        await close_mongo_connection()
+        logger.info("✅ Database connection closed")
+    except Exception as e:
+        logger.warning(f"⚠️ Error closing database: {e}")
+    
+    logger.info("✅ Application shutdown completed")
 
 # Production startup verification
 logger.info("🔍 Running production startup checks...")
