@@ -84,7 +84,11 @@ const RegisterPage = () => {
   const handleGoogleSignup = useGoogleLogin({
     onSuccess: async (credentialResponse) => {
       try {
-        console.log('Google signup success:', credentialResponse);
+        console.log('✅ Google signup success:', credentialResponse);
+        
+        if (!credentialResponse.access_token) {
+          throw new Error('No access token received from Google');
+        }
         
         // Get user info from Google
         const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.access_token}`, {
@@ -94,23 +98,30 @@ const RegisterPage = () => {
           }
         });
         
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user info: ${response.status}`);
+        }
+        
         const userInfo = await response.json();
-        console.log('Google user info:', userInfo);
+        console.log('✅ Google user info:', userInfo);
         
         // TODO: Send Google user info to backend for registration
-        // For now, simulate successful registration and redirect to onboarding
-        alert(`Google signup successful for ${userInfo.email}! (Integration pending)`);
+        // For now, show success message and redirect to onboarding
+        alert(`✅ Google signup successful!\nWelcome ${userInfo.name} (${userInfo.email})\n\n⚠️ Backend integration pending - you'll be redirected to onboarding.`);
+        
+        // Redirect to onboarding
         navigate('/onboarding');
         
       } catch (error) {
-        console.error('Google signup error:', error);
-        alert('Google signup failed. Please try again.');
+        console.error('❌ Google signup error:', error);
+        alert(`❌ Google signup failed: ${error.message}\n\nPlease try again or use email/password registration.`);
       }
     },
     onError: (error) => {
-      console.error('Google signup error:', error);
-      alert('Google signup failed. Please try again.');
-    }
+      console.error('❌ Google signup error:', error);
+      alert('❌ Google authentication failed. Please try again.');
+    },
+    flow: 'implicit',
   });
 
   const handleAppleSignup = () => {
