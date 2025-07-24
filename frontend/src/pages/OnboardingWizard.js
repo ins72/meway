@@ -593,9 +593,12 @@ const OnboardingWizard = () => {
                     </span>
                   </div>
                   <div className="summary-item">
-                    <span className="summary-label">Team Size:</span>
+                    <span className="summary-label">Selected Goals:</span>
                     <span className="summary-value">
-                      {teamSizes.find(s => s.value === formData.teamSize)?.label}
+                      {formData.selectedGoals.map(goalId => {
+                        const goal = businessGoals.find(g => g.id === goalId);
+                        return goal ? goal.title : goalId;
+                      }).join(', ')}
                     </span>
                   </div>
                 </div>
