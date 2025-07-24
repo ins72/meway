@@ -52,8 +52,10 @@ export const authAPI = {
 
 // Onboarding API endpoints
 export const onboardingAPI = {
-  completeOnboarding: (data) => api.post('/complete_onboarding', data),
+  completeOnboarding: (data) => api.post('/complete-onboarding', data),
   createWorkspace: (data) => api.post('/workspace', data),
+  getBundles: () => api.get('/workspace-subscription/bundles/available'),
+  calculatePricing: (params) => api.get('/workspace-subscription/pricing/calculate', { params }),
 };
 
 export const dashboardAPI = {
