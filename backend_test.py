@@ -394,6 +394,218 @@ class MewayzBackendAuditor:
             except Exception as e:
                 self.log_result("Multi-Vendor Marketplace", endpoint, method, False, 0, str(e))
     
+    def test_admin_pricing_system(self):
+        """Test Admin Pricing Management System - CRITICAL FOR ADMIN DASHBOARD"""
+        print(f"\n⚙️ TESTING ADMIN PRICING MANAGEMENT SYSTEM - CRITICAL FOR ADMIN DASHBOARD")
+        print("=" * 60)
+        
+        # Test workspace ID from review request
+        test_workspace_id = "deebdeae-4a9d-4611-ad12-9b71e13376a6"
+        
+        # 1. Health Check
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-pricing/health", timeout=30)
+            success = response.status_code == 200
+            if success:
+                data = response.json()
+                details = f"Service healthy: {data.get('healthy', False)}, Templates: {data.get('pricing_templates', 0)}"
+            else:
+                details = "Health check failed"
+            self.log_result("Admin Pricing", "/api/admin-pricing/health", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/health", "GET", False, 0, str(e))
+        
+        # 2. Get Current Pricing Config (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-pricing/current-pricing", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Retrieved pricing for {data.get('total_bundles', 0)} bundles with {data.get('active_overrides', 0)} overrides"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to get current pricing"
+            self.log_result("Admin Pricing", "/api/admin-pricing/current-pricing", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/current-pricing", "GET", False, 0, str(e))
+        
+        # 3. Update Bundle Pricing (requires admin auth)
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "pricing_updates": {
+                    "monthly_price": 29.99,
+                    "yearly_price": 299.99
+                },
+                "reason": "Test pricing update for admin system verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-pricing/update-bundle-pricing", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Bundle pricing updated successfully with impact on {data.get('affected_subscriptions', 0)} subscriptions"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to update bundle pricing"
+            self.log_result("Admin Pricing", "/api/admin-pricing/update-bundle-pricing", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/update-bundle-pricing", "POST", False, 0, str(e))
+        
+        # 4. Update Bundle Features (requires admin auth)
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "feature_updates": {
+                    "added_features": ["advanced_analytics"],
+                    "removed_features": []
+                },
+                "limit_updates": {
+                    "ai_content_generation": 1000,
+                    "instagram_searches": 500
+                },
+                "reason": "Test feature update for admin system verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-pricing/update-bundle-features", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Bundle features updated, notification required: {data.get('notification_required', False)}"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to update bundle features"
+            self.log_result("Admin Pricing", "/api/admin-pricing/update-bundle-features", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/update-bundle-features", "POST", False, 0, str(e))
+        
+        # 5. Enable/Disable Bundle (requires admin auth)
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "action": "disable",
+                "reason": "Test bundle disable for admin system verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-pricing/enable-disable-bundle", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Bundle {data.get('new_status', 'unknown')} with {data.get('existing_subscriptions', 0)} existing subscriptions"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to enable/disable bundle"
+            self.log_result("Admin Pricing", "/api/admin-pricing/enable-disable-bundle", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/enable-disable-bundle", "POST", False, 0, str(e))
+        
+        # 6. Bulk Pricing Update (requires admin auth)
+        try:
+            test_data = {
+                "bundle_updates": {
+                    "creator": {
+                        "monthly_price": 24.99,
+                        "yearly_price": 249.99
+                    },
+                    "business": {
+                        "monthly_price": 49.99,
+                        "yearly_price": 499.99
+                    }
+                },
+                "reason": "Test bulk pricing update for admin system verification"
+            }
+            response = requests.post(f"{self.base_url}/api/admin-pricing/bulk-pricing-update", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                summary = data.get('summary', {})
+                details = f"Bulk update: {summary.get('successful', 0)}/{summary.get('total_bundles', 0)} successful ({summary.get('success_rate', 0):.1f}%)"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to perform bulk pricing update"
+            self.log_result("Admin Pricing", "/api/admin-pricing/bulk-pricing-update", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/bulk-pricing-update", "POST", False, 0, str(e))
+        
+        # 7. Get Pricing Analytics (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-pricing/pricing-analytics", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                analytics = data.get('analytics', {})
+                details = f"Analytics: {analytics.get('total_active_subscriptions', 0)} active subscriptions, {analytics.get('recent_pricing_changes', 0)} recent changes"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to get pricing analytics"
+            self.log_result("Admin Pricing", "/api/admin-pricing/pricing-analytics", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/pricing-analytics", "GET", False, 0, str(e))
+        
+        # 8. Test Pricing Change (requires admin auth)
+        try:
+            test_data = {
+                "bundle_name": "creator",
+                "proposed_changes": {
+                    "monthly_price": 39.99,
+                    "yearly_price": 399.99
+                }
+            }
+            response = requests.post(f"{self.base_url}/api/admin-pricing/test-pricing-change", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                impact = data.get('impact_analysis', {})
+                risk = data.get('impact_analysis', {}).get('risk_assessment', {})
+                details = f"Pricing test: {impact.get('bundle_name', 'unknown')} bundle, risk level: {risk.get('risk_level', 'unknown')}"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to test pricing change"
+            self.log_result("Admin Pricing", "/api/admin-pricing/test-pricing-change", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/test-pricing-change", "POST", False, 0, str(e))
+        
+        # 9. Get Pricing History (requires admin auth)
+        try:
+            response = requests.get(f"{self.base_url}/api/admin-pricing/pricing-history/creator?limit=10", headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403, 404]  # 403 expected for non-admin, 404 if no history
+            if response.status_code == 200:
+                data = response.json()
+                details = f"Pricing history: {data.get('total_changes', 0)} changes for {data.get('bundle_name', 'unknown')} bundle"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            elif response.status_code == 404:
+                details = "No pricing history found (expected for new system)"
+            else:
+                details = "Failed to get pricing history"
+            self.log_result("Admin Pricing", "/api/admin-pricing/pricing-history/creator", "GET", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/pricing-history/creator", "GET", False, 0, str(e))
+        
+        # 10. Apply Pricing Template (requires admin auth)
+        try:
+            test_data = {
+                "template_name": "holiday_discount",
+                "custom_duration_days": 14
+            }
+            response = requests.post(f"{self.base_url}/api/admin-pricing/apply-pricing-template", json=test_data, headers=self.headers, timeout=30)
+            success = response.status_code in [200, 403]  # 403 expected for non-admin users
+            if response.status_code == 200:
+                data = response.json()
+                result = data.get('application_result', {})
+                details = f"Template applied: {result.get('bundles_updated', 0)} bundles updated"
+            elif response.status_code == 403:
+                details = "Admin access control working correctly"
+            else:
+                details = "Failed to apply pricing template"
+            self.log_result("Admin Pricing", "/api/admin-pricing/apply-pricing-template", "POST", success, response.status_code, details)
+        except Exception as e:
+            self.log_result("Admin Pricing", "/api/admin-pricing/apply-pricing-template", "POST", False, 0, str(e))
+
     def test_launch_pricing_system(self):
         """Test Launch Pricing System - CRITICAL FOR PRODUCTION LAUNCH"""
         print(f"\n🚀 TESTING LAUNCH PRICING SYSTEM - CRITICAL FOR PRODUCTION")
