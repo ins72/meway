@@ -280,9 +280,10 @@ try:
     app.include_router(ai_token_purchase_router, prefix="/api/ai-token-purchase", tags=["ai_token_purchase"])
     app.include_router(launch_pricing_router, prefix="/api/launch-pricing", tags=["launch_pricing"])
     app.include_router(admin_pricing_router, prefix="/api/admin-pricing", tags=["admin_pricing"])
+    app.include_router(admin_plan_management_router, prefix="/api/admin-plan-management", tags=["admin_plan_management"])
 
     
-    logger.info(f"✅ Successfully included 144 bulletproof routers")
+    logger.info(f"✅ Successfully included 145 bulletproof routers")
     
 except Exception as e:
     logger.error(f"❌ Error including routers: {e}")
