@@ -10,7 +10,7 @@ const OnboardingWizard = () => {
     industry: '',
     teamSize: '',
     selectedGoals: [], // Changed to support multiple goals
-    selectedPlan: null,
+    selectedBundles: [], // Changed to support multiple bundles
     paymentMethod: 'monthly'
   });
   const [loading, setLoading] = useState(false);
