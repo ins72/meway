@@ -85,7 +85,9 @@ const SimpleStripePayment = ({
         setError(null);
 
         const url = `${process.env.REACT_APP_BACKEND_URL}/api/create-payment-intent`;
+        const authToken = localStorage.getItem('auth_token');
         console.log('Creating payment intent with URL:', url);
+        console.log('Auth token:', authToken ? `${authToken.substring(0, 50)}...` : 'MISSING');
         console.log('Request data:', {
           amount: Math.round(amount * 100),
           currency,
