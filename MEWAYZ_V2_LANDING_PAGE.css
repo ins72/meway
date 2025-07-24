@@ -260,6 +260,17 @@
   padding: 0.5rem;
 }
 
+/* Show only on mobile devices (768px and below) */
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+}
+
 /* Mobile Menu */
 .mobile-menu {
   position: fixed;
