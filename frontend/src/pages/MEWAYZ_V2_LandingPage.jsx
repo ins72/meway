@@ -510,7 +510,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <div className="logo">Mewayz</div>
+            <div className="logo">MEWAYZ</div>
             <p>The complete creator economy platform trusted by over 10,000 businesses worldwide. Build, manage, and scale your online business with our comprehensive suite of tools.</p>
             <div className="social-links">
               <a href="https://twitter.com/mewayz" className="social-link" aria-label="Twitter" target="_blank" rel="noopener">𝕏</a>
