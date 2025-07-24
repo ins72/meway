@@ -575,6 +575,21 @@ class PlanChangeImpactService:
             executed_by = data.get("executed_by")
             dry_run = data.get("dry_run", False)
             
+            # Enhanced validation
+            if not migration_id:
+                return {"success": False, "error": "Migration ID is required"}
+            
+            if not executed_by:
+                return {"success": False, "error": "Executed by user ID is required"}
+            
+            # Validate migration_id format (should be UUID)
+            try:
+                # Check if it's a valid UUID format
+                if len(migration_id) < 10:
+                    return {"success": False, "error": "Invalid migration ID format"}
+            except Exception:
+                return {"success": False, "error": "Invalid migration ID format"}
+            
             # Get migration plan
             migration_plan = await self.db.migration_plans.find_one({"_id": migration_id})
             if not migration_plan:
