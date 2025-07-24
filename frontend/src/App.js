@@ -27,6 +27,8 @@ import CookiePolicyPage from './pages/legal/CookiePolicyPage';
 // Protected pages
 import AppShell from './layouts/AppShell';
 import DashboardHome from './pages/dashboard/DashboardHome';
+import SocialMediaPage from './pages/dashboard/SocialMediaPage';
+import EcommercePage from './pages/dashboard/EcommercePage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
