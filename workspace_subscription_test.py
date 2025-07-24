@@ -276,28 +276,7 @@ class WorkspaceSubscriptionTester:
     def test_create_workspace_subscription(self):
         """Test creating a workspace subscription"""
         try:
-            # First create a test workspace
-            workspace_data = {
-                "name": "Test Workspace for Subscription",
-                "description": "Testing workspace subscription functionality",
-                "type": "business"
-            }
-            
-            workspace_response = requests.post(
-                f"{self.base_url}/api/workspace/create",
-                json=workspace_data,
-                headers=self.headers,
-                timeout=30
-            )
-            
-            if workspace_response.status_code != 200:
-                # Use a predefined workspace ID if creation fails
-                print(f"⚠️ Workspace creation failed, using test workspace ID")
-            else:
-                workspace_data = workspace_response.json()
-                if workspace_data.get("success") and workspace_data.get("workspace"):
-                    self.test_workspace_id = workspace_data["workspace"]["_id"]
-            
+            # Use the pre-created workspace that the user owns
             # Create subscription
             subscription_data = {
                 "bundles": ["creator", "ecommerce"],
