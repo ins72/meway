@@ -15,15 +15,33 @@ db = Database()
 
 async def connect_to_mongo():
     """Create database connection"""
-    db.client = AsyncIOMotorClient(settings.MONGO_URL)
-    db.database = db.client[settings.DATABASE_NAME]
+    mongo_url = settings.MONGO_URL
     
-    # Test connection
+    # Log connection attempt (without exposing credentials)
+    print(f"🔗 Attempting to connect to MongoDB...")
+    print(f"   Database name: {settings.DATABASE_NAME}")
+    
     try:
-        await db.client.admin.command('ping')
+        db.client = AsyncIOMotorClient(mongo_url)
+        db.database = db.client[settings.DATABASE_NAME]
+        
+        # Test connection with timeout
+        await asyncio.wait_for(
+            db.client.admin.command('ping'), 
+            timeout=10.0
+        )
         print(f"✅ Connected to MongoDB: {settings.DATABASE_NAME}")
+        
+        # Also test database access
+        collections = await db.database.list_collection_names()
+        print(f"   📋 Available collections: {len(collections)}")
+        
+    except asyncio.TimeoutError:
+        print(f"❌ MongoDB connection timeout")
+        raise Exception("Database connection timeout - check connection string and network")
     except Exception as e:
         print(f"❌ Failed to connect to MongoDB: {e}")
+        print(f"   Check if MONGO_URL environment variable is set correctly")
         raise
 
 async def close_mongo_connection():
