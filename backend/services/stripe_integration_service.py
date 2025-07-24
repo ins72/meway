@@ -746,7 +746,7 @@ class StripeIntegrationService:
             }
             
             collection = await self._get_collection_async()
-            if collection:
+            if collection is not None:
                 await collection.insert_one(confirmation_data)
                 
             logger.info(f"Payment confirmed for user {user_id}")
