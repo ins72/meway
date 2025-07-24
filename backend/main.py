@@ -358,14 +358,12 @@ except Exception as e:
 
 @app.get("/")
 async def root():
-    """Root endpoint - simple response that doesn't require database"""
+    """Root endpoint - minimal response for deployment verification"""
     return {
-        "message": "Mewayz Professional Platform API",
+        "service": "mewayz-api",
+        "status": "running", 
         "version": "2.0.0",
-        "status": "operational",
-        "timestamp": datetime.utcnow().isoformat(),
-        "docs": "/docs",
-        "health": "/health"
+        "timestamp": datetime.utcnow().isoformat()
     }
 
 @app.get("/health")
@@ -386,6 +384,11 @@ async def health():
             "version": "2.0.0",
             "message": "API is operational despite minor errors"
         }
+
+@app.get("/api/health") 
+async def api_health():
+    """Health check with API prefix for load balancer"""
+    return await health()
     """Enhanced health check endpoint that works even without database"""
     try:
         # Basic app health
