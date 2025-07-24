@@ -99,7 +99,7 @@ const SimpleStripePayment = ({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            'Authorization': `Bearer ${authToken}`
           },
           body: JSON.stringify({
             amount: Math.round(amount * 100), // Convert to cents
