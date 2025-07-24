@@ -1,0 +1,120 @@
+{
+  "summary": {
+    "total_tests": 8,
+    "passed_tests": 5,
+    "failed_tests": 3,
+    "success_rate": 62.5
+  },
+  "test_results": [
+    {
+      "endpoint": "/api/plan-change-impact/analyze-feature-change",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Feature analysis: 2 added, 1 removed",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:05:25.799265"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-plan-disable",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Plan disable analysis: 1 subscriptions affected",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:05:25.825027"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/simulate-change",
+      "method": "POST",
+      "success": false,
+      "status_code": 0,
+      "details": "Expecting value: line 1 column 1 (char 0)",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:05:25.857884"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/execute-migration-plan/97090aac-fe9c-421b-b4c5-d32685f8cbcd",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Migration execution: completed",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:05:25.919554"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/rollback-plan-change",
+      "method": "POST",
+      "success": false,
+      "status_code": 400,
+      "details": "Plan rollback failed: Version 1 not found for plan creator",
+      "response_data": {
+        "detail": "Version 1 not found for plan creator"
+      },
+      "timestamp": "2025-07-24T17:05:25.940405"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-feature-change [empty-data]",
+      "method": "POST",
+      "success": true,
+      "status_code": 400,
+      "details": "Validation error handled correctly: Plan name and feature changes are required",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:05:25.962226"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-feature-change [invalid-plan]",
+      "method": "POST",
+      "success": true,
+      "status_code": 400,
+      "details": "Invalid plan error handled correctly: Plan 'nonexistent_plan' not found",
+      "response_data": null,
+      "timestamp": "2025-07-24T17:05:25.990629"
+    },
+    {
+      "endpoint": "/api/plan-change-impact/analyze-plan-disable [invalid-date]",
+      "method": "POST",
+      "success": false,
+      "status_code": 200,
+      "details": "Invalid date error not handled properly",
+      "response_data": {
+        "success": true,
+        "analysis_id": "2b8f44b0-dc03-4878-bd13-9ab013b126c9",
+        "plan_name": "creator",
+        "change_type": "plan_disable",
+        "impact_summary": {
+          "affected_subscriptions": 1,
+          "revenue_at_risk": 34.4,
+          "migration_options": 0,
+          "risk_level": "critical"
+        },
+        "business_impact": {
+          "affected_subscriptions": 1,
+          "total_revenue_at_risk": 34.4,
+          "disable_date": "invalid-date-format",
+          "sunset_date": "2025-09-01T00:00:00Z"
+        },
+        "migration_options": [],
+        "risk_assessment": {
+          "level": "critical",
+          "factors": {
+            "affected_subscriptions": 1,
+            "revenue_impact": 0,
+            "change_type_severity": "critical"
+          },
+          "requires_migration": true
+        },
+        "recommendations": [
+          "\ud83d\udea8 CRITICAL: 1 active subscriptions will be affected",
+          "\ud83d\udce7 Send 60-day advance notice to all affected customers",
+          "\ud83d\udd04 Create migration paths to alternative plans",
+          "\ud83d\udcb0 Consider offering discounts for plan upgrades",
+          "\ud83d\udcde Provide dedicated customer support during transition",
+          "\u26a0\ufe0f No suitable migration plans found - consider creating one"
+        ],
+        "requires_migration": true
+      },
+      "timestamp": "2025-07-24T17:05:26.012778"
+    }
+  ]
+}
