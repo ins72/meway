@@ -9,7 +9,7 @@ const OnboardingWizard = () => {
     workspaceName: '',
     industry: '',
     teamSize: '',
-    primaryGoal: '',
+    selectedGoals: [], // Changed to support multiple goals
     selectedPlan: null,
     paymentMethod: 'monthly'
   });
