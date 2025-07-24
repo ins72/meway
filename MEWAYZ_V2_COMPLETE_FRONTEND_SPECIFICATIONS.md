@@ -1605,6 +1605,435 @@ const FeatureUsageLimits = {
 };
 ```
 
+## 🔧 ADMIN PRICING MANAGEMENT SYSTEM ⚠️ ADMIN ONLY IMPLEMENTATION
+
+### **Admin Pricing Management Dashboard** 
+**File:** `/frontend/src/pages/admin/AdminPricingManagement.js`  
+**Route:** `/admin/pricing-management`  
+**Access:** Admin users only - Critical for platform pricing control
+
+#### **Main Dashboard Structure:**
+```javascript
+const AdminPricingManagementDashboard = {
+  pricing_overview: {
+    cards: [
+      { title: "Active Bundles", value: "6", subtitle: "2 recently modified" },
+      { title: "Total Revenue", value: "$127,456", change: "+18% vs last month" },
+      { title: "Active Subscriptions", value: "2,847", change: "+67 this week" },
+      { title: "Pricing Changes", value: "15", subtitle: "This month" }
+    ]
+  },
+  
+  bundle_management_table: {
+    title: "Bundle Pricing Management",
+    columns: ["Bundle", "Monthly Price", "Yearly Price", "Status", "Subscriptions", "Last Modified", "Actions"],
+    data: [
+      {
+        bundle: "Creator",
+        monthly_price: "$19",
+        yearly_price: "$190",
+        status: "Active",
+        subscriptions: 847,
+        last_modified: "2 hours ago by Admin",
+        actions: ["Edit Pricing", "Edit Features", "View History", "Disable"]
+      },
+      {
+        bundle: "Social Media",
+        monthly_price: "$15",
+        yearly_price: "$150",
+        status: "Active", 
+        subscriptions: 634,
+        last_modified: "3 days ago by Admin",
+        actions: ["Edit Pricing", "Edit Features", "View History", "Disable"]
+      }
+    ]
+  },
+  
+  quick_actions: {
+    primary_actions: [
+      { label: "Create New Bundle", icon: "plus", color: "green" },
+      { label: "Bulk Pricing Update", icon: "edit", color: "blue" },
+      { label: "Apply Pricing Template", icon: "template", color: "purple" },
+      { label: "Generate Pricing Report", icon: "chart-bar", color: "orange" }
+    ]
+  },
+  
+  pricing_analytics: {
+    charts: [
+      { type: "Line chart", title: "Revenue Trends by Bundle", timeframe: "Last 12 months" },
+      { type: "Bar chart", title: "Subscription Distribution" },
+      { type: "Area chart", title: "Pricing Change Impact" }
+    ]
+  },
+  
+  recent_changes: {
+    title: "Recent Pricing Changes",
+    table_columns: ["Bundle", "Change Type", "Old Value", "New Value", "Impact", "Admin", "Date"],
+    max_entries: 10
+  }
+};
+```
+
+### **Bundle Pricing Edit Modal** ⚠️ ADMIN FEATURE
+**File:** `/frontend/src/modals/admin/EditBundlePricingModal.js`  
+**Trigger:** Click "Edit Pricing" in bundle management table
+
+#### **Modal Content:**
+```javascript
+const EditBundlePricingModal = {
+  header: {
+    title: "Edit Creator Bundle Pricing",
+    current_subscriptions: "847 active subscriptions",
+    warning: "Changes will affect future billing cycles only"
+  },
+  
+  pricing_form: {
+    fields: [
+      { 
+        label: "Monthly Price", 
+        current: "$19.00", 
+        input: "currency", 
+        validation: "Min $5, Max $999" 
+      },
+      { 
+        label: "Yearly Price", 
+        current: "$190.00", 
+        input: "currency", 
+        validation: "Min $50, Max $9999",
+        discount_indicator: "16.7% discount vs monthly"
+      },
+      { 
+        label: "Enterprise Price Override", 
+        current: "Not set", 
+        input: "currency", 
+        optional: true 
+      }
+    ],
+    
+    reason_field: {
+      label: "Reason for Change",
+      type: "textarea",
+      required: true,
+      placeholder: "Explain why pricing is being changed..."
+    }
+  },
+  
+  impact_analysis: {
+    title: "Pricing Change Impact Analysis",
+    metrics: [
+      { label: "Affected Subscriptions", value: "847", color: "orange" },
+      { label: "Estimated Revenue Change", value: "+$8,470/month", color: "green" },
+      { label: "Price Change Percentage", value: "+5.3%", color: "blue" },
+      { label: "Risk Level", value: "Low", color: "green" }
+    ],
+    
+    recommendations: [
+      "✅ Safe price increase - within acceptable range",
+      "⚠️ Consider grandfather pricing for existing customers",
+      "📧 Send advance notification to current subscribers"
+    ]
+  },
+  
+  actions: [
+    { label: "Test Changes", type: "secondary", action: "run_pricing_simulation" },
+    { label: "Schedule Change", type: "primary", action: "schedule_pricing_change" },
+    { label: "Apply Immediately", type: "danger", action: "apply_pricing_change" }
+  ]
+};
+```
+
+### **Bundle Features Management Modal** ⚠️ ADMIN FEATURE
+**File:** `/frontend/src/modals/admin/EditBundleFeaturesModal.js`  
+**Trigger:** Click "Edit Features" in bundle management table
+
+#### **Modal Structure:**
+```javascript
+const EditBundleFeaturesModal = {
+  header: {
+    title: "Edit Creator Bundle Features & Limits",
+    current_users: "847 workspaces using this bundle"
+  },
+  
+  features_section: {
+    title: "Included Features",
+    feature_list: [
+      { 
+        name: "Link in Bio Builder", 
+        included: true, 
+        toggle: "admin_can_modify",
+        impact: "Used by 89% of subscribers"
+      },
+      { 
+        name: "AI Content Generation", 
+        included: true, 
+        toggle: "admin_can_modify",
+        impact: "Core feature - high usage"
+      },
+      { 
+        name: "Advanced Analytics", 
+        included: false, 
+        toggle: "admin_can_modify",
+        impact: "Available in Business+ bundles"
+      }
+    ]
+  },
+  
+  limits_section: {
+    title: "Usage Limits",
+    limits: [
+      { 
+        name: "AI Content Generation", 
+        current: "500/month", 
+        input: "number",
+        unit: "credits per month",
+        usage_stats: "Average usage: 387/month"
+      },
+      { 
+        name: "Instagram Searches", 
+        current: "300/month", 
+        input: "number",
+        unit: "searches per month",
+        usage_stats: "Average usage: 234/month"
+      },
+      { 
+        name: "Email Marketing", 
+        current: "1000/month", 
+        input: "number",
+        unit: "emails per month",
+        usage_stats: "Average usage: 678/month"
+      }
+    ]
+  },
+  
+  change_impact: {
+    title: "Feature Change Impact Analysis",
+    affected_users: "847 workspaces",
+    notification_required: true,
+    upgrade_suggestions: "Users losing features will be offered upgrade options",
+    grandfathering: "Apply changes to new subscriptions only (recommended)"
+  }
+};
+```
+
+### **Bulk Pricing Update Modal** ⚠️ ADMIN FEATURE
+**File:** `/frontend/src/modals/admin/BulkPricingUpdateModal.js`  
+**Trigger:** Click "Bulk Pricing Update" in dashboard
+
+#### **Modal Design:**
+```javascript
+const BulkPricingUpdateModal = {
+  header: {
+    title: "Bulk Pricing Update",
+    subtitle: "Update multiple bundles simultaneously"
+  },
+  
+  bundle_selection: {
+    title: "Select Bundles to Update",
+    bundles: [
+      { name: "Creator", current_price: "$19", selected: false },
+      { name: "Social Media", current_price: "$15", selected: false },
+      { name: "E-commerce", current_price: "$29", selected: false },
+      { name: "Business", current_price: "$39", selected: false }
+    ],
+    select_all_option: true
+  },
+  
+  update_type: {
+    options: [
+      { 
+        type: "percentage", 
+        label: "Percentage Change", 
+        input: "±15%",
+        description: "Apply same percentage change to all selected bundles"
+      },
+      { 
+        type: "fixed_amount", 
+        label: "Fixed Amount Change",
+        input: "±$5.00",
+        description: "Add or subtract fixed amount from all selected bundles"
+      },
+      { 
+        type: "individual", 
+        label: "Individual Pricing",
+        description: "Set specific prices for each bundle"
+      }
+    ]
+  },
+  
+  bulk_impact_analysis: {
+    title: "Bulk Change Impact",
+    total_affected_subscriptions: "2,847",
+    estimated_revenue_change: "+$23,456/month",
+    risk_assessment: "Medium - Multiple bundles affected",
+    rollback_plan: "Changes can be reverted within 24 hours"
+  }
+};
+```
+
+### **Pricing Templates System** ⚠️ ADMIN FEATURE  
+**File:** `/frontend/src/modals/admin/PricingTemplatesModal.js`  
+**Trigger:** Click "Apply Pricing Template" in dashboard
+
+#### **Templates Modal:**
+```javascript
+const PricingTemplatesModal = {
+  header: {
+    title: "Apply Pricing Template",
+    subtitle: "Quick pricing changes for common scenarios"
+  },
+  
+  template_categories: {
+    seasonal: {
+      title: "Seasonal Promotions",
+      templates: [
+        {
+          name: "Holiday 20% Discount",
+          description: "20% off all bundles for holiday season",
+          duration: "30 days",
+          applies_to: "All bundles",
+          preview: "Creator: $19 → $15.20, Business: $39 → $31.20"
+        },
+        {
+          name: "New Year Special",
+          description: "30% off selected bundles for new year",
+          duration: "14 days", 
+          applies_to: "Creator, Business bundles",
+          preview: "Creator: $19 → $13.30, Business: $39 → $27.30"
+        }
+      ]
+    },
+    
+    market_response: {
+      title: "Market Response",
+      templates: [
+        {
+          name: "Competitor Response",
+          description: "Match competitor pricing",
+          duration: "Permanent",
+          applies_to: "Selected bundles",
+          requires_input: "Competitor prices"
+        },
+        {
+          name: "Growth Push",
+          description: "Aggressive pricing for user acquisition",
+          duration: "60 days",
+          applies_to: "Entry-level bundles",
+          warning: "High impact on revenue"
+        }
+      ]
+    },
+    
+    enterprise: {
+      title: "Enterprise Adjustments",
+      templates: [
+        {
+          name: "Enterprise Promotion",
+          description: "Reduced enterprise minimum fee",
+          current_minimum: "$99",
+          new_minimum: "$49",
+          duration: "90 days"
+        }
+      ]
+    }
+  },
+  
+  template_preview: {
+    title: "Template Impact Preview",
+    before_after_comparison: "Side-by-side pricing comparison",
+    revenue_impact: "Estimated revenue change",
+    subscription_impact: "Expected subscription changes",
+    risk_assessment: "Template risk level"
+  }
+};
+```
+
+### **Pricing Analytics Deep Dive** ⚠️ ADMIN FEATURE
+**File:** `/frontend/src/pages/admin/PricingAnalytics.js`  
+**Route:** `/admin/pricing-analytics`  
+**Access:** Admin users only
+
+#### **Analytics Dashboard:**
+```javascript
+const PricingAnalyticsDashboard = {
+  performance_overview: {
+    cards: [
+      { title: "Revenue Growth", value: "+18.3%", subtitle: "Month over month" },
+      { title: "Bundle Performance", value: "Creator leading", subtitle: "847 subscriptions" },
+      { title: "Price Elasticity", value: "Low", subtitle: "Healthy demand" },
+      { title: "Churn Impact", value: "2.1%", subtitle: "Due to pricing" }
+    ]
+  },
+  
+  pricing_trends: {
+    chart_type: "Multi-line chart",
+    metrics: ["Revenue per bundle", "Subscription count", "Average revenue per user"],
+    timeframe_options: ["7 days", "30 days", "90 days", "1 year"],
+    drill_down: "Click to see bundle-specific data"
+  },
+  
+  bundle_comparison: {
+    title: "Bundle Performance Comparison",
+    table_columns: ["Bundle", "Subscriptions", "Revenue", "Growth Rate", "Churn Rate", "Avg Revenue/User"],
+    sorting: "All columns sortable",
+    insights: "AI-generated insights for each bundle"
+  },
+  
+  pricing_insights: {
+    title: "AI-Generated Pricing Insights",
+    insights: [
+      "Creator Bundle showing strongest growth - consider modest price increase",
+      "E-commerce Bundle underperforming - review feature set vs pricing",
+      "Business Bundle has high revenue per user - explore premium tier"
+    ]
+  },
+  
+  export_options: {
+    formats: ["PDF Report", "Excel Dashboard", "CSV Data"],
+    scheduling: "Schedule automatic reports",
+    recipients: "Email to stakeholders"
+  }
+};
+```
+
+---
+
+## 🎯 ADMIN SYSTEM INTEGRATION WITH EXISTING DESIGN
+
+### **Consistent Design Language**
+- **Follow landing page professional styling** - Clean, modern, business-focused
+- **Color scheme:** Primary blues and whites, accent colors for status indicators
+- **Typography:** Same font stack as landing page for consistency
+- **Button styles:** Match landing page CTA button styling
+- **Card layouts:** Similar to landing page feature cards
+
+### **Navigation Integration**
+```javascript
+const AdminNavigation = {
+  main_menu: [
+    { label: "Dashboard", route: "/admin", icon: "dashboard" },
+    { label: "Pricing Management", route: "/admin/pricing-management", icon: "dollar-sign" },
+    { label: "User Management", route: "/admin/users", icon: "users" },
+    { label: "Analytics", route: "/admin/analytics", icon: "chart-bar" },
+    { label: "System Health", route: "/admin/system", icon: "activity" }
+  ],
+  
+  pricing_submenu: [
+    { label: "Bundle Management", route: "/admin/pricing-management" },
+    { label: "Pricing Analytics", route: "/admin/pricing-analytics" },
+    { label: "Launch Specials", route: "/admin/launch-specials" },
+    { label: "Pricing History", route: "/admin/pricing-history" }
+  ]
+};
+```
+
+### **Mobile Responsiveness**
+- **Admin pricing tables:** Horizontal scroll on mobile with sticky first column
+- **Modals:** Full-screen on mobile, overlay on desktop
+- **Charts:** Responsive sizing with touch-friendly controls
+- **Forms:** Single-column layout on mobile, two-column on tablet+
+
+---
+
 ---
 
 ## 🔄 SUBSCRIPTION MANAGEMENT WORKFLOWS
