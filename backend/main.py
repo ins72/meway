@@ -345,45 +345,50 @@ async def root():
 async def health():
     """Enhanced health check endpoint that works even without database"""
     try:
-        # Try to get database status
-        database_status = "unknown"
-        collections_count = 0
-        
-        try:
-            if db.database is not None:
-                # Test database connection
-                await asyncio.wait_for(
-                    db.client.admin.command('ping'), 
-                    timeout=5.0
-                )
-                database_status = "connected"
-                collections = await db.database.list_collection_names()
-                collections_count = len(collections)
-            else:
-                database_status = "not_initialized"
-        except asyncio.TimeoutError:
-            database_status = "timeout"
-        except Exception as e:
-            database_status = f"error: {str(e)[:50]}"
-        
-        return {
+        # Basic app health
+        health_status = {
             "status": "healthy",
             "timestamp": datetime.utcnow().isoformat(),
             "services": {
                 "api": "operational",
-                "database": database_status,
-                "collections": collections_count
+                "database": "unknown",
+                "collections": 0
             },
-            "version": "2.0.0"
+            "version": "2.0.0",
+            "environment": "production"
         }
+        
+        # Try to get database status with timeout
+        try:
+            if db.database is not None:
+                # Test database connection with shorter timeout for health checks
+                await asyncio.wait_for(
+                    db.client.admin.command('ping'), 
+                    timeout=3.0
+                )
+                health_status["services"]["database"] = "connected"
+                
+                # Get collection count
+                collections = await db.database.list_collection_names()
+                health_status["services"]["collections"] = len(collections)
+            else:
+                health_status["services"]["database"] = "not_initialized"
+        except asyncio.TimeoutError:
+            health_status["services"]["database"] = "timeout"
+        except Exception as e:
+            health_status["services"]["database"] = f"error: {str(e)[:50]}"
+        
+        return health_status
         
     except Exception as e:
         # Even if there's an error, return a basic health status
+        logger.error(f"Health check error: {e}")
         return {
-            "status": "healthy",
+            "status": "degraded",
             "timestamp": datetime.utcnow().isoformat(),
-            "error": str(e),
-            "message": "API is operational despite errors"
+            "error": str(e)[:100],
+            "message": "API is operational despite errors",
+            "version": "2.0.0"
         }
 
 if __name__ == "__main__":
