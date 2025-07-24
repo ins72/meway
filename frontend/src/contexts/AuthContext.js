@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authAPI.register(userData);
-      const { token: newToken, user: newUser } = response.data;
+      const { access_token: newToken, user: newUser } = response.data;
       
       setToken(newToken);
       setUser(newUser);
