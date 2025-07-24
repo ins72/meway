@@ -131,62 +131,14 @@ function App() {
             <Route path="/cookie-policy" element={<CookiePolicyPage />} />
             
             {/* Protected Dashboard Routes */}
-            <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+            <Route path="/dashboard" element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
-              <Route path="social-media" element={<UltraAdvancedSocialMediaScheduler />} />
-              <Route path="instagram" element={<UltraAdvancedInstagramManager />} />
-              <Route path="instagram-leads" element={<InstagramLeadGeneration />} />
-              <Route path="bio-sites" element={<ProfessionalLinkInBioBuilder />} />
-              <Route path="crm" element={<ComprehensiveCRMSystem />} />
-              <Route path="workspace-settings" element={<AdvancedWorkspaceSettings />} />
-              <Route path="link-shortener" element={<LinkShortenerPage />} />
-              <Route path="referrals" element={<ReferralSystemPage />} />
               
-              <Route path="website-builder" element={<WebsiteBuilderPage />} />
-              <Route path="team-management" element={<TeamManagementPage />} />
-              <Route path="form-templates" element={<FormTemplatesPage />} />
-              <Route path="discount-codes" element={<DiscountCodesPage />} />
-              <Route path="token-management" element={<TokenManagementPage />} />
-              <Route path="financial-management" element={<FinancialManagementPage />} />
-              
-              <Route path="courses" element={<CoursesPage />} />
-              <Route path="ecommerce" element={<ComprehensiveMarketplace />} />
-              <Route path="templates" element={<TemplateMarketplace />} />
-              <Route path="template-marketplace" element={<TemplateMarketplaceV2Page />} />
-              <Route path="escrow-system" element={<EscrowSystemPage />} />
-              <Route path="analytics" element={<AdvancedAnalytics />} />
-              <Route path="gamified-analytics" element={<GamifiedAnalyticsPage />} />
-              
-              <Route path="ai-features" element={<UltraAdvancedAIFeaturesPage />} />
-              <Route path="email-marketing" element={<EmailMarketingPage />} />
-              <Route path="advanced-booking" element={<ProfessionalBookingSystem />} />
-              <Route path="realtime-collaboration" element={<RealtimeCollaborationPage />} />
-              <Route path="integrations" element={<IntegrationHubPage />} />
-              <Route path="workspaces" element={<UltraAdvancedWorkspaceManagement />} />
-              <Route path="subscription" element={<UltraAdvancedSubscriptionManager />} />
-              <Route path="settings" element={<UserSettingsPage />} />
-              
-              {/* Legacy routes for backward compatibility */}
-              <Route path="workspace" element={<WorkspacePage />} />
-              <Route path="payments" element={<PaymentsPage />} />
-              <Route path="advanced-analytics" element={<AnalyticsPage />} />
-              
-              {/* Admin Routes */}
-              <Route path="admin" element={<UltraAdvancedAdminDashboard />} />
-              <Route path="admin/comprehensive" element={<ComprehensiveAdminDashboard />} />
-              <Route path="admin/simple" element={<SimpleAdminDashboard />} />
-              <Route path="admin/users" element={<div className="p-8 text-center">User management coming soon...</div>} />
-              <Route path="admin/system" element={<div className="p-8 text-center">System settings coming soon...</div>} />
-              
-              {/* Enhanced Template Marketplace */}
-              <Route path="marketplace" element={<EnhancedTemplateMarketplace />} />
-              <Route path="marketplace/enhanced" element={<EnhancedTemplateMarketplace />} />
-              
-              {/* Advanced Builders */}
-              <Route path="bio-builder" element={<AdvancedLinkInBioBuilder />} />
-              <Route path="course-builder" element={<ProfessionalCourseBuilder />} />
-              <Route path="social-enhanced" element={<EnhancedSocialMediaManager />} />
-              <Route path="admin/security" element={<div className="p-8 text-center">Security center coming soon...</div>} />
+              {/* Temporary placeholder routes - will be rebuilt */}
+              <Route path="*" element={<div className="p-8 text-center">
+                <h2 className="text-2xl font-bold mb-4">🚧 Under Construction</h2>
+                <p>This feature is being rebuilt with our new design system. Coming soon!</p>
+              </div>} />
             </Route>
 
             {/* 404 Page */}
