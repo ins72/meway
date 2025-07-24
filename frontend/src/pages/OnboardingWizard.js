@@ -1075,13 +1075,21 @@ const OnboardingWizard = () => {
           </div>
           <div className="nav-right">
             {currentStep < steps.length ? (
-              <button 
-                onClick={currentStep === 4 ? handlePaymentSetup : handleNext} 
-                disabled={!canProceed()}
-                className="btn btn-primary"
-              >
-                {currentStep === 4 ? 'Start Free Trial' : 'Continue'}
-              </button>
+              <>
+                {/* For credit card payments, hide the main button since Stripe form has its own */}
+                {!(currentStep === 4 && formData.selectedPaymentType === 'credit_card') && (
+                  <button 
+                    onClick={currentStep === 4 ? handlePaymentSetup : handleNext} 
+                    disabled={!canProceed()}
+                    className="btn btn-primary"
+                  >
+                    {currentStep === 4 ? 
+                      (formData.selectedPaymentType === 'paypal' ? 'Continue with PayPal' : 'Start Free Trial') 
+                      : 'Continue'
+                    }
+                  </button>
+                )}
+              </>
             ) : (
               <button 
                 onClick={handleComplete}
