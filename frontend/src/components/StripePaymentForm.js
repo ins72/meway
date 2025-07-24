@@ -68,22 +68,36 @@ const StripePaymentForm = ({
 
     console.log('Payment method created:', paymentMethod);
     
-    // In a real implementation, you would:
-    // 1. Send payment method to your backend
-    // 2. Create payment intent on backend
-    // 3. Confirm payment intent
-    // For now, simulate successful payment setup
-    
     try {
-      // Simulate backend call to create subscription
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      onSuccess?.({
-        paymentMethodId: paymentMethod.id,
-        paymentMethod: paymentMethod
+      // Create checkout session via backend
+      const checkoutResponse = await stripeAPI.createCheckoutSession({
+        bundles: bundles,
+        workspace_name: workspaceName,
+        payment_method: paymentMethod
       });
+      
+      if (checkoutResponse.data.success) {
+        // If checkout session created successfully, confirm payment
+        const confirmResponse = await stripeAPI.confirmPayment({
+          paymentMethodId: paymentMethod.id,
+          sessionId: checkoutResponse.data.session_id
+        });
+        
+        if (confirmResponse.data.success) {
+          onSuccess?.({
+            paymentMethodId: paymentMethod.id,
+            paymentMethod: paymentMethod,
+            sessionId: checkoutResponse.data.session_id
+          });
+        } else {
+          throw new Error(confirmResponse.data.error || 'Payment confirmation failed');
+        }
+      } else {
+        throw new Error(checkoutResponse.data.error || 'Checkout session creation failed');
+      }
     } catch (err) {
-      console.error('Payment processing error:', err);
+      console.error('Backend payment processing error:', err);
+      setCardError(err.response?.data?.detail || err.message || 'Payment processing failed');
       onError?.(err);
     } finally {
       setIsProcessing(false);
