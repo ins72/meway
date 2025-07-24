@@ -272,7 +272,7 @@ const OnboardingWizard = () => {
   };
 
   const getSelectedPlan = () => {
-    return pricingPlans.find(plan => plan.id === formData.selectedPlan);
+    return pricingBundles.find(bundle => bundle.id === formData.selectedPlan);
   };
 
   const canProceed = () => {
