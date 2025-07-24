@@ -154,6 +154,7 @@ try:
     from api.twitter import router as twitter_router
     from api.tiktok import router as tiktok_router
     from api.stripe_integration import router as stripe_integration_router
+    from api.simple_stripe import router as simple_stripe_router
     from api.referral_system import router as referral_system_router
     from api.production_monitoring import router as production_monitoring_router
     from api.pwa_management import router as pwa_management_router
