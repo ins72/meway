@@ -11,7 +11,7 @@ from datetime import datetime
 from core.auth import get_current_admin
 from core.database import get_database_async
 
-router = APIRouter(prefix="/advanced-ui", tags=["advanced_ui"])
+router = APIRouter(tags=["advanced_ui"])
 
 class AdvancedUIService:
     """Service for advanced UI components backend support"""
