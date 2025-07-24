@@ -54,7 +54,16 @@ async def get_onboarding_progress(
         user_id = current_user.get("id")
         
         if not user_id:
-            raise HTTPException(status_code=401, detail="User not authenticated")
+            # Return default progress if user not authenticated
+            return {
+                "success": True,
+                "data": {
+                    "step": 1,
+                    "completed": False,
+                    "data": {},
+                    "has_workspace": False
+                }
+            }
         
         user_service = get_user_service()
         result = await user_service.get_user(user_id)
@@ -71,10 +80,26 @@ async def get_onboarding_progress(
                 }
             }
         else:
-            raise HTTPException(status_code=404, detail="User not found")
+            # Return default progress if user not found
+            return {
+                "success": True,
+                "data": {
+                    "step": 1,
+                    "completed": False,
+                    "data": {},
+                    "has_workspace": False
+                }
+            }
             
-    except HTTPException:
-        raise
     except Exception as e:
         logger.error(f"Get onboarding progress error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        # Return default progress on error instead of failing
+        return {
+            "success": True,
+            "data": {
+                "step": 1,
+                "completed": False,
+                "data": {},
+                "has_workspace": False
+            }
+        }
