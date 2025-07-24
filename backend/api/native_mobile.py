@@ -278,14 +278,87 @@ class NativeMobileService:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    async def get_app_config(self, user_id: str) -> Dict[str, Any]:
-        """Get mobile app configuration"""
+    async def update_app_config(self, config_id: str, update_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
+        """Update mobile app configuration"""
         try:
             collection = await self._get_collection()
             if collection is None:
                 return {"success": False, "error": "Database unavailable"}
             
-            config = await collection.find_one({"user_id": user_id, "status": "active"})
+            update_data["updated_at"] = datetime.utcnow().isoformat()
+            
+            result = await collection.update_one(
+                {"id": config_id, "user_id": user_id},
+                {"$set": update_data}
+            )
+            
+            if result.matched_count > 0:
+                updated_config = await collection.find_one({"id": config_id, "user_id": user_id})
+                return {
+                    "success": True,
+                    "message": "Mobile app configuration updated successfully",
+                    "data": {k: v for k, v in updated_config.items() if k != '_id'} if updated_config else None
+                }
+            else:
+                return {"success": False, "error": "Configuration not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def delete_app_config(self, config_id: str, user_id: str) -> Dict[str, Any]:
+        """Delete mobile app configuration"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"id": config_id, "user_id": user_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "Mobile app configuration deleted successfully",
+                    "deleted_count": result.deleted_count
+                }
+            else:
+                return {"success": False, "error": "Configuration not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def list_app_configs(self, user_id: str, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """List mobile app configurations"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            cursor = collection.find({"user_id": user_id}).skip(offset).limit(limit)
+            configs = await cursor.to_list(length=limit)
+            
+            sanitized_configs = [{k: v for k, v in config.items() if k != '_id'} for config in configs]
+            
+            total = await collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": sanitized_configs,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_app_config_by_id(self, config_id: str, user_id: str) -> Dict[str, Any]:
+        """Get mobile app configuration by ID"""
+        try:
+            collection = await self._get_collection()
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            config = await collection.find_one({"id": config_id, "user_id": user_id})
             
             if config:
                 return {
@@ -297,6 +370,116 @@ class NativeMobileService:
                 
         except Exception as e:
             return {"success": False, "error": str(e)}
+    
+    async def get_push_tokens(self, user_id: str, limit: int = 50, offset: int = 0) -> Dict[str, Any]:
+        """Get push tokens for user"""
+        try:
+            collection = await self._get_collection(self.push_tokens_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            cursor = collection.find({"user_id": user_id}).skip(offset).limit(limit)
+            tokens = await cursor.to_list(length=limit)
+            
+            sanitized_tokens = [{k: v for k, v in token.items() if k != '_id'} for token in tokens]
+            
+            total = await collection.count_documents({"user_id": user_id})
+            
+            return {
+                "success": True,
+                "data": sanitized_tokens,
+                "total": total,
+                "limit": limit,
+                "offset": offset
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def delete_push_token(self, token_id: str, user_id: str) -> Dict[str, Any]:
+        """Delete push token"""
+        try:
+            collection = await self._get_collection(self.push_tokens_collection)
+            if collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            result = await collection.delete_one({"id": token_id, "user_id": user_id})
+            
+            if result.deleted_count > 0:
+                return {
+                    "success": True,
+                    "message": "Push token deleted successfully",
+                    "deleted_count": result.deleted_count
+                }
+            else:
+                return {"success": False, "error": "Push token not found"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def get_app_stats(self, user_id: str) -> Dict[str, Any]:
+        """Get mobile app statistics"""
+        try:
+            configs_collection = await self._get_collection()
+            tokens_collection = await self._get_collection(self.push_tokens_collection)
+            
+            if configs_collection is None or tokens_collection is None:
+                return {"success": False, "error": "Database unavailable"}
+            
+            total_configs = await configs_collection.count_documents({"user_id": user_id})
+            active_tokens = await tokens_collection.count_documents({"user_id": user_id, "status": "active"})
+            
+            # Get platform breakdown
+            platform_stats = {}
+            cursor = tokens_collection.find({"user_id": user_id})
+            async for token in cursor:
+                platform = token.get("platform", "unknown")
+                platform_stats[platform] = platform_stats.get(platform, 0) + 1
+            
+            return {
+                "success": True,
+                "data": {
+                    "total_configurations": total_configs,
+                    "active_push_tokens": active_tokens,
+                    "platform_breakdown": platform_stats,
+                    "user_id": user_id
+                }
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    async def health_check(self) -> Dict[str, Any]:
+        """Health check with database verification"""
+        try:
+            db = await get_database_async()
+            if db is None:
+                return {"success": False, "healthy": False, "error": "Database unavailable"}
+            
+            # Test database connection
+            collection = db[self.collection_name]
+            await collection.count_documents({})
+            
+            return {
+                "success": True,
+                "healthy": True,
+                "service": "Native Mobile Backend",
+                "features": {
+                    "push_notifications": True,
+                    "offline_sync": True,
+                    "deep_linking": True,
+                    "app_configuration": True,
+                    "biometric_auth": True,
+                    "file_upload": True,
+                    "real_database_storage": True
+                },
+                "supported_platforms": ["ios", "android"],
+                "database_status": "connected",
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            return {"success": False, "healthy": False, "error": str(e)}
     
     async def handle_deep_link(self, deep_link_data: Dict[str, Any]) -> Dict[str, Any]:
         """Handle deep link routing"""
