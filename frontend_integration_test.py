@@ -214,13 +214,13 @@ class FrontendIntegrationTester:
         
         # Test workspace subscription endpoint (for plan management)
         try:
-            response = requests.get(f"{self.base_url}/api/workspace_subscription/health", 
+            response = requests.get(f"{self.base_url}/api/workspace-subscription/health", 
                                   headers=self.headers, timeout=10)
             success = response.status_code == 200
-            self.log_result("/api/workspace_subscription/health", success, response.status_code,
+            self.log_result("/api/workspace-subscription/health", success, response.status_code,
                           "Subscription system available" if success else f"Failed: {response.text[:100]}")
         except Exception as e:
-            self.log_result("/api/workspace_subscription/health", False, None, f"Subscription error: {str(e)}")
+            self.log_result("/api/workspace-subscription/health", False, None, f"Subscription error: {str(e)}")
     
     def run_all_tests(self):
         """Run all frontend integration tests"""
