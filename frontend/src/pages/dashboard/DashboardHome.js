@@ -1,337 +1,251 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import { adminAPI, healthAPI } from '../../services/api';
-import CreateUserModal from '../../components/modals/CreateUserModal';
-import {
-  ChartBarIcon,
-  UserGroupIcon,
-  CreditCardIcon,
-  ArrowTrendingUpIcon,
-  CurrencyDollarIcon,
-  ShoppingBagIcon,
-  CalendarIcon,
-  EnvelopeIcon,
-  BellIcon,
-  ChartPieIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  ExclamationTriangleIcon
-} from '@heroicons/react/24/outline';
+import './DashboardHome.css';
 
 const DashboardHome = () => {
-  const { user, isAdmin } = useAuth();
-  const [dashboardData, setDashboardData] = useState(null);
-  const [systemHealth, setSystemHealth] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const { user } = useAuth();
+  const [stats, setStats] = useState({
+    revenue: { value: '$12,450', change: '+18.3%', period: 'vs last month' },
+    contacts: { value: '247', change: '+25.1%', period: 'this week' },
+    performance: { value: '94.2%', change: '+5.7%', period: 'open rate' },
+    views: { value: '8,945', change: '+12.4%', period: 'this month' }
+  });
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  const [recentActivity] = useState([
+    { type: 'sale', title: 'New order received', time: '2 minutes ago', icon: '🛍️' },
+    { type: 'contact', title: '3 new contacts added', time: '1 hour ago', icon: '👤' },
+    { type: 'campaign', title: 'Email campaign sent', time: '3 hours ago', icon: '📧' },
+    { type: 'content', title: 'New course published', time: '5 hours ago', icon: '🎓' },
+    { type: 'payment', title: 'Payment received: $299', time: '1 day ago', icon: '💳' }
+  ]);
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      const [dashboardResponse, healthResponse] = await Promise.all([
-        isAdmin ? adminAPI.getDashboard() : Promise.resolve({ data: {} }),
-        healthAPI.checkHealth()
-      ]);
-      
-      setDashboardData(dashboardResponse.data);
-      setSystemHealth(healthResponse.data);
-    } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
+  const [goals] = useState([
+    { label: 'Revenue Target', current: 8450, target: 10000, unit: '$' },
+    { label: 'New Contacts', current: 247, target: 300, unit: '' },
+    { label: 'Content Published', current: 12, target: 20, unit: ' posts' }
+  ]);
+
+  const [teamActivity] = useState([
+    { name: 'Sarah Chen', action: 'Added 5 new products', time: '30m ago', avatar: 'SC' },
+    { name: 'Mike Johnson', action: 'Completed email campaign', time: '2h ago', avatar: 'MJ' },
+    { name: 'Emily Watson', action: 'Updated course content', time: '4h ago', avatar: 'EW' }
+  ]);
+
+  const quickActions = [
+    { label: 'Create Social Post', icon: '📝', action: 'social_post', gradient: 'var(--gradient-primary)' },
+    { label: 'Send Email Campaign', icon: '📧', action: 'email_campaign', gradient: 'var(--gradient-accent)' },
+    { label: 'Add New Product', icon: '🛍️', action: 'add_product', gradient: 'var(--gradient-warm)' },
+    { label: 'Schedule Meeting', icon: '📅', action: 'schedule_meeting', gradient: 'var(--gradient-cool)' }
+  ];
+
+  const handleQuickAction = (action) => {
+    console.log(`Quick action: ${action}`);
+    // TODO: Implement quick action modals
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary"></div>
-      </div>
-    );
-  }
-
-  const stats = [
-    {
-      name: 'Total Users',
-      stat: dashboardData?.data?.user_metrics?.total_users || '2,847',
-      icon: UserGroupIcon,
-      change: '+12%',
-      changeType: 'increase',
-      color: 'bg-blue-500'
-    },
-    {
-      name: 'Total Revenue',
-      stat: `$${(dashboardData?.data?.revenue_metrics?.total_revenue || 567890).toLocaleString()}`,
-      icon: CurrencyDollarIcon,
-      change: '+15.6%',
-      changeType: 'increase',
-      color: 'bg-green-500'
-    },
-    {
-      name: 'Active Workspaces',
-      stat: dashboardData?.data?.business_metrics?.total_workspaces || '456',
-      icon: ChartBarIcon,
-      change: '+8%',
-      changeType: 'increase',
-      color: 'bg-purple-500'
-    },
-    {
-      name: 'Total Bookings',
-      stat: dashboardData?.data?.business_metrics?.total_bookings || '1,247',
-      icon: CalendarIcon,
-      change: '+23%',
-      changeType: 'increase',
-      color: 'bg-indigo-500'
-    }
-  ];
-
-  const recentActivity = [
-    {
-      id: 1,
-      type: 'user',
-      message: 'New user registration',
-      user: 'Sarah Johnson',
-      time: '2 minutes ago',
-      icon: UserGroupIcon,
-      color: 'text-blue-600'
-    },
-    {
-      id: 2,
-      type: 'payment',
-      message: 'Payment received',
-      user: 'Business Pro Plan - $299',
-      time: '5 minutes ago',
-      icon: CreditCardIcon,
-      color: 'text-green-600'
-    },
-    {
-      id: 3,
-      type: 'booking',
-      message: 'New booking confirmed',
-      user: 'Strategy Session - Mike Chen',
-      time: '12 minutes ago',
-      icon: CalendarIcon,
-      color: 'text-purple-600'
-    },
-    {
-      id: 4,
-      type: 'course',
-      message: 'Course completed',
-      user: 'Digital Marketing Mastery',
-      time: '1 hour ago',
-      icon: ChartBarIcon,
-      color: 'text-indigo-600'
-    }
-  ];
-
-  const systemMetrics = [
-    {
-      name: 'System Uptime',
-      value: systemHealth?.data?.system_health?.uptime || '99.9%',
-      status: 'excellent',
-      icon: ArrowTrendingUpIcon
-    },
-    {
-      name: 'Response Time',
-      value: systemHealth?.data?.system_health?.response_time || '89ms',
-      status: 'good',
-      icon: ChartPieIcon
-    },
-    {
-      name: 'Error Rate',
-      value: systemHealth?.data?.system_health?.error_rate || '0.1%',
-      status: 'excellent',
-      icon: ExclamationTriangleIcon
-    },
-    {
-      name: 'Database',
-      value: systemHealth?.data?.system_health?.database_status || 'Healthy',
-      status: 'excellent',
-      icon: ChartBarIcon
-    }
-  ];
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-8"
-      >
-        <h1 className="text-3xl font-bold text-primary mb-2">
-          Welcome back, {user?.name || 'User'}! 👋
-        </h1>
-        <p className="text-secondary">
-          Here's what's happening with your platform today.
-        </p>
-      </motion.div>
+    <div className="dashboard-home">
+      {/* Background Effects */}
+      <div className="bg-effects">
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+        </div>
+      </div>
 
-      {/* Stats Grid */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-      >
-        {stats.map((item, index) => (
-          <div
-            key={item.name}
-            className="bg-surface-elevated p-6 rounded-lg shadow-default hover:shadow-lg transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className={`flex-shrink-0 p-3 rounded-lg ${item.color}`}>
-                <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <div className="ml-4 flex-1">
-                <p className="text-sm font-medium text-secondary">{item.name}</p>
-                <div className="flex items-center">
-                  <p className="text-2xl font-semibold text-primary">{item.stat}</p>
-                  <div className="ml-2 flex items-center text-sm">
-                    {item.changeType === 'increase' ? (
-                      <ArrowUpIcon className="w-4 h-4 text-green-500" />
-                    ) : (
-                      <ArrowDownIcon className="w-4 h-4 text-red-500" />
-                    )}
-                    <span className={`ml-1 ${
-                      item.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {item.change}
-                    </span>
-                  </div>
-                </div>
-              </div>
+      {/* Header Section */}
+      <div className="dashboard-header">
+        <div className="greeting-section">
+          <h1 className="greeting-title">
+            {getGreeting()}, <span className="gradient-text">{user?.name || 'User'}</span>
+          </h1>
+          <p className="greeting-subtitle">
+            Here's what's happening with {user?.workspace?.name || 'your workspace'} today
+          </p>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="quick-stats">
+        <div className="stat-card">
+          <div className="stat-icon">💰</div>
+          <div className="stat-content">
+            <h3 className="stat-value">{stats.revenue.value}</h3>
+            <p className="stat-label">Total Revenue</p>
+            <div className="stat-change positive">
+              <span className="change-value">{stats.revenue.change}</span>
+              <span className="change-period">{stats.revenue.period}</span>
             </div>
           </div>
-        ))}
-      </motion.div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">👥</div>
+          <div className="stat-content">
+            <h3 className="stat-value">{stats.contacts.value}</h3>
+            <p className="stat-label">New Contacts</p>
+            <div className="stat-change positive">
+              <span className="change-value">{stats.contacts.change}</span>
+              <span className="change-period">{stats.contacts.period}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">📈</div>
+          <div className="stat-content">
+            <h3 className="stat-value">{stats.performance.value}</h3>
+            <p className="stat-label">Campaign Performance</p>
+            <div className="stat-change positive">
+              <span className="change-value">{stats.performance.change}</span>
+              <span className="change-period">{stats.performance.period}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">👁️</div>
+          <div className="stat-content">
+            <h3 className="stat-value">{stats.views.value}</h3>
+            <p className="stat-label">Content Views</p>
+            <div className="stat-change positive">
+              <span className="change-value">{stats.views.change}</span>
+              <span className="change-period">{stats.views.period}</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="lg:col-span-2"
-        >
-          <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
-            <h3 className="text-lg font-semibold text-primary mb-4">Recent Activity</h3>
-            <div className="space-y-4">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-lg bg-surface flex items-center justify-center">
-                      <activity.icon className={`h-5 w-5 ${activity.color}`} />
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-primary">{activity.message}</p>
-                    <p className="text-sm text-secondary">{activity.user}</p>
-                    <p className="text-xs text-secondary mt-1">{activity.time}</p>
+      <div className="main-content-grid">
+        {/* Left Column */}
+        <div className="content-left">
+          {/* Recent Activity */}
+          <div className="card activity-card">
+            <div className="card-header">
+              <h2 className="card-title">Recent Activity</h2>
+              <button className="card-action">View All</button>
+            </div>
+            <div className="activity-timeline">
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="activity-item">
+                  <div className="activity-icon">{activity.icon}</div>
+                  <div className="activity-content">
+                    <p className="activity-title">{activity.title}</p>
+                    <span className="activity-time">{activity.time}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </motion.div>
 
-        {/* System Health */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
-            <h3 className="text-lg font-semibold text-primary mb-4">System Health</h3>
-            <div className="space-y-4">
-              {systemMetrics.map((metric, index) => {
-                const IconComponent = metric.icon || ChartBarIcon;
-                return (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <IconComponent className="h-5 w-5 text-secondary" />
-                    <span className="text-sm text-secondary">{metric.name}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-primary">{metric.value}</span>
-                    <div className={`w-2 h-2 rounded-full ${
-                      metric.status === 'excellent' ? 'bg-green-500' :
-                      metric.status === 'good' ? 'bg-yellow-500' : 'bg-red-500'
-                    }`} />
-                  </div>
+          {/* Performance Chart Placeholder */}
+          <div className="card chart-card">
+            <div className="card-header">
+              <h2 className="card-title">Revenue Trends</h2>
+              <div className="chart-controls">
+                <select className="period-selector">
+                  <option>Last 30 days</option>
+                  <option>Last 7 days</option>
+                  <option>Last 90 days</option>
+                </select>
+              </div>
+            </div>
+            <div className="chart-placeholder">
+              <div className="chart-mockup">
+                <div className="chart-bars">
+                  {[40, 65, 35, 80, 45, 75, 60, 90].map((height, index) => (
+                    <div 
+                      key={index} 
+                      className="chart-bar" 
+                      style={{ height: `${height}%` }}
+                    ></div>
+                  ))}
                 </div>
+                <p className="chart-label">📈 Revenue increasing steadily</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="content-right">
+          {/* Goals Progress */}
+          <div className="card goals-card">
+            <div className="card-header">
+              <h2 className="card-title">Monthly Goals</h2>
+            </div>
+            <div className="goals-content">
+              {goals.map((goal, index) => {
+                const progress = (goal.current / goal.target) * 100;
+                return (
+                  <div key={index} className="goal-item">
+                    <div className="goal-header">
+                      <span className="goal-label">{goal.label}</span>
+                      <span className="goal-value">
+                        {goal.unit}{goal.current} / {goal.unit}{goal.target}
+                      </span>
+                    </div>
+                    <div className="goal-progress">
+                      <div 
+                        className="goal-progress-bar" 
+                        style={{ width: `${Math.min(progress, 100)}%` }}
+                      ></div>
+                    </div>
+                    <span className="goal-percentage">{progress.toFixed(0)}%</span>
+                  </div>
                 );
               })}
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      {/* Quick Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-surface-elevated p-6 rounded-lg shadow-default"
-      >
-        <h3 className="text-lg font-semibold text-primary mb-4">Main Goals & Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ChartBarIcon className="h-6 w-6 text-white" />
+          {/* Quick Actions */}
+          <div className="card quick-actions-card">
+            <div className="card-header">
+              <h2 className="card-title">Quick Actions</h2>
             </div>
-            <span className="text-sm font-medium text-primary text-center">Instagram</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ArrowTrendingUpIcon className="h-6 w-6 text-white" />
+            <div className="quick-actions-grid">
+              {quickActions.map((action, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleQuickAction(action.action)}
+                  className="quick-action-button"
+                  style={{ '--action-gradient': action.gradient }}
+                >
+                  <span className="action-icon">{action.icon}</span>
+                  <span className="action-label">{action.label}</span>
+                </button>
+              ))}
             </div>
-            <span className="text-sm font-medium text-primary text-center">Link in Bio</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ChartPieIcon className="h-6 w-6 text-white" />
+          </div>
+
+          {/* Team Activity */}
+          <div className="card team-card">
+            <div className="card-header">
+              <h2 className="card-title">Team Activity</h2>
             </div>
-            <span className="text-sm font-medium text-primary text-center">Courses</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ShoppingBagIcon className="h-6 w-6 text-white" />
+            <div className="team-activity">
+              {teamActivity.map((member, index) => (
+                <div key={index} className="team-member">
+                  <div className="member-avatar">{member.avatar}</div>
+                  <div className="member-content">
+                    <p className="member-name">{member.name}</p>
+                    <p className="member-action">{member.action}</p>
+                    <span className="member-time">{member.time}</span>
+                  </div>
+                </div>
+              ))}
             </div>
-            <span className="text-sm font-medium text-primary text-center">E-commerce</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <UserGroupIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">CRM</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <EnvelopeIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">Marketing</span>
-          </button>
+          </div>
         </div>
-      </motion.div>
-
-      {/* Create User Modal */}
-      <CreateUserModal 
-        isOpen={showCreateUserModal}
-        onClose={() => setShowCreateUserModal(false)}
-      />
+      </div>
     </div>
   );
 };
