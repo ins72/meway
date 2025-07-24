@@ -554,6 +554,8 @@
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 2.5rem;
   margin-top: 5rem;
+  width: 100%;
+  min-height: 200px; /* Ensure minimum height */
 }
 
 .feature-card {
