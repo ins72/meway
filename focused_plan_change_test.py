@@ -111,7 +111,7 @@ class PlanChangeImpactTester:
             print(f"❌ Health check error: {str(e)}")
             return False
     
-    def test_simulate_change(self):
+    def test_health_check(self):
         """Test the simulate-change endpoint with provided test data"""
         print("\n🔍 Testing POST /api/plan-change-impact/simulate-change")
         
