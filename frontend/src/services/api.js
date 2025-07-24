@@ -56,6 +56,8 @@ export const onboardingAPI = {
   createWorkspace: (data) => api.post('/workspace', data),
   getBundles: () => api.get('/workspace-subscription/bundles/available'),
   calculatePricing: (params) => api.get('/workspace-subscription/pricing/calculate', { params }),
+  saveProgress: (step, data) => api.post('/onboarding/progress', { step, data }),
+  getProgress: () => api.get('/onboarding/progress'),
 };
 
 // Google OAuth API endpoints  
