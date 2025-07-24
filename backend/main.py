@@ -313,8 +313,9 @@ try:
     app.include_router(admin_pricing_router, prefix="/api/admin-pricing", tags=["admin_pricing"])
     app.include_router(admin_plan_management_router, prefix="/api/admin-plan-management", tags=["admin_plan_management"])
     app.include_router(plan_change_impact_router, prefix="/api/plan-change-impact", tags=["plan_change_impact"])
-    app.include_router(admin_workspace_management_router, prefix="/api/admin-workspace-management", tags=["admin_workspace_management"])
-    app.include_router(customer_notification_router, prefix="/api/customer-notification", tags=["customer_notification"])
+    # Temporarily disable new admin systems for deployment debugging
+    # app.include_router(admin_workspace_management_router, prefix="/api/admin-workspace-management", tags=["admin_workspace_management"])
+    # app.include_router(customer_notification_router, prefix="/api/customer-notification", tags=["customer_notification"])
 
     
     logger.info(f"✅ Successfully included 148 bulletproof routers")
