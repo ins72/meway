@@ -645,24 +645,46 @@ const OnboardingWizard = () => {
                   </div>
                 </div>
 
-                {formData.selectedPlan && (
+                {formData.selectedBundles.length > 0 && (
                   <div className="summary-section">
-                    <h3>Selected Plan</h3>
-                    <div className="selected-plan-summary">
-                      <div className="plan-summary-header">
-                        <span className="plan-summary-name">{getSelectedPlan().name}</span>
-                        <span className="plan-summary-price">
-                          ${formData.paymentMethod === 'monthly' 
-                            ? getSelectedPlan().monthlyPrice 
-                            : Math.floor(getSelectedPlan().yearlyPrice / 12)
-                          }/month
-                        </span>
+                    <h3>Selected Bundles</h3>
+                    {getSelectedBundles().map((bundle) => (
+                      <div key={bundle.id} className="selected-bundle-item">
+                        <div className="bundle-summary-header">
+                          <span className="bundle-summary-name">{bundle.name}</span>
+                          <span className="bundle-summary-price">
+                            ${formData.paymentMethod === 'monthly' 
+                              ? bundle.monthlyPrice 
+                              : Math.floor(bundle.yearlyPrice / 12)
+                            }/month
+                          </span>
+                        </div>
                       </div>
-                      <p className="plan-summary-billing">
-                        Billed {formData.paymentMethod === 'monthly' ? 'monthly' : 'yearly'}
-                        {formData.paymentMethod === 'yearly' && ' (17% savings)'}
-                      </p>
-                    </div>
+                    ))}
+                    
+                    {formData.selectedBundles.length > 1 && (
+                      <div className="pricing-summary">
+                        <div className="pricing-breakdown">
+                          <div className="price-row">
+                            <span>Subtotal:</span>
+                            <span>${calculateTotalPrice().basePrice.toFixed(2)}</span>
+                          </div>
+                          <div className="price-row discount">
+                            <span>Multi-bundle Discount ({(calculateBundleDiscount() * 100)}%):</span>
+                            <span>-${calculateTotalPrice().savings.toFixed(2)}</span>
+                          </div>
+                          <div className="price-row total">
+                            <span>Total:</span>
+                            <span>${calculateTotalPrice().discountedPrice.toFixed(2)}/{formData.paymentMethod}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <p className="plan-summary-billing">
+                      Billed {formData.paymentMethod === 'monthly' ? 'monthly' : 'yearly'}
+                      {formData.paymentMethod === 'yearly' && ' (17% additional savings)'}
+                    </p>
                   </div>
                 )}
 
