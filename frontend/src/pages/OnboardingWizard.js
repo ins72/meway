@@ -942,6 +942,9 @@ const OnboardingWizard = () => {
                       onError={handleStripePaymentError}
                       loading={loading}
                       disabled={!formData.selectedPaymentType}
+                      bundles={formData.selectedBundles}
+                      workspaceName={formData.workspaceName}
+                      paymentMethod={formData.paymentMethod}
                     />
                   </div>
                 )}
