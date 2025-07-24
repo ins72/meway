@@ -8,8 +8,10 @@ import {
 } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
 
-// Initialize Stripe with publishable key
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+// Initialize Stripe with publishable key - with error handling
+const stripePromise = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY 
+  ? loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+  : Promise.resolve(null);
 
 // Enhanced Payment Form Component
 const EnhancedPaymentForm = ({ clientSecret, onSuccess, onError, workspaceName, bundles }) => {
