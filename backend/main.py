@@ -71,31 +71,17 @@ async def lifespan(app: FastAPI):
     logger.info("✅ Application shutdown completed")
 
 # Production startup verification
-logger.info("🔍 Running production startup checks...")
-try:
-    # Verify critical imports are working
-    from core.config import settings
-    from core.database import get_database
-    logger.info("✅ Core imports verified")
-    
-    # Verify app configuration
-    if hasattr(settings, 'MONGO_URL') and settings.MONGO_URL:
-        logger.info("✅ Database configuration verified")
-    else:
-        logger.warning("⚠️ Database configuration not found - using defaults")
-    
-    logger.info("✅ Production startup checks completed")
-    
-except Exception as e:
-    logger.warning(f"⚠️ Startup check warning: {e}")
-    logger.info("🔄 Continuing with application startup anyway...")
+logger.info("🔍 Production startup initiated...")
+logger.info(f"🐍 Python executable: {sys.executable}")
 
-# Create FastAPI app
+# Create FastAPI app with minimal configuration
 app = FastAPI(
-    title="Mewayz Professional Platform - BULLETPROOF",
-    description="Complete business platform with 100% working endpoints",
+    title="Mewayz Professional Platform",
+    description="Business platform API",
     version="2.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
 # Add CORS middleware with production-friendly settings
