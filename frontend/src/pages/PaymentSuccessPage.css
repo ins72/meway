@@ -1,0 +1,272 @@
+/* Payment Success Page Styles */
+.payment-success-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.payment-status-container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.status-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.status-icon.processing {
+  font-size: 48px;
+}
+
+.status-icon .spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.status-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+}
+
+.status-message {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0 0 32px 0;
+  line-height: 1.5;
+}
+
+.workspace-info {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+}
+
+.workspace-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item .label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.info-item .value {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.status-active {
+  color: #059669 !important;
+  background: #dcfce7;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.success-actions {
+  margin: 32px 0;
+}
+
+.redirect-info {
+  margin-bottom: 20px;
+}
+
+.redirect-info p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  padding: 12px;
+  background: #f0f9ff;
+  border-radius: 8px;
+  border: 1px solid #bae6fd;
+}
+
+.go-to-dashboard-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.go-to-dashboard-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.error-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.retry-btn, .dashboard-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.retry-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.retry-btn:hover {
+  background: #dc2626;
+}
+
+.dashboard-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.dashboard-btn:hover {
+  background: #e5e7eb;
+}
+
+.payment-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.security-note, .support-note {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.security-note {
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-status-container {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+  
+  .status-title {
+    font-size: 24px;
+  }
+  
+  .status-icon {
+    font-size: 48px;
+  }
+  
+  .error-actions {
+    flex-direction: column;
+  }
+  
+  .retry-btn, .dashboard-btn {
+    width: 100%;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .payment-status-container {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .status-title {
+    color: #f9fafb;
+  }
+  
+  .workspace-info {
+    background: #374151;
+    border-color: #4b5563;
+  }
+  
+  .info-item {
+    border-color: #4b5563;
+  }
+  
+  .info-item .label {
+    color: #d1d5db;
+  }
+  
+  .info-item .value {
+    color: #f9fafb;
+  }
+  
+  .payment-footer {
+    border-color: #4b5563;
+  }
+  
+  .dashboard-btn {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .dashboard-btn:hover {
+    background: #4b5563;
+  }
+}
