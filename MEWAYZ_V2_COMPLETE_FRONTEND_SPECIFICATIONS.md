@@ -1,23 +1,476 @@
-# MEWAYZ V2 COMPLETE FRONTEND SPECIFICATIONS
-## Every Screen, Widget, Popup & Page for Web + Native Mobile
+# MEWAYZ V2 WORKSPACE-BASED FRONTEND SPECIFICATIONS
+## Every Screen, Widget, Popup & Page with Workspace Access Control
 
 **Documentation Date:** December 30, 2024  
-**Scope:** Complete UI/UX specifications for 36 sellable features  
-**Platforms:** Web App + Native Mobile (iOS/Android)
+**Scope:** Complete UI/UX specifications with workspace-based access control  
+**Key Principle:** Users only see features their current workspace has access to
 
 ---
 
-## 📱 PLATFORM ARCHITECTURE
+## 🏢 WORKSPACE-BASED ACCESS ARCHITECTURE
 
-### **App Structure Overview**
-```
-Public Marketing Site → Authentication → Onboarding → Main Dashboard → Feature Modules
+### **Core Principle:**
+- **Subscriptions are per workspace** (not per user)
+- **Users can belong to multiple workspaces** with different roles
+- **What users see depends on currently selected workspace**
+- **Workspace selector determines feature visibility**
+
+### **Access Control Logic:**
+```javascript
+const getVisibleFeatures = (user, currentWorkspace) => {
+  // Check user's role in current workspace
+  const userRole = currentWorkspace.members.find(m => m.user_id === user.id)?.role;
+  
+  // Check workspace subscription and enabled bundles
+  const enabledBundles = currentWorkspace.subscription.enabled_bundles;
+  
+  // Return features based on subscription + role permissions
+  return features.filter(feature => 
+    enabledBundles.includes(feature.bundle) && 
+    hasRoleAccess(userRole, feature.required_permissions)
+  );
+};
 ```
 
-### **Navigation Architecture**
-- **Web:** Sidebar navigation + top header
-- **Mobile:** Bottom tab bar + hamburger menu
-- **PWA:** Native-like navigation with gestures
+---
+
+## 📊 MAIN DASHBOARD WITH WORKSPACE CONTROL
+
+### **Enhanced Dashboard Layout**
+**File:** `/frontend/src/pages/dashboard/Dashboard.js`  
+**Route:** `/dashboard`
+
+#### **Header Components** ⚠️ CRITICAL IMPLEMENTATION NEEDED
+```javascript
+const DashboardHeader = {
+  workspace_selector: {
+    component: "WorkspaceDropdown",
+    functionality: [
+      "Show all user's workspaces",
+      "Display current workspace name + logo", 
+      "Switch workspace (reload dashboard)",
+      "Show subscription status per workspace",
+      "Create new workspace option"
+    ],
+    api_calls: [
+      "GET /api/workspace/ (list user workspaces)",
+      "POST /api/complete-multi-workspace/switch",
+      "GET /api/workspace/{id} (get workspace details)"
+    ]
+  },
+  
+  subscription_indicator: {
+    component: "SubscriptionBadge",
+    shows: [
+      "Current workspace plan (Free/Creator/E-commerce/etc)",
+      "Features used vs limits",
+      "Upgrade prompts if over limits",
+      "Billing status"
+    ]
+  },
+  
+  global_search: {
+    component: "UnifiedSearch",
+    scope: "Current workspace only",
+    searches_across: "Only enabled features for current workspace"
+  }
+};
+```
+
+#### **Dynamic Feature Cards** ⚠️ NEEDS IMPLEMENTATION
+```javascript
+const WorkspaceBasedFeatureCards = {
+  visibility_logic: {
+    free_workspace: {
+      visible_features: ["basic_bio_links", "basic_forms", "basic_analytics"],
+      feature_limits: {
+        bio_links: "1 page, 5 links max",
+        forms: "1 form, 50 submissions/month", 
+        analytics: "7 days retention"
+      },
+      branding: "Mewayz watermark required"
+    },
+    
+    creator_bundle: {
+      visible_features: ["advanced_bio_links", "website_builder", "seo_tools", "ai_content", "template_marketplace"],
+      feature_limits: {
+        bio_links: "Unlimited links, custom domain",
+        website: "10 pages, custom domain",
+        ai_content: "500 credits/month"
+      },
+      branding: "No Mewayz watermark"
+    },
+    
+    ecommerce_bundle: {
+      visible_features: ["ecommerce_store", "multi_vendor", "promotions", "payment_processing", "inventory"],
+      feature_limits: {
+        products: "Unlimited",
+        vendors: "Up to 10",
+        transactions: "Unlimited"
+      }
+    },
+    
+    // ... other bundles
+    
+    enterprise: {
+      visible_features: "All features available",
+      feature_limits: "No limits",
+      additional: ["white_label", "api_access", "custom_analytics"]
+    }
+  },
+  
+  card_rendering: {
+    enabled_features: {
+      style: "full_color_card",
+      clickable: true,
+      shows_usage_stats: true
+    },
+    disabled_features: {
+      style: "grayed_out_with_lock_icon", 
+      clickable: false,
+      shows_upgrade_prompt: true
+    }
+  }
+};
+```
+
+---
+
+## 🚀 WORKSPACE-SPECIFIC ONBOARDING
+
+### **Enhanced Onboarding Wizard**
+**File:** `/frontend/src/pages/OnboardingWizard.js`
+
+#### **Step 5: Subscription Selection** ⚠️ ENHANCED IMPLEMENTATION NEEDED
+```javascript
+const WorkspaceSubscriptionStep = {
+  title: "Choose Your Workspace Plan",
+  subtitle: "This subscription applies to this workspace only",
+  
+  pricing_display: {
+    bundle_cards: [
+      {
+        bundle: "creator",
+        price: "$19/month",
+        features: ["Bio links", "Website", "SEO", "AI content"],
+        limits: "Perfect for individual creators"
+      },
+      {
+        bundle: "ecommerce", 
+        price: "$24/month",
+        features: ["Online store", "Multi-vendor", "Payments"],
+        limits: "Great for online businesses"
+      },
+      // ... other bundles
+      {
+        bundle: "enterprise",
+        price: "15% of revenue",
+        minimum: "$99/month",
+        features: "All bundles + white-label + API access",
+        limits: "For agencies and large businesses"
+      }
+    ]
+  },
+  
+  workspace_context: {
+    shows: "You are setting up: {workspace_name}",
+    billing: "Billing will be separate for each workspace",
+    clarification: "You can create additional workspaces with different plans"
+  },
+  
+  api_integration: {
+    endpoint: "POST /api/workspace/{id}/subscription",
+    payload: {
+      bundle_type: "creator|ecommerce|social|education|business|operations|enterprise",
+      billing_cycle: "monthly|yearly",
+      payment_method: "stripe_payment_method_id"
+    }
+  }
+};
+```
+
+---
+
+## 💼 WORKSPACE MANAGEMENT SCREENS
+
+### **Workspace Settings** ⚠️ ENHANCED IMPLEMENTATION NEEDED
+**File:** `/frontend/src/pages/dashboard/WorkspaceSettings.js`
+
+#### **Subscription Management Tab**
+```javascript
+const WorkspaceSubscriptionSettings = {
+  current_plan_display: {
+    shows: [
+      "Current bundle(s) active",
+      "Monthly/yearly billing cycle",
+      "Next billing date and amount",
+      "Features included vs used",
+      "Usage limits and overages"
+    ]
+  },
+  
+  bundle_management: {
+    add_bundle: {
+      action: "Add additional bundles to workspace",
+      pricing: "Shows multi-bundle discounts (20%, 30%, 40%)",
+      confirmation: "Prorated billing calculation"
+    },
+    
+    remove_bundle: {
+      action: "Remove bundles from workspace", 
+      warning: "Data and features will be disabled",
+      timing: "Takes effect at next billing cycle"
+    },
+    
+    upgrade_to_enterprise: {
+      action: "Switch to 15% revenue share model",
+      requirements: "Minimum $660/month revenue",
+      benefits: "All bundles + white-label + API access"
+    }
+  },
+  
+  billing_section: {
+    payment_methods: "Workspace-specific payment methods",
+    invoices: "Workspace billing history", 
+    usage_tracking: "For enterprise revenue calculation"
+  }
+};
+```
+
+### **Multi-Workspace Switcher** ⚠️ CRITICAL IMPLEMENTATION NEEDED
+**Component:** `WorkspaceSwitcher`
+
+```javascript
+const WorkspaceSwitcherComponent = {
+  dropdown_content: {
+    current_workspace: {
+      displays: ["Name", "Logo", "Plan badge", "Role badge"],
+      style: "Highlighted as current"
+    },
+    
+    other_workspaces: {
+      displays: ["Name", "Logo", "Plan", "Your role"],
+      action: "Click to switch context",
+      api_call: "POST /api/complete-multi-workspace/switch"
+    },
+    
+    actions: [
+      {
+        label: "Create New Workspace", 
+        action: "Opens onboarding wizard",
+        icon: "+"
+      },
+      {
+        label: "Workspace Settings",
+        action: "Opens current workspace settings",
+        icon: "⚙️"
+      }
+    ]
+  },
+  
+  switching_behavior: {
+    on_switch: [
+      "Update global app state",
+      "Reload dashboard with new workspace context", 
+      "Update navigation based on new workspace features",
+      "Clear any cached data from previous workspace"
+    ]
+  }
+};
+```
+
+---
+
+## 🔒 ROLE-BASED ACCESS WITHIN WORKSPACES
+
+### **Permission Matrix by Role**
+```javascript
+const WorkspaceRolePermissions = {
+  owner: {
+    permissions: ["full_access", "billing", "team_management", "delete_workspace"],
+    sees: "All enabled features + workspace management"
+  },
+  
+  admin: {
+    permissions: ["feature_access", "team_management", "view_billing"],
+    sees: "All enabled features + team management (no billing)"
+  },
+  
+  editor: {
+    permissions: ["feature_access", "create_content", "edit_content"],
+    sees: "All enabled features (no team/billing management)"
+  },
+  
+  viewer: {
+    permissions: ["view_only"],
+    sees: "Read-only access to enabled features"
+  }
+};
+```
+
+---
+
+## 📱 FEATURE MODULE ACCESS CONTROL
+
+### **Dynamic Feature Routing** ⚠️ IMPLEMENTATION NEEDED
+```javascript
+const FeatureAccessControl = {
+  route_guards: {
+    before_route_enter: (to, from, next) => {
+      const currentWorkspace = getCurrentWorkspace();
+      const requiredBundle = getRequiredBundle(to.path);
+      
+      if (workspaceHasBundle(currentWorkspace, requiredBundle)) {
+        next(); // Allow access
+      } else {
+        next('/dashboard/upgrade'); // Redirect to upgrade page
+      }
+    }
+  },
+  
+  feature_specific_checks: {
+    "/dashboard/instagram": {
+      required_bundle: "social_media",
+      fallback: "Upgrade to Social Media Bundle"
+    },
+    
+    "/dashboard/ecommerce": {
+      required_bundle: "ecommerce", 
+      fallback: "Upgrade to E-commerce Bundle"
+    },
+    
+    "/dashboard/courses": {
+      required_bundle: "education",
+      fallback: "Upgrade to Education Bundle"
+    }
+    
+    // ... for all features
+  }
+};
+```
+
+### **Feature Usage Limits** ⚠️ IMPLEMENTATION NEEDED
+```javascript
+const FeatureUsageLimits = {
+  bio_links: {
+    free: { pages: 1, links_per_page: 5, custom_domain: false },
+    creator: { pages: "unlimited", links_per_page: "unlimited", custom_domain: true }
+  },
+  
+  forms: {
+    free: { forms: 1, submissions_per_month: 50 },
+    operations: { forms: "unlimited", submissions_per_month: "unlimited" }
+  },
+  
+  ai_content: {
+    creator: { credits_per_month: 500 },
+    business: { credits_per_month: 2000 },
+    enterprise: { credits_per_month: "unlimited" }
+  },
+  
+  ecommerce: {
+    ecommerce: { products: "unlimited", transaction_fee: "2.4%" },
+    enterprise: { products: "unlimited", transaction_fee: "1.9%" }
+  }
+};
+```
+
+---
+
+## 🔄 SUBSCRIPTION MANAGEMENT WORKFLOWS
+
+### **Upgrade/Downgrade Flows** ⚠️ NEEDS IMPLEMENTATION
+
+#### **Bundle Addition Flow**
+1. **Current Plan Display** → Shows active bundles
+2. **Available Bundles** → Shows unselected bundles with pricing
+3. **Multi-Bundle Discount Calculator** → Real-time pricing
+4. **Payment Confirmation** → Prorated billing
+5. **Feature Activation** → Immediate access to new features
+
+#### **Enterprise Upgrade Flow**  
+1. **Revenue Verification** → Must show $660+ monthly revenue
+2. **Revenue Share Explanation** → 15% model with examples
+3. **White-label Setup** → Branding configuration
+4. **API Access Provisioning** → Generate API keys
+5. **Success State** → All features unlocked
+
+---
+
+## 📊 MISSING BACKEND IMPLEMENTATIONS NEEDED
+
+### **1. Workspace-Based Subscription Management** ⚠️ TO BUILD
+```python
+# New API endpoints needed
+@router.post("/workspace/{workspace_id}/subscription")
+async def create_workspace_subscription(workspace_id: str, data: dict):
+    # Create subscription for specific workspace
+    pass
+
+@router.put("/workspace/{workspace_id}/subscription/add-bundle")
+async def add_bundle_to_workspace(workspace_id: str, bundle_data: dict):
+    # Add bundle to existing workspace subscription
+    pass
+
+@router.get("/workspace/{workspace_id}/usage-limits")
+async def get_workspace_usage_limits(workspace_id: str):
+    # Get current usage vs limits for workspace
+    pass
+```
+
+### **2. Enterprise Revenue Tracking** ⚠️ TO BUILD
+```python
+@router.get("/workspace/{workspace_id}/revenue-tracking")
+async def get_workspace_revenue(workspace_id: str, period: str):
+    # Calculate total revenue generated through platform
+    # Include: e-commerce sales, course sales, bookings, templates
+    pass
+
+@router.post("/enterprise/calculate-billing")
+async def calculate_enterprise_billing(workspace_id: str):
+    # Calculate 15% of total revenue for billing
+    # Minimum $99/month enforcement
+    pass
+```
+
+### **3. Feature Access Control Service** ⚠️ TO BUILD
+```python
+@router.get("/workspace/{workspace_id}/feature-access")
+async def check_feature_access(workspace_id: str, feature: str):
+    # Check if workspace has access to specific feature
+    # Return usage limits and current usage
+    pass
+```
+
+---
+
+## 🎯 IMPLEMENTATION PRIORITY
+
+### **Phase 1: Critical Workspace Features (Week 1)**
+1. **Workspace-based subscription management**
+2. **Multi-workspace switcher component**
+3. **Feature access control middleware**
+4. **Usage limits enforcement**
+
+### **Phase 2: Enhanced UI/UX (Week 2)**
+1. **Dynamic dashboard based on workspace**
+2. **Upgrade/downgrade flows**
+3. **Enterprise revenue tracking**
+4. **Role-based permission UI**
+
+### **Phase 3: Advanced Features (Week 3)**
+1. **White-label configuration**
+2. **API access management**
+3. **Advanced analytics per workspace**
+4. **Billing optimization**
+
+---
+
+This workspace-based approach ensures users have a clean, focused experience where they only see what they have access to, while enabling flexible multi-workspace management with per-workspace billing.
+
+---
+
+*Complete Workspace-Based Architecture: Subscriptions per workspace, dynamic feature access, role-based permissions*
 
 ---
 
