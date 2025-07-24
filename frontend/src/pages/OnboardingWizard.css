@@ -290,6 +290,83 @@
   border: 1px solid var(--border);
 }
 
+/* Multi-bundle Discount */
+.multi-bundle-discount {
+  background: var(--gradient-warm);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.multi-bundle-discount h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.multi-bundle-discount p {
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+/* Pricing Summary */
+.pricing-summary {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.pricing-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.price-row.discount {
+  color: #22c55e;
+}
+
+.price-row.total {
+  font-weight: 600;
+  font-size: var(--text-base);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.5rem;
+}
+
+.selected-bundle-item {
+  margin-bottom: 0.75rem;
+}
+
+.bundle-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bundle-summary-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.bundle-summary-price {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 /* Launch Special Styling */
 .launch-special {
   background: var(--gradient-warm);
