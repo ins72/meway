@@ -37,10 +37,36 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google login clicked');
-    // TODO: Implement Google OAuth
-  };
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (credentialResponse) => {
+      try {
+        console.log('Google login success:', credentialResponse);
+        
+        // Get user info from Google
+        const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${credentialResponse.access_token}`,
+            Accept: 'application/json'
+          }
+        });
+        
+        const userInfo = await response.json();
+        console.log('Google user info:', userInfo);
+        
+        // TODO: Send Google user info to backend for authentication
+        // For now, simulate successful login
+        alert(`Google login successful for ${userInfo.email}! (Integration pending)`);
+        
+      } catch (error) {
+        console.error('Google login error:', error);
+        alert('Google login failed. Please try again.');
+      }
+    },
+    onError: (error) => {
+      console.error('Google login error:', error);
+      alert('Google login failed. Please try again.');
+    }
+  });
 
   const handleAppleLogin = () => {
     console.log('Apple login clicked');
