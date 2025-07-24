@@ -90,12 +90,18 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Add CORS middleware
+# Add CORS middleware with production-friendly settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://preview-launch-1.emergent.host",
+        "https://*.emergent.host", 
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "*"  # Permissive for deployment debugging
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
 )
 
