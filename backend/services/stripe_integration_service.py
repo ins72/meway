@@ -653,25 +653,19 @@ class StripeIntegrationService:
                         'quantity': 1,
                     })
             
-            # Apply multi-bundle discount
+            # Apply multi-bundle discount by reducing the total amount
             if len(bundles) > 1:
                 discount_percent = 0.20 if len(bundles) == 2 else 0.30 if len(bundles) == 3 else 0.40
                 discount_amount = int(total_amount * discount_percent)
+                total_amount = total_amount - discount_amount
                 
-                # Add discount as a negative line item
-                line_items.append({
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': f'Multi-Bundle Discount ({int(discount_percent * 100)}% off)',
-                        },
-                        'unit_amount': -discount_amount,
-                        'recurring': {
-                            'interval': 'month' if payment_method == 'monthly' else 'year'
-                        }
-                    },
-                    'quantity': 1,
-                })
+                # Update the line items with discounted prices
+                for item in line_items:
+                    original_amount = item['price_data']['unit_amount']
+                    discounted_amount = int(original_amount * (1 - discount_percent))
+                    item['price_data']['unit_amount'] = discounted_amount
+                    # Update the product name to show discount
+                    item['price_data']['product_data']['name'] += f' ({int(discount_percent * 100)}% off)'
             
             # Create checkout session
             session = stripe.checkout.Session.create(
