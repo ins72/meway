@@ -50,6 +50,13 @@ export const authAPI = {
   resetPassword: (data) => api.post('/auth/reset-password', data),
 };
 
+// Onboarding API endpoints
+export const onboardingAPI = {
+  completeOnboarding: (data) => api.post('/complete_onboarding', data),
+  createWorkspace: (data) => api.post('/workspace', data),
+};
+};
+
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
   getRecentActivity: () => api.get('/dashboard/activity'),
