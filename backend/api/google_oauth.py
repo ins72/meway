@@ -119,7 +119,10 @@ async def google_verify_token(
                         "id": user_data["id"],
                         "email": user_data["email"],
                         "name": user_data["name"],
-                        "picture": user_data.get("picture")
+                        "picture": user_data.get("picture"),
+                        "onboarding_completed": False,
+                        "onboarding_step": 1,
+                        "has_workspace": False
                     },
                     "access_token": access_token,
                     "token_type": "bearer",
