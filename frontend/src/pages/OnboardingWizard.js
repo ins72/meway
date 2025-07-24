@@ -344,8 +344,8 @@ const OnboardingWizard = () => {
     }
   };
 
-  const getSelectedPlan = () => {
-    return pricingBundles.find(bundle => bundle.id === formData.selectedPlan);
+  const getSelectedBundles = () => {
+    return pricingBundles.filter(bundle => formData.selectedBundles.includes(bundle.id));
   };
 
   const canProceed = () => {
