@@ -1,0 +1,878 @@
+{
+  "summary": {
+    "total_tests": 62,
+    "passed_tests": 49,
+    "failed_tests": 13,
+    "success_rate": 79.03225806451613,
+    "timestamp": "2025-07-24T00:45:18.869663"
+  },
+  "api_results": {
+    "PWA Management": {
+      "total": 12,
+      "passed": 11,
+      "failed": 1
+    },
+    "Visual Builder": {
+      "total": 14,
+      "passed": 12,
+      "failed": 2
+    },
+    "Native Mobile": {
+      "total": 12,
+      "passed": 11,
+      "failed": 1
+    },
+    "Advanced UI": {
+      "total": 17,
+      "passed": 9,
+      "failed": 8
+    },
+    "Workflow Automation": {
+      "total": 7,
+      "passed": 6,
+      "failed": 1
+    }
+  },
+  "crud_operations": {
+    "Health Check": {
+      "total": 5,
+      "passed": 5
+    },
+    "CREATE Config": {
+      "total": 2,
+      "passed": 2
+    },
+    "READ Config": {
+      "total": 2,
+      "passed": 2
+    },
+    "LIST Configs": {
+      "total": 2,
+      "passed": 2
+    },
+    "UPDATE Config": {
+      "total": 2,
+      "passed": 2
+    },
+    "Generate Manifest": {
+      "total": 1,
+      "passed": 0
+    },
+    "Service Worker Config": {
+      "total": 1,
+      "passed": 1
+    },
+    "Track Installation": {
+      "total": 1,
+      "passed": 1
+    },
+    "Installation Stats": {
+      "total": 1,
+      "passed": 1
+    },
+    "Offline Sync": {
+      "total": 1,
+      "passed": 1
+    },
+    "Sync History": {
+      "total": 1,
+      "passed": 1
+    },
+    "DELETE Config": {
+      "total": 2,
+      "passed": 2
+    },
+    "Component Library": {
+      "total": 1,
+      "passed": 1
+    },
+    "CREATE Project": {
+      "total": 1,
+      "passed": 1
+    },
+    "READ Project": {
+      "total": 1,
+      "passed": 1
+    },
+    "LIST Projects": {
+      "total": 1,
+      "passed": 1
+    },
+    "UPDATE Project": {
+      "total": 1,
+      "passed": 1
+    },
+    "Project Stats": {
+      "total": 1,
+      "passed": 0
+    },
+    "Duplicate Project": {
+      "total": 1,
+      "passed": 0
+    },
+    "Publish Project": {
+      "total": 1,
+      "passed": 1
+    },
+    "Save Custom Component": {
+      "total": 1,
+      "passed": 1
+    },
+    "Get Custom Components": {
+      "total": 1,
+      "passed": 1
+    },
+    "Create Template": {
+      "total": 1,
+      "passed": 1
+    },
+    "Get Templates": {
+      "total": 1,
+      "passed": 1
+    },
+    "DELETE Project": {
+      "total": 1,
+      "passed": 1
+    },
+    "Register Push Token": {
+      "total": 1,
+      "passed": 1
+    },
+    "Get Push Tokens": {
+      "total": 1,
+      "passed": 1
+    },
+    "Send Push Notification": {
+      "total": 1,
+      "passed": 1
+    },
+    "App Data Sync": {
+      "total": 1,
+      "passed": 0
+    },
+    "Handle Deep Link": {
+      "total": 1,
+      "passed": 1
+    },
+    "App Statistics": {
+      "total": 1,
+      "passed": 1
+    },
+    "CREATE Wizard": {
+      "total": 1,
+      "passed": 1
+    },
+    "LIST Wizards": {
+      "total": 1,
+      "passed": 0
+    },
+    "CREATE Goals": {
+      "total": 1,
+      "passed": 1
+    },
+    "READ Goals": {
+      "total": 1,
+      "passed": 0
+    },
+    "UPDATE Goals": {
+      "total": 1,
+      "passed": 0
+    },
+    "CREATE UI State": {
+      "total": 1,
+      "passed": 1
+    },
+    "READ UI State": {
+      "total": 1,
+      "passed": 1
+    },
+    "LIST UI States": {
+      "total": 1,
+      "passed": 0
+    },
+    "UPDATE UI State": {
+      "total": 1,
+      "passed": 0
+    },
+    "UI Statistics": {
+      "total": 1,
+      "passed": 0
+    },
+    "Component Config (data_table)": {
+      "total": 1,
+      "passed": 1
+    },
+    "Component Config (chart)": {
+      "total": 1,
+      "passed": 1
+    },
+    "Component Config (form)": {
+      "total": 1,
+      "passed": 1
+    },
+    "Component Config (calendar)": {
+      "total": 1,
+      "passed": 1
+    },
+    "DELETE UI State": {
+      "total": 1,
+      "passed": 0
+    },
+    "DELETE Goals": {
+      "total": 1,
+      "passed": 0
+    },
+    "CREATE Workflow": {
+      "total": 1,
+      "passed": 1
+    },
+    "READ Workflow": {
+      "total": 1,
+      "passed": 1
+    },
+    "LIST Workflows": {
+      "total": 1,
+      "passed": 1
+    },
+    "UPDATE Workflow": {
+      "total": 1,
+      "passed": 1
+    },
+    "Workflow Stats": {
+      "total": 1,
+      "passed": 0
+    },
+    "DELETE Workflow": {
+      "total": 1,
+      "passed": 1
+    }
+  },
+  "detailed_results": [
+    {
+      "api": "PWA Management",
+      "operation": "Health Check",
+      "endpoint": "/api/pwa/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health status: True",
+      "timestamp": "2025-07-24T00:45:17.518736"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "CREATE Config",
+      "endpoint": "/api/pwa/configs",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Created config: aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+      "timestamp": "2025-07-24T00:45:17.543241"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "READ Config",
+      "endpoint": "/api/pwa/configs/aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Retrieved config: Test Business PWA",
+      "timestamp": "2025-07-24T00:45:17.567417"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "LIST Configs",
+      "endpoint": "/api/pwa/configs",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Found 1 configs",
+      "timestamp": "2025-07-24T00:45:17.594247"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "UPDATE Config",
+      "endpoint": "/api/pwa/configs/aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+      "method": "PUT",
+      "success": true,
+      "status_code": 200,
+      "details": "Updated config: PWA configuration updated successfully",
+      "timestamp": "2025-07-24T00:45:17.618585"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "Generate Manifest",
+      "endpoint": "/api/pwa/manifest/generate/aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "details": "Generated manifest: False",
+      "timestamp": "2025-07-24T00:45:17.640760"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "Service Worker Config",
+      "endpoint": "/api/pwa/service-worker/config/aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "SW config: True",
+      "timestamp": "2025-07-24T00:45:17.664114"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "Track Installation",
+      "endpoint": "/api/pwa/install/track",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Tracked install: b40ad643-f340-4b40-9678-d098efb4ff0e",
+      "timestamp": "2025-07-24T00:45:17.689865"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "Installation Stats",
+      "endpoint": "/api/pwa/install/stats",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Total installs: 2",
+      "timestamp": "2025-07-24T00:45:17.712794"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "Offline Sync",
+      "endpoint": "/api/pwa/offline/sync",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Synced items: 2",
+      "timestamp": "2025-07-24T00:45:17.737217"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "Sync History",
+      "endpoint": "/api/pwa/sync/history",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "History records: 4",
+      "timestamp": "2025-07-24T00:45:17.761395"
+    },
+    {
+      "api": "PWA Management",
+      "operation": "DELETE Config",
+      "endpoint": "/api/pwa/configs/aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+      "method": "DELETE",
+      "success": true,
+      "status_code": 200,
+      "details": "Deleted: PWA configuration deleted successfully",
+      "timestamp": "2025-07-24T00:45:17.785891"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Health Check",
+      "endpoint": "/api/visual-builder/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health status: True",
+      "timestamp": "2025-07-24T00:45:17.806137"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Component Library",
+      "endpoint": "/api/visual-builder/components",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Components available: True",
+      "timestamp": "2025-07-24T00:45:17.827937"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "CREATE Project",
+      "endpoint": "/api/visual-builder/projects",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Created project: 7b184ec6-0606-459e-8c90-eca9debf7b1e",
+      "timestamp": "2025-07-24T00:45:17.846003"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "READ Project",
+      "endpoint": "/api/visual-builder/projects/7b184ec6-0606-459e-8c90-eca9debf7b1e",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Retrieved project: Test Landing Page",
+      "timestamp": "2025-07-24T00:45:17.871638"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "LIST Projects",
+      "endpoint": "/api/visual-builder/projects",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Found 3 projects",
+      "timestamp": "2025-07-24T00:45:17.894016"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "UPDATE Project",
+      "endpoint": "/api/visual-builder/projects/7b184ec6-0606-459e-8c90-eca9debf7b1e",
+      "method": "PUT",
+      "success": true,
+      "status_code": 200,
+      "details": "Updated project: Project updated successfully",
+      "timestamp": "2025-07-24T00:45:17.918249"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Project Stats",
+      "endpoint": "/api/visual-builder/projects/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 500,
+      "details": "Stats available: False",
+      "timestamp": "2025-07-24T00:45:17.937951"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Duplicate Project",
+      "endpoint": "/api/visual-builder/projects/7b184ec6-0606-459e-8c90-eca9debf7b1e/duplicate",
+      "method": "POST",
+      "success": false,
+      "status_code": 422,
+      "details": "Duplicated: none",
+      "timestamp": "2025-07-24T00:45:17.958396"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Publish Project",
+      "endpoint": "/api/visual-builder/projects/7b184ec6-0606-459e-8c90-eca9debf7b1e/publish",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Published: Project published successfully",
+      "timestamp": "2025-07-24T00:45:17.981674"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Save Custom Component",
+      "endpoint": "/api/visual-builder/components/custom",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Saved component: f32e82a8-6b74-4e84-8543-093a7853afd3",
+      "timestamp": "2025-07-24T00:45:18.007494"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Get Custom Components",
+      "endpoint": "/api/visual-builder/components/custom",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Custom components: 2",
+      "timestamp": "2025-07-24T00:45:18.032793"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Create Template",
+      "endpoint": "/api/visual-builder/templates",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Created template: 3bc05cab-dc5d-47a4-aa1b-d848f5da1be4",
+      "timestamp": "2025-07-24T00:45:18.054811"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "Get Templates",
+      "endpoint": "/api/visual-builder/templates",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Templates: 2",
+      "timestamp": "2025-07-24T00:45:18.078290"
+    },
+    {
+      "api": "Visual Builder",
+      "operation": "DELETE Project",
+      "endpoint": "/api/visual-builder/projects/7b184ec6-0606-459e-8c90-eca9debf7b1e",
+      "method": "DELETE",
+      "success": true,
+      "status_code": 200,
+      "details": "Deleted: Project deleted successfully",
+      "timestamp": "2025-07-24T00:45:18.104075"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "Health Check",
+      "endpoint": "/api/native-mobile/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health status: True",
+      "timestamp": "2025-07-24T00:45:18.129126"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "CREATE Config",
+      "endpoint": "/api/native-mobile/config",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Created config: f6d5d3d2-a93c-4bb7-87b8-7f86d8e2d96c",
+      "timestamp": "2025-07-24T00:45:18.148173"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "READ Config",
+      "endpoint": "/api/native-mobile/config/f6d5d3d2-a93c-4bb7-87b8-7f86d8e2d96c",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Retrieved config: Test Business Mobile App",
+      "timestamp": "2025-07-24T00:45:18.169094"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "LIST Configs",
+      "endpoint": "/api/native-mobile/config",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Found 2 configs",
+      "timestamp": "2025-07-24T00:45:18.193768"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "UPDATE Config",
+      "endpoint": "/api/native-mobile/config/f6d5d3d2-a93c-4bb7-87b8-7f86d8e2d96c",
+      "method": "PUT",
+      "success": true,
+      "status_code": 200,
+      "details": "Updated config: Mobile app configuration updated successfully",
+      "timestamp": "2025-07-24T00:45:18.217031"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "Register Push Token",
+      "endpoint": "/api/native-mobile/push/register",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Registered token: none",
+      "timestamp": "2025-07-24T00:45:18.239878"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "Get Push Tokens",
+      "endpoint": "/api/native-mobile/push/tokens",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Found 3 tokens",
+      "timestamp": "2025-07-24T00:45:18.264840"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "Send Push Notification",
+      "endpoint": "/api/native-mobile/push/send",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Sent notification: Push notification sent to 3 devices",
+      "timestamp": "2025-07-24T00:45:18.287265"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "App Data Sync",
+      "endpoint": "/api/native-mobile/sync",
+      "method": "POST",
+      "success": false,
+      "status_code": 500,
+      "details": "Sync result: none",
+      "timestamp": "2025-07-24T00:45:18.309675"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "Handle Deep Link",
+      "endpoint": "/api/native-mobile/deep-link",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Deep link handled: none",
+      "timestamp": "2025-07-24T00:45:18.331174"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "App Statistics",
+      "endpoint": "/api/native-mobile/stats",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Stats available: True",
+      "timestamp": "2025-07-24T00:45:18.356078"
+    },
+    {
+      "api": "Native Mobile",
+      "operation": "DELETE Config",
+      "endpoint": "/api/native-mobile/config/f6d5d3d2-a93c-4bb7-87b8-7f86d8e2d96c",
+      "method": "DELETE",
+      "success": true,
+      "status_code": 200,
+      "details": "Deleted: Mobile app configuration deleted successfully",
+      "timestamp": "2025-07-24T00:45:18.376866"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "Health Check",
+      "endpoint": "/api/advanced-ui/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health status: True",
+      "timestamp": "2025-07-24T00:45:18.395031"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "CREATE Wizard",
+      "endpoint": "/api/advanced-ui/wizard",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Created wizard: none",
+      "timestamp": "2025-07-24T00:45:18.415180"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "LIST Wizards",
+      "endpoint": "/api/advanced-ui/wizard",
+      "method": "GET",
+      "success": false,
+      "status_code": 405,
+      "details": "Found 0 wizards",
+      "timestamp": "2025-07-24T00:45:18.437827"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "CREATE Goals",
+      "endpoint": "/api/advanced-ui/goals",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Saved goals: Goals saved successfully",
+      "timestamp": "2025-07-24T00:45:18.462369"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "READ Goals",
+      "endpoint": "/api/advanced-ui/goals",
+      "method": "GET",
+      "success": false,
+      "status_code": 405,
+      "details": "Retrieved goals: 0",
+      "timestamp": "2025-07-24T00:45:18.480573"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "UPDATE Goals",
+      "endpoint": "/api/advanced-ui/goals",
+      "method": "PUT",
+      "success": false,
+      "status_code": 405,
+      "details": "Updated goals: none",
+      "timestamp": "2025-07-24T00:45:18.496411"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "CREATE UI State",
+      "endpoint": "/api/advanced-ui/state",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Saved state: UI state saved successfully",
+      "timestamp": "2025-07-24T00:45:18.518698"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "READ UI State",
+      "endpoint": "/api/advanced-ui/state/dashboard_layout_9a171998-3394-4c93-b827-fc5f7728490a",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Retrieved state: dashboard",
+      "timestamp": "2025-07-24T00:45:18.539818"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "LIST UI States",
+      "endpoint": "/api/advanced-ui/state",
+      "method": "GET",
+      "success": false,
+      "status_code": 405,
+      "details": "Found 0 states",
+      "timestamp": "2025-07-24T00:45:18.562522"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "UPDATE UI State",
+      "endpoint": "/api/advanced-ui/state/dashboard_layout_9a171998-3394-4c93-b827-fc5f7728490a",
+      "method": "PUT",
+      "success": false,
+      "status_code": 405,
+      "details": "Updated state: none",
+      "timestamp": "2025-07-24T00:45:18.584235"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "UI Statistics",
+      "endpoint": "/api/advanced-ui/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Stats available: False",
+      "timestamp": "2025-07-24T00:45:18.603992"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "Component Config (data_table)",
+      "endpoint": "/api/advanced-ui/component/data_table/config",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Config available: True",
+      "timestamp": "2025-07-24T00:45:18.621502"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "Component Config (chart)",
+      "endpoint": "/api/advanced-ui/component/chart/config",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Config available: True",
+      "timestamp": "2025-07-24T00:45:18.639937"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "Component Config (form)",
+      "endpoint": "/api/advanced-ui/component/form/config",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Config available: True",
+      "timestamp": "2025-07-24T00:45:18.657768"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "Component Config (calendar)",
+      "endpoint": "/api/advanced-ui/component/calendar/config",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Config available: True",
+      "timestamp": "2025-07-24T00:45:18.677778"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "DELETE UI State",
+      "endpoint": "/api/advanced-ui/state/dashboard_layout_9a171998-3394-4c93-b827-fc5f7728490a",
+      "method": "DELETE",
+      "success": false,
+      "status_code": 405,
+      "details": "Deleted state: none",
+      "timestamp": "2025-07-24T00:45:18.698656"
+    },
+    {
+      "api": "Advanced UI",
+      "operation": "DELETE Goals",
+      "endpoint": "/api/advanced-ui/goals",
+      "method": "DELETE",
+      "success": false,
+      "status_code": 405,
+      "details": "Deleted goals: none",
+      "timestamp": "2025-07-24T00:45:18.718803"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "Health Check",
+      "endpoint": "/api/workflow-automation/health",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Health status: True",
+      "timestamp": "2025-07-24T00:45:18.737017"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "CREATE Workflow",
+      "endpoint": "/api/workflow-automation/",
+      "method": "POST",
+      "success": true,
+      "status_code": 200,
+      "details": "Created workflow: 26fb2b35-3bcd-4387-8a23-bd76c8d8a0ec",
+      "timestamp": "2025-07-24T00:45:18.759734"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "READ Workflow",
+      "endpoint": "/api/workflow-automation/26fb2b35-3bcd-4387-8a23-bd76c8d8a0ec",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Retrieved workflow: Customer Onboarding Automation",
+      "timestamp": "2025-07-24T00:45:18.781148"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "LIST Workflows",
+      "endpoint": "/api/workflow-automation/",
+      "method": "GET",
+      "success": true,
+      "status_code": 200,
+      "details": "Found 3 workflows",
+      "timestamp": "2025-07-24T00:45:18.803982"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "UPDATE Workflow",
+      "endpoint": "/api/workflow-automation/26fb2b35-3bcd-4387-8a23-bd76c8d8a0ec",
+      "method": "PUT",
+      "success": true,
+      "status_code": 200,
+      "details": "Updated workflow: workflow_automation updated successfully",
+      "timestamp": "2025-07-24T00:45:18.822717"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "Workflow Stats",
+      "endpoint": "/api/workflow-automation/stats",
+      "method": "GET",
+      "success": false,
+      "status_code": 404,
+      "details": "Stats available: False",
+      "timestamp": "2025-07-24T00:45:18.843635"
+    },
+    {
+      "api": "Workflow Automation",
+      "operation": "DELETE Workflow",
+      "endpoint": "/api/workflow-automation/26fb2b35-3bcd-4387-8a23-bd76c8d8a0ec",
+      "method": "DELETE",
+      "success": true,
+      "status_code": 200,
+      "details": "Deleted workflow: workflow_automation deleted successfully",
+      "timestamp": "2025-07-24T00:45:18.869058"
+    }
+  ],
+  "created_resources": {
+    "pwa_config": "aa6ea1eb-aa41-4779-8449-690f4b6b8b0d",
+    "visual_builder_project": "7b184ec6-0606-459e-8c90-eca9debf7b1e",
+    "native_mobile_config": "f6d5d3d2-a93c-4bb7-87b8-7f86d8e2d96c",
+    "workflow": "26fb2b35-3bcd-4387-8a23-bd76c8d8a0ec"
+  }
+}
