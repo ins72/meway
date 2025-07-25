@@ -18,33 +18,58 @@ class Database:
 db = Database()
 
 async def connect_to_mongo():
-    """Create database connection - production optimized"""
+    """Create database connection - production optimized for Atlas"""
     mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
-    database_name = "mewayz_professional"
+    
+    # Extract database name from URL or use default
+    if "mongodb+srv://" in mongo_url or "mongodb://" in mongo_url:
+        # For Atlas URLs, extract database name from path
+        if "/" in mongo_url.split("://")[1]:
+            database_name = mongo_url.split("/")[-1].split("?")[0]
+        else:
+            database_name = "mewayz_professional"
+    else:
+        database_name = "mewayz_professional"
     
     logger.info(f"🔗 Connecting to MongoDB...")
+    logger.info(f"   URL: {mongo_url[:30]}...")
     logger.info(f"   Database: {database_name}")
     
     try:
-        db.client = AsyncIOMotorClient(
-            mongo_url,
-            serverSelectionTimeoutMS=5000,  # 5 second timeout
-            connectTimeoutMS=5000,
-            socketTimeoutMS=5000,
-            maxPoolSize=10,
-            minPoolSize=1
-        )
+        # Production-optimized connection settings for Atlas
+        connection_settings = {
+            "serverSelectionTimeoutMS": 15000,  # 15 seconds for Atlas
+            "connectTimeoutMS": 15000,
+            "socketTimeoutMS": 15000,
+            "maxPoolSize": 50,  # Higher for production
+            "minPoolSize": 5,
+            "retryWrites": True,
+            "retryReads": True,
+        }
+        
+        # Add Atlas-specific settings if it's an Atlas URL
+        if "mongodb+srv://" in mongo_url:
+            connection_settings.update({
+                "ssl": True,
+                "tlsAllowInvalidCertificates": False,
+            })
+        
+        db.client = AsyncIOMotorClient(mongo_url, **connection_settings)
         db.database = db.client[database_name]
         
-        # Quick ping test
-        await db.client.admin.command('ping')
-        logger.info(f"✅ MongoDB connected successfully")
+        # Quick ping test with timeout
+        await asyncio.wait_for(db.client.admin.command('ping'), timeout=15.0)
+        logger.info(f"✅ MongoDB connected successfully to {database_name}")
         
         return True
         
+    except asyncio.TimeoutError:
+        logger.error(f"❌ MongoDB connection timeout after 15 seconds")
+        db.client = None
+        db.database = None
+        raise
     except Exception as e:
         logger.error(f"❌ MongoDB connection failed: {e}")
-        # Set db to None so app knows database is unavailable
         db.client = None
         db.database = None
         raise
