@@ -69,38 +69,31 @@ async def initialize_database_connection():
 async def load_application_routers():
     """Load application routers in background"""
     try:
-        await asyncio.sleep(1)  # Let health checks respond first
+        await asyncio.sleep(5)  # Give more time for health checks to work
+        logger.info("🔄 Starting background router loading...")
         
-        # Import and load core routers
-        from api.auth import router as auth_router
-        from api.user import router as user_router
-        
-        app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
-        app.include_router(user_router, prefix="/api/user", tags=["user"])
-        
-        loaded_count = 2
-        
-        # Additional routers - load safely
-        additional_routers = [
+        # Only load essential routers for production
+        essential_routers = [
+            ("api.auth", "/api/auth", "auth"),
             ("api.stripe_integration", "/api/stripe-integration", "stripe"),
-            ("api.workspace_subscription", "/api/workspace-subscription", "subscription"),
-            ("api.admin_workspace_management", "/api/admin-workspace-management", "admin_workspace"),
-            ("api.booking", "/api/booking", "booking"),
             ("api.workspace", "/api/workspace", "workspace"),
         ]
         
-        for router_path, prefix, tag in additional_routers:
+        loaded_count = 0
+        
+        for router_path, prefix, tag in essential_routers:
             try:
                 module = __import__(router_path, fromlist=["router"])
                 router = getattr(module, "router")
                 app.include_router(router, prefix=prefix, tags=[tag])
                 loaded_count += 1
                 logger.info(f"✅ {router_path} loaded")
+                await asyncio.sleep(0.5)  # Small delay between loads
             except Exception as e:
                 logger.warning(f"⚠️ {router_path} failed to load: {e}")
         
         app_state["total_routers_loaded"] = loaded_count
-        logger.info(f"✅ Total routers loaded: {loaded_count}")
+        logger.info(f"✅ Essential routers loaded: {loaded_count}")
         
     except Exception as e:
         logger.error(f"❌ Router loading failed: {e}")
