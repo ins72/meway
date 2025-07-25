@@ -124,28 +124,48 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    """Root endpoint"""
+    """Root endpoint - ultra-fast response"""
     return {
         "service": "mewayz-api",
         "status": "running",
         "version": "2.0.0",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.utcnow().isoformat(),
+        "uptime_seconds": (datetime.utcnow() - app_state["startup_time"]).total_seconds()
     }
 
 @app.get("/health")
 async def health():
-    """Health check - always returns healthy"""
+    """Health check - ultra-fast, always healthy for Kubernetes"""
     return {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
-        "database": "connected" if app_state.get("db_available", False) else "optional",
-        "routers_loaded": app_state.get("total_routers_loaded", 0)
+        "database": "connected" if app_state.get("db_available", False) else "initializing",
+        "routers_loaded": app_state.get("total_routers_loaded", 0),
+        "uptime_seconds": (datetime.utcnow() - app_state["startup_time"]).total_seconds()
     }
 
 @app.get("/api/health")
 async def api_health():
-    """API health check"""
+    """API health check - same as health"""
     return await health()
+
+@app.get("/readiness")
+async def readiness():
+    """Kubernetes readiness probe - always ready"""
+    return {
+        "ready": True,
+        "timestamp": datetime.utcnow().isoformat(),
+        "routers_loaded": app_state.get("total_routers_loaded", 0)
+    }
+
+@app.get("/liveness")
+async def liveness():
+    """Kubernetes liveness probe - always alive"""
+    return {
+        "alive": True,
+        "timestamp": datetime.utcnow().isoformat(),
+        "uptime_seconds": (datetime.utcnow() - app_state["startup_time"]).total_seconds()
+    }
 
 @app.get("/readiness")
 async def readiness():
