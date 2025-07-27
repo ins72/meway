@@ -1,46 +1,129 @@
 # Dependencies
-/node_modules
-/vendor
-composer.lock
-package-lock.json
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Environment files
+# Environment variables
 .env
-.env.backup
-.env.production
 .env.local
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+frontend.env
 
-# Build outputs
-/public/build
-/public/hot
-/public/storage
-/public/mix-manifest.json
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# Laravel specific
-/bootstrap/cache/*.php
-/storage/*.key
-/storage/logs/*.log
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*
-/storage/app/public/*
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Testing
-/.phpunit.cache
-.phpunit.result.cache
-/coverage
-/tests/coverage
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
 
-# IDE files
-/.fleet
-/.idea
-/.vscode
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.test
+
+# parcel-bundler cache
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Editor directories and files
+.vscode/
+.idea/
 *.swp
 *.swo
 *~
 
-# OS files
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -49,77 +132,99 @@ package-lock.json
 ehthumbs.db
 Thumbs.db
 
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-*.log
+# Docker
+.dockerignore
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Temporary files
-*.tmp
-*.temp
-/tmp/
-/temp/
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
 # Backup files
 *.bak
 *.backup
-*.old
 
-# Docker
-/.docker
-docker-compose.override.yml
+# Test files
+test_results.txt
+*.test.js
+*.spec.js
 
-# Local configuration
-Homestead.json
-Homestead.yaml
-auth.json
-
-# Generated files
-/public/css/
-/public/js/
-/public/fonts/
-/public/images/generated/
-
-# Cache
-.cache/
-*.cache
-
-# Development files
-.local
-.development
-/dev/
-
-# Sensitive files
-*.key
-*.pem
-*.crt
-*.csr
-*.p12
-*.pfx
-
-# Database
-*.sqlite
-*.db
-*.sql.gz
-
-# Archives
-*.zip
+# Build artifacts
+build/
+dist/
 *.tar.gz
-*.rar
-*.7z
+*.zip
 
-# Large files
-*.mov
-*.mp4
-*.avi
-*.mkv
-*.wmv
-*.flv
-*.webm
+# Python virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# MongoDB
+data/
+mongodb_data/
+
+# Docker volumes
+mysql_data/
+redis_data/
+mongodb_data/
+
+# Production files
+production_config.json
+*.production.*
+
+# Local development files
+local_config.json
+*.local.*
+
+# Screenshots and images (if you don't want to track them)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# But keep important documentation images
+!dashboard_home_*.png
+!login_page_*.png
+!onboarding_wizard_*.png
+!social_media_page_*.png

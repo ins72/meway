@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React
+import ApiService from '../../services/apiService';, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   UserGroupIcon, 
@@ -30,8 +31,11 @@ const AdminDashboard = () => {
 
   const loadAdminData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setMetrics({
+      // Real API data
+      const loadAdminData = async () => {
+    try {
+      const metrics = await ApiService.getAdminStats();
+      setMetrics(metrics);
         totalUsers: 12450,
         userGrowth: 15.2,
         totalRevenue: 89750,
@@ -44,7 +48,8 @@ const AdminDashboard = () => {
         avgResponseTime: 125
       });
 
-      setSystemHealth({
+      const health = await ApiService.getSystemHealth();
+      setSystemHealth(health);
         status: 'healthy',
         database: 'healthy',
         redis: 'healthy',
@@ -56,14 +61,16 @@ const AdminDashboard = () => {
         disk: 34
       });
 
-      setUsers([
+      const users = await ApiService.getUsers();
+      setUsers(users);
         { id: 1, name: 'John Smith', email: 'john@example.com', status: 'active', plan: 'Premium', joined: '2025-01-15' },
         { id: 2, name: 'Sarah Johnson', email: 'sarah@company.com', status: 'active', plan: 'Enterprise', joined: '2025-01-14' },
         { id: 3, name: 'Mike Chen', email: 'mike@startup.com', status: 'suspended', plan: 'Starter', joined: '2025-01-13' },
         { id: 4, name: 'Emily Davis', email: 'emily@creative.com', status: 'active', plan: 'Premium', joined: '2025-01-12' }
       ]);
 
-      setRecentActivity([
+      const activity = await ApiService.getAdminStats();
+      setRecentActivity(activity.recent || []);
         { id: 1, action: 'User registered', details: 'New user: alex@example.com', time: '2 minutes ago', type: 'user' },
         { id: 2, action: 'Payment processed', details: '$299 for Premium plan', time: '5 minutes ago', type: 'payment' },
         { id: 3, action: 'System alert', details: 'Queue processing delay detected', time: '10 minutes ago', type: 'system' },

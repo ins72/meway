@@ -19,7 +19,7 @@ db = Database()
 
 async def connect_to_mongo():
     """Create database connection - production optimized for Atlas"""
-    mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
+    mongo_url = os.getenv("MONGODB_URL", os.getenv("DATABASE_URL", "mongodb://localhost:27017/mewayz"))
     
     # Extract database name from URL or use default
     if "mongodb+srv://" in mongo_url or "mongodb://" in mongo_url:
@@ -27,9 +27,9 @@ async def connect_to_mongo():
         if "/" in mongo_url.split("://")[1]:
             database_name = mongo_url.split("/")[-1].split("?")[0]
         else:
-            database_name = "mewayz_professional"
+            database_name = "mewayz"
     else:
-        database_name = "mewayz_professional"
+        database_name = "mewayz"
     
     logger.info(f"🔗 Connecting to MongoDB...")
     logger.info(f"   URL: {mongo_url[:30]}...")

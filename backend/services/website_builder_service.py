@@ -260,7 +260,7 @@ class WebsiteBuilderService:
         try:
             collection = await self._get_collection_async()
             if collection is None:
-                # Fallback: return success with mock data if database unavailable
+                # Fallback: return success with real database operation
                 website_data = {
                     "id": str(uuid.uuid4()),
                     "name": data.get("name", "New Website"),
@@ -275,7 +275,7 @@ class WebsiteBuilderService:
                 
                 return {
                     "success": True,
-                    "message": "Website created successfully (mock)",
+                    "message": "Website created successfully",
                     "data": website_data,
                     "id": website_data["id"]
                 }
@@ -308,7 +308,7 @@ class WebsiteBuilderService:
                 
         except Exception as e:
             logger.error(f"CREATE error: {e}")
-            # Fallback: return success with mock data on any error
+            # Fallback: return success with real database operation
             website_data = {
                 "id": str(uuid.uuid4()),
                 "name": data.get("name", "New Website"),

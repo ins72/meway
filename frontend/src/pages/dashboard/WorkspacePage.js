@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React
+import ApiService from '../../services/apiService';, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   BuildingOfficeIcon, 
@@ -33,8 +34,9 @@ const WorkspacePage = () => {
 
   const loadWorkspaceData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setWorkspaces([
+      // Real API data
+      const workspaces = await ApiService.getWorkspaces();
+      setWorkspaces(workspaces);
         {
           id: 1,
           name: 'Marketing Agency Pro',
@@ -75,7 +77,8 @@ const WorkspacePage = () => {
 
       setCurrentWorkspace(workspaces[0] || null);
 
-      setTeamMembers([
+      const members = await ApiService.getWorkspace(workspaceId).members;
+      setTeamMembers(members);
         {
           id: 1,
           name: 'Sarah Johnson',

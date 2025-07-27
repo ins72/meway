@@ -1,0 +1,293 @@
+{
+  "code_verification": {
+    "success": false,
+    "files_checked": 298,
+    "mock_data_found": [
+      {
+        "file": ".\\eliminate_all_mock_data.py",
+        "pattern": "Mock.*data",
+        "matches": 8
+      },
+      {
+        "file": ".\\eliminate_all_mock_data.py",
+        "pattern": "#.*mock",
+        "matches": 4
+      },
+      {
+        "file": ".\\eliminate_random_data.py",
+        "pattern": "Mock.*data",
+        "matches": 6
+      },
+      {
+        "file": ".\\eliminate_random_data.py",
+        "pattern": "Fake.*data",
+        "matches": 1
+      },
+      {
+        "file": ".\\eliminate_random_data.py",
+        "pattern": "Sample.*data",
+        "matches": 1
+      },
+      {
+        "file": ".\\eliminate_random_data.py",
+        "pattern": "#.*mock",
+        "matches": 12
+      },
+      {
+        "file": ".\\eliminate_random_data.py",
+        "pattern": "#.*fake",
+        "matches": 1
+      },
+      {
+        "file": ".\\eliminate_random_data.py",
+        "pattern": "#.*dummy",
+        "matches": 1
+      },
+      {
+        "file": ".\\implement_missing_systems.py",
+        "pattern": "Sample.*data",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "mock_",
+        "matches": 28
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "fake_",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "dummy_",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "test_data",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "sample_data",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "hardcoded",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "hard-coded",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "Mock.*data",
+        "matches": 31
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "Fake.*data",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "Sample.*data",
+        "matches": 2
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "TODO.*mock",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "#.*mock",
+        "matches": 4
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "#.*fake",
+        "matches": 1
+      },
+      {
+        "file": ".\\mock_data_elimination_verifier.py",
+        "pattern": "#.*dummy",
+        "matches": 1
+      },
+      {
+        "file": ".\\api\\missing_endpoints_fix.py",
+        "pattern": "Sample.*data",
+        "matches": 1
+      },
+      {
+        "file": ".\\core\\advanced_data_service.py",
+        "pattern": "sample_data",
+        "matches": 4
+      },
+      {
+        "file": ".\\core\\advanced_data_service.py",
+        "pattern": "Sample.*data",
+        "matches": 10
+      },
+      {
+        "file": ".\\core\\external_apis.py",
+        "pattern": "Mock.*data",
+        "matches": 1
+      },
+      {
+        "file": ".\\core\\external_api_integrator.py",
+        "pattern": "mock_",
+        "matches": 3
+      },
+      {
+        "file": ".\\core\\security.py",
+        "pattern": "#.*mock",
+        "matches": 1
+      },
+      {
+        "file": ".\\services\\enterprise_revenue_service.py",
+        "pattern": "test_data",
+        "matches": 2
+      },
+      {
+        "file": ".\\services\\enterprise_revenue_service.py",
+        "pattern": "Sample.*data",
+        "matches": 1
+      }
+    ]
+  },
+  "database_operations": {
+    "success": false,
+    "endpoints_tested": 8,
+    "results": [
+      {
+        "endpoint": "/api/workspace",
+        "description": "Workspace listing",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/user",
+        "description": "User listing",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/blog",
+        "description": "Blog posts",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/workspace/subscription/usage",
+        "description": "Usage data",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/analytics/revenue",
+        "description": "Revenue analytics",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/ai-tokens/balance",
+        "description": "Token balance",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/notifications",
+        "description": "Notifications",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/campaigns",
+        "description": "Campaigns",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      }
+    ]
+  },
+  "service_layer": {
+    "success": false,
+    "services_checked": 8,
+    "results": [
+      {
+        "service": "services/workspace_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      },
+      {
+        "service": "services/user_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      },
+      {
+        "service": "services/blog_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      },
+      {
+        "service": "services/workspace_subscription_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      },
+      {
+        "service": "services/enterprise_revenue_service.py",
+        "has_db_operations": true,
+        "has_mock_data": true,
+        "success": false
+      },
+      {
+        "service": "services/ai_token_purchase_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      },
+      {
+        "service": "services/website_builder_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      },
+      {
+        "service": "services/template_marketplace_access_service.py",
+        "has_db_operations": true,
+        "has_mock_data": false,
+        "success": true
+      }
+    ]
+  },
+  "crud_operations": {
+    "success": false,
+    "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+  },
+  "overall_success": false,
+  "verification_timestamp": "2025-07-27T07:13:31.859813"
+}

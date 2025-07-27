@@ -1,0 +1,35 @@
+# Mewayz Professional Platform - Environment Variables
+# Copy this file to .env and update with your actual values
+
+# Database Configuration
+MONGO_URL=mongodb://localhost:27017/mewayz_professional
+
+# JWT Configuration
+JWT_SECRET_KEY=your-super-secret-jwt-key-change-this-in-production
+
+# Stripe Configuration
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# OpenAI Configuration
+OPENAI_API_KEY=your-openai-api-key
+
+# Optional Configuration
+REDIS_URL=redis://localhost:6379
+ELASTIC_EMAIL_API_KEY=your-elastic-email-api-key
+TWITTER_API_KEY=your-twitter-api-key
+TIKTOK_CLIENT_KEY=your-tiktok-client-key
+SENTRY_DSN=your-sentry-dsn
+LOG_LEVEL=INFO
+
+# CORS Configuration
+CORS_ORIGINS=*
+
+# Rate Limiting
+RATE_LIMIT_ENABLED=true
+RATE_LIMIT_REQUESTS=100
+RATE_LIMIT_WINDOW=60 

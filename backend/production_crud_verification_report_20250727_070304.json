@@ -1,0 +1,22 @@
+{
+  "total_tests": 14,
+  "passed": 1,
+  "failed": 13,
+  "errors": [
+    "Root endpoint: Status: 404",
+    "Health check: Status: 404",
+    "Readiness probe: Status: 404",
+    "Liveness probe: Status: 404",
+    "User Registration: Status: 404",
+    "Workspace CRUD: No authentication token",
+    "User CRUD: No authentication token",
+    "Blog CRUD: No authentication token",
+    "Content CRUD: No authentication token",
+    "Notification CRUD: No authentication token",
+    "Campaign CRUD: No authentication token",
+    "Analytics: No authentication token",
+    "Admin Endpoints: No authentication token"
+  ],
+  "crud_operations": {},
+  "production_ready": false
+}

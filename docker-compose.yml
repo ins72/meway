@@ -1,146 +1,66 @@
 version: '3.8'
 
 services:
-  app:
+  frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
-    container_name: mewayz-v2-app
-    restart: unless-stopped
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-      - ./storage:/var/www/html/storage
-    networks:
-      - mewayz-network
-    depends_on:
-      - db
-      - redis
-    environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - APP_URL=https://test.mewayz.com
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=mewayz_production
-      - DB_USERNAME=root
-      - DB_PASSWORD=secure_password
-      - REDIS_HOST=redis
-      - CACHE_DRIVER=redis
-      - SESSION_DRIVER=redis
-      - QUEUE_CONNECTION=redis
-
-  web:
-    image: nginx:alpine
-    container_name: mewayz-v2-web
+    container_name: mewayz-frontend
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:3000"
     volumes:
-      - ./:/var/www/html
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
-      - ./docker/nginx/ssl:/etc/nginx/ssl
-    depends_on:
-      - app
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+      - REACT_APP_API_URL=http://localhost:8000/api
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - mewayz-network
+    depends_on:
+      - backend
 
-  db:
-    image: mysql:8.0
-    container_name: mewayz-v2-db
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mewayz-backend
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "8000:8000"
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - ./backend:/app
     environment:
-      - MYSQL_ROOT_PASSWORD=secure_password
-      - MYSQL_DATABASE=mewayz_production
-      - MYSQL_USER=mewayz_user
-      - MYSQL_PASSWORD=secure_password
+      - MONGODB_URL=mongodb://mongodb:27017/mewayz
+      - DATABASE_URL=mongodb://mongodb:27017/mewayz
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - PORT=8000
+      - HOST=0.0.0.0
     networks:
       - mewayz-network
+    depends_on:
+      - mongodb
 
-  redis:
-    image: redis:7.0-alpine
-    container_name: mewayz-v2-redis
+  mongodb:
+    image: mongo:7.0
+    container_name: mewayz-mongodb
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "5000:27017"
     volumes:
-      - redis_data:/data
-    networks:
-      - mewayz-network
-
-  queue:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: mewayz-v2-queue
-    restart: unless-stopped
-    command: php artisan queue:work --sleep=3 --tries=3 --timeout=60
-    volumes:
-      - ./:/var/www/html
-    depends_on:
-      - db
-      - redis
-    networks:
-      - mewayz-network
+      - mongodb_data:/data/db
+      - ./docker/mongodb/init:/docker-entrypoint-initdb.d
     environment:
-      - APP_ENV=production
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - REDIS_HOST=redis
-      - QUEUE_CONNECTION=redis
-
-  scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: mewayz-v2-scheduler
-    restart: unless-stopped
-    command: php artisan schedule:work
-    volumes:
-      - ./:/var/www/html
-    depends_on:
-      - db
-      - redis
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+      - MONGO_INITDB_DATABASE=mewayz
     networks:
       - mewayz-network
-    environment:
-      - APP_ENV=production
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - REDIS_HOST=redis
-
-  websocket:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: mewayz-v2-websocket
-    restart: unless-stopped
-    command: php artisan websockets:serve
-    ports:
-      - "6001:6001"
-    volumes:
-      - ./:/var/www/html
-    depends_on:
-      - db
-      - redis
-    networks:
-      - mewayz-network
-    environment:
-      - APP_ENV=production
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - REDIS_HOST=redis
 
 volumes:
-  mysql_data:
-  redis_data:
+  mongodb_data:
 
 networks:
   mewayz-network:

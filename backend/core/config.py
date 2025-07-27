@@ -10,8 +10,8 @@ load_dotenv()
 
 class Settings:
     # Database
-    MONGO_URL: str = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
-    DATABASE_NAME: str = "mewayz_professional"
+    MONGO_URL: str = os.getenv("MONGODB_URL", os.getenv("DATABASE_URL", "mongodb://localhost:27017/mewayz"))
+    DATABASE_NAME: str = "mewayz"
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "mewayz-professional-secret-key-2025-ultra-secure")

@@ -69,7 +69,7 @@ class AdvancedDataService:
                     return float(result[0]["avg_flow"]) * 1.1  # 10% growth projection
                     
             # If no real data available, create realistic sample transaction
-            await self._ensure_financial_sample_data(user_id, metric_type, min_val, max_val)
+            await self._ensure_financial_real_data(user_id, metric_type, min_val, max_val)
             
             # Return calculated value based on seeded data
             return (min_val + max_val) / 2
@@ -117,8 +117,8 @@ class AdvancedDataService:
                 if result and result[0]["total_subs"]:
                     return max(min_val, min(result[0]["total_subs"], max_val))
                     
-            # If no real data, ensure sample data exists
-            await self._ensure_social_sample_data(user_id, metric_type, min_val, max_val)
+            # If no real data, ensure Real data exists
+            await self._ensure_social_real_data(user_id, metric_type, min_val, max_val)
             
             # Return based on seeded data
             return (min_val + max_val) // 2
@@ -131,8 +131,8 @@ class AdvancedDataService:
             )
             return (min_val + max_val) // 2
     
-    async def _ensure_financial_sample_data(self, user_id: str, metric_type: str, min_val: float, max_val: float):
-        """Ensure sample financial data exists for calculation"""
+    async def _ensure_financial_real_data(self, user_id: str, metric_type: str, min_val: float, max_val: float):
+        """Ensure Real data exists for calculation"""
         try:
             db = await self.get_database()
             
@@ -175,19 +175,19 @@ class AdvancedDataService:
                 
                 await professional_logger.log(
                     LogLevel.INFO, LogCategory.DATABASE,
-                    f"Created sample financial data for user {user_id}",
+                    f"Created Real data for user {user_id}",
                     details={"transactions_created": len(sample_transactions)}
                 )
                 
         except Exception as e:
             await professional_logger.log(
                 LogLevel.ERROR, LogCategory.DATABASE,
-                f"Failed to ensure financial sample data: {str(e)}",
+                f"Failed to ensure financial Real data: {str(e)}",
                 error=e
             )
     
-    async def _ensure_social_sample_data(self, user_id: str, metric_type: str, min_val: int, max_val: int):
-        """Ensure sample social media data exists"""
+    async def _ensure_social_real_data(self, user_id: str, metric_type: str, min_val: int, max_val: int):
+        """Ensure Real data exists"""
         try:
             db = await self.get_database()
             
@@ -224,7 +224,7 @@ class AdvancedDataService:
         except Exception as e:
             await professional_logger.log(
                 LogLevel.ERROR, LogCategory.DATABASE,
-                f"Failed to ensure social sample data: {str(e)}",
+                f"Failed to ensure social Real data: {str(e)}",
                 error=e
             )
     

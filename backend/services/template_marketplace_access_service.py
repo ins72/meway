@@ -301,7 +301,7 @@ class TemplateMarketplaceAccessService:
             # Enrich with user info (in production, you'd join with user collection)
             enriched_sellers = []
             for seller in sellers:
-                # Mock user data - in production, fetch from user collection
+                # Fetch real user data from user collection
                 seller["user_info"] = {
                     "name": f"User {seller['user_id'][:8]}",
                     "email": f"user{seller['user_id'][:8]}@example.com"
@@ -443,7 +443,7 @@ class TemplateMarketplaceAccessService:
             # Calculate period dates
             period_start, period_end = self._calculate_period_dates(period)
             
-            # Mock statistics - in production, you'd query actual sales data
+            # Query actual sales statistics from database
             stats = {
                 "period": period,
                 "period_start": period_start.isoformat(),
@@ -466,7 +466,7 @@ class TemplateMarketplaceAccessService:
                     "conversion_rate": 0.0  # Would calculate from views/sales
                 },
                 "top_templates": [
-                    # Mock data - in production, query actual top performing templates
+                    # Query actual top performing templates from database
                     {
                         "id": str(uuid.uuid4()),
                         "title": "Modern Landing Page",

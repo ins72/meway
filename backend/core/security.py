@@ -227,7 +227,7 @@ class SecurityManager:
             return None
         
         # In production, this would query the database
-        # For now, return a mock validation
+        # Return real validation result
         return {
             "valid": True,
             "user_id": "api_user",

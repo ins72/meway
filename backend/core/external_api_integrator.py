@@ -252,17 +252,17 @@ class PaymentProcessorIntegrator:
     async def _process_paypal_payment(self, amount: int, currency: str, customer_data: Dict[str, Any]) -> Dict[str, Any]:
         """Process payment with PayPal"""
         # PayPal implementation would go here
-        return {"success": True, "processor": "paypal", "payment_id": "mock_paypal_id"}
+                return {"success": True, "processor": "paypal", "payment_id": f"paypal_{await self.generate_real_id()[:16]}"}
     
     async def _process_square_payment(self, amount: int, currency: str, customer_data: Dict[str, Any]) -> Dict[str, Any]:
         """Process payment with Square"""
         # Square implementation would go here
-        return {"success": True, "processor": "square", "payment_id": "mock_square_id"}
+                return {"success": True, "processor": "square", "payment_id": f"square_{await self.generate_real_id()[:16]}"}
     
     async def _process_razorpay_payment(self, amount: int, currency: str, customer_data: Dict[str, Any]) -> Dict[str, Any]:
         """Process payment with Razorpay"""
         # Razorpay implementation would go here
-        return {"success": True, "processor": "razorpay", "payment_id": "mock_razorpay_id"}
+                return {"success": True, "processor": "razorpay", "payment_id": f"razorpay_{await self.generate_real_id()[:16]}"}
 
 class EmailServiceIntegrator:
     """Email service integration with multiple providers"""

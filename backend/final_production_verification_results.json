@@ -1,0 +1,366 @@
+{
+  "server_health": {
+    "success": false,
+    "status": "unreachable",
+    "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+  },
+  "crud_operations": {
+    "success": false,
+    "tests": [
+      {
+        "name": "Workspace CRUD",
+        "endpoints": [
+          {
+            "method": "POST",
+            "endpoint": "/api/workspace",
+            "operation": "create",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/workspace",
+            "operation": "read",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "PUT",
+            "endpoint": "/api/workspace/{id}",
+            "operation": "update",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "DELETE",
+            "endpoint": "/api/workspace/{id}",
+            "operation": "delete",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          }
+        ],
+        "success": false
+      },
+      {
+        "name": "User CRUD",
+        "endpoints": [
+          {
+            "method": "POST",
+            "endpoint": "/api/user",
+            "operation": "create",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/user",
+            "operation": "read",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "PUT",
+            "endpoint": "/api/user/{id}",
+            "operation": "update",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "DELETE",
+            "endpoint": "/api/user/{id}",
+            "operation": "delete",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          }
+        ],
+        "success": false
+      },
+      {
+        "name": "Blog CRUD",
+        "endpoints": [
+          {
+            "method": "POST",
+            "endpoint": "/api/blog",
+            "operation": "create",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/blog",
+            "operation": "read",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "PUT",
+            "endpoint": "/api/blog/{id}",
+            "operation": "update",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "DELETE",
+            "endpoint": "/api/blog/{id}",
+            "operation": "delete",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          }
+        ],
+        "success": false
+      },
+      {
+        "name": "Content CRUD",
+        "endpoints": [
+          {
+            "method": "POST",
+            "endpoint": "/api/content",
+            "operation": "create",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/content",
+            "operation": "read",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "PUT",
+            "endpoint": "/api/content/{id}",
+            "operation": "update",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "DELETE",
+            "endpoint": "/api/content/{id}",
+            "operation": "delete",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          }
+        ],
+        "success": false
+      },
+      {
+        "name": "Notification CRUD",
+        "endpoints": [
+          {
+            "method": "POST",
+            "endpoint": "/api/notifications",
+            "operation": "create",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/notifications",
+            "operation": "read",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "PUT",
+            "endpoint": "/api/notifications/{id}",
+            "operation": "update",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "DELETE",
+            "endpoint": "/api/notifications/{id}",
+            "operation": "delete",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          }
+        ],
+        "success": false
+      },
+      {
+        "name": "Campaign CRUD",
+        "endpoints": [
+          {
+            "method": "POST",
+            "endpoint": "/api/campaigns",
+            "operation": "create",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/campaigns",
+            "operation": "read",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "PUT",
+            "endpoint": "/api/campaigns/{id}",
+            "operation": "update",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          },
+          {
+            "method": "DELETE",
+            "endpoint": "/api/campaigns/{id}",
+            "operation": "delete",
+            "status_code": 0,
+            "success": false,
+            "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+          }
+        ],
+        "success": false
+      }
+    ],
+    "total_endpoints": 24
+  },
+  "database_operations": {
+    "success": false,
+    "endpoints_tested": 7,
+    "results": [
+      {
+        "endpoint": "/api/workspace/subscription/usage",
+        "description": "Usage Data",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/analytics/revenue",
+        "description": "Revenue Analytics",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/ai-tokens/balance",
+        "description": "Token Balance",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/notifications",
+        "description": "Notifications",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/campaigns",
+        "description": "Campaigns",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/user/activity",
+        "description": "User Activity",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/blog/analytics",
+        "description": "Blog Analytics",
+        "status_code": 0,
+        "is_real_data": false,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      }
+    ]
+  },
+  "authentication": {
+    "success": false,
+    "endpoints_tested": 4,
+    "results": [
+      {
+        "endpoint": "/api/auth/register",
+        "description": "User Registration",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/auth/login",
+        "description": "User Login",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/auth/refresh",
+        "description": "Token Refresh",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/api/auth/logout",
+        "description": "User Logout",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      }
+    ]
+  },
+  "api_documentation": {
+    "success": false,
+    "endpoints_tested": 3,
+    "results": [
+      {
+        "endpoint": "/docs",
+        "description": "Swagger UI",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/redoc",
+        "description": "ReDoc",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      },
+      {
+        "endpoint": "/openapi.json",
+        "description": "OpenAPI Schema",
+        "status_code": 0,
+        "success": false,
+        "error": "Cannot connect to host localhost:8000 ssl:default [The remote computer refused the network connection]"
+      }
+    ]
+  },
+  "overall_success": false,
+  "verification_timestamp": "2025-07-27T07:22:51.948785"
+}

@@ -418,37 +418,158 @@ class WorkspaceSubscriptionService:
     async def get_current_usage(self, workspace_id: str) -> Dict[str, int]:
         """Get current usage statistics for workspace"""
         try:
-            # This would typically query various collections to get current usage
-            # For now, returning mock data structure that would be populated by real queries
+            # Query actual usage from database collections
+            usage = {}
             
-            usage = {
-                "bio_links": 0,
-                "website_pages": 0,
-                "ai_credits": 0,
-                "custom_domains": 0,
-                "products": 0,
-                "vendors": 0,
-                "transactions": 0,
-                "instagram_searches": 0,
-                "scheduled_posts": 0,
-                "social_accounts": 0,
-                "students": 0,
-                "courses": 0,
-                "streaming_hours": 0,
-                "contacts": 0,
-                "emails_sent": 0,
-                "workflows": 0,
-                "campaigns": 0,
-                "bookings": 0,
-                "forms": 0,
-                "surveys": 0,
-                "invoices": 0
-            }
+            # Bio links usage
+            try:
+                bio_links_count = await self.db.bio_sites.count_documents({"workspace_id": workspace_id})
+                usage["bio_links"] = bio_links_count
+            except Exception:
+                usage["bio_links"] = 0
             
-            # TODO: Implement actual usage queries
-            # Example:
-            # bio_links_count = await self.db.bio_links.count_documents({"workspace_id": workspace_id})
-            # usage["bio_links"] = bio_links_count
+            # Website pages usage
+            try:
+                website_pages_count = await self.db.website_pages.count_documents({"workspace_id": workspace_id})
+                usage["website_pages"] = website_pages_count
+            except Exception:
+                usage["website_pages"] = 0
+            
+            # AI credits usage (from usage tracking)
+            try:
+                ai_usage = await self.db.usage_tracking.find_one({"workspace_id": workspace_id, "feature": "ai_credits"})
+                usage["ai_credits"] = ai_usage.get("used", 0) if ai_usage else 0
+            except Exception:
+                usage["ai_credits"] = 0
+            
+            # Custom domains usage
+            try:
+                domains_count = await self.db.custom_domains.count_documents({"workspace_id": workspace_id})
+                usage["custom_domains"] = domains_count
+            except Exception:
+                usage["custom_domains"] = 0
+            
+            # Products usage
+            try:
+                products_count = await self.db.products.count_documents({"workspace_id": workspace_id})
+                usage["products"] = products_count
+            except Exception:
+                usage["products"] = 0
+            
+            # Vendors usage
+            try:
+                vendors_count = await self.db.vendors.count_documents({"workspace_id": workspace_id})
+                usage["vendors"] = vendors_count
+            except Exception:
+                usage["vendors"] = 0
+            
+            # Transactions usage
+            try:
+                transactions_count = await self.db.transactions.count_documents({"workspace_id": workspace_id})
+                usage["transactions"] = transactions_count
+            except Exception:
+                usage["transactions"] = 0
+            
+            # Instagram searches usage
+            try:
+                instagram_searches = await self.db.instagram_searches.count_documents({"workspace_id": workspace_id})
+                usage["instagram_searches"] = instagram_searches
+            except Exception:
+                usage["instagram_searches"] = 0
+            
+            # Scheduled posts usage
+            try:
+                scheduled_posts_count = await self.db.scheduled_posts.count_documents({"workspace_id": workspace_id})
+                usage["scheduled_posts"] = scheduled_posts_count
+            except Exception:
+                usage["scheduled_posts"] = 0
+            
+            # Social accounts usage
+            try:
+                social_accounts_count = await self.db.social_accounts.count_documents({"workspace_id": workspace_id})
+                usage["social_accounts"] = social_accounts_count
+            except Exception:
+                usage["social_accounts"] = 0
+            
+            # Students usage (for education bundle)
+            try:
+                students_count = await self.db.students.count_documents({"workspace_id": workspace_id})
+                usage["students"] = students_count
+            except Exception:
+                usage["students"] = 0
+            
+            # Courses usage
+            try:
+                courses_count = await self.db.courses.count_documents({"workspace_id": workspace_id})
+                usage["courses"] = courses_count
+            except Exception:
+                usage["courses"] = 0
+            
+            # Streaming hours usage
+            try:
+                streaming_data = await self.db.streaming_sessions.aggregate([
+                    {"$match": {"workspace_id": workspace_id}},
+                    {"$group": {"_id": None, "total_hours": {"$sum": "$duration_hours"}}}
+                ]).to_list(1)
+                usage["streaming_hours"] = streaming_data[0]["total_hours"] if streaming_data else 0
+            except Exception:
+                usage["streaming_hours"] = 0
+            
+            # Contacts usage
+            try:
+                contacts_count = await self.db.contacts.count_documents({"workspace_id": workspace_id})
+                usage["contacts"] = contacts_count
+            except Exception:
+                usage["contacts"] = 0
+            
+            # Emails sent usage
+            try:
+                emails_sent = await self.db.email_logs.count_documents({"workspace_id": workspace_id})
+                usage["emails_sent"] = emails_sent
+            except Exception:
+                usage["emails_sent"] = 0
+            
+            # Workflows usage
+            try:
+                workflows_count = await self.db.workflows.count_documents({"workspace_id": workspace_id})
+                usage["workflows"] = workflows_count
+            except Exception:
+                usage["workflows"] = 0
+            
+            # Campaigns usage
+            try:
+                campaigns_count = await self.db.campaigns.count_documents({"workspace_id": workspace_id})
+                usage["campaigns"] = campaigns_count
+            except Exception:
+                usage["campaigns"] = 0
+            
+            # Bookings usage
+            try:
+                bookings_count = await self.db.bookings.count_documents({"workspace_id": workspace_id})
+                usage["bookings"] = bookings_count
+            except Exception:
+                usage["bookings"] = 0
+            
+            # Forms usage
+            try:
+                forms_count = await self.db.forms.count_documents({"workspace_id": workspace_id})
+                usage["forms"] = forms_count
+            except Exception:
+                usage["forms"] = 0
+            
+            # Surveys usage
+            try:
+                surveys_count = await self.db.surveys.count_documents({"workspace_id": workspace_id})
+                usage["surveys"] = surveys_count
+            except Exception:
+                usage["surveys"] = 0
+            
+            # Invoices usage
+            try:
+                invoices_count = await self.db.invoices.count_documents({"workspace_id": workspace_id})
+                usage["invoices"] = invoices_count
+            except Exception:
+                usage["invoices"] = 0
             
             return usage
             

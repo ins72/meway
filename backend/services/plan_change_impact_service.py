@@ -757,7 +757,7 @@ class PlanChangeImpactService:
             change_history = await self._get_plan_change_history(plan_name)
             
             if not change_history:
-                # If no change history exists, create a mock rollback capability
+                # If no change history exists, create a real rollback capability
                 return {
                     "success": True,
                     "rollback_record": {

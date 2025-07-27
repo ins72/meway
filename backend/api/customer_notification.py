@@ -309,7 +309,7 @@ async def get_workspace_notifications(
 
 @router.post("/test-notification")
 async def send_test_notification(
-    test_data: Dict[str, Any] = Body(..., description="Test notification data"),
+    notification_data: Dict[str, Any] = Body(..., description="Notification data"),
     current_user: dict = Depends(get_current_user)
 ):
     """Send a test notification (admin only)"""
@@ -322,9 +322,9 @@ async def send_test_notification(
         
         # Default test notification
         test_notification = {
-            "notification_type": test_data.get("notification_type", "admin_override"),
-            "workspace_id": test_data.get("workspace_id"),
-            "template_data": test_data.get("template_data", {
+                    "notification_type": notification_data.get("notification_type", "admin_override"),
+        "workspace_id": notification_data.get("workspace_id"),
+        "template_data": notification_data.get("template_data", {
                 "reason": "This is a test notification from the admin panel",
                 "additional_details": "Test completed successfully"
             })

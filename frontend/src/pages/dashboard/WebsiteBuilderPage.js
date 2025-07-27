@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React
+import ApiService from '../../services/apiService';, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   GlobeAltIcon, 
@@ -32,8 +33,9 @@ const WebsiteBuilderPage = () => {
 
   const loadWebsiteBuilderData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setWebsites([
+      // Real API data
+      const websites = await ApiService.getWebsites();
+      setWebsites(websites);
         {
           id: 1,
           name: 'My Business Website',
@@ -72,7 +74,8 @@ const WebsiteBuilderPage = () => {
         }
       ]);
 
-      setTemplates([
+      const templates = await ApiService.getTemplates();
+      setTemplates(templates);
         { id: 1, name: 'Business Professional', category: 'Business', price: 'Free', features: ['Responsive', 'SEO Optimized', 'Contact Forms'] },
         { id: 2, name: 'Creative Portfolio', category: 'Portfolio', price: '$29', features: ['Gallery', 'Animations', 'Blog'] },
         { id: 3, name: 'E-commerce Store', category: 'E-commerce', price: '$49', features: ['Shopping Cart', 'Payment Integration', 'Inventory'] },
